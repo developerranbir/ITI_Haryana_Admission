@@ -1,0 +1,815 @@
+﻿@model HigherEducation.Models.FileViewModel
+@{
+    Session["currentPage"] = 4;
+}
+@{
+    if (Session["MaxPage"] == null)
+    {
+        Session["currentPage"] = 1;
+        Session["MaxPage"] = 1;
+    }
+    else if (Convert.ToInt32(Session["currentPage"]) > Convert.ToInt32(Session["MaxPage"]))
+    {
+        Session["MaxPage"] = Session["currentPage"];
+    }
+
+}
+@{
+    ViewBag.Title = "FileUpload";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="~/assets/js/jquery/jquery.min.js"></script>
+    @*<script src="~/assets/js/jquery.validate.js"></script>*@
+
+    <link href="~/assets/css/stylecommon.css" rel="stylesheet" />
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <script src="~/swalJs/sweetalert.min.js"></script>
+    <script src="~/swalJs/swal-forms.js"></script>
+    <style>
+        .main-banner img {
+            width: 100vw;
+            border-bottom: 4px solid #f9f9f9;
+        }
+
+        .loader,
+        .outer-loader {
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        .outer-loader {
+            background: rgba(0, 0, 0, .3);
+            width: 100%;
+            height: 100%;
+            z-index: 999
+        }
+
+        .loader {
+            width: 69px;
+            height: 89px;
+            border: 1px solid #000;
+            margin: auto
+        }
+
+        .loader-img {
+            border: 15px solid #415bbb;
+            border-radius: 50%;
+            border-top: 15px solid #000;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0)
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg)
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .row_new {
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+        #logo img {
+            height: auto;
+            padding-left: 3px;
+            width: 40px
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        #feetbl {
+            height: 500px;
+            overflow: scroll;
+            display: block;
+        }
+
+        span.hh {
+            display: none !important;
+        }
+
+        .validation {
+            color: red;
+        }
+
+        .notvalid {
+            display: none
+        }
+
+        .disabledbutton {
+            pointer-events: none;
+            /*opacity: 0.4;*/
+        }
+    </style>
+</head>
+
+@if (Convert.ToInt32(TempData["WeightageSave"]) == 1)
+{
+    <script>
+        swal("Success!", "Weightage details successfully submitted.", "success");
+    </script>
+}
+<div class="col-lg-12 col-md-12 cus-heading">
+    <h3>File Upload</h3>
+</div>
+<div class="row">
+
+    <div class="col-md-12" id="home">
+
+        @using (Html.BeginForm("FileUpload", "FileUpload", FormMethod.Post, new { @enctype = "multipart/form-data", onsubmit = "startPreloader();", @id = "frm" }))
+        {
+            @Html.HiddenFor(x => x.Applicant_Name, new { @class = "form-control input-shadow", @id = "txtapplicant" })
+            @Html.HiddenFor(x => x.Father_Name, new { @class = "form-control input-shadow", @id = "txtfathername" })
+            @Html.HiddenFor(x => x.Mother_Name, new { @class = "form-control input-shadow", @id = "txtmothername" })
+            @Html.HiddenFor(x => x.IsDocExists, new { @class = "form-control input-shadow" })
+
+            <div class="card c-shadow">
+                <div class="card-body table-responsive-md table-responsive-sm">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Document</th>
+                                <th></th>
+                                <th>Upload/Verify</th>
+                            </tr>
+                            @{
+
+                                for (int i = 0; i < Model.documentLists.Count; i++)
+                                {
+                                    //Model.documentLists[i].DocumentId != 3 && Model.documentLists[i].DocumentId != 4 &&
+                                    if (Model.documentLists[i].DocumentId != 5 && Model.documentLists[i].DocumentId != 6)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(o => o.documentLists[i].DocumentName)
+                                                @Html.HiddenFor(x => x.documentLists[i].DocumentId, new { @class = "form-control input-shadow" })
+                                                @Html.HiddenFor(x => x.documentLists[i].IsDocVerify, new { @class = "form-control input-shadow" })
+                                                <span style="color:red;"><strong>*</strong></span>
+                                            </td>
+                                            @if (Model.documentLists[i].DocumentId == 9 || Model.documentLists[i].DocumentId == 8)  // photo and image
+                                            {
+                                                <td></td>
+                                                <td>
+                                                    @Html.TextBoxFor(o => o.documentLists[i].files, new { @id = "files_" + Model.documentLists[i].DocumentId, @class = "form-control valid", @maxlength = "15", @onchange = "validationForSignatures(this)", @required = "required", @type = "file" })
+                                                    <a onclick="PreviewDoc(@Model.documentLists[i].DocumentId);" data-toggle="modal" data-target="#myModal1" style="cursor:pointer">
+                                                        @if (Model.documentLists[i].IsDocVerify != "")
+                                                        {
+                                                            <span class="badge badge-danger hh"><i class="fa fa-eye"></i>&nbsp;View</span>
+                                                        }
+                                                        (jpeg/jpg/png max size 10KB to 100 KB)
+                                                    </a>
+                                                    @Html.ValidationMessageFor(o => o.documentLists[i].files, "", new { @class = "validation" })
+                                                    <div id="dvPreview_@Model.documentLists[i].DocumentId"></div>
+                                                </td>
+                                            }
+                                            else if (Model.documentLists[i].DocumentId == 1)
+                                            {
+                                                <td>
+                                                    <button class="btn btn-primary c-shadow-1" id="btnfetch10" type="button"><i class="fa fa-save"></i>&nbsp;Get Mark Sheet</button>
+                                                </td>
+                                                <td>
+                                                    @Html.HiddenFor(x => x.documentLists[i].IsDocVerify, new { @id = "hdn_" + Model.documentLists[i].DocumentId, @class = "form-control input-shadow" })
+                                                    @Html.TextBoxFor(o => o.documentLists[i].files, new { @id = "files_" + Model.documentLists[i].DocumentId, @class = "form-control valid", @maxlength = "15", @onchange = "validation(this)", @required = "required", @type = "file" })
+                                                    <a onclick="PreviewDoc(@Model.documentLists[i].DocumentId);" data-toggle="modal" data-target="#myModal1" style="cursor:pointer">
+                                                        @if (Model.documentLists[i].IsDocVerify != "")
+                                                        {
+                                                            <span class="badge badge-danger hh"><i class="fa fa-eye"></i>&nbsp;View</span>
+                                                        }
+                                                        (Only pdf/png/jpg/jpeg max size 300Kb)
+                                                    </a>
+                                                    @Html.ValidationMessageFor(o => o.documentLists[i].files, "", new { @class = "validation" })
+                                                    <label id="lbl10" style="display: none; color: red;">10th Mark Sheet Saved</label>
+                                                </td>
+                                            }
+                                            else if (Model.documentLists[i].DocumentId == 2)
+                                            {
+                                                <td>
+                                                    <button class="btn btn-primary c-shadow-1" id="btnfetch12" type="button"><i class="fa fa-save"></i>&nbsp;Get Mark Sheet</button>
+                                                </td>
+                                                <td>
+                                                    @Html.HiddenFor(x => x.documentLists[i].IsDocVerify, new { @id = "hdn_" + Model.documentLists[i].DocumentId, @class = "form-control input-shadow" })
+                                                    @Html.TextBoxFor(o => o.documentLists[i].files, new { @id = "files_" + Model.documentLists[i].DocumentId, @class = "form-control valid", @maxlength = "15", @onchange = "validation(this)", @required = "required", @type = "file" })
+                                                    <a onclick="PreviewDoc(@Model.documentLists[i].DocumentId);" data-toggle="modal" data-target="#myModal1" style="cursor:pointer">
+                                                        @if (Model.documentLists[i].IsDocVerify != "")
+                                                        {
+                                                            <span class="badge badge-danger hh"><i class="fa fa-eye"></i>&nbsp;View</span>
+                                                        }
+                                                        (Only pdf/png/jpg/jpeg max size 300Kb)
+                                                    </a>
+                                                    @Html.ValidationMessageFor(o => o.documentLists[i].files, "", new { @class = "validation" })
+                                                    <label style="display:none;color:red;" id="lbl12">12th Mark Sheet Saved</label>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(o => o.documentLists[i].files, new { @id = "files_" + Model.documentLists[i].DocumentId, @class = "form-control valid", @maxlength = "15", @onchange = "validation(this)", @required = "required", @type = "file" })
+                                                    <a onclick="PreviewDoc(@Model.documentLists[i].DocumentId);" data-toggle="modal" data-target="#myModal1" style="cursor:pointer">
+                                                        @if (Model.documentLists[i].IsDocVerify != "")
+                                                        {
+                                                            <span class="badge badge-danger hh"><i class="fa fa-eye"></i>&nbsp;View</span>
+                                                        }
+                                                        (Only pdf/png/jpg/jpeg max size 300Kb)
+                                                    </a>
+                                                    @Html.ValidationMessageFor(o => o.documentLists[i].files, "", new { @class = "validation" })
+                                                </td>
+                                            }
+
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        if (Model.documentLists[i].IsDocVerify == "Y") // if edisha verified
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(o => o.documentLists[i].DocumentName)
+                                                    @Html.HiddenFor(x => x.documentLists[i].DocumentId, new { @class = "form-control input-shadow" })
+                                                    @Html.HiddenFor(x => x.documentLists[i].IsDocVerify, new { @class = "form-control input-shadow" })
+                                                    <span style="color:red;"><strong>*</strong></span>
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(o => o.documentLists[i].DocumentNo, new { @class = "form-control input-shadow checkvalid" })
+                                                    @*@Html.TextBoxFor(o => o.documentLists[i].files, new { @id = "files_" + Model.documentLists[i].DocumentId, @class = "notvalid", @type = "file" })*@
+                                                </td>
+                                                <td>
+                                                    <span class="btn btn-success">Verified</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(o => o.documentLists[i].DocumentName)
+                                                    @Html.HiddenFor(x => x.documentLists[i].DocumentId, new { @class = "form-control input-shadow" })
+                                                    @Html.HiddenFor(x => x.documentLists[i].IsDocVerify, new { @class = "form-control input-shadow" })
+                                                    <span style="color:red;"><strong>*</strong></span>
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(o => o.documentLists[i].DocumentNo, new { @id = "EdishaId_" + @Model.documentLists[i].DocumentId, @class = "form-control input-shadow checkvalid", @placeholder = "15 digit edisha transaction id", @maxlength = "15" })
+                                                    @Html.HiddenFor(x => x.documentLists[i].EdishaServiceId, new { @id = "ServiceCode_" + @Model.documentLists[i].DocumentId, @class = "form-control input-shadow" })
+                                                </td>
+                                                <td>
+                                                    @if (Model.documentLists[i].IsDocVerify == "N") // if edisha not verified
+                                                    {
+                                                        <span class="btn btn-danger">Not Verified</span>
+                                                        @Html.TextBoxFor(o => o.documentLists[i].files, new { @id = "files_" + Model.documentLists[i].DocumentId, @class = "form-control valid", @maxlength = "15", @onchange = "validation(this)", @required = "required", @type = "file" })
+                                                        @Html.ValidationMessageFor(o => o.documentLists[i].files, "", new { @class = "validation" })
+                                                        <a onclick="PreviewDoc(@Model.documentLists[i].DocumentId);" data-toggle="modal" data-target="#myModal1" style="cursor:pointer">
+                                                            @if (Model.documentLists[i].IsDocVerify != "")
+                                                            {
+                                                                <span class="badge badge-danger hh"><i class="fa fa-eye"></i>&nbsp;View</span>
+                                                            }
+                                                            (Only pdf/png/jpg/jpeg max size 300Kb)
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="button" value="Verify" id="btn_@Model.documentLists[i].DocumentId" class="btn btn-danger" onclick="VerifyDocument(this,@Model.documentLists[i].DocumentId);" />
+                                                        <span style="display:none" id="span_@Model.documentLists[i].DocumentId">
+                                                            @Html.TextBoxFor(o => o.documentLists[i].files, new { @id = "files_" + Model.documentLists[i].DocumentId, @class = "form-control valid", @maxlength = "15", @onchange = "validation(this)", @required = "required", @type = "file" })
+                                                            @Html.ValidationMessageFor(o => o.documentLists[i].files, "", new { @class = "validation" })
+                                                            <a onclick="PreviewDoc(@Model.documentLists[i].DocumentId);" data-toggle="modal" data-target="#myModal1" style="cursor:pointer">
+                                                                @if (Model.documentLists[i].IsDocVerify != "")
+                                                                {
+                                                                    <span class="badge badge-danger hh"><i class="fa fa-eye"></i>&nbsp;View</span>
+                                                                }
+                                                                (Only pdf/png/jpg/jpeg max size 300Kb)
+                                                            </a>
+                                                        </span>
+                                                    }
+
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    }
+
+                                }
+                            }
+                        </thead>
+                    </table>
+                    @if (Session["Verificationstatus"].ToString() == "" || Session["Verificationstatus"].ToString() == "R")
+                    {
+                        <div class="col-md-12 cus-registerbtn text-right">
+                            <button class="btn btn-primary c-shadow-1" id="btnUpload" value="Upload" type="submit">Save & Next</button>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="outer-loader" style="display: none;">
+                <div class="loader-img loader" style="display: none;"></div>
+            </div>
+        }
+
+    </div>
+</div>
+<div class="modal cus-modal" tabindex="-1" id="myModal1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Preview</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                @*<iframe id="Pviewer" src="" frameborder="0" scrolling="no" class="cus-view-frame"></iframe>*@
+                <embed id="Pviewer" src="" frameborder="0" scrolling="no" class="cus-view-frame" />
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" style="min-width: 50px; font-weight: bold; font-size: 12px;" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script language="javascript" type="text/javascript">
+
+    var isDocVerify = 0;
+    var isverify = 0;
+
+    function startPreloader() {
+        $(".loader").css("display", "block");
+        $(".outer-loader").css("display", "block");
+
+    }
+    function stopPreloader() {
+
+        $(".loader").css("display", "none");
+        $(".outer-loader").css("display", "none");
+    }
+
+
+    function PreviewDoc(el) {
+        $('#Pviewer').attr('src', ('//:0'));
+
+         var DocId =el;
+          $.ajax({
+             url: '@Url.Action("GetImage", "FileUpload")',
+             type: "POST",
+              data: "{DocId:" + DocId + "}",
+              contentType: "application/json; charset=utf-8",
+              dataType: "json",
+              success: function (data) {
+
+                  var json = JSON.parse(data);
+
+                  var Xdoc = json[0].Docs;
+
+            var cha = Xdoc.toString().substring(0, 5);
+            if (cha == 'JVBER') {
+                $('#Pviewer').attr('src', ('data:application/pdf;base64,' + Xdoc));
+            }
+            else if (cha == '/9j/4') {
+                $('#Pviewer').attr('src', ('data:image/jpeg;base64,' + Xdoc));
+
+            }
+            else if (cha == "iVBOR") {
+
+                 $('#Pviewer').attr('src', ('data:image/png;base64,' + Xdoc));
+                  }
+             },
+             error: function (err) {
+                 alert(err.statusText);
+             }
+         });
+
+
+    }
+
+    function validation(abc) {
+
+        var id = abc.id;
+        var selectedFile = document.getElementById(id).files;
+        var a = abc.files[0].size / 1024;
+        var fname = (document.getElementById(id).value).substring(12);
+        var extension = fname.replace(/^.*\./, '');
+        console.log(extension);
+        var b = 0;
+        if (extension == "pdf") {
+            b = 300;
+        }
+        else {
+            b = 1000;
+        }
+          if (a < parseInt(b)) {
+
+            //Check File is not Empty
+            if (selectedFile.length > 0) {
+                //
+                var re = /(\.pdf)$/i;
+                var re1 = /(\.jpeg)$/i;
+                var re2 = /(\.jpg)$/i;
+                var re3 = /(\.png)$/i;
+
+                var fname = (document.getElementById(id).value).substring(12);
+                var res = fname.split(".");
+                var count = res.length;
+                if (count > 2) {
+                    document.getElementById(id).value = null;
+                    alert("File not supported! Kindly select pdf/png/jpg/jpeg file only");
+                    return false;
+                }
+                if (re.exec(fname) || re1.exec(fname)|| re2.exec(fname)|| re3.exec(fname)) {
+                    var extenstion = (document.getElementById(id).value).substring(12);
+                    // Select the very first file from list
+                    var fileToLoad = selectedFile[0];
+                    // FileReader function for read the file.
+                    var fileReader = new FileReader();
+                    var base64;
+                    var filesubstring;
+                    // Onload of file read the file content
+                    fileReader.onload = function (fileLoadedEvent) {
+                        base64 = fileLoadedEvent.target.result;
+                        substring = "JVBER";
+                        substring2 = "/9j/4";
+                        substring3 = "iVBOR";
+
+                        if (base64.includes(substring) || base64.includes(substring2)|| base64.includes(substring3)) {
+                        }
+                        else {
+                            document.getElementById(id).value = null;
+                            swal("Alert!", "File not supported. Kindly select pdf/png/jpg/jpeg file only.", "warning");
+                        }
+                        //console.log(base64);
+                    };
+                    // Convert data to base64
+                    fileReader.readAsDataURL(fileToLoad);
+                }
+                else {
+                    document.getElementById(id).value = null;
+                    swal("Alert!", "File not supported. Kindly select pdf/png/jpg/jpeg.", "warning");
+                }
+            }
+        }
+        else {
+            document.getElementById(id).value = null;
+            swal("Warning!", "File size is not exceed "+b+" KB", "warning");
+        }
+    }
+
+    function validationForSignatures(abc) {
+
+        var id = abc.id;
+        $formData = new FormData();
+        var selectedFile = document.getElementById(id).files;
+        //Check File is not Empty
+        var a = abc.files[0].size / 1024;
+        a = parseInt(a);
+        if (a>10 && a<100) {
+            if (selectedFile.length > 0) {
+                var re = /(\.png)$/i;
+                var re1 = /(\.jpeg)$/i;
+                var re2 = /(\.jpg)$/i;
+                var fname = (document.getElementById(id).value).substring(12);
+                if (re.exec(fname) || re1.exec(fname) || re2.exec(fname)) {
+                    if (abc.files && abc.files[0]) {
+                        var fr = new FileReader();
+                        fr.addEventListener("load", function (e) {
+                            if (window.FormData !== undefined) {
+                                var fileUpload = $("#files_9").get(0);
+                                var files = fileUpload.files;
+                                // Create FormData object
+                                var fileData = new FormData();
+                                // Looping over all files and add it to FormData object
+                                for (var i = 0; i < files.length; i++) {
+                                    fileData.append(files[i].name, files[i]);
+                                }
+
+                                // Adding one more key to FormData object
+                                @*$.ajax({
+                                  //  url: '/Account/SignatureSave',
+                                    url: '@Url.Action("SignatureSave", "Account")',
+                                    type: "POST",
+                                    contentType: false, // Not to set any content header
+                                    processData: false, // Not to process data
+                                    data: fileData,
+                                    success: function (base64String) {
+                                        $("#imgSign").attr("src", "data:image/png;base64," + base64String + "");
+                                    },
+                                    error: function (err) {
+                                        alert(err.statusText);
+                                    }
+                                });*@
+                            } else {
+                                alert("FormData is not supported.");
+                            }
+                        });
+                        fr.readAsDataURL(abc.files[0]);
+                    }
+                }
+                else {
+                    document.getElementById(id).value = null;
+                    swal("Alert", "file not supported! kindly select png, jpeg or jpg file only", "warning");
+                }
+            }
+        }
+        else {
+            document.getElementById(id).value = null;
+            swal("Alert", "file size should be 10KB to 100KB","warning");
+        }
+    }
+    function VerifyDocument(elem,docid) {
+        startPreloader();
+        var idd = $(elem);
+        var citizenname = "";
+
+        var TransactionId = $('#EdishaId_' + docid).val();
+        var servicecode = $('#ServiceCode_' + docid).val();
+        var Caste = '@Model.Caste';
+        var DocId = docid;
+        if (servicecode == "16") {
+            citizenname = $('#txtfathername').val() + "$" + $('#txtmothername').val();
+
+        }
+        else {
+            citizenname = $('#txtapplicant').val();
+        }
+
+        if (TransactionId == "") {
+
+            swal('Alert!', 'Document Id required', 'warning');
+             stopPreloader();
+            return;
+        }
+
+        item = {
+            TransactionID: TransactionId,
+            ServiceCode: servicecode,
+            Name: citizenname,
+            Caste: Caste,
+            DocId: DocId
+        }
+
+          $.ajax({
+                  type: "POST",
+                  url: '@Url.Action("GetDocumentStatus", "FileUpload")',
+                  data: "{item:" + JSON.stringify(item) + "}",
+                  contentType: "application/json; charset=utf-8",
+                  dataType: "json",
+                  success: function (data) {
+
+                      if (data == "001") {
+                          swal("Alert!","Document Not Verified. Kindly check your 15 digit eDisha transaction id OR upload your document.","warning");
+                          isDocVerify = 1;
+                          isverify = 0;
+                          var visibleid = $(idd).siblings('span').attr('id');
+                          var validationid = $(idd).siblings().children().attr('id');
+                          $('#'+visibleid).show();
+                          $('#'+validationid).attr("required","required");
+                      }
+                      if (data == "000") {
+
+                          isDocVerify = 1;
+                          isverify = 1;
+
+                          $('#btn_' + docid).val('Verified');
+                          $('#btn_' + docid).addClass('btn btn-success');
+                          $('#btn_' + docid).attr('disabled','disabled');
+                          $('#EdishaId_' + docid).attr("readonly", "readonly");
+                          $('#files_' + docid).removeAttr("required", "required");
+                                            swal({
+                            title: "Success!!",
+                            text: "Document has been verified. Please upload other documents",
+                            type: "success",
+                            showCancelButton: false,
+                            confirmButtonClass: "btn-danger",
+                            confirmButtonText: "Ok",
+                            closeOnConfirm: false
+                        },
+                      function (isConfirm) {
+                        if (isConfirm) {
+
+                            window.location = "@Url.Action("FileUpload", "FileUpload")"
+                        }
+                        else {
+
+                        }
+                    });
+
+                      }
+                      if (data == "999") {
+
+                          swal("Alert!","Something went wrong.!","warning");
+                          isDocVerify = 0;
+                      }
+                     stopPreloader();
+
+                  },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                     stopPreloader();
+
+                }
+          });
+
+
+    }
+
+    function Fetchmarks(qual) {
+        startPreloader();
+          $.ajax({
+               type: "GET",
+              url: '@Url.Action("GetMarkSheet", "Account")',
+              data: { Exampassed: qual },
+               contentType: "application/json; charset=utf-8",
+               dataType: "json",
+              success: function (data) {
+                  if (data == true) {
+                      if (qual == '10th') {
+                          $("#btnfetch10").hide();
+                          $("#files_1").prop("disabled", true);
+                          $("#lbl10").show();
+                          $("#hdn_1").val("Y");
+                          $("#10thsapn").removeClass('hh');
+
+                      }
+                      if (qual == '12th') {
+                          $("#btnfetch12").hide();
+                          $("#files_2").prop("disabled", true);
+                          $("#lbl12").show();
+                          $("#hdn_2").val("Y");
+                          $("#12thsapn").removeClass('hh');
+                      }
+                      window.location = "@Url.Action("FileUpload", "FileUpload")";
+                  }
+                  else {
+                      $("#files_1").prop("disabled", false);
+                      $("#files_2").removeAttr("disabled");
+                      swal("Document not found, Kindly upload your document");
+
+                  }
+                  stopPreloader();
+               },
+              failure: function (data) {
+
+                  stopPreloader();
+               }
+           });
+
+    }
+
+    $(document).ready(function () {
+        // prevent form submit from console window
+        //$("#frm").submit(function (e) {
+        //    alert('submit intercepted');
+        //    stopPreloader();
+        //    e.preventDefault(e);
+        //});
+
+         var MaxPages = '@Session["MaxPage"]';
+        var currentPage = '@Session["currentPage"]';
+        for (var i = 0; i < parseInt(MaxPages) ; i++) {
+            if ((i+1) != currentPage) $("#tablist > li:eq(" + i + ")").addClass('done');
+            else $("#tablist > li:eq(" + i + ")").addClass('current');
+        }
+        for (i = 8; i > MaxPages; i--) {
+            $("#tablist > li:eq(" + (i - 1) + ")>a").attr("href", "#");
+        }
+
+        // If doc exists show view file option
+        if (@Model.IsDocExists> 0) {
+
+            $('span.hh').removeClass('hh');
+            $('.valid').removeAttr('required');
+            $('#btnfetch10').hide();
+            $('#btnfetch12').hide();
+
+        }
+        else {
+            $("#files_1").prop("disabled", true);
+            $("#files_2").prop("disabled", true);
+        }
+
+        $(document).on("keyup", ".checkvalid", function () {
+
+            if (/\D/g.test(this.value)) {
+                this.value = this.value.replace(/\D/g, '');
+                swal("Alert!", "Please enter only numeric value", "warning");
+            }
+        });
+        $("#btnfetch10").on('click', function () {
+            Fetchmarks("10th");
+        });
+        $("#btnfetch12").on('click', function () {
+            Fetchmarks("12th");
+        });
+        $('#btnUpload').on('click', function () {
+
+                  if ((isDocVerify == 0 && @Model.IsDocExists== 0) && ($('#EdishaId_5').is(':visible') || $('#EdishaId_4').is(':visible') || $('#EdishaId_3').is(':visible') || $('#EdishaId_6').is(':visible') )) {
+                swal('Alert!', 'Please verify the document', 'warning');
+                return false;
+            }
+        });
+
+        // disable enter as submit button
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+
+    $(function () {
+        $("#files_8").change(function () {
+            if (typeof (FileReader) != "undefined") {
+                var dvPreview = $("#dvPreview_8");
+                dvPreview.html("");
+                var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+                $($(this)[0].files).each(function () {
+                    var file = $(this);
+                    if (regex.test(file[0].name.toLowerCase())) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            var img = $("<img />");
+                            img.attr("style", "height:100px;width: 100px");
+                            img.attr("src", e.target.result);
+                            dvPreview.append(img);
+                        }
+                        reader.readAsDataURL(file[0]);
+                    } else {
+                        alert(file[0].name + " is not a valid image file.");
+                        dvPreview.html("");
+                        $("#files_8").val("");
+                        return false;
+                    }
+                });
+            } else {
+                alert("This browser does not support HTML5 FileReader.");
+            }
+        });
+    });
+    $(function () {
+        $("#files_9").change(function () {
+            if (typeof (FileReader) != "undefined") {
+                var dvPreview = $("#dvPreview_9");
+                dvPreview.html("");
+                var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+                $($(this)[0].files).each(function () {
+                    var file = $(this);
+                    if (regex.test(file[0].name.toLowerCase())) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+
+                            var img = $("<img />");
+                            img.attr("style", "height:100px;width: 100px");
+                            img.attr("src", e.target.result);
+                            dvPreview.append(img);
+                        }
+                        reader.readAsDataURL(file[0]);
+                    } else {
+                        alert(file[0].name + " is not a valid image file.");
+                        dvPreview.html("");
+                        $("#files_9").val("");
+                        return false;
+                    }
+                });
+            } else {
+                alert("This browser does not support HTML5 FileReader.");
+            }
+        });
+    });
+</script>
+@if (Session["Verificationstatus"].ToString() == "F")
+{
+    <script>
+        $('#home').removeClass('active');
+        $('#home').addClass('disabledbutton');
+    </script>
+}

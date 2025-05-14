@@ -1,0 +1,375 @@
+
+/**  =====================
+      Custom css start
+==========================  **/
+body {
+    background-color: #f3f3f3;
+    font-size: 0.875em;
+    overflow-x: hidden;
+    color: #222;
+    font-family: "Montserrat", sans-serif;
+    background-attachment: fixed;
+}
+
+ul {
+  padding-left: 0;
+  list-style-type: none;
+  margin-bottom: 0; }
+
+*:focus {
+  outline: none; }
+
+a {
+    font-size: 13px;
+    color: #222;
+    font-family: "Montserrat", sans-serif;
+}
+  @media only screen and (min-width: 1400px) {
+    a {
+      font-size: 14px; } }
+  a:focus, a:hover {
+    text-decoration: none;
+    color: #4099ff; }
+
+h4 {
+  font-size: 1.375rem; }
+
+h6 {
+  font-size: 14px; }
+
+p {
+  font-size: 14px; }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 600;
+    font-family: "Montserrat", sans-serif;
+}
+
+.media-left {
+  padding-right: 20px; }
+/*--------------------------------------
+    Top bar css and css changer
+*/
+.homepage .cus-maintop-banner {
+    background: #213F71;
+    border-bottom: 4px solid #e1e1e1;
+}
+
+    .homepage .cus-maintop-banner a {
+        color: #fff;
+        text-decoration: none;
+        transition: all 0.3s ease-in 0s;
+        text-align: center;
+        vertical-align: middle;
+        display: inline-block;
+        padding: 4px 10px;
+        font-family: "Montserrat", sans-serif;
+    }
+
+.cus-maintop-banner a:hover {
+    color: #fff;
+    text-decoration: none;
+    background: #F28028;
+    transition: all 0.3s ease-in 0s;
+}
+
+.cus-maintop-banner .button-toggle-remove {
+    background: #ccc;
+    color: #333;
+}
+
+.cus-maintop-banner .button-toggle-highcontrast {
+    background: #333;
+    color: #fff;
+}
+
+.skip-content {
+    padding: 10px 8px;
+    font-size: 12px;
+    transition: all 0.4s;
+}
+/*--------------------------------------------------------------
+/**====== Custom css end ======**/
+/**  =====================
+      Theme-preloader css start
+==========================  **/
+.theme-loader {
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  z-index: 999999;
+  top: 0;
+  left: 0; }
+  .theme-loader .loader-track {
+    position: relative;
+    left: 0;
+    top: 0;
+    position: absolute;
+    height: 3px;
+    display: block;
+    width: 100%;
+    background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.6)), to(transparent));
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent);
+    overflow: hidden; }
+    .theme-loader .loader-track .loader-bar:after, .theme-loader .loader-track .loader-bar:before {
+      content: '';
+      position: absolute;
+      background-color: inherit;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      will-change: left, right;
+      background: -webkit-gradient(linear, left top, left bottom, from(#4099ff), to(rgba(64, 153, 255, 0.8)));
+      background: linear-gradient(to bottom, #4099ff, rgba(64, 153, 255, 0.8)); }
+    .theme-loader .loader-track .loader-bar:before {
+      -webkit-animation: move 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+              animation: move 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite; }
+    .theme-loader .loader-track .loader-bar:after {
+      -webkit-animation: movefast 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+              animation: movefast 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+      -webkit-animation-delay: 1.15s;
+              animation-delay: 1.15s; }
+
+@-webkit-keyframes move {
+  0% {
+    left: -35%;
+    right: 100%; }
+  60% {
+    left: 100%;
+    right: -90%; }
+  100% {
+    left: 100%;
+    right: -90%; } }
+
+@keyframes move {
+  0% {
+    left: -35%;
+    right: 100%; }
+  60% {
+    left: 100%;
+    right: -90%; }
+  100% {
+    left: 100%;
+    right: -90%; } }
+@-webkit-keyframes movefast {
+  0% {
+    left: -200%;
+    right: 100%; }
+  60% {
+    left: 107%;
+    right: -8%; }
+  100% {
+    left: 107%;
+    right: -8%; } }
+@keyframes movefast {
+  0% {
+    left: -200%;
+    right: 100%; }
+  60% {
+    left: 107%;
+    right: -8%; }
+  100% {
+    left: 107%;
+    right: -8%; } }
+/**  =====================
+      Main-body css start
+==========================  **/
+
+.main-body .page-wrapper {
+  padding: 1.8rem;
+  -webkit-transition: all ease-in 0.3s;
+  transition: all ease-in 0.3s; }
+.main-body .page-header h5 {
+  color: #4099ff; }
+.main-banner img {
+    width: 100%;
+    border-bottom: 4px solid #213F71;
+}
+
+.homepage .cus-heading h4 {
+    color: #223f73;
+    font-weight: 800;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    text-decoration: none;
+    position: relative;
+    text-align:center;
+}
+
+.homepage .cus-heading h4::after {
+    content: '';
+    position: absolute;
+    height: 4px;
+    bottom: -10px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    width: 8%;
+    background: #223f73;
+    -o-transition: .5s;
+    -ms-transition: .5s;
+    -moz-transition: .5s;
+    -webkit-transition: .5s;
+    transition: .5s;
+}
+
+.homepage .cus-heading h4:hover:after {
+    width: 20%;
+    background: orange;
+}
+.top-section {
+    box-shadow: rgba(18, 16, 87, 0.17) 0px 0px 5px;
+    -webkit-box-shadow: rgba(18, 16, 87, 0.17) 0px 0px 5px;
+    padding: 0.8rem;
+    background:#fff;
+}
+.homepage .top-section label {
+    font-size: 14px !important;
+}
+.middle-section {
+    box-shadow: rgba(18, 16, 87, 0.17) 0px 0px 5px;
+    -webkit-box-shadow: rgba(18, 16, 87, 0.17) 0px 0px 5px;
+    padding: 0.8rem;
+    margin-top: 10px;
+    background: #fff;
+}
+    .homepage .middle-section label {
+        font-size: 14px !important;
+        color: rgb(52, 73, 94) !important;
+    }
+.homepage .card{
+    background:#fff;
+}
+.cus-getbtn .btn.btn-info {
+    background: #223f73;
+    border: 1px solid #223f73;
+    box-shadow: 0 2px 6px #223f73;
+    cursor: pointer;
+    margin-top: 1%;
+}
+
+    .cus-getbtn .btn.btn-info:hover {
+        transition: all 0.5s;
+        border-radius: 10px;
+        box-shadow: 0px 6px 10px #F6822F;
+        color: #fff;
+        background: #F6822F;
+        border: 1px solid #F6822F;
+    }
+.cus-getbtn .btn.btn-info:hover::after {
+            opacity: 1;
+            transition: all 0.5s;
+            color: #fff;
+ }
+.cus-registerbtn .btn.btn-primary {
+    background: #223f73;
+    border: 1px solid #223f73;
+    box-shadow: 0 2px 6px #223f73;
+    cursor: pointer;
+    margin-top: 1%;
+}
+
+    .cus-registerbtn .btn.btn-primary:hover {
+        transition: all 0.5s;
+        border-radius: 10px;
+        box-shadow: 0px 6px 10px #F6822F;
+        color: #fff;
+        background: #F6822F;
+        border: 1px solid #F6822F;
+    }
+
+        .cus-registerbtn .btn.btn-primary:hover::after {
+            opacity: 1;
+            transition: all 0.5s;
+            color: #fff;
+        }
+.cus-modal .modal-header {
+    background: #223f73;
+    color:#fff;
+}
+.cus-modal .close {
+    background: #fff;
+    color: #223f73;
+    padding: 0.4rem 0.5rem;
+    opacity: 1;
+    border-radius: 0.1rem;
+    cursor:pointer;
+}
+.cus-modal-button .btn{
+    cursor:pointer;
+}
+.cus-modal h4{
+    font-size:18px !important;
+}
+#footer {
+    background: #223f73;
+    padding: 10px 0 10px 0;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+}
+#footer a{
+    color:#fff;
+    text-align:center;
+}
+ul {
+    list-style-type: none;
+}
+
+    ul.list li a {
+        color: #333;
+        cursor: pointer;
+        transition: all 0.3s linear;
+    }
+
+    ul.list li {
+        margin: 10px 0px;
+        padding: 1px;
+        text-align: center;
+        display: inline-block;
+        border-radius: 4px;
+    }
+
+.list .active {
+    background: #223f73;
+    color: #fff;
+    border: 0;
+    padding: 0.5rem;
+}
+.cus-topbar-label .btn.btn-info {
+    background: #213F71;
+    cursor: pointer;
+    border: 1px solid #213F71;
+    margin-top: 5px;
+}
+
+    .cus-topbar-label .btn.btn-info:hover {
+        background: #F28028;
+        transition: all 0.5s;
+        border-radius: 10px;
+        box-shadow: 0px 6px 10px #F28028;
+        color: #fff;
+        border: 1px solid #F28028;
+    }
+@media only screen and (max-width: 640px) {
+    .cus-heading h3 {
+        left:0px !important;
+        position:relative;
+        text-align:center;
+    }
+    .pcoded-main-container{
+        margin-top:0px !important;
+    }
+    .c-shadow{
+        margin-bottom:14% !important;
+    }
+}

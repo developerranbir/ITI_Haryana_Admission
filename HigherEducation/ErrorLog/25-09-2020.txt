@@ -1,0 +1,20 @@
+
+Log Entry : 4.31.21 PM 25 September 2020
+  :
+  :Method Name -    at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at HigherEducation.BusinessLayer.CourseDB.SendManualSMS(String connection) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\CourseDB.cs:line 499
+Target Website - System.Data.DataColumn GetDataColumn(System.String)
+ Error - Column 'MobileNo11' does not belong to table Table.
+
+-------------------------------
+
+Log Entry : 4.32.53 PM 25 September 2020
+  :
+  :Method Name -    at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at HigherEducation.BusinessLayer.CourseDB.SendManualSMS(String connection) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\CourseDB.cs:line 499
+Target Website - System.Data.DataColumn GetDataColumn(System.String)
+ Error - Column 'MobileNo11' does not belong to table Table.
+
+-------------------------------

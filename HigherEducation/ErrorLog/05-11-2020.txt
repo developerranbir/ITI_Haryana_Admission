@@ -1,0 +1,24 @@
+
+Log Entry : 5.16.55 PM 05 November 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.UpdateSubjectCombinationfees(String SubjectCombinationId, String TotalFees, String NoofSeats)
+Target Website - System.Web.Mvc.JsonResult UpdateSubjectCombinationfees(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 5.17.24 PM 05 November 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.UpdateSubjectCombinationfees(String SubjectCombinationId, String TotalFees, String NoofSeats)
+Target Website - System.Web.Mvc.JsonResult UpdateSubjectCombinationfees(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 5.20.25 PM 05 November 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.UpdateSubjectCombinationfees(String SubjectCombinationId, String TotalFees, String NoofSeats)
+Target Website - System.Web.Mvc.JsonResult UpdateSubjectCombinationfees(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------

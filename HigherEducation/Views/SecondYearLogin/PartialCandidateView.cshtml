@@ -1,0 +1,202 @@
+﻿@model  HigherEducation.Models.FeeModule
+
+@{
+    Layout = null;
+    //Layout = "~/Views/Shared/_LayoutFee.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Details</title>
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/stylepayment.css">
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <link href="~/assets/css/all.css" rel="stylesheet" />
+    <link href="~/assets/css/jquery-ui.css" rel="stylesheet" />
+    <script src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <style>
+
+        .loader,
+        .outer-loader {
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        .outer-loader {
+            background: rgba(0, 0, 0, .3);
+            width: 100%;
+            height: 100%;
+            z-index: 999
+        }
+
+        .loader {
+            width: 69px;
+            height: 89px;
+            border: 1px solid #000;
+            margin: auto
+        }
+
+        .loader-img {
+            border: 15px solid #415bbb;
+            border-radius: 50%;
+            border-top: 15px solid #000;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0)
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg)
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .row_new {
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+        #logo img {
+            height: auto;
+            padding-left: 3px;
+            width: 40px
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        @@media print {
+            #dvIsSc, #cmd1 {
+                display: none;
+            }
+
+            .top-heading {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+        <section class="cus-background">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="card c-shadow">
+                        <div class="card-body">
+                            <div class="row cus-inner-border">
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="RegistrationId"><span class="english">Registration Id:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.RegistrationId, new { @class = "form-control" })
+
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="CandidateName"><span class="english">Candidate Name:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.CandidateName, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="gendername"><span class="english">Gender:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.gender_name, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="CollegeName"><span class="english">College:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.CollegeName, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="CourseName"><span class="english">Course:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.CourseName, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="CourseName"><span class="english">Course Section:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.SectionName, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="CategoryName"><span class="english">Student Category:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.CategoryName, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="SeatAllocationCategory"><span class="english">Seat Allocation Category:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.SeatAllocationCategory, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="SeatAllocationCategory"><span class="english">Mobile Number:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.CandidateMobile, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="SeatAllocationCategory"><span class="english">Email ID:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.CandidateEmailid, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+    <script type="text/javascript" src="../assets/js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../assets/js/popperjs/popper.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap/Js/bootstrap.min.js"></script>
+    <script src="~/swalJs/sweetalert.min.js"></script>
+    <script src="~/swalJs/swal-forms.js"></script>
+    <script src="~/scripts/printThis.js"></script>
+    <script type="text/javascript" language="Javascript">
+        history.go(1); // disable the browser's back button
+    </script>
+</body>
+</html>

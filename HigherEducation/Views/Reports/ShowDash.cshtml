@@ -1,0 +1,2123 @@
+﻿@{
+
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>ITI Admissions 2024 Dashboard</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/sweetalert.css" rel="stylesheet" />
+    <link href="../assets/css/styledashboard.css?version=1" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/jquery-3.5.1.js"></script>
+    <script src="../assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../assets/js/popperjs/popper.min.js"></script>
+    <script src="../assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../scripts/sweetalert.min.js"></script>
+    <link href="../assets/dataTable/dataTables/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/jquery.dataTables.min.js"></script>
+    @*<link href="../assets/css/styleverification.css" rel="stylesheet" />*@
+    <link href="../assets/css/all.css" rel="stylesheet" />
+    <script src="../assets/js/Chartjs/chart.js"></script>
+    <link href="../assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/dataTables.buttons.min.js"></script>
+    <script src="../assets/dataTable/dataTables/pdfmake.min.js"></script>
+    <script src="../assets/dataTable/dataTables/buttons.html5.min.js"></script>
+    <script src="../assets/dataTable/dataTables/buttons.print.min.js"></script>
+    <script src="../assets/dataTable/dataTables/vfs_fonts.js"></script>
+    <script src="../assets/dataTable/dataTables/jszip.min.js"></script>
+    <script src="~/assets/js/chartjs/chartjs-plugin-datalabels.js"></script>
+    <style>
+    </style>
+
+    <style type="text/css">
+	
+	@@media (max-width: 700px) 
+ {
+  .card-counter .count-numbers 
+  {
+    position: absolute;
+    right: 30px;
+    top: 10px;
+    font-size: 20px;
+    display: block;
+  }
+
+    
+ .card-counter .count-numbers-pvt
+  {
+    position: absolute;
+    left: 166px;
+    top: 10px;
+    font-size: 20px;
+    display: b ock;
+  }
+
+ .card-counter .count-numbers-gov 
+ {
+    position: absolute;
+    left: 75px;
+    top: 10px;
+    font-size: 20px;
+    display: block;
+ }
+ .card-counter .count-name 
+ {
+    position: absolute;
+    right: 23px;
+    top: 58px;
+    text-transform: capitalize;
+    opacity: 1;
+    display: block;
+    font-size: 12px;
+     font-weight: 500; 
+    color: rgb(255, 255, 255);
+ }
+    
+    .card-counter .count-name-pvt {
+    position: absolute;
+    left: 174px;
+    top: 56px;
+    text-transform: capitalize;
+    opacity: 1;
+    display: block;
+    font-size: 14px;
+    font-size: 1;
+    ight: 700;
+    color: rgb(255, 255, 255);
+    }
+
+    .card-counter i 
+    {
+    font-size: 20px;
+    opacity: 0.7;
+    
+    }
+
+     .card-counter .count-name-gov {
+    position: absolute;
+    left: 77px;
+    top: 55px;
+    text-transform: capitalize;
+    opacity: 1;
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: rgb(255, 255, 255);
+  }
+}
+ 
+	
+        .chart-legend li span {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            margin-right: 5px;
+        }
+
+        .chart-legend {
+            height: 290px;
+            overflow: auto;
+        }
+
+            .chart-legend li {
+                cursor: pointer;
+                list-style: none;
+            }
+
+        .strike {
+            text-decoration: line-through !important;
+        }
+
+        .float-left {
+            float: left;
+        }
+
+        .modalBackground {
+            background-color: rgb(192,234,255);
+            filter: alpha(opacity=70);
+            opacity: 0.7;
+            z-index: 100 !important;
+        }
+
+        .modalPopup {
+            background-color: #ffffff;
+            border-width: 3px;
+            border-style: solid;
+            border-color: Gray;
+            padding: 3px;
+            /*width: 250px;*/
+            z-index: 100;
+        }
+
+        .btnPop {
+            background-color: #033280;
+            color: White;
+            font-size: 12px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+    </style>
+    <script>
+        $(document).ready(
+            function () {
+                $('#RegistrationTabs a,#VerificationsTab a,#MFtabs a,#reservationtabs a,#BoardTabs a,#DomicileTabs a').on('click', function (e) {
+                    e.preventDefault()
+                    $(this).tab('show')
+                });
+                Chart.plugins.unregister(ChartDataLabels);
+                getChartData();
+                //bubbleChart();
+
+
+
+            });
+            function getChartData() {
+            $("#cover").fadeIn();
+
+             $.ajax({
+                    url: '@Url.Action("d_GetDateWiseRegistrations", "Reports")',
+                    type: 'GET',
+                    contentType: 'application/json;charset=utf-8',
+                    dataType: 'json',
+                    success: function (data)
+                    {
+                        var ListOfColleges = JSON.parse(data);
+
+                        $("#tblRegistrations").DataTable({
+                            dom: 'Bfrtip',
+                            destroy: true,
+                            pageLength:4,
+                            Buttons: ['csv','pdf'],
+                            data: ListOfColleges.Table2,
+                            columns: [
+
+                                {
+                                    data: 'datetime', title: "Date", render: function (d) {
+                                        var date_comp = d.split('T');
+                                        var date = date_comp[0].split('-');
+                                        var dateString = date[2] + '/' + date[1] + '/' + date[0];
+                                        return dateString + ' ' + date_comp[1];
+                                    } },
+                                { data:'TotalRegistration',title:"Registrations"},
+                                { data:'TotalFinalSubmission',title:"Applications"},
+                                { data:'Reservation_CatCount',title:"Reserve Ctg."},
+                                { data: 'APICOUNT',title:"API" },
+                                { data:'TotaFemale',title:"Female"},
+                                { data:'FamilyIDCount',title:"FamilyID"},
+                                { data:'AadhaarIDCount',title:"AadhaarID", visible:false},
+                            ]
+                        });
+                        $("#tblVerifications").DataTable({
+                            dom: 'Bfrtip',
+                            destroy: true,
+                            pageLength:4,
+                            Buttons: ['csv','pdf'],
+                            data: ListOfColleges.Table3,
+                            columns: [
+
+                                {
+                                    data: 'DateData', title: "Date", render: function (d) {
+                                        var date_comp = d.split('T');
+                                        var date = date_comp[0].split('-');
+                                        var dateString = date[2] + '/' + date[1] + '/' + date[0];
+                                        return dateString + ' ' + date_comp[1];
+                                    } },
+                                { data:'AllocatedforVerification',title:"Pending Ver."},
+                                { data: 'ObjectionRaised', title:"Obj. Raised"},
+                                { data:'ObjectionRemovedbigint',title:"Obj. Removed"},
+                                { data: 'VerificationOK',title:"Verified" },
+
+                            ]
+                        });
+                        $("#tbltop10course").DataTable({
+                            dom: 'Bfrt',
+
+                            destroy: true,
+                            Buttons: ['csv', 'pdf'],
+                            ordering: false,
+                            paging:false,
+                            data: ListOfColleges.Table1,
+                            columns: [
+
+
+                                { data: 'name', title: "Trades" },
+                                { data: 'Applications', title: "Applications" },
+
+
+                            ]
+                        });
+                        $("#tbltop10college").DataTable({
+                            dom: 'Bfrt',
+                            destroy: true,
+                            Buttons: ['csv', 'pdf'],
+                            data: ListOfColleges.Table,
+                            ordering: false,
+                            paging: false,
+                            columns: [
+
+
+                                { data: 'collegename', title: "Institute" },
+                                { data: 'Applications', title: "Applications" },
+
+
+                            ]
+                        });
+                        $("#tblMF").DataTable({
+                            dom: 'Bfrt',
+                            destroy: true,
+                            Buttons: ['csv', 'pdf'],
+                            data: ListOfColleges.Table7,
+                            ordering: false,
+                            paging: false,
+                            columns: [
+
+
+                                { data: 'Sex', title: "Gender" },
+                                { data: 'Registrations', title: "Applications" },
+
+
+                            ]
+                        });
+                        $("#tblReservations").DataTable({
+                            dom: 'Bfrt',
+                            destroy: true,
+                            Buttons: ['csv', 'pdf'],
+                            data: ListOfColleges.Table6,
+                            ordering: false,
+                            paging: false,
+                            columns: [
+
+
+                                { data: 'reservationname', title: "Category" },
+                                { data: 'Registrations', title: "Applications" },
+
+
+                            ]
+                        });
+                        $("#tblBoard").DataTable({
+                            dom: 'Bfrt',
+                            destroy: true,
+                            Buttons: ['csv', 'pdf'],
+                            data: ListOfColleges.Table9,
+                            ordering: false,
+                            paging: false,
+                            columns: [
+
+
+                                { data: 'univeristyname', title: "Board/Institution Name" },
+                                { data: 'Registrations', title: "Registrations" },
+
+
+                            ]
+                        });
+                        $("#tblDomicile").DataTable({
+                            dom: 'Bfrt',
+                            destroy: true,
+                            Buttons: ['csv', 'pdf'],
+                            data: ListOfColleges.Table8,
+                            ordering: false,
+                            paging: false,
+                            columns: [
+
+
+                                { data: 'Has_Domicile', title: "From Haryana" },
+                                { data: 'Registrations', title: "Registrations" },
+
+
+                            ]
+                        });
+                        var apiData = [];
+                        var familyIdData = [];
+                        var datesData = [];
+                        var totalRegistrations = [];
+                        var reservationCatCount = [];
+                        var femaleApp = [];
+                        var aadhaarApp = [];
+                        var totalfinalSubmission = [];
+
+                        ListOfColleges.Table2.forEach(function (X)
+                        {
+                            datesData.push(X.datetime.split('T')[0]);
+                            apiData.push(X.APICOUNT);
+                            familyIdData.push(X.FamilyIDCount);
+                            totalRegistrations.push(X.TotalRegistration);
+                            reservationCatCount.push(X.Reservation_CatCount);
+                            femaleApp.push(X.TotaFemale == null ? 0 : X.TotaFemale);
+                            aadhaarApp.push(X.AadhaarIDCount == null ? 0 : X.AadhaarIDCount);
+                            totalfinalSubmission.push(X.TotalFinalSubmission == null ? 0 : X.TotalFinalSubmission);
+
+                        });
+
+                        var C_AllocatedforVerification=[];
+                        var C_DateData=[];
+                        var C_NotSet=[];
+                        var C_ObjectionRaised=[];
+                        var C_ObjectionRemovedbigint=[];
+                        var C_ReAllocated=[];
+                        var C_ReplyFiledbyCandidate=[];
+                        var C_Unlocked=[];
+                        var C_VerificationOK=[];
+
+                        ListOfColleges.Table3.forEach(function (X)
+                        {
+                            C_DateData.push(X.DateData.split('T')[0]);
+                            C_AllocatedforVerification.push(X.AllocatedforVerification+X.ReAllocated);
+                            C_ObjectionRaised.push(X.ObjectionRaised);
+                            C_ObjectionRemovedbigint.push(X.ObjectionRemovedbigint);
+                            //C_ReAllocated.push(X.ReAllocated);
+                            C_VerificationOK.push(X.VerificationOK);
+
+                        });
+
+
+                        var ctx = document.getElementById('myChart').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                //labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                                labels: datesData,
+                                datasets: [
+                                    {
+                                    label: 'Total Registrations',
+                                    data: totalRegistrations,//[12, 19, 3, 5, 2, 3],
+                                    backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                                    borderColor:'rgba(255, 99, 132, 1)',
+                                    borderWidth: 1
+                                    },
+                                    {
+                                        label: 'API Data',
+                                        data: apiData,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Reserve Category',
+                                        data: reservationCatCount,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor:'rgba(255, 206, 86, 0.1)',
+                                        borderColor: 'rgba(255, 206, 86, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Female Applicants',
+                                        data: femaleApp,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Total Applications',
+                                        data: totalfinalSubmission,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor:'rgba(255, 159, 64, 0.1)',
+                                        borderColor:'rgba(255, 159, 64, 1)',
+                                        borderWidth: 1
+                                    },
+                                 /*   {
+                                        label: 'Aadhaar IDs',
+                                        data: aadhaarApp,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor:'rgba(153, 102, 255, 0.1)',
+                                        borderColor:'rgba(153, 102, 255, 1)',
+                                        borderWidth: 1
+                                    }, */
+                                    {
+                                        label: 'Family IDs',
+                                        data: familyIdData,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                                        borderColor: 'rgba(76, 175, 80, 1)',
+                                        borderWidth: 1
+                                    },
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio:false,
+                                title: {
+                                    display: true,
+                                    text: 'Registration Status'
+                                },
+                                tooltips: {
+                                    mode: 'index',
+                                    intersect: false,
+                                },
+                                hover: {
+                                    mode: 'nearest',
+                                    intersect: true
+                                },
+                                scales: {
+                                    xAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Date'
+                                        }
+                                    }],
+                                    yAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Total Registrations'
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+
+                        var ctx1 = document.getElementById('myChart1').getContext('2d');
+                        var myChart1 = new Chart(ctx1, {
+                            type: 'line',
+                            data: {
+
+                                labels: C_DateData,
+                                datasets: [
+                                    {
+                                        label: 'Verified',
+                                        data: C_VerificationOK,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                                        borderColor: 'rgba(76, 175, 80, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Verification Pending',
+                                        data: C_AllocatedforVerification,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor: 'rgba(255, 235, 59, 0.1)',
+                                        borderColor: 'rgba(255, 235, 59, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Objection Raised',
+                                        data: C_ObjectionRaised,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                                        borderColor:'rgba(244, 67, 54, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Objection Removed',
+                                        data: C_ObjectionRemovedbigint,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor:'rgba(255, 152, 0, 0.1)',
+                                        borderColor: 'rgba(255, 152, 0, 1)',
+                                        borderWidth: 1
+                                    },
+
+
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                title: {
+                                    display: true,
+                                    text: 'Verification Status'
+                                },
+                                tooltips: {
+                                    mode: 'index',
+                                    intersect: false,
+                                },
+                                hover: {
+                                    mode: 'nearest',
+                                    intersect: true
+                                },
+                                scales: {
+                                    xAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Date'
+                                        }
+                                    }],
+                                    yAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Total Applications'
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+
+                        //chart3
+                        var coursecounts = [];
+                        var coursenames = [];
+                        ListOfColleges.Table1.forEach(function (X) {
+                            coursecounts.push(X.Applications);
+                            coursenames.push(X.name);
+                        });
+                        var ctx3 = document.getElementById('myChart3').getContext('2d');
+                        var myChart3 = new Chart(ctx3, {
+                            type: 'bar',
+                            data: {
+
+                                labels: coursenames,
+                                datasets: [
+                                    {
+                                        label: 'Top 10 Trades',
+                                        data: coursecounts,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                                        borderColor: 'rgba(255, 99, 132, 1)',
+                                        borderWidth: 1
+                                    },
+
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                title: {
+                                    display: false,
+                                    text: 'Top 10 Trades'
+                                },
+                                tooltips: {
+                                    mode: 'index',
+                                    intersect: false,
+                                },
+                                hover: {
+                                    mode: 'nearest',
+                                    intersect: true
+                                },
+                                scales: {
+                                    xAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Trades'
+                                        }
+                                    }],
+                                    yAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Total Applications'
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                        //endchart 3
+
+                        //chart4
+                        var collegecounts = [];
+                        var collegenames = [];
+                        ListOfColleges.Table.forEach(function (X) {
+                            collegecounts.push(X.Applications);
+                            collegenames.push(X.collegename);
+                        });
+                        var ctx2 = document.getElementById('myChart2').getContext('2d');
+                        var myChart2 = new Chart(ctx2, {
+                            type: 'bar',
+                            data: {
+
+                                labels: collegenames,
+                                datasets: [
+                                    {
+                                        label: 'Top 10 Institutes',
+                                        data: collegecounts,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        borderWidth: 1
+
+                                    },
+
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                title: {
+                                    display: false,
+                                    text: 'Top 10 Institutes'
+                                },
+                                tooltips: {
+                                    mode: 'index',
+                                    intersect: false,
+                                },
+                                hover: {
+                                    mode: 'nearest',
+                                    intersect: true
+                                },
+                                scales: {
+                                    xAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Institute'
+                                        },
+                                        ticks: {
+                                            callback: function (value) {
+                                                return value;//(value.substr(0, 15)+'...');//truncate
+                                            },
+                                        }
+                                    }],
+                                    yAxes: [{
+                                        display: true,
+                                        //type: 'logarithmic',
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Total Applications'
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                        //endchart 4
+
+                        //chart 5 Reservations
+                        var reservationcounts = [];
+                        var reservations = [];
+                        ListOfColleges.Table6.forEach(function (X) {
+                            reservationcounts.push(X.Registrations);
+                            reservations.push(X.reservationname);
+                        });
+                        var ctxRes = document.getElementById('myChartRes').getContext('2d');
+                        var myChartRes = new Chart(ctxRes, {
+                            type: 'pie',
+                            plugins: [ChartDataLabels],
+                            data: {
+
+                                labels: reservations,
+                                datasets: [
+                                    {
+                                        label: 'Top 10 Institutes',
+                                        data: reservationcounts,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor: [
+                                            'rgba(255, 99, 132, 0.2)',
+                                            'rgba(54, 162, 235, 0.2)',
+                                            'rgba(255, 206, 86, 0.2)',
+                                            'rgba(75, 192, 192, 0.2)',
+                                            'rgba(153, 102, 255, 0.2)',
+                                            'rgba(255, 159, 64, 0.2)',
+                                            'rgba(76, 175, 80, 0.2)',
+											'rgba(205, 220, 57, 0.2)'
+                                        ],
+                                        borderColor: [
+                                            'rgba(255, 99, 132, 1)',
+                                            'rgba(54, 162, 235, 1)',
+                                            'rgba(255, 206, 86, 1)',
+                                            'rgba(75, 192, 192, 1)',
+                                            'rgba(153, 102, 255, 1)',
+                                            'rgba(255, 159, 64, 1)',
+                                            'rgba(76, 175, 80, 1)',
+											'rgba(205, 220, 57, 1)'
+                                        ],
+                                        borderWidth: 1
+                                    },
+
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+
+                                title: {
+                                    display: true,
+                                    text: 'Reservation Ratio'
+                                },
+                                tooltips: {
+                                    mode: 'index',
+                                    intersect: false,
+                                    enabled:true,
+                                },
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, ctxRes) => {
+
+                                            let datasets = ctxRes.chart.data.datasets;
+
+                                            if (datasets.indexOf(ctxRes.dataset) === datasets.length - 1) {
+                                                let sum = datasets[0].data.reduce((a, b) => a + b, 0);
+                                                let percentage = ((value / sum) * 100).toFixed(2) + '%';
+                                                return percentage;
+                                            } else {
+                                                return percentage;
+                                            }
+                                        },
+                                        color: '#000',
+                                        display:'auto'
+                                    }
+                                },
+                                legend:
+                                {
+                                    position:'right', display: true
+                                },
+                                hover: {
+                                    mode: 'nearest',
+                                    intersect: true
+                                },
+                                scales: {
+                                    //xAxes: [{
+                                    //    display: true,
+                                    //    scaleLabel: {
+                                    //        display: true,
+                                    //        labelString: 'College'
+                                    //    },
+                                    //    ticks: {
+                                    //        callback: function (value) {
+                                    //            return value;//(value.substr(0, 15)+'...');//truncate
+                                    //        },
+                                    //    }
+                                    //}],
+                                    //yAxes: [{
+                                    //    display: true,
+                                    //    //type: 'logarithmic',
+                                    //    scaleLabel: {
+                                    //        display: true,
+                                    //        labelString: 'Total Applications'
+                                    //    }
+                                    //}]
+                                },
+
+                            }
+                        });
+                        // end chart 5 Reservations
+                        //chart 6 male femalres
+                        var malefemalecounts = [];
+                        var malefemales = [];
+                        ListOfColleges.Table7.forEach(function (X) {
+                            malefemalecounts.push(X.Registrations);
+                            malefemales.push(X.Sex);
+                        });
+                        var ctxMF = document.getElementById('myChartMF').getContext('2d');
+                        var myChartMFs = new Chart(ctxMF, {
+                            type: 'pie',
+                            plugins: [ChartDataLabels],
+                            data: {
+
+                                labels: malefemales,
+                                datasets: [
+                                    {
+                                        label: 'Top 10 Colleges',
+                                        data: malefemalecounts,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor: [
+                                            'rgba(255, 99, 132, 0.2)',
+                                            'rgba(54, 162, 235, 0.2)',
+                                            'rgba(255, 206, 86, 0.2)',
+                                            'rgba(75, 192, 192, 0.2)',
+                                            'rgba(153, 102, 255, 0.2)',
+                                            'rgba(255, 159, 64, 0.2)',
+                                            'rgba(76, 175, 80, 0.2)'
+                                        ],
+                                        borderColor: [
+                                            'rgba(255, 99, 132, 1)',
+                                            'rgba(54, 162, 235, 1)',
+                                            'rgba(255, 206, 86, 1)',
+                                            'rgba(75, 192, 192, 1)',
+                                            'rgba(153, 102, 255, 1)',
+                                            'rgba(255, 159, 64, 1)',
+                                            'rgba(76, 175, 80, 1)'
+                                        ],
+                                        borderWidth: 1
+                                    },
+
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                title: {
+                                    display: true,
+                                    text: 'Applicant Sex Ratio'
+                                },
+                                tooltips: {
+                                    mode: 'index',
+                                    intersect: false,
+                                },
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, ctxMF) => {
+
+                                            let datasets = ctxMF.chart.data.datasets;
+
+                                            if (datasets.indexOf(ctxMF.dataset) === datasets.length - 1) {
+                                                let sum = datasets[0].data.reduce((a, b) => a + b, 0);
+                                                let percentage = ((value / sum) * 100).toFixed(2) + '%';
+                                                return percentage;
+                                            } else {
+                                                return percentage;
+                                            }
+                                        },
+                                        color: '#000',
+                                        display: 'auto'
+                                    }
+                                },
+                                legend: { position: 'right', display: true },
+                                hover: {
+                                    mode: 'nearest',
+                                    intersect: true
+                                },
+                                scales: {
+                                    //xAxes: [{
+                                    //    display: true,
+                                    //    scaleLabel: {
+                                    //        display: true,
+                                    //        labelString: 'College'
+                                    //    },
+                                    //    ticks: {
+                                    //        callback: function (value) {
+                                    //            return value;//(value.substr(0, 15)+'...');//truncate
+                                    //        },
+                                    //    }
+                                    //}],
+                                    //yAxes: [{
+                                    //    display: true,
+                                    //    //type: 'logarithmic',
+                                    //    scaleLabel: {
+                                    //        display: true,
+                                    //        labelString: 'Total Applications'
+                                    //    }
+                                    //}]
+                                }
+                            }
+                        });
+                        // end chart 6 male female
+                        //chart 7 Boards
+                        var Boardscounts = [];
+                        var Boards = [];
+                        var BoardsbgColor = ['rgba(3,169,244,0.7)', 'rgba(244,67,54,0.7)', 'rgba(233,30,99,0.7)', 'rgba(156,39,176,0.7)', 'rgba(63,81,181,0.7)', 'rgba(0,188,212,0.7)', 'rgba(0,150,136,0.7)', 'rgba(76,175,80,0.7)', 'rgba(205,220,57,0.7)', 'rgba(255,235,59,0.7)', 'rgba(255,152,0,0.7)', 'rgba(121,85,72,0.7)', 'rgba(158,158,158,0.7)', 'rgba(96,125,139,0.7)', 'rgba(0,0,0,0.7)', 'rgba(62,69,81,0.7)', 'rgba(255,255,255,0.7)', 'rgba(3,169,244,0.3)', 'rgba(244,67,54,0.3)', 'rgba(233,30,99,0.3)', 'rgba(156,39,176,0.3)', 'rgba(63,81,181,0.3)', 'rgba(0,188,212,0.3)', 'rgba(0,150,136,0.3)', 'rgba(76,175,80,0.3)', 'rgba(205,220,57,0.3)', 'rgba(255,235,59,0.3)', 'rgba(255,152,0,0.3)', 'rgba(121,85,72,0.3)', 'rgba(158,158,158,0.3)', 'rgba(96,125,139,0.3)', 'rgba(0,0,0,0.3)', 'rgba(62,69,81,0.3)'];
+                        var BoardsFBordercolor = ['rgba(3,169,244,0.7)', 'rgba(244,67,54,0.7)', 'rgba(233,30,99,0.7)', 'rgba(156,39,176,0.7)', 'rgba(63,81,181,0.7)', 'rgba(0,188,212,0.7)', 'rgba(0,150,136,0.7)', 'rgba(76,175,80,0.7)', 'rgba(205,220,57,0.7)', 'rgba(255,235,59,0.7)', 'rgba(255,152,0,0.7)', 'rgba(121,85,72,0.7)', 'rgba(158,158,158,0.7)', 'rgba(96,125,139,0.7)', 'rgba(0,0,0,0.7)', 'rgba(62,69,81,0.7)', 'rgba(255,255,255,0.7)', 'rgba(3,169,244,0.3)', 'rgba(244,67,54,0.3)', 'rgba(233,30,99,0.3)', 'rgba(156,39,176,0.3)', 'rgba(63,81,181,0.3)', 'rgba(0,188,212,0.3)', 'rgba(0,150,136,0.3)', 'rgba(76,175,80,0.3)', 'rgba(205,220,57,0.3)', 'rgba(255,235,59,0.3)', 'rgba(255,152,0,0.3)', 'rgba(121,85,72,0.3)', 'rgba(158,158,158,0.3)', 'rgba(96,125,139,0.3)', 'rgba(0,0,0,0.3)', 'rgba(62,69,81,0.3)'];
+                        //var BoardsbgColor = [];
+                        //var BoardsFBordercolor = [];
+                        var i = 0;
+                        ListOfColleges.Table9.forEach(function (X) {
+                            Boardscounts.push(X.Registrations);
+                            Boards.push(X.univeristyname);
+                            BoardsbgColor.push('rgba(0, 0,0, 0.2)');
+                            BoardsFBordercolor.push('rgba(0, 0, 0, 1)');
+                           // i = i + 30;
+                        });
+                        var ctxBoard = document.getElementById('myChartBoard').getContext('2d');
+                        window.myChartBoard = new Chart(ctxBoard, {
+                            type: 'pie',
+                            plugins: [ChartDataLabels],
+                            data: {
+
+                                labels: Boards,
+                                datasets: [
+                                    {
+                                        label: 'Boards Ratio',
+                                        data: Boardscounts,//[12, 19, 3, 5, 2, 3],
+                                        //backgroundColor: [
+                                        //    'rgba(255, 99, 132, 0.2)',
+                                        //    'rgba(54, 162, 235, 0.2)',
+                                        //    'rgba(255, 206, 86, 0.2)',
+                                        //    'rgba(75, 192, 192, 0.2)',
+                                        //    'rgba(153, 102, 255, 0.2)',
+                                        //    'rgba(255, 159, 64, 0.2)',
+                                        //    'rgba(76, 175, 80, 0.2)'
+                                        //],
+                                        backgroundColor: BoardsbgColor,
+                                        borderColor: BoardsFBordercolor,
+                                        borderWidth: 1
+                                    },
+
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                title: {
+                                    display: true,
+                                    text: 'Boards Ratio'
+                                },
+                                tooltips: {
+                                    mode: 'index',
+                                    intersect: false,
+                                },
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, ctxBoard) => {
+
+                                            let datasets = ctxBoard.chart.data.datasets;
+
+                                            if (datasets.indexOf(ctxBoard.dataset) === datasets.length - 1) {
+                                                let sum = datasets[0].data.reduce((a, b) => a + b, 0);
+                                                let percentage = ((value / sum) * 100).toFixed(2) + '%';
+                                                return percentage;
+                                            } else {
+                                                return percentage;
+                                            }
+                                        },
+                                        color: '#000',
+                                        display: 'auto'
+                                    }
+                                },
+                                legend: {
+                                    position: 'right',
+                                    display:false, /*labels: { fontSize: 10, boxWidth:10}*/
+                                },
+                                hover: {
+                                    mode: 'nearest',
+                                    intersect: true
+                                },
+                                scales: {
+                                    //xAxes: [{
+                                    //    display: true,
+                                    //    scaleLabel: {
+                                    //        display: true,
+                                    //        labelString: 'College'
+                                    //    },
+                                    //    ticks: {
+                                    //        callback: function (value) {
+                                    //            return value;//(value.substr(0, 15)+'...');//truncate
+                                    //        },
+                                    //    }
+                                    //}],
+                                    //yAxes: [{
+                                    //    display: true,
+                                    //    //type: 'logarithmic',
+                                    //    scaleLabel: {
+                                    //        display: true,
+                                    //        labelString: 'Total Applications'
+                                    //    }
+                                    //}]
+                                }
+                            }
+                        });
+                        //document.getElementById('js-legend').innerHTML = myChartBoard.generateLegend();
+                        //(value, ctxBoard) => {
+
+                        //    let datasets = ctxBoard.chart.data.datasets;
+
+                        //    if (datasets.indexOf(ctxBoard.dataset) === datasets.length - 1) {
+                        //        let sum = datasets[0].data.reduce((a, b) => a + b, 0);
+                        //        let percentage = ((value / sum) * 100).toFixed(2) + '%';
+                        //        return percentage;
+                        //    } else {
+                        //        return percentage;
+                        //    }
+                        //}
+                        document.getElementById('js-legend').innerHTML = myChartBoard.generateLegend();
+
+                        $("#js-legend > ul > li").on("click", function (e) {
+                            //console.log(this,e.view.myChart,);
+                            var index = $(this).index();
+                            $(this).toggleClass("strike");
+                            console.log(index);
+                            //var ci = e.view.myChartBoard;
+                            //var meta = myChartBoard.getDatasetMeta(index);
+                            ////console.log();
+                            ////var curr = ci.data.datasets[0]._meta[0].data[index];
+                            ////var curr = ci.data.datasets[0].data[index];
+                            //ci.getDatasetMeta(0).data[4].hidden = true;
+                            ////curr.hidden = !curr.hidden
+                            ///*if (meta.dataset) {
+                            //     meta.hidden = !meta.hidden;
+                            //} else {
+                            //     meta.data[index].hidden = !meta.data[index].hidden;
+                            // }*/
+
+                            //// We hid a dataset ... rerender the chart
+                            ci.update();
+                        })
+                        //end of chart 7
+                        //chart 8 From haryana
+                        var DomicileCounts = [];
+                        var Domiciles = [];
+
+                        ListOfColleges.Table8.forEach(function (X) {
+                            DomicileCounts.push(X.Registrations);
+                            Domiciles.push(X.Has_Domicile);
+
+                        });
+                        var ctxDomicile = document.getElementById('myChartDomicile').getContext('2d');
+                        var myChartDomicile= new Chart(ctxDomicile, {
+                            type: 'pie',
+                            plugins: [ChartDataLabels],
+                            data: {
+
+                                labels: Domiciles,
+                                datasets: [
+                                    {
+                                        label: 'Boards Ratio',
+                                        data: DomicileCounts,//[12, 19, 3, 5, 2, 3],
+                                        backgroundColor: [
+                                            'rgba(255, 99, 132, 0.2)',
+                                            'rgba(54, 162, 235, 0.2)',
+                                            'rgba(255, 206, 86, 0.2)',
+                                            'rgba(75, 192, 192, 0.2)',
+                                            'rgba(153, 102, 255, 0.2)',
+                                            'rgba(255, 159, 64, 0.2)',
+                                            'rgba(76, 175, 80, 0.2)'
+                                        ],
+                                        borderColor: [
+                                            'rgba(255, 99, 132, 1)',
+                                            'rgba(54, 162, 235, 1)',
+                                            'rgba(255, 206, 86, 1)',
+                                            'rgba(75, 192, 192, 1)',
+                                            'rgba(153, 102, 255, 1)',
+                                            'rgba(255, 159, 64, 1)',
+                                            'rgba(76, 175, 80, 1)'
+                                        ],
+                                        borderWidth: 1
+                                    },
+
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                title: {
+                                    display: true,
+                                    text: 'Haryana Applicant Ratio'
+                                },
+                                tooltips: {
+                                    mode: 'index',
+                                    intersect: false,
+                                },
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, ctxBoard) => {
+
+                                            let datasets = ctxBoard.chart.data.datasets;
+
+                                            if (datasets.indexOf(ctxBoard.dataset) === datasets.length - 1) {
+                                                let sum = datasets[0].data.reduce((a, b) => a + b, 0);
+                                                let percentage = ((value / sum) * 100).toFixed(2) + '%';
+                                                return percentage;
+                                            } else {
+                                                return percentage;
+                                            }
+                                        },
+                                        color: '#000',
+                                        display: 'auto'
+                                    }
+                                },
+                                legend: {
+                                    position: 'right',
+                                    display: true, /*labels: { fontSize: 10, boxWidth:10}*/
+                                },
+                                hover: {
+                                    mode: 'nearest',
+                                    intersect: true
+                                },
+                                scales: {
+                                    //xAxes: [{
+                                    //    display: true,
+                                    //    scaleLabel: {
+                                    //        display: true,
+                                    //        labelString: 'College'
+                                    //    },
+                                    //    ticks: {
+                                    //        callback: function (value) {
+                                    //            return value;//(value.substr(0, 15)+'...');//truncate
+                                    //        },
+                                    //    }
+                                    //}],
+                                    //yAxes: [{
+                                    //    display: true,
+                                    //    //type: 'logarithmic',
+                                    //    scaleLabel: {
+                                    //        display: true,
+                                    //        labelString: 'Total Applications'
+                                    //    }
+                                    //}]
+                                }
+                            }
+                        });
+                        // end of chart 8
+                        if (ListOfColleges.Table4[0] != null || ListOfColleges.Table5[0] != null) {
+                            $.each(ListOfColleges.Table4[0], function (key, value) {
+                                //console.log(key + ": " + value);
+                                if (key == 'AadhaarNo' && value !== null && value !== '') {
+                                    $('#' + key).text('XXXXXXXX' + value.substr(8, 12));
+                                }
+                                else if (key == 'datetime') {
+                                    var a = value.split('T')[0].split('-');
+
+                                    $('#' + key).text(a[2] + '/' + a[1] + '/' + a[0] + ' ' + value.split('T')[1]);
+                                }
+                                else if (key == 'TodayRegistrations' || key == 'TodayVerification' || key == 'TodayFormComplete' )
+                                {
+
+                                    if (value == null || value == '')
+                                    {
+                                        $('#' + key).text(value == null || value == '' ? '---' : value);
+                                        //$("#" + key).parent().parent().hide();
+                                        //$("#" + key.replace("Today", "Yesterday")).parent().parent().show();
+                                    }
+                                    else
+                                    {
+                                        $('#' + key).text(value == null || value == '' ? '---' : value);
+                                       // $("#" + key).parent().parent().show();
+                                       // $("#" + key.replace("Today", "Yesterday")).parent().parent().hide();
+                                    }
+                                }
+                                else {
+                                    $('#' + key).text(value == null || value == '' ? '---' : value);
+                                }
+                                console.log(key + ':' + value);
+                            });
+                            $.each(ListOfColleges.Table5[0], function (key, value) {
+                                //console.log(key + ": " + value);
+                                if (key == 'AadhaarNo' && value !== null && value !== '') { $('#' + key).text('XXXXXXXX' + value.substr(8, 12)); }
+                                else if (key == 'DateData') {
+                                    var a = value.split('T')[0].split('-');
+
+                                    $('#' + key).text(a[2] + '/' + a[1] + '/' + a[0] + ' ' + value.split('T')[1]);
+                                }
+
+                                else {
+                                    $('#' + key).text(value == null || value == '' ? '---' : value);
+
+                                }
+                                console.log(key + ':' + value);
+                            });
+                            console.log($("#AllocatedforVerification").text().trim());
+                            console.log($("#ReAllocated").text().trim());
+                            var allo = parseInt($("#AllocatedforVerification").text().trim());
+                            var reallo = parseInt($("#ReAllocated").text().trim());
+
+                            $("#AllocatedforVerification").text((isNaN(allo) ? 0 : allo) + (isNaN(reallo) ? 0 : reallo));
+                        }
+                        else {
+                            $(".fa.fa-spinner").parent().html('---');
+                        }
+
+                        $("#cover").fadeOut();
+                         },
+                         error: function (jqXHR, exception) {
+
+                             var msg = '';
+                             if (jqXHR.status === 0) {
+                                 msg = 'Not connect.\n Verify Network.';
+                             } else if (jqXHR.status == 404) {
+                                 msg = 'Requested page not found. [404]';
+                             } else if (jqXHR.status == 500) {
+                                 msg = 'Internal Server Error [500].';
+                             } else if (exception === 'parsererror') {
+                                 msg = 'Requested JSON parse failed.';
+                             } else if (exception === 'timeout') {
+                                 msg = 'Time out error.';
+                             } else if (exception === 'abort') {
+                                 msg = 'Ajax request aborted.';
+                             } else {
+                                 msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                             }
+                             alert("Error: " + msg);
+                             $("#cover").fadeOut("slow");
+                         }
+                })
+        }
+
+         function getCollegeList() {
+            $("#cover").fadeIn();
+
+             $.ajax({
+
+            url: '@Url.Action("GetCollegeList", "Reports")',
+            type: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (data)
+            {
+                var ListOfColleges = JSON.parse(data);
+                //$("#ddlCollege").empty();
+                $.each(ListOfColleges, function (i) {
+                    $("#ddlCollege").append(`<option value='` + ListOfColleges[i].collegeid + `'>` + ListOfColleges[i].collegename+`</option>`);
+                })
+                $("#cover").fadeOut();
+                 },
+                 error: function (jqXHR, exception) {
+
+                     var msg = '';
+                     if (jqXHR.status === 0) {
+                         msg = 'Not connect.\n Verify Network.';
+                     } else if (jqXHR.status == 404) {
+                         msg = 'Requested page not found. [404]';
+                     } else if (jqXHR.status == 500) {
+                         msg = 'Internal Server Error [500].';
+                     } else if (exception === 'parsererror') {
+                         msg = 'Requested JSON parse failed.';
+                     } else if (exception === 'timeout') {
+                         msg = 'Time out error.';
+                     } else if (exception === 'abort') {
+                         msg = 'Ajax request aborted.';
+                     } else {
+                         msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                     }
+                     alert("Error: " + msg);
+                     $("#cover").fadeOut("slow");
+                 }
+        })
+        }
+
+
+        function getCourseListArPerCollege(collegeId)
+        {
+            $("#cover").fadeIn();
+              var dataToSend = {};
+                dataToSend.collegeId = $("#ddlCollege").val();
+
+            $.ajax({
+            //url: "/higher/Account/getdata",
+            url: '@Url.Action("GetCourseList", "Reports")',
+            type: 'get',
+            //type: 'POST',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: dataToSend,
+            success: function (data)
+            {
+                var ListOfCourses = JSON.parse(data);
+                $("#ddlCourse").empty();
+                $("#ddlCourse").append(`<option value='0'>All Courses</option>`);
+                $.each(ListOfCourses, function (i) {
+                    $("#ddlCourse").append(`<option value='` + ListOfCourses[i].courseid + `'>` + ListOfCourses[i].name+`</option>`);
+                })
+                $("#cover").fadeOut();
+                },
+                error: function (jqXHR, exception) {
+
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert("Error: " + msg);
+                    $("#cover").fadeOut("slow");
+                }
+        })
+        }
+        function bubbleChart() {
+            new Chart(document.getElementById("bubble-chart"), {
+                type: 'bubble',
+                data: {
+                    labels: "Africa",
+                    datasets: [{
+                        label: ["China"],
+                        backgroundColor: "rgba(255,221,50,0.2)",
+                        borderColor: "rgba(255,221,50,1)",
+                        title: "dataTitle1",//adding the title you want to show
+                        data: [{
+                            x: 21269017,
+                            y: 5.245,
+                            r: 15
+                        }]
+                    }, {
+                        label: ["Denmark"],
+                        backgroundColor: "rgba(60,186,159,0.2)",
+                        borderColor: "rgba(60,186,159,1)",
+                        title: "dataTitle2",
+                        data: [{
+                            x: 258702,
+                            y: 7.526,
+                            r: 10
+                        }]
+                    }, {
+                        label: ["Germany"],
+                        backgroundColor: "rgba(0,0,0,0.2)",
+                        borderColor: "#000",
+                        title: "dataTitle3",//adding the title you want to show
+                        data: [{
+                            x: 3979083,
+                            y: 6.994,
+                            r: 15
+                        }]
+                    }, {
+                        label: ["Japan"],
+                        backgroundColor: "rgba(193,46,12,0.2)",
+                        borderColor: "rgba(193,46,12,1)",
+                        title: "dataTitle4",//adding the title you want to show
+                        data: [{
+                            x: 4931877,
+                            y: 5.921,
+                            r: 15
+                        }]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    title: {
+                        display: true,
+                        text: 'Predicted world population (millions) in 2050'
+                    },
+                    scales: {
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Happiness"
+                            }
+                        }],
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: "GDP (PPP)"
+                            }
+                        }]
+                    }
+                }
+            });
+
+            Chart.plugins.register({
+                afterDatasetsDraw: function (chart, easing) {
+                    var ctx = chart.ctx;
+
+                    chart.data.datasets.forEach(function (dataset, i) {
+                        var meta = chart.getDatasetMeta(i);
+                        if (meta.type == "bubble") { //exclude scatter
+                            meta.data.forEach(function (element, index) {
+                                // Draw the text in black, with the specified font
+                                ctx.fillStyle = 'rgb(0, 0, 0)';
+                                var fontSize = 13;
+                                var fontStyle = 'normal';
+                                var fontFamily = 'Helvetica Neue';
+                                ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+
+                                // Just naively convert to string for now
+                                var dataString = dataset.data[index].toString();
+                                // Make sure alignment settings are correct
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle';
+
+                                var padding = 15;
+                                var position = element.tooltipPosition();
+                                ctx.fillText(dataset.title, position.x, position.y - (fontSize / 2) - padding);
+                            });
+                        } //if
+                    });
+                }
+            });
+        }
+        function getData() {
+            $("#cover").fadeIn();
+             var dataToSend = {};
+                dataToSend.collegeId = $("#ddlCollege").val();
+            dataToSend.courseId = $("#ddlCourse").val();
+
+
+            $.ajax({
+            //url: "/higher/Account/getdata",
+            url: '@Url.Action("GetCourseCollegeWiseReport", "Reports")',
+            type: 'get',
+            //type: 'POST',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: dataToSend,
+            success: function (data)
+            {
+                $("#tblListOfCourse").DataTable({
+                    data: JSON.parse(data),
+                    dom: 't',
+                    paging: false,
+                    destroy:true,
+                    "order": [[0, "asc"]],
+                    "footerCallback": function (row, data, start, end, display) {
+                        this.api().columns('.sum').every(function () {
+                            var column = this;
+
+                            var sum = column
+                                .data()
+                                .reduce(function (a, b) {
+                                    a = parseInt(a, 10);
+                                    if (isNaN(a)) { a = 0; }
+
+                                    b = parseInt(b, 10);
+                                    if (isNaN(b)) { b = 0; }
+
+                                    return a + b;
+                                });
+
+                            $(column.footer()).html(sum);
+                        })
+                    },
+                    columns: [
+
+                        { data: 'CourseName' },// render: function (d, t, r) { return d + ', ' + r["districtname"]; } },
+                        { data: 'ApplicantCount',className:'dt-right' }//, title:'Preference No.'},
+
+                    ]
+                });
+                $("#cover").fadeOut("slow");
+                },
+                error: function (jqXHR, exception) {
+
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert("Error: " + msg);
+                    $("#cover").fadeOut("slow");
+                }
+        })
+        }
+    </script>
+
+</head>
+<body>
+
+    <!--<div id="cover">
+        <i class="fa fa-spinner fa-spin" style="font-size:xx-large"></i>
+    </div>-->
+    <div class="container-fluid">
+        <div class="row main-banner">
+            <img src="../assets/images/banner.jpg" style="width: 100%" alt="online admission portal" />
+        </div>
+        <div class="row header">
+            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
+                <nav class="nav-menu d-none d-lg-block">
+                    <ul>
+                        @*<li><a href="../index.html">Home</a></li>
+                            <li class="active"><a href='@Url.Action("CollegeCourseWiseAppRec","Reports")'>College Course Wise Application Received</a></li>
+
+                            <li><a href="#">Search College</a></li>*@
+                    </ul>
+                </nav>
+                <!-- .nav-menu -->
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-1"></div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-9 text-center top-heading" style="margin-top: 5px;"><h4 class="heading">ITI ADMISSIONS DASHBOARD</h4></div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-2 text-right back-btn" style="margin-top: 5px;">
+                <a href="~/dhe/HEMenu.aspx" id="btnBack" class="btn btn-icon icon-left btn-primary"><i class="fas fa-arrow-alt-circle-left"></i></a>
+            </div>
+        </div>
+
+    </div>
+    <div class="container-fluid cus-main-section">
+        <div class="cus-top-cards">
+            <div class="row">
+                <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-id-card"></i>
+                                <span class="count-numbers" id="CollegeCount">379</span>
+                                <span class="count-name">Participating Institutes</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-file-alt"></i>
+                                <span class="count-numbers" id="TotalRegistration"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Total Registrations</span>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-list"></i>
+                                <span class="count-numbers" id="TotalFinalSubmission"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Total Completed Applications</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-users"></i>
+                                <span class="count-numbers" id="FamilyIDCount"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Family IDs</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-cloud"></i>
+                                <span class="count-numbers" id="APICOUNT"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">API Data</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-tag"></i>
+                                <span class="count-numbers" id="Reservation_CatCount"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Reserved Category</span>
+                            </div>
+                        </div>
+                        @*<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="card-counter primary">
+                                    <i class="fa fa-female"></i>
+                                    <span class="count-numbers" id="TotaFemale"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <span class="count-name">Female Applicants</span>
+                                </div>
+                            </div>*@
+
+                        @*<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="card-counter primary">
+                                    <i class="fa fa-check"></i>
+                                    <span class="count-numbers" id="TodayVerification"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <span class="count-name">Verified Today</span>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12" style="display:none;">
+                                <div class="card-counter primary">
+                                    <i class="fa fa-check"></i>
+                                    <span class="count-numbers" id="YesterdayVerification"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <span class="count-name">Verified Yesterday</span>
+                                </div>
+                            </div>*@
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12" style="display:none;">
+                            <div class="card-counter primary">
+                                <i class="fa fa-unlock-alt"></i>
+                                <span class="count-numbers" id="Unlocked"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Unlocked</span>
+                            </div>
+                        </div>
+                   <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fas fa-calendar-day"></i>
+                                <span class="count-numbers" id="TodayRegistrations"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Today's Registrations</span>
+                            </div> 
+                        </div> 
+                        @*<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12" style="display:none;">
+                                <div class="card-counter primary">
+                                    <i class="fas fa-calendar-day"></i>
+                                    <span class="count-numbers" id="YesterdayRegistrations"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <span class="count-name">Yesterday's Registrations</span>
+                                </div>
+                            </div>*@
+                  @*      <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fas fa-calendar-day"></i>
+                                <span class="count-numbers" id="TodayFormComplete"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Today's Completed Applications</span>
+                            </div>
+                        </div>  
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-check"></i>
+                                <span class="count-numbers" id="TodayVerification"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Today's Verified</span>
+                            </div>
+                        </div> *@
+                        @*<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12" style="display:none;">
+                                <div class="card-counter primary">
+                                    <i class="fas fa-calendar-day"></i>
+                                    <span class="count-numbers" id="YesterdayFormComplete"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <span class="count-name">Yesterday's Completed Applications</span>
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12" style="">
+
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card-counter success">
+                                <i class="fa fa-check"></i>
+                                <span class="count-numbers-gov" id="TotalGovVerification"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name-gov">Govt.</span>
+                                <span class="count-numbers-pvt" id="TotalPvtVerification"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name-pvt">Pvt.</span>
+                                <span class="count-numbers" id="VerificationOK"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Total Verified</span>
+                            </div>
+                        </div>
+					
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card-counter success">
+                                <i class="fa fa-check"></i>
+                                <span class="count-numbers-gov" id="TotalConfirmedAdmissionsGov"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name-gov">Govt.</span>
+                                <span class="count-numbers-pvt" id="TotalConfirmedAdmissionsPvt"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name-pvt">Pvt.</span>
+                                <span class="count-numbers" id="TotalConfirmedAdmissions"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Total Admissions</span>
+                            </div>
+                        </div>
+
+	
+                      @*  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card-counter success">
+                                <i class="fa fa-check"></i>
+                                <span class="count-numbers-gov" id="TotalAdmissionsTodayGov"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name-gov">Govt.</span>
+                                <span class="count-numbers-pvt" id="TotalAdmissionsTodayPvt"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name-pvt">Pvt.</span>
+
+                                <span class="count-numbers" id="TotalAdmissionsToday"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Today's Admissions</span>
+                            </div> *@
+                        </div>
+			
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="display:none;">
+                            <div class="card-counter yellow">
+                                <i class="fa fa-pen"></i>
+                                <span class="count-numbers" id="AllocatedforVerification"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Verification Pending</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="display:none;">
+                            <div class="card-counter ">
+                                <i class="fa fa-info"></i>
+                                <span class="count-numbers" id="DateData"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Date Data</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12" style="display:none;">
+                            <div class="card-counter danger">
+                                <i class="fa fa-info-circle"></i>
+                                <span class="count-numbers" id="ObjectionRaised"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Objection Raised</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12" style="display:none;">
+                            <div class="card-counter bg-warning">
+                                <i class="fa fa-check-circle"></i>
+                                <span class="count-numbers" id="ObjectionRemovedbigint"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Objection Removed</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="display: none;">
+                            <div class="card-counter info">
+                                <i class="fa fa-backward"></i>
+                                <span class="count-numbers" id="ReAllocated"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Re-Allocated</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="display:none;">
+                            <div class="card-counter info">
+                                <i class="fa fa-info"></i>
+                                <span class="count-numbers" id="ReplyFiledbyCandidate"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Reply Filed by Candidate</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="display:none;">
+                            <div class="card-counter info">
+                                <i class="fa fa-file-excel"></i>
+                                <span class="count-numbers" id="NotSet"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Forms Incomplete</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+
+            </div>
+        </div>
+        <div class="row cus-section-heading" style="margin-top:20px;">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-12 top-heading text-center">
+                <h4 class="heading"></h4>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-12 text-right" style="margin-top:10px;">
+                <i class="fa fa-clock" style="color:#F6822F;font-size:15px;"></i>
+                <span class="count-name" style="color:#F6822F;font-size:15px;font-weight:700;">Last Updated</span>
+                <span class="count-numbers" id="datetime" style="font-size:15px;"><i class="fa fa-spinner fa-spin"></i></span>
+
+
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 20px;">
+
+            <div class="col-lg-6 col-md-12 col-sm-12 col-12" style="">
+                <div class="card-counter" style="height:350px;">
+                    <ul class="nav nav-tabs card-header-tabs" role="tablist" id="RegistrationTabs">
+                        <li class="nav-item" style="width:50%"><a class="nav-link active" role="tab" aria-controls="Chart" href="#Chart">Chart</a></li>
+                        <li class="nav-item" style="width:50%"><a class="nav-link" role="tab" aria-controls="Data" href="#Data">Report</a></li>
+                    </ul>
+
+                    <div class="tab-content mt-3">
+                        <div class="tab-pane active" role="tabpanel" id="Chart">
+
+                            <canvas id="myChart" style="height:290px;"></canvas>
+
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="Data">
+                            <div class="table-responsive" style="height:290px;overflow:auto;">
+                                <table class="table table-striped table-bordered table-condensed" id="tblRegistrations" style="width:100%;border-collapse:collapse;padding:0px 0px !important;">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                <div class="card-counter" style="height:350px;">
+                    <ul class="nav nav-tabs card-header-tabs" role="tablist" id="VerificationsTab">
+                        <li class="nav-item" style="width:50%"><a class="nav-link active" role="tab" aria-controls="v_Chart" href="#v_Chart">Chart</a></li>
+                        <li class="nav-item" style="width:50%"><a class="nav-link" role="tab" aria-controls="v_Data" href="#v_Data">Report</a></li>
+                    </ul>
+
+                    <div class="tab-content mt-3">
+                        <div class="tab-pane active" role="tabpanel" id="v_Chart">
+
+                            <canvas id="myChart1" style="height:290px;"></canvas>
+
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="v_Data">
+
+                            <div class="table-responsive" style="height:290px;">
+                                <table class="table table-striped table-bordered table-condensed" id="tblVerifications" style="width:100%;border-collapse:collapse;padding:0px 0px !important;font-size:small !important;">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="">
+
+            <div class="col-lg-6 col-md-12 col-sm-12 col-12" style="">
+                <div class="card-counter" style="height:350px;">
+                    <ul class="nav nav-tabs card-header-tabs" role="tablist" id="RegistrationTabs">
+                        <li class="nav-item" style="width:50%"><a class="nav-link active" role="tab" aria-controls="Chart11" href="#Chart11">Chart</a></li>
+                        <li class="nav-item" style="width:50%"><a class="nav-link" role="tab" aria-controls="Data11" href="#Data11">Report</a></li>
+                    </ul>
+
+                    <div class="tab-content mt-3">
+                        <div class="tab-pane active" role="tabpanel" id="Chart11">
+
+                            <canvas id="myChart2" style="height:290px;"></canvas>
+
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="Data11">
+                            <div class="table-responsive" style="height:290px;overflow-y:auto">
+                                <table class="table table-striped table-bordered table-condensed" id="tbltop10college" style="width:100%;border-collapse:collapse;padding:0px 0px !important;font-size:small !important;">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                <div class="card-counter" style="height:350px;">
+                    <ul class="nav nav-tabs card-header-tabs" role="tablist" id="VerificationsTab">
+                        <li class="nav-item" style="width:50%"><a class="nav-link active" role="tab" aria-controls="v_Chart1" href="#v_Chart1">Chart</a></li>
+                        <li class="nav-item" style="width:50%"><a class="nav-link" role="tab" aria-controls="v_Data1" href="#v_Data1">Report</a></li>
+                    </ul>
+
+                    <div class="tab-content mt-3">
+                        <div class="tab-pane active" role="tabpanel" id="v_Chart1">
+
+                            <canvas id="myChart3" style="height:290px;"></canvas>
+
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="v_Data1">
+
+                            <div class="table-responsive" style="height:290px;overflow-y:auto">
+                                <table class="table table-striped table-bordered table-condensed" id="tbltop10course" style="width:100%;border-collapse:collapse;padding:0px 0px !important;font-size:small !important;">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="">
+
+            <div class="col-lg-6 col-md-12 col-sm-12 col-12" style="">
+                <div class="card-counter" style="height:350px;">
+                    <ul class="nav nav-tabs card-header-tabs" role="tablist" id="MFtabs">
+                        <li class="nav-item" style="width:50%"><a class="nav-link active" role="tab" aria-controls="ChartMFpie" href="#ChartMFpie">Chart</a></li>
+                        <li class="nav-item" style="width:50%"><a class="nav-link" role="tab" aria-controls="DataMFpie" href="#DataMFpie">Report</a></li>
+                    </ul>
+
+                    <div class="tab-content mt-3">
+                        <div class="tab-pane active" role="tabpanel" id="ChartMFpie">
+
+                            <canvas id="myChartMF" style="height:290px;"></canvas>
+
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="DataMFpie">
+                            <div class="table-responsive" style="height:290px;overflow-y:auto">
+                                <table class="table table-striped table-bordered table-condensed" id="tblMF" style="width:100%;border-collapse:collapse;padding:0px 0px !important;font-size:small !important;">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                <div class="card-counter" style="height:350px;">
+                    <ul class="nav nav-tabs card-header-tabs" role="tablist" id="reservationtabs">
+                        <li class="nav-item" style="width:50%"><a class="nav-link active" role="tab" aria-controls="ChartRes" href="#ChartRes">Chart</a></li>
+                        <li class="nav-item" style="width:50%"><a class="nav-link" role="tab" aria-controls="DataRes" href="#DataRes">Report</a></li>
+                    </ul>
+
+                    <div class="tab-content mt-3">
+                        <div class="tab-pane active" role="tabpanel" id="ChartRes">
+
+                            <canvas id="myChartRes" style="height:290px;"></canvas>
+
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="DataRes">
+
+                            <div class="table-responsive" style="height:290px;overflow-y:auto">
+                                <table class="table table-striped table-bordered table-condensed" id="tblReservations" style="width:100%;border-collapse:collapse;padding:0px 0px !important;font-size:small !important;">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-lg-6 col-md-12 col-sm-12 col-12" style="">
+                <div class="card-counter cus-mychart" style="height:350px;">
+                    <ul class="nav nav-tabs card-header-tabs" role="tablist" id="BoardTabs">
+                        <li class="nav-item" style="width:50%"><a class="nav-link active" role="tab" aria-controls="ChartBoardpie" href="#ChartBoardpie">Chart</a></li>
+                        <li class="nav-item" style="width:50%"><a class="nav-link" role="tab" aria-controls="DataBoardpie" href="#DataBoardpie">Report</a></li>
+                    </ul>
+
+                    <div class="tab-content mt-3">
+                        <div class="tab-pane active" role="tabpanel" id="ChartBoardpie">
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-6 col-xs-6 col-6">
+                                    <canvas id="myChartBoard" style="height:290px;"></canvas>
+                                </div>
+                                <div class="col-lg-6 cus-boardchart col-sm-6 col-xs-6 col-6">
+                                    <div id="js-legend" class="chart-legend"></div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="DataBoardpie">
+                            <div class="table-responsive" style="height:290px;overflow-y:auto">
+                                <table class="table table-striped table-bordered table-condensed" id="tblBoard" style="width:100%;border-collapse:collapse;padding:0px 0px !important;font-size:small !important;">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                <div class="card-counter" style="height:350px;">
+                    <ul class="nav nav-tabs card-header-tabs" role="tablist" id="DomicileTabs">
+                        <li class="nav-item" style="width:50%"><a class="nav-link active" role="tab" aria-controls="ChartDomicile" href="#ChartDomicile">Chart</a></li>
+                        <li class="nav-item" style="width:50%"><a class="nav-link" role="tab" aria-controls="DataDomicile" href="#DataDomicile">Report</a></li>
+                    </ul>
+
+                    <div class="tab-content mt-3">
+                        <div class="tab-pane active" role="tabpanel" id="ChartDomicile">
+
+                            <canvas id="myChartDomicile" style="height:290px;"></canvas>
+
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="DataDomicile">
+
+                            <div class="table-responsive" style="height:290px;overflow-y:auto">
+                                <table class="table table-striped table-bordered table-condensed" id="tblDomicile" style="width:100%;border-collapse:collapse;padding:0px 0px !important;font-size:small !important;">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal cus-modal cus-inner-modal" id="myModal2" role="dialog">
+            <div class="modal-dialog  modal-lg" style="margin-top: 1%;">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-body" id="mydatamodel2" style="display: block;">
+                        <div class="table-responsive cus-grid-table-three">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group input-group-sm mb-3">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12 text-center">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 text-left" style="margin-top:10px;">
+                            <div class="credits">
+                                <a>Site is technically designed, hosted and maintained by National Informatics Centre, Haryana</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <img src="/assets/images/nic-logo.png" style="width:100px;">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </footer>
+    <!-- End Footer -->
+</body>
+</html>
+
+

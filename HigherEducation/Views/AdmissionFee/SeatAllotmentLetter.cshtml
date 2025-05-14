@@ -1,0 +1,306 @@
+﻿@model  HigherEducation.Models.SeatAllotmentLetter
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Receipt</title>
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    @*<link rel="stylesheet" href="~/assets/css/style.css">*@
+    <link rel="stylesheet" href="~/assets/css/stylepayment.css">
+    <link href="~/assets/css/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Content/assets/js/libs/jquery/jspdf.js"></script>
+    <script src="~/scripts/html2canvas.js"></script>
+
+    <style>
+        #dvPrint label {
+            font-weight: 600 !important;
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        @@media print {
+            #printpdf, #btntest, #btnLogout, #tblfeedetail, #footer {
+                display: none;
+            }
+            /*@@page {
+                size: landscape;
+            }*/
+            html, label {
+                height: auto;
+                font-size: 20pt; /* changing to 10pt has no impact */
+                background-color: red;
+            }
+        }
+
+        .bt-3 {
+            padding: 0.4rem 0.3rem;
+            border: none;
+            margin-bottom: 4px;
+            float: left;
+        }
+
+            .bt-3 label {
+                font-weight: 700;
+                line-height: normal;
+                display: inline-block;
+            }
+
+        .right-side {
+            float: right;
+            width: 8vw;
+        }
+
+        .bottom-text {
+            display: inline-block;
+            clear: both;
+        }
+
+        #dvPrint1 {
+            width: 90%;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="form1">
+        <section class="cus-background canvas_div_pdf" style="font-size:16px">
+            <div class="container-fluid">
+                <div class="row aaaa" id="ppppp">
+                    <div class="card c-shadow">
+                        <div class="card-body">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="row">
+                                    <div class="col-lg-2 col-md-2 col-sm-6 col-12 text-right">
+                                        <img src="~/assets/images/Logo_ITI.png" style="width:100px; height:80px" />
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-6 col-12 text-center" style="margin-top:10px">
+                                        <h2 style="color:#1B3572;font-weight:500;">Skill Development & Industrial Training Department, Haryana</h2>
+                                        <h2 style="color:#1B3572; font-weight: 500; margin-top: 5px; margin-bottom: 5px;">Online admission to NCVT/SCVT approved CTS courses in ITIs</h2>
+                                        <h2 style="color: #1B3572; font-weight: 500; margin-top: 5px; margin-bottom: 5px;">(Session 2024-25)</h2>
+                                        <h2 style="color: #1B3572; font-weight: 500; margin-top: 5px; margin-bottom: 5px;">(Helpline: 0172-2586071,2996371,2586071)</h2>
+                                        <div class="col-md-12 form-group text-center bottom-text" style="font-size:25px">
+                                            <span>
+                                                Provisional Seat Allotment Letter <br />
+                                                (@Model.CounsellingRound Counselling Round)
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-2 col-md-2 col-sm-6 col-12 text-left">
+                                        <img src="~/assets/images/haryana-logo-Receipt.png" style="width: 100px; height: 100px" />
+                                    </div>
+                                </div>
+                            </div>
+                            <hr style="font-weight:bold" />
+                            <div class="cus-inner-data1" id="dvPrint1" style="font-size:25px">
+                                <div class="col-lg-6 col-md-6 col-sm-6 bt-3">
+                                    <label>Candidate Name: </label>
+                                    @Html.DisplayFor(model => model.CandidateName, new { @class = "form-control" })
+
+                                </div>
+
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 bt-3">
+                                    <label>Gender: </label>
+                                    @Html.DisplayFor(model => model.Gender, new { @class = "form-control" })
+
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 bt-3">
+                                    <label>Father Name: </label>
+                                    <label class="lblBold"><b>Sh.</b></label>
+                                    @Html.DisplayFor(model => model.FatherName, new { @class = "form-control" })
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 bt-3">
+                                    <label>Mother Name: </label>
+                                    <label class="lblBold"><b>Smt.</b></label>
+                                    @Html.DisplayFor(model => model.MotherName, new { @class = "form-control" })
+                                </div>
+
+
+                                <div class="col-lg-8 col-md-8 col-sm-6 bt-3">
+                                    <label>Address: </label>
+                                    @Html.DisplayFor(model => model.Address, new { @class = "form-control" })
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-6 bt-3">
+                                    <label>Date of Birth: </label>
+                                    @Html.DisplayFor(model => model.ApplicantDOB, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+
+                            <div class="right-side">
+                                <img alt="" src="" id="Pviewer" style="height:200px;width:140px;" />
+                            </div>
+
+
+                            <div class="col-md-12 form-group text-center bottom-text" style="font-size:25px">
+                                <span>
+                                    Out of the choices filled by you in the application form, you are allotted temporary seat in following institute and trade on the basis of available seats and your merit position.
+                                </span>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="font-size:20px">
+                                <div class="table-responsive">
+                                    <table class="table no-margin">
+                                        <thead>
+                                            <tr>
+                                                <th>Sr. No</th>
+                                                <th>Application<br /> Number</th>
+                                                <th style="width:20px">State <br />Merit<br /> Number</th>
+                                                <th>Institute <br /> Allocated</th>
+                                                <th>Trade</th>
+                                                <th>Candidate's <br />category</th>
+                                                <th style="width:20px">Selected<br /> against <br />category</th>
+                                                <th>Fee payable</th>
+                                                <th>Last date <br />of fee<br /> deposit</th>
+                                                <th>Mode of <br />payment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                int i = 1;
+                                                foreach (var item in Model.seatAllotmentDetails)
+                                                {
+                                                    <tr>
+                                                        <td><span>@i</span></td>
+                                                        <td> @Html.DisplayFor(m => item.ApplicationNo, new { @class = "form-control" })</td>
+                                                        <td> @Html.DisplayFor(m => item.MeritNumber, new { @class = "form-control" })</td>
+                                                        <td> @Html.DisplayFor(m => item.CollegeName, new { @class = "form-control" })</td>
+                                                        <td> @Html.DisplayFor(m => item.Trade, new { @class = "form-control" })</td>
+                                                        <td> @Html.DisplayFor(m => item.CandidateCategory, new { @class = "form-control" })</td>
+                                                        <td> @Html.DisplayFor(m => item.SeatAllotedCategory, new { @class = "form-control" })</td>
+                                                        <td> @Html.DisplayFor(m => item.Fee, new { @class = "form-control" })</td>
+                                                        <td> @Html.DisplayFor(m => item.LastDateFee, new { @class = "form-control" })</td>
+                                                        <td> @Html.DisplayFor(m => item.ModeOfPayment, new { @class = "form-control" })</td>
+                                                        @*<td><input type='button' value='Print' id='btnprint' class='btn btn-danger btn-sm detail'></td>*@
+                                                    </tr>
+                                                    i++;
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="font-size:25px">
+                                <h2>Candidate to visit allotted institute for documents verification from @Model.DateFromTo .</h2>
+                                <h2>Note/Conditions:-</h2>
+                                <ul>
+                                    <li>
+                                        1. This seat allotment is purely provisional and only issuing of this provisional seat allotment is not a guarantee of admission. It will depend on the verification of original documents & confirmation of merit at institute level.
+                                    </li>
+                                    <li>
+                                        2. Document verification of various necessary documents i.e, educational qualification certificates, family income certificate, Haryana domicile certificate and reservation related certificate etc. uploaded on the portal along with online admission application form will be done at the institute given above.
+                                    </li>
+                                    <li>
+                                        3. In case all original documents are found to be correct and complete, you will be informed through SMS for depositing the admission fee through online mode.
+                                    </li>
+                                    <li>
+                                        4. Seat allotment will be confirmed only after depositing the admission fee before due date.
+                                    </li>
+                                    <li>
+                                        5. In case the documents uploaded in the application form does not correctly match with the information filled in application form, your seat allotment will be canceled without any notice and your claim for admission will not be valid. You will be informed through SMS in this regard.
+                                    </li>
+                                    <li>
+                                        6. If you do not receive any SMS or information about the deposition of admission fees or seat allotment / cancellation by the last date of counselling schedule, then contact the concerned institute or admission helpline immediately.
+                                    </li>
+                                </ul>
+
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 bt-3">
+                                <span class="text-monospace text-dark container-fluid" style="font-size:20px;"><b>Generated on :</b> @DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt")</span>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 bt-3 text-center">
+                                <h4>
+                                    Principal <br />
+                                    @Model.seatAllotmentDetails[0].CollegeName
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+    <script type="text/javascript" src="../assets/js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../assets/js/popperjs/popper.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap/Js/bootstrap.min.js"></script>
+    <script src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(function () {
+                //$("#btnSubmit").click(function () {
+                //    $("input[name='GridHtml']").val($(".aaaa").html());
+                //});
+            });
+            var Xdoc = '@Model.Photo';
+             var cha = Xdoc.toString().substring(0, 5);
+            if (cha == 'JVBER') {
+                $('#Pviewer').attr('src', ('data:application/pdf;base64,' + Xdoc));
+            }
+            else if (cha == '/9j/4') {
+                $('#Pviewer').attr('src', ('data:image/jpeg;base64,' + Xdoc));
+
+            }
+            else if (cha == "iVBOR") {
+
+                 $('#Pviewer').attr('src', ('data:image/png;base64,' + Xdoc));
+                  }
+
+            getPDF();
+        });
+
+        function getPDF() {
+            var HTML_Width = $(".canvas_div_pdf").width();
+            var HTML_Height = $(".canvas_div_pdf").height();
+            //var HTML_Width = 595;
+            //var HTML_Height = 600;
+            var top_left_margin = 15;
+            var PDF_Width = HTML_Width + (top_left_margin * 2);
+            var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+            var canvas_image_width = HTML_Width;
+            var canvas_image_height = HTML_Height;
+
+            var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+
+
+            html2canvas($(".canvas_div_pdf")[0], { allowTaint: true }).then(function (canvas) {
+                canvas.getContext('2d');
+
+                console.log(canvas.height + "  " + canvas.width);
+
+
+                var imgData = canvas.toDataURL("image/jpeg", 1.0);
+                var pdf = new jsPDF('p', 'pt', [595, 600]);
+                //pdf.addImage(imgData, 'JPG', 10, 0, 595, 600);
+                pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, 570, 570);
+                pdf.setFont("helvetica");
+                pdf.setFontType("bold");
+                pdf.setFontSize(100);
+                //pdf.text(50, 50, 'Hello World');
+                for (var i = 1; i <= totalPDFPages; i++) {
+                    pdf.addPage(595, 600);
+                    pdf.addImage(imgData, 'JPG', 0, canvas_image_width, canvas_image_height);
+                }
+                pdf.save("Provisional Seat Allotment Letter.pdf");
+                $("#seat_letter").hide();
+            });
+        };
+
+
+
+    </script>
+
+</body>
+</html>

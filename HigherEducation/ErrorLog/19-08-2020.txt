@@ -1,0 +1,264 @@
+
+Log Entry : 11.03.25 AM 19 August 2020
+  :
+  :Method Name -    at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at Higher_Education.Controllers.FileUploadController.CallEdishaAPI_ForSave(DocumentStatus document) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 181
+Target Website - System.IO.Stream GetRequestStream(System.Net.TransportContext ByRef)
+ Error - The underlying connection was closed: An unexpected error occurred on a send.
+-------------------------------
+
+Log Entry : 11.05.23 AM 19 August 2020
+  :
+  :Method Name -    at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at Higher_Education.Controllers.FileUploadController.CallEdishaAPI_ForSave(DocumentStatus document) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 191
+Target Website - System.IO.Stream GetRequestStream(System.Net.TransportContext ByRef)
+ Error - The underlying connection was closed: An unexpected error occurred on a send.
+-------------------------------
+
+Log Entry : 11.05.30 AM 19 August 2020
+  :
+  :Method Name -    at CallSite.Target(Closure , CallSite , Object , String )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 166
+Target Website - System.Object CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, System.Object, System.String)
+ Error - Cannot perform runtime binding on a null reference
+-------------------------------
+
+Log Entry : 11.07.24 AM 19 August 2020
+  :
+  :Method Name -    at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at Higher_Education.Controllers.FileUploadController.CallEdishaAPI_ForSave(DocumentStatus document) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 191
+Target Website - System.IO.Stream GetRequestStream(System.Net.TransportContext ByRef)
+ Error - The underlying connection was closed: An unexpected error occurred on a send.
+-------------------------------
+
+Log Entry : 11.07.25 AM 19 August 2020
+  :
+  :Method Name -    at CallSite.Target(Closure , CallSite , Object , String )
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 166
+Target Website - System.Object CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, System.Object, System.String)
+ Error - Cannot perform runtime binding on a null reference
+-------------------------------
+
+Log Entry : 11.08.16 AM 19 August 2020
+  :
+  :Method Name -    at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at Higher_Education.Controllers.FileUploadController.CallEdishaAPI_ForSave(DocumentStatus document) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 191
+Target Website - System.IO.Stream GetRequestStream(System.Net.TransportContext ByRef)
+ Error - The underlying connection was closed: An unexpected error occurred on a send.
+-------------------------------
+
+Log Entry : 11.08.16 AM 19 August 2020
+  :
+  :Method Name -    at CallSite.Target(Closure , CallSite , Object , String )
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 166
+Target Website - System.Object CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, System.Object, System.String)
+ Error - Cannot perform runtime binding on a null reference
+-------------------------------
+
+Log Entry : 11.10.09 AM 19 August 2020
+  :
+  :Method Name -    at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at Higher_Education.Controllers.FileUploadController.CallEdishaAPI_ForSave(DocumentStatus document) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 191
+Target Website - System.IO.Stream GetRequestStream(System.Net.TransportContext ByRef)
+ Error - The underlying connection was closed: An unexpected error occurred on a send.
+-------------------------------
+
+Log Entry : 11.10.11 AM 19 August 2020
+  :
+  :Method Name -    at CallSite.Target(Closure , CallSite , Object , String )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 166
+Target Website - System.Object CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, System.Object, System.String)
+ Error - Cannot perform runtime binding on a null reference
+-------------------------------
+
+Log Entry : 11.10.20 AM 19 August 2020
+  :
+  :Method Name -    at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at Higher_Education.Controllers.FileUploadController.CallEdishaAPI_ForSave(DocumentStatus document) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 191
+Target Website - System.IO.Stream GetRequestStream(System.Net.TransportContext ByRef)
+ Error - The underlying connection was closed: An unexpected error occurred on a send.
+-------------------------------
+
+Log Entry : 11.10.20 AM 19 August 2020
+  :
+  :Method Name -    at CallSite.Target(Closure , CallSite , Object , String )
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 166
+Target Website - System.Object CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, System.Object, System.String)
+ Error - Cannot perform runtime binding on a null reference
+-------------------------------
+
+Log Entry : 11.10.22 AM 19 August 2020
+  :
+  :Method Name -    at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at Higher_Education.Controllers.FileUploadController.CallEdishaAPI_ForSave(DocumentStatus document) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 191
+Target Website - System.IO.Stream GetRequestStream(System.Net.TransportContext ByRef)
+ Error - The underlying connection was closed: An unexpected error occurred on a send.
+-------------------------------
+
+Log Entry : 11.10.22 AM 19 August 2020
+  :
+  :Method Name -    at CallSite.Target(Closure , CallSite , Object , String )
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 166
+Target Website - System.Object CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, System.Object, System.String)
+ Error - Cannot perform runtime binding on a null reference
+-------------------------------
+
+Log Entry : 11.10.37 AM 19 August 2020
+  :
+  :Method Name -    at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at Higher_Education.Controllers.FileUploadController.CallEdishaAPI_ForSave(DocumentStatus document) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 191
+Target Website - System.IO.Stream GetRequestStream(System.Net.TransportContext ByRef)
+ Error - The underlying connection was closed: An unexpected error occurred on a send.
+-------------------------------
+
+Log Entry : 11.10.37 AM 19 August 2020
+  :
+  :Method Name -    at CallSite.Target(Closure , CallSite , Object , String )
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 166
+Target Website - System.Object CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, System.Object, System.String)
+ Error - Cannot perform runtime binding on a null reference
+-------------------------------
+
+Log Entry : 11.12.58 AM 19 August 2020
+  :
+  :Method Name -    at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at Higher_Education.Controllers.FileUploadController.CallEdishaAPI_ForSave(DocumentStatus document) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 191
+Target Website - System.IO.Stream GetRequestStream(System.Net.TransportContext ByRef)
+ Error - The underlying connection was closed: An unexpected error occurred on a send.
+-------------------------------
+
+Log Entry : 11.12.58 AM 19 August 2020
+  :
+  :Method Name -    at CallSite.Target(Closure , CallSite , Object , String )
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 166
+Target Website - System.Object CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, System.Object, System.String)
+ Error - Cannot perform runtime binding on a null reference
+-------------------------------
+
+Log Entry : 11.26.10 AM 19 August 2020
+  :
+  :Method Name -    at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at Higher_Education.Controllers.FileUploadController.CallEdishaAPI_ForSave(DocumentStatus document) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 191
+Target Website - System.IO.Stream GetRequestStream(System.Net.TransportContext ByRef)
+ Error - The underlying connection was closed: An unexpected error occurred on a send.
+-------------------------------
+
+Log Entry : 11.26.10 AM 19 August 2020
+  :
+  :Method Name -    at CallSite.Target(Closure , CallSite , Object , String )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 166
+Target Website - System.Object CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, System.Object, System.String)
+ Error - Cannot perform runtime binding on a null reference
+-------------------------------
+
+Log Entry : 11.26.29 AM 19 August 2020
+  :
+  :Method Name -    at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at Higher_Education.Controllers.FileUploadController.CallEdishaAPI_ForSave(DocumentStatus document) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 191
+Target Website - System.IO.Stream GetRequestStream(System.Net.TransportContext ByRef)
+ Error - The underlying connection was closed: An unexpected error occurred on a send.
+-------------------------------
+
+Log Entry : 11.26.29 AM 19 August 2020
+  :
+  :Method Name -    at CallSite.Target(Closure , CallSite , Object , String )
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 166
+Target Website - System.Object CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, System.Object, System.String)
+ Error - Cannot perform runtime binding on a null reference
+-------------------------------
+
+Log Entry : 11.26.38 AM 19 August 2020
+  :
+  :Method Name -    at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at Higher_Education.Controllers.FileUploadController.CallEdishaAPI_ForSave(DocumentStatus document) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 191
+Target Website - System.IO.Stream GetRequestStream(System.Net.TransportContext ByRef)
+ Error - The underlying connection was closed: An unexpected error occurred on a send.
+-------------------------------
+
+Log Entry : 11.28.55 AM 19 August 2020
+  :
+  :Method Name -    at CallSite.Target(Closure , CallSite , Object , String )
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 166
+Target Website - System.Object CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, System.Object, System.String)
+ Error - Cannot perform runtime binding on a null reference
+-------------------------------
+
+Log Entry : 11.29.16 AM 19 August 2020
+  :
+  :Method Name -    at System.Net.HttpWebRequest.GetRequestStream(TransportContext& context)
+   at System.Net.HttpWebRequest.GetRequestStream()
+   at Higher_Education.Controllers.FileUploadController.CallEdishaAPI_ForSave(DocumentStatus document) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 191
+Target Website - System.IO.Stream GetRequestStream(System.Net.TransportContext ByRef)
+ Error - The underlying connection was closed: An unexpected error occurred on a send.
+-------------------------------
+
+Log Entry : 11.29.16 AM 19 August 2020
+  :
+  :Method Name -    at CallSite.Target(Closure , CallSite , Object , String )
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 166
+Target Website - System.Object CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, System.Object, System.String)
+ Error - Cannot perform runtime binding on a null reference
+-------------------------------
+
+Log Entry : 4.27.23 PM 19 August 2020
+  :
+  :Method Name -    at HigherEducation.BusinessLayer.CourseCombinationDB.UpdateSubjectCombinationfees(String SubjectCombinationId, String TotalFees, String NoofSeats) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\CourseCombinationDB.cs:line 462
+Target Website - System.Data.DataSet UpdateSubjectCombinationfees(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 4.27.23 PM 19 August 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.UpdateSubjectCombinationfees(String SubjectCombinationId, String TotalFees, String NoofSeats) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\CourseCombinationController.cs:line 316
+Target Website - System.Web.Mvc.JsonResult UpdateSubjectCombinationfees(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 4.28.41 PM 19 August 2020
+  :
+  :Method Name -    at HigherEducation.BusinessLayer.CourseCombinationDB.UpdateSubjectCombinationfees(String SubjectCombinationId, String TotalFees, String NoofSeats) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\CourseCombinationDB.cs:line 462
+Target Website - System.Data.DataSet UpdateSubjectCombinationfees(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 4.28.41 PM 19 August 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.UpdateSubjectCombinationfees(String SubjectCombinationId, String TotalFees, String NoofSeats) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\CourseCombinationController.cs:line 316
+Target Website - System.Web.Mvc.JsonResult UpdateSubjectCombinationfees(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 4.29.03 PM 19 August 2020
+  :
+  :Method Name -    at HigherEducation.BusinessLayer.CourseCombinationDB.UpdateSubjectCombinationfees(String SubjectCombinationId, String TotalFees, String NoofSeats) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\CourseCombinationDB.cs:line 462
+Target Website - System.Data.DataSet UpdateSubjectCombinationfees(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 4.29.03 PM 19 August 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.UpdateSubjectCombinationfees(String SubjectCombinationId, String TotalFees, String NoofSeats) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\CourseCombinationController.cs:line 316
+Target Website - System.Web.Mvc.JsonResult UpdateSubjectCombinationfees(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------

@@ -1,0 +1,207 @@
+﻿@*@model  IEnumerable<HigherEducation.Models.FeeModule>*@
+@model  HigherEducation.Models.FeeModule
+
+
+@{
+ Layout =null;
+//Layout = "~/Views/Shared/_LayoutFee.cshtml";
+
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Pay</title>
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/stylepayment.css">
+
+    @*<link rel="stylesheet" href="~/assets/css/jquery.mCustomScrollbar.css">*@
+    <script type="text/javascript" src="../assets/js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../Content/Js/sweetalert.min.js"></script>
+    <script type="text/javascript" src="../assets/js/popperjs/popper.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap/Js/bootstrap.min.js"></script>
+    <style>
+
+        .loader,
+        .outer-loader {
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        .outer-loader {
+            background: rgba(0, 0, 0, .3);
+            width: 100%;
+            height: 100%;
+            z-index: 999
+        }
+
+        .loader {
+            width: 69px;
+            height: 89px;
+            border: 1px solid #000;
+            margin: auto
+        }
+
+        .loader-img {
+            border: 15px solid #415bbb;
+            border-radius: 50%;
+            border-top: 15px solid #000;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0)
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg)
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .row_new {
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+        #logo img {
+            height: auto;
+            padding-left: 3px;
+            width: 40px
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        .table td {
+            padding: 0.35rem;
+        }
+    </style>
+</head>
+
+<body>
+    @if (ViewBag.isshowtable != "N")
+    {
+
+        <div class="row">
+
+            <div class="col-md-12 form-group">
+                <table class="table table-hover" id="tblfeedetail" style="margin-top:37px;box-shadow: 0px 0px 10px 0px #ccc;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>College Name</th>
+                            <th>Course/Section</th>
+                            <th>Combination</th>
+                            <th>Select</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.CandidateAllocatedCollege)
+                        {
+
+                            <tr>
+
+                                <td> @Html.HiddenFor(m => item.A_Collegeid, new { @Value = item.A_Collegeid })</td>
+                                <td> @Html.HiddenFor(m => item.A_RegistrationId, new { @Value = item.A_RegistrationId })</td>
+                                <td> @Html.HiddenFor(m => item.A_CombinationId, new { @Value = item.A_CombinationId })</td>
+                                <td> @Html.DisplayFor(m => item.A_CollegeName, new { @class = "form-control" })</td>
+                                <td> @Html.DisplayFor(m => item.A_Section, new { @class = "form-control" })</td>
+                                <td> @Html.DisplayFor(m => item.A_Combination, new { @class = "form-control" })</td>
+                                <td><input type='button' value='Choose & Pay' id='btngetdetail' class='btn btn-danger btn-sm detail'></td>
+                            </tr>
+
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    <div id="user_content">
+    </div>
+
+    <div class="outer-loader" style="display: none;">
+        <div class="loader-img loader" style="display: none;"></div>
+    </div>
+    <script type="text/javascript" src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/popperjs/popper.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            if ('@ViewBag.isshowtable' == 'N') {
+            $('#user_content').load('@Url.Action("PartialFeeViewAfterpayment")');
+
+            }
+            $(document).on('click', '.detail', function () {
+                startPreloader();
+                $('#user_content').empty();
+                var college_id = $(this).closest("tr").find("td").eq(0).find("input").val();
+                var registrationid = $(this).closest("tr").find("td").eq(1).find("input").val();
+                var combinationid = $(this).closest("tr").find("td").eq(2).find("input").val();
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Account/PartialFeeViewHDFC",
+                   //url: @Url.Action("PartialFeeViewHDFC", "Account"),
+                    //data: '{collegeid: "' + college_id + '" ,registrationid: "' + registrationid + '"}',
+				    data: { collegeid: college_id,registrationid: registrationid,combinationid:combinationid },
+
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: function (response) {
+                        $('#user_content').append(response);
+                        stopPreloader();
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                        stopPreloader();
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                        stopPreloader();
+                    }
+                });
+            });
+
+        });
+
+    </script>
+    <script>
+        function startPreloader() {
+            $(".loader").css("display", "block");
+            $(".outer-loader").css("display", "block");
+
+        }
+        function stopPreloader() {
+
+            $(".loader").css("display", "none");
+            $(".outer-loader").css("display", "none");
+        }
+    </script>
+</body>
+</html>

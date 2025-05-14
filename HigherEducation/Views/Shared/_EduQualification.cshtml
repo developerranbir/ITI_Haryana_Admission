@@ -1,0 +1,156 @@
+﻿@model HigherEducation.Models.AllSubject
+
+    <form class="form form-validate" id="formLogin" autocomplete="off" action="@Url.Action("SaveSubjectDetail", "Account")" accept-charset="utf-8" method="post" enctype="multipart/form-data">
+        <div class="card c-shadow">
+            <div class="card-body">
+                <table id="#print-content" class="table no-margin">
+                    @{
+                        for (int i = 0; i <= 0; i++)
+                        {
+                                        <tr>
+                                            <th>
+                                                For Which Qualification You are Applying for
+                                            </th>
+
+                                            <th>
+                                                @Html.DropDownList("[" + i + "].CourseType", new SelectList(ViewBag.CourseType as System.Collections.IEnumerable, "Value", "Text"),
+                                                 "Select", new { @id = "CourseType", @class = "form-control input-shadow", required = "required" })
+                                            </th>
+                                        </tr>
+                        }
+                    }
+                </table>
+
+                <div class="table-responsive">
+                    <table id="#print-content" class="table no-margin">
+                        <thead>
+                            <tr>
+                                <th hidden="hidden">
+                                    ID
+                                </th>
+                                <th>
+                                    Exam Passed
+                                </th>
+                                <th>
+                                    Optional
+                                </th>
+                                <th>
+                                    Univ/Board
+                                <th>
+                                    School/College
+                                </th>
+                                <th>
+                                    Registration/Roll no
+                                </th>
+                                <th>
+                                    Result Status
+                                </th>
+                                <th>
+                                    Passing Year
+                                </th>
+                                <th>
+                                    CGPA
+                                </th>
+                                <th>
+                                    Marks obta/CGPA
+                                </th>
+                                <th>
+                                    Max. Marks
+                                </th>
+                                <th>
+                                    Subject
+                                </th>
+                                <th>
+                                    Percentage
+                                </th>
+                            </tr>
+                        </thead>
+                        @for (var count = 1; count <= 3; count++)
+                        {
+                            <tbody class="tbody1">
+                                <tr>
+                                    <td>
+                                        @Html.DropDownList("[" + count + "].ExamPassed", new List<SelectListItem>{
+                                    new SelectListItem{ Text="Select", Value=""},
+                                    new SelectListItem{ Text="10th", Value="10th"},
+                                    new SelectListItem{ Text="12th", Value="12th"},
+                                    new SelectListItem{ Text="Diploma", Value="Diploma"}}, new { @class = "form-control input-shadow", id = "ExamPassed", required = "required" })
+                                    </td>
+                                    <td> @Html.CheckBox("[" + count + "].Optional", new { @placeholder = "Optional", @class = "form-control input-shadow", @id = "Optional" })</td>
+                                    <td>
+                                        @Html.DropDownList("[" + count + "].UnivBoard", new SelectList(ViewBag.BoardCode as System.Collections.IEnumerable, "Value", "Text"),
+                                        "Select", new { id = "UnivBoard", @class = "form-control input-shadow", required = "required" })
+                                    </td>
+                                    <td> @Html.TextBox("[" + count + "].SchoolCollege", null, new { @placeholder = "Enter School", @class = "form-control input-shadow", @id = "SchoolCollege" })</td>
+                                    <td> @Html.TextBox("[" + count + "].RegistrationRollNo", null, new { @placeholder = "Enter Roll no", @class = "form-control input-shadow", @id = "RegistrationRollNo" })</td>
+                                    <td>
+                                        @Html.DropDownList("[" + count + "].ResultStatus", new List<SelectListItem>{
+                                    new SelectListItem{ Text="Select", Value=""},
+                                    new SelectListItem{ Text="Pass", Value="Pass"},
+                                    new SelectListItem{ Text="Fail", Value="Fail"}}, null, new { @class = "form-control input-shadow", id = "resultStatus", required = "required" })
+                                    </td>
+                                    <td> @Html.TextBox("[" + count + "].PassingYear", null, new { @placeholder = "Passing", @class = "form-control input-shadow", @id = "PassingYear" })</td>
+                                    <td> @Html.CheckBox("[" + count + "].CGPA", new { @class = "form-control input-shadow", @id = "CGPA" })</td>
+                                    <td> @Html.TextBox("[" + count + "].MarksObt", null, null, new { @placeholder = "Obtained", @class = "form-control input-shadow", @id = "MarksObt" })</td>
+                                    <td> @Html.TextBox("[" + count + "].MaxMarks", null, new { @placeholder = "Max. Marks", @class = "form-control input-shadow", @id = "MaxMarks" })</td>
+                                    <td> @Html.TextBox("[" + count + "].Subject", null, new { @placeholder = "Subject", @class = "form-control input-shadow", @id = "Subject" })</td>
+                                    <td> @Html.TextBox("[" + count + "].Percentage", null, new { @placeholder = "Percentage", @class = "form-control input-shadow", @id = "Percentage" })</td>
+                                </tr>
+                            </tbody>
+                        }
+                    </table>
+                </div><!--end .table-responsive -->
+                <span style="background:#014E8C; color:white;text-align:center; font:20px;border: 1px solid black;">Best of Five Subject Marks: </span>
+                <div class="card-body">
+                    <div class="row">
+                        &nbsp; &nbsp;&nbsp; &nbsp;<input type="checkbox" id="chkmandatory" />&nbsp; &nbsp;<span style="font-weight:bold;">Mandatory()</span>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <input type="checkbox" id="chkoptional" />&nbsp; &nbsp;<span style="font-weight:bold;">Optional()</span>
+                    </div>
+                    <br />
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <table id="#print-content" class="table no-margin">
+            <tr>
+                <th hidden="hidden">
+                    ID
+                </th>
+                <th>
+                    S.No
+                </th>
+                <th>
+                    Subject
+                </th>
+                <th>
+                    Marks Obtained
+                <th>
+                    Maximum Marks
+                </th>
+            </tr>
+            @{
+                for (int i = 0, sNo = 1; i <= 4; i++, sNo++)
+                {
+                    <tr>
+                        <td><label>@sNo</label> </td>
+                        <td>
+                            @Html.DropDownList("[" + i + "].B_SubjectId", new SelectList(ViewBag.AllSubject as System.Collections.IEnumerable, "Value", "Text"),
+                             "Select", new { @id = "B_SubjectId", @class = "form-control input-shadow", required = "required" })
+                        </td>
+                        <td> @Html.TextBox("[" + i + "].B_MarksObtained", null, null, new { @placeholder = "Marks Obtained", @class = "form-control input-shadow", @id = "B_MarksObtained" })</td>
+                        <td> @Html.TextBox("[" + i + "].B_MaxMarks", null, null, new { @placeholder = "Max. Marks", @class = "form-control input-shadow", @id = "B_MaxMarks" })</td>
+                    </tr>
+
+                }
+            }
+        </table>
+        <div class="col-xs-12 text-right">
+            <button class="btn btn-primary c-shadow-1" id="btnNext" value="Next" type="submit">Save & Next</button>
+        </div>
+    </form>
+
+

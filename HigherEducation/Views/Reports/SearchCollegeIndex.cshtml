@@ -1,0 +1,1560 @@
+﻿@{
+    Layout = "../Shared/_bannerMenu.cshtml";
+}
+
+
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head runat="server">
+    <title>DHE Admissions : Search University and College</title>
+    <meta charset="utf-8" />
+   
+    <style>
+        .myani {
+            animation: shake 0.5s;
+            animation-iteration-count: infinite;
+        }
+
+        @@keyframes shake {
+            0% {
+                transform: translate(1px, 1px) rotate(0deg);
+            }
+
+            10% {
+                transform: translate(-1px, -2px) rotate(-1deg);
+            }
+
+            20% {
+                transform: translate(-3px, 0px) rotate(1deg);
+            }
+
+            30% {
+                transform: translate(3px, 2px) rotate(0deg);
+            }
+
+            40% {
+                transform: translate(1px, -1px) rotate(1deg);
+            }
+
+            50% {
+                transform: translate(-1px, 2px) rotate(-1deg);
+            }
+
+            60% {
+                transform: translate(-3px, 1px) rotate(0deg);
+            }
+
+            70% {
+                transform: translate(3px, 1px) rotate(-1deg);
+            }
+
+            80% {
+                transform: translate(-1px, -1px) rotate(1deg);
+            }
+
+            90% {
+                transform: translate(1px, 2px) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(1px, -2px) rotate(-1deg);
+            }
+        }
+
+        .blinking {
+            animation: blinkingText 1s infinite;
+        }
+
+        @@keyframes blinkingText {
+            0% {
+                color: #fff;
+            }
+
+            49% {
+                color: #fff;
+            }
+
+            50% {
+                color: #300a9d;
+            }
+
+            99% {
+                color: #300a9d;
+            }
+
+            100% {
+                color: #fff;
+            }
+        }
+
+        .blinking-id {
+            animation: blinkingid 1s infinite;
+        }
+
+        @@keyframes blinkingid {
+            0% {
+                color: #E91E63;
+            }
+
+            49% {
+                color: #fff;
+            }
+
+            50% {
+                color: #fff;
+            }
+
+            99% {
+                color: #E91E63;
+            }
+
+            100% {
+                color: #E91E63;
+            }
+        }
+
+        .cus-right-button {
+            margin-top: 10px;
+        }
+
+            .cus-right-button a {
+                text-decoration: none;
+                color: #E91E63;
+                font-size: 14px;
+                font-weight: 800;
+                background-color: #fff;
+                padding: 0.4rem;
+                border-radius: 2px;
+            }
+
+                .cus-right-button a:hover {
+                    color: #E91E63;
+                    background-color: #fff;
+                    transition: 0.3s;
+                    padding: 0.6rem;
+                    text-decoration: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+
+            .iframe-container iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 95%;
+                height: 100%;
+            }
+
+        #exchanger ul {
+            list-style: none;
+            position: absolute;
+            right: -75px;
+            transform: translate(0% -30%);
+            z-index: 1000;
+        }
+
+        .cus-language ul {
+            list-style: none;
+            text-align: right;
+        }
+
+        .cus-language .list-item .active {
+            background: #F6822F;
+            color: #fff;
+            border: 0;
+        }
+
+        .cus-language ul.list-item li {
+            padding: 1px;
+            text-align: center;
+            display: inline-block;
+        }
+
+            .cus-language ul.list-item li a {
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.3s linear;
+            }
+
+        .img-modal .modal-dialog {
+            max-width: 800px !important;
+        }
+
+            .img-modal .modal-dialog li {
+                font-size: 14px;
+                padding: 0.2rem;
+            }
+
+        .highlight-news h3 {
+            font-size: 17px !important;
+        }
+
+        /* .close {
+            font-size: 30px;
+            font-weight: bold;
+            color: #fff;
+            top: -30px;
+            right: -15px;
+            z-index: 1;
+        }*/
+
+        .inner-list {
+            box-shadow: 0px 1px 10px 0px #ccc;
+            padding: 0.3rem;
+            margin-bottom: 10px;
+        }
+
+        .contentinformation {
+            /*align-content:right;*/
+            font-size: large
+        }
+    </style>
+
+    <style>
+
+        td.details-control {
+            background: url('../../assets/images/details_open.png') no-repeat center center;
+            cursor: pointer;
+        }
+
+        tr.shown td.details-control {
+            background: url('../../assets/images/details_close.png') no-repeat center center;
+        }
+
+        .cus-grid-table {
+            height: 100%;
+            overflow: auto;
+            box-shadow: 0px 0px 5px 0px #ccc;
+            padding: 1rem;
+            margin-bottom: 5%;
+        }
+
+        .collapse.show {
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 5px 5px;
+            box-shadow: 0px 0px 10px 0px #c9c9c9;
+        }
+
+        .collapsing {
+            max-height: 100px;
+            overflow-y: auto;
+            padding: 5px 5px;
+        }
+
+        #cover {
+            /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+            background-color: rgba(33,63,113, 0.6);
+            position: fixed;
+            top: 0px;
+            bottom: 0px;
+            height: 100%;
+            width: 100%;
+            z-index: 100000;
+        }
+
+            #cover i {
+                /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+                margin-left: 50%;
+                margin-top: 50vh;
+            }
+
+        .btn:disabled {
+            opacity: 0.2 !important;
+        }
+
+        .card-counter {
+            box-shadow: 4px 4px 2px -1px rgba(0,0,0,0.4);
+            margin: 5px;
+            padding: 10px 10px;
+            background-color: #fff;
+            height: 75px;
+            border-radius: 5px;
+            transition: .3s linear all;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+            .card-counter:hover {
+                box-shadow: 4px 4px 20px #DADADA;
+                transition: .3s linear all;
+            }
+
+            .card-counter.primary {
+                /*background-color: #007bff;*/
+                background: linear-gradient(to right, #0d47a1, #1976d2 99%) !important;
+                background: -webkit-gradient(linear, left top, right top, from(#0d47a1), color-stop(99%, #1976d2)) !important;
+                color: #FFF;
+            }
+
+            .card-counter.danger {
+                background-color: #ef5350;
+                color: #FFF;
+            }
+
+            .card-counter.success {
+                background-color: #66bb6a;
+                color: #FFF;
+            }
+
+            .card-counter.info {
+                background: linear-gradient(to right, #4527a0, #5e35b1) !important;
+                background: -webkit-gradient(linear, left top, right top, from(#4527a0), to(#5e35b1)) !important;
+                color: #FFF;
+            }
+
+            .card-counter i {
+                font-size: 4em;
+                opacity: 0.5;
+                margin-top: -1px;
+            }
+
+            .card-counter .fa.fa-spinner {
+                font-size: 1.5em !important;
+                opacity: 0.5;
+            }
+
+            .card-counter .count-numbers {
+                position: absolute;
+                right: 30px;
+                top: 10px;
+                font-size: 28px;
+                display: block;
+                /*font-weight:800;*/
+                text-shadow: 10px 10px 0px 0px #333;
+            }
+
+            .card-counter .count-name {
+                position: absolute;
+                right: 30px;
+                top: 55px;
+                font-style: italic;
+                text-transform: capitalize;
+                opacity: 0.8;
+                display: block;
+                font-size: 12px;
+                /*font-weight: 700;*/
+            }
+
+        .cus-top-cards {
+            border: 1px solid #ccc;
+            padding: 0.8rem;
+            box-shadow: inset 0px 1px 8px 2px #a9a9a9;
+        }
+
+        .cus-leftsection {
+            padding: 1rem;
+            margin-bottom: 51px;
+            font-size: small;
+            box-shadow: inset 20px 5px 25px #e2eaf4;
+        }
+
+            .cus-leftsection .card {
+                margin-bottom: 1rem;
+                border-radius: 0px;
+                border: 0;
+            }
+
+                .cus-leftsection .card .card-header {
+                    padding: 0.5rem;
+                    border-bottom: 4px solid #F28028;
+                    background: #213F71;
+                    border-radius: 0;
+                }
+
+                .cus-leftsection .card .card-body {
+                    padding: 0.1rem 1.7rem;
+                }
+
+                .cus-leftsection .card .btn {
+                    cursor: pointer;
+                    text-align: left;
+                    outline: none;
+                }
+
+                    .cus-leftsection .card .btn:focus {
+                        outline: none;
+                    }
+
+            .cus-leftsection .form-check-label {
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .cus-leftsection .form-check {
+                margin-bottom: 0px !important;
+            }
+
+        .cus-rightsection {
+            background: #f9f9f9;
+            padding: 1rem;
+            box-shadow: inset 20px 5px 25px #e2eaf4;
+            margin-bottom: 7%;
+            border-left: 4px solid #fff;
+        }
+
+
+        .cus-rightsection-inner {
+            background: #fff;
+            padding: 1rem;
+        }
+    </style>
+    <style type="text/css">
+
+
+        button.dt-button, div.dt-button, a.dt-button {
+            padding: 0.01em 0.5em !important;
+            font-size: x-large;
+        }
+
+        .modalBackground {
+            background-color: rgb(192,234,255);
+            filter: alpha(opacity=70);
+            opacity: 0.7;
+            z-index: 100 !important;
+        }
+
+        .modalPopup {
+            background-color: #ffffff;
+            border-width: 3px;
+            border-style: solid;
+            border-color: Gray;
+            padding: 3px;
+            /*width: 250px;*/
+            z-index: 100;
+        }
+
+        .btnPop {
+            background-color: #033280;
+            color: White;
+            font-size: 12px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+
+        table {
+            width: 100% !important;
+            font-size: small;
+        }
+    </style>
+    <script>
+
+        errorFn = function (jqXHR, exception) {
+
+            var msg = '';
+            if (jqXHR.status === 0) {
+                msg = 'Not connect.\n Verify Network.';
+            } else if (jqXHR.status == 404) {
+                msg = 'Requested page not found. [404]';
+            } else if (jqXHR.status == 500) {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'parsererror') {
+                msg = 'Requested JSON parse failed.';
+            } else if (exception === 'timeout') {
+                msg = 'Time out error.';
+            } else if (exception === 'abort') {
+                msg = 'Ajax request aborted.';
+            } else {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            alert("Error: " + msg);
+            $("#cover").fadeOut("fast");
+        };
+
+        function downloadPDF(pdf)
+        {
+            const linkSource = `data:application/pdf;base64,${pdf}`;
+            const downloadLink = document.createElement("a");
+            const fileName = "Prospectus.pdf";
+            downloadLink.href = linkSource;
+            downloadLink.download = fileName;
+            downloadLink.click();
+        }
+        $(document).ready(function ()
+        {
+
+
+            $(".cus-rightsection,.cus-leftsection").hide();
+
+            $("#cover").hide();
+
+            $('[name=optradio]').change(function () {
+                //alert($(this).prop('checked'));
+                $('#tbcollegeFilter').val('');
+                const rbs = document.querySelectorAll('input[name="optradio"]');
+                let selectedValue;
+                for (const rb of rbs)
+                {
+                    if (rb.checked)
+                    {
+                        selectedValue = rb.value;
+                        break;
+                    }
+                }
+                //alert(selectedValue);
+                //getFilterMenu(selectedValue);
+
+                getCollegeFiltered(selectedValue);
+                $(".cus-rightsection,.cus-leftsection").show();
+            });
+        });
+        //-----------------------
+        var edumod = [];
+        var FilterData;
+        function generateListofSelectedEduMod(FilterID)
+        {
+            var a = $('#' + FilterID + ' > div > input[type=checkbox]');
+
+            var SelectedEduMod = [];
+            $.each(a, (i) =>
+            {
+                if ($(a[i]).prop('checked'))
+                {
+                    $('.' + $(a[i]).val()).show();//showing div with class of cb_1_dcode
+                    SelectedEduMod.push($(a[i]).val())//keep this
+                }
+                else
+                {
+                    $('.' + $(a[i]).val()).hide();
+                }
+                ;
+            })
+            edumod = SelectedEduMod;
+        }
+        var dis =[];
+        function generateListofSelectedDistrict(FilterID)
+        {
+            var a = $('#'+FilterID+' > div > input[type=checkbox]');
+
+            var SelectedDistrict = [];
+            $.each(a, (i) =>
+            {
+                if ($(a[i]).prop('checked'))
+                {
+                    $('.'+$(a[i]).val()).show();//showing div with class of cb_1_dcode
+                    SelectedDistrict.push($(a[i]).val())//keep this
+                }
+                else
+                {
+                    $('.'+$(a[i]).val()).hide();
+                }
+                ;
+            })
+            dis = SelectedDistrict;
+            //var D, C;
+            //if (dis.length === 0 || coltyp.length === 0)
+            //{
+            //    alert("Atleast one item must be selected");
+            //    return;
+            //}
+            //lazyProduct([dis, coltyp], function (dist, colt)
+            //{
+            //    console.log(dist + ',' + colt);
+            //    D = dist + '.' + colt;
+
+            //});
+           /* $("#FilteredCollegeList > " + (D === '' ? '' : ('.' + D))).show();*/
+
+        }
+        var coltyp =[];
+        function generateListofSelectedCollegeType(FilterID)
+        {
+            var a = $('#'+FilterID+' > div > input[type=checkbox]');
+
+            var SelectedCollegetype = [];
+            $.each(a, (i) =>
+            {
+                if ($(a[i]).prop('checked'))
+                {
+                    $('.' + $(a[i]).val()).show();//showing div with class of cb_1_dcode
+                    SelectedCollegetype.push($(a[i]).val())//keep this
+                }
+                else
+                {
+                    $('.' + $(a[i]).val()).hide();
+                }
+                ;
+            })
+
+            coltyp = SelectedCollegetype;
+            var D, C;
+            //if (dis.length === 0 || coltyp.length === 0)
+            //{
+            //    alert("Atleast one item must be selected");
+            //    return;
+            //}
+            //lazyProduct([dis, coltyp], function (dist, colt)
+            //{
+            //    console.log(dist + ',' + colt);
+            //    D = dist + '.' + colt;
+
+            //});
+            //$("#FilteredCollegeList > " + (D === '' ? '' : ('.' + D))).show();
+
+
+
+            //$("#FilteredCollegeList").children().filter(dis+','+coltyp).show();
+            //$("#FilteredCollegeList").children().filter(function () { return $(this).is(dis +','+ coltyp); }).show();
+        }
+        var discipline = [];
+        function generateListofSelectedDiscipline(FilterID)
+        {
+            var a = $('#' + FilterID + ' > div > input[type=checkbox]');
+
+            var SelectedDiscipline= [];
+            $.each(a, (i) =>
+            {
+                if ($(a[i]).prop('checked'))
+                {
+                    $('.' + $(a[i]).val()).show();//showing div with class of cb_1_dcode
+                    SelectedDiscipline.push($(a[i]).val())//keep this
+                }
+                else
+                {
+                    $('.' + $(a[i]).val()).hide();
+                }
+                ;
+            })
+
+            discipline = SelectedDiscipline;
+//            var D, C;
+            //if (dis.length === 0 || coltyp.length === 0)
+            //{
+            //    alert("Atleast one item must be selected");
+            //    return;
+            //}
+            //lazyProduct([dis, coltyp], function (dist, colt)
+            //{
+            //    console.log(dist + ',' + colt);
+            //    D = dist + '.' + colt;
+
+            //});
+            //$("#FilteredCollegeList > " + (D === '' ? '' : ('.' + D))).show();
+
+
+
+            //$("#FilteredCollegeList").children().filter(dis+','+coltyp).show();
+            //$("#FilteredCollegeList").children().filter(function () { return $(this).is(dis +','+ coltyp); }).show();
+        }
+        //lazyProduct([hats, shirts, pants, shoes], function (hat, shirt, pant, shoe)
+        //{
+        //    // Your function is yielded unique combinations of values from the arrays
+        //    console.log(hat, shirt, pant, shoe);
+        //});
+        function lazyProduct(sets, f, context)
+        {
+            if (!context) context = this;
+            var p = [], max = sets.length - 1, lens = [];
+            for (var i = sets.length; i--;) lens[i] = sets[i].length;
+            function dive(d)
+            {
+                var a = sets[d], len = lens[d];
+                if (d == max) for (var i = 0; i < len; ++i) p[d] = a[i], f.apply(context, p);
+                else for (var i = 0; i < len; ++i) p[d] = a[i], dive(d + 1);
+                p.pop();
+            }
+            dive(0);
+        }
+
+        //------------------------------
+
+        function AccordionFilters(FilterDivData)
+        {
+            var StringToAppend = '';
+            //var filter_data = [{param_dcode: 71,param_dname:'Ambala'},{param_dcode: 59,param_dname:'bhiwani'},{param_dcode: 60,param_dname:'ynr'},];
+
+            //var FilterDivData =
+            //{
+            //    filter_id: '5',
+            //    filter_name: 'Location',
+            //    filter_data: [
+            //        {
+            //            id: 71,
+            //            nam: 'Ambala'
+            //                        cnt : 20
+            //        },
+            //        {
+            //            id: 59,
+            //            nam: 'bhiwani'
+//                        cnt : 20
+            //        },
+            //        {
+            //            id: 60,
+            //            nam: 'ynr',
+//                        cnt : 20
+
+            //        }]
+            //};
+            var totalValues;
+            StringToFilter = `
+            <div class="card">
+                <div class="card-header" id="heading2">
+                   <div class="row">
+                        <div class="col-lg-7 col-md-7 col-6">
+                            <button class="" type="button" data-toggle="" data-target="#collapse`+ FilterDivData.filter_id + `" aria-expanded="false" aria-controls="collapse` + FilterDivData.filter_id + `">
+                            `+ FilterDivData.filter_name + `</button>
+                        </div>
+                        <div class="col-lg-5 col-md-5 col-6 text-right cus-loc-btn">
+                                <input type="button" id="selNone` + FilterDivData.filter_name.replace(' ', '') + `" onclick="selectNoneCb(event,'` + FilterDivData.filter_name.replace(' ', '') + `Filter')" value="Clear">
+                                <input type="button" id="selAll` + FilterDivData.filter_name.replace(' ', '') + `" checked="checked" onclick="selectAllCb(event,'` + FilterDivData.filter_name.replace(' ', '') + `Filter')" value="All"/>
+                        </div>
+                   </div>
+                </div>
+                <div id="collapse`+ FilterDivData.filter_id + `" class="collapse show" aria-labelledby="heading` + FilterDivData.filter_id + `" data-parent="#AccordionFilter">
+                    <div class="card-body" id="`+ FilterDivData.filter_name.replace(' ','') + `Filter" >`;
+
+            //var mid = "<label for ><input class="form-check - inline" style="" type="checkbox" id="selAll` + FilterDivData.filter_name.replace(' ', '')+`"/> Select All</label>";
+            var mid = '';
+
+            for (var i = 0; i < FilterDivData.filter_data.length; i++)
+            {
+                if (FilterDivData.filter_data[i].nam !== 'Total')
+                {
+
+                    cbid = '_' + FilterDivData.filter_id + '_' + FilterDivData.filter_data[i].id;
+
+                    mid += `<div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="cb`+ cbid + `" id="cb` + cbid + `" name="` + FilterDivData.filter_name + `"checked="checked"/>
+                                <label class="form-check-label" for="cb`+ cbid + `">` + FilterDivData.filter_data[i].nam
+                        //+ `</label><span class="badge badge-danger" style="float: right;">` + FilterDivData.filter_data[i].cnt
+                        + `</span></div>`;
+                }
+                else
+                {
+                    totalValues = FilterDivData.filter_data[i].cnt;
+                }
+            }
+
+            var end = `</div></div></div>`;
+
+            $("#AccordionFilter").append(StringToFilter+mid+end);
+
+            $("#span" + FilterDivData.filter_name.replace(' ', '')).text(totalValues);
+
+        }
+        function searchCollege(id)
+        {
+            var input, filter, ul, li, a, i, txtValue,h5;
+            input = document.getElementById('tbcollegeFilter');
+            filter = input.value.toUpperCase();
+            //console.log(filter+'|'+input)
+            parent = document.querySelectorAll("#FilteredCollegeList > div");
+            h5 = document.querySelectorAll('#FilteredCollegeList > div > div > div > div > div > h5');
+            if (filter.length == 0)
+            {
+                $("#FilteredCollegeList > div").show();
+                var X = $("[type=checkbox]");
+                $(X).each((Y) => { $(X[Y]).prop("checked", "checked") })
+            }
+            // Loop through all div items, and hide those who don't match the search query
+            for (i = 0; i < h5.length; i++)
+            {
+                a = h5[i];//.getElementsByTagName("a")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1)
+                {
+
+                    h5[i].parentElement.parentElement.parentElement.parentElement.parentElement.style.display = "";
+                } else
+                {
+                    h5[i].parentElement.parentElement.parentElement.parentElement.parentElement.style.display = "none";
+                }
+            }
+            $("#ContentInfromation > input").val(`Showing ${$('.card.infoCard:visible').length} College(s) of ${$('.card.infoCard').length}`);
+
+        }
+        //function searchCollegeNew(valueT)
+        //{
+
+        //    var showItems = '';
+        //    if (dis.length >= 1 && coltyp.length >= 1 && edumod.length >= 1)
+        //    {
+        //        lazyProduct([dis, coltyp, edumod], function (c, d, e)
+        //        {
+        //            showItems += '.' + c + '.' + d + '.' + e + ',';
+        //        })
+        //    }
+        //    else if (dis.length == 0 && edumod.length == 0 && coltyp.length >= 1)
+        //    {
+        //        showItems += '.' + coltyp.join(',.') + ',';
+        //    }
+        //    else if (coltyp.length == 0 && edumod.length == 0 && dis.length >= 1)
+        //    {
+        //        showItems += '.' + dis.join(',.') + ',';
+        //    }
+        //    else if (coltyp.length == 0 && dis.length == 0 && edumod.length >= 1)
+        //    {
+        //        showItems += '.' + edumod.join(',.') + ',';
+        //    }
+        //    //else if (coltyp.length == 0 && dis.length == 0 && edumod.length == 0 && discipline.length >= 1)
+        //    //{
+        //    //    showItems += '.' + discipline.join(',.') + ',';
+        //    //}
+        //    else
+        //    {
+        //        console.log('Selection too short');
+        //    }
+
+        //    //debugger;
+
+        //    showItems = showItems.slice(0, -1);
+
+        //    $("#FilteredCollegeList > div").hide();
+        //    if (coltyp.length == 0 && dis.length == 0 && edumod.length == 0)
+        //    {
+        //        alert('Nothing is selected!\nShowing All');
+        //        $("#FilteredCollegeList > div").show();
+        //    }
+        //    else
+        //    {
+        //        $("#FilteredCollegeList").children().filter(showItems).show();
+        //    }
+
+        //    var input, filter, ul, li, a, i, txtValue, h5;
+        //    filter= valueT.toUpperCase();
+        //    //filter = input.value.toUpperCase();
+        //    console.log(filter + '|' + input)
+        //    parent = $("#FilteredCollegeList > div:visible");
+
+        //    h5 = $('.cus-subject');
+
+        //    // Loop through all div items, and hide those who don't match the search query
+        //    for (i = 0; i < h5.length; i++)
+        //    {
+        //        a = h5[i];//.getElementsByTagName("a")[0];
+        //        txtValue = a.textContent || a.innerText;
+        //        debugger
+        //        if (txtValue.toUpperCase().indexOf(filter) > -1 && h5[i].parentElement.parentElement.parentElement.parentElement.parentElement.style.display == "")
+        //        {
+        //            h5[i].parentElement.parentElement.parentElement.parentElement.parentElement.style.display = "";
+        //        } else
+        //        {
+        //            h5[i].parentElement.parentElement.parentElement.parentElement.parentElement.style.display = "none";
+        //        }
+        //    }
+        //    $("#ContentInfromation").text(`Showing ${$('.card.infoCard:visible').length} Colleges of ${$('.card.infoCard').length}`);
+
+        //}
+
+        var f_getCollegeDetailsAction = '@Url.Action("f_getCollegeDetails", "Reports")';
+        function getCollegeDetails(collegeid)
+        {
+            $("#cover").fadeIn("fast");
+            var dataToSend = {};
+            dataToSend.p_college_id = collegeid;
+            dataToSend.p_ugpg = $("[name='optradio']:checked").val()
+
+            $.ajax({
+
+                url: f_getCollegeDetailsAction,
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: dataToSend,
+                success: function (data)
+                {
+                    //debugger;
+                    var responseData = JSON.parse(data);
+                    var prospectusBtn = '';
+                    if (responseData.length > 0 && responseData[0].hasOwnProperty('docs'))
+                    { $("#btnPros").remove();
+                        if (responseData[0].docs !== '')
+                        {
+                            
+                            prospectusBtn = `<div class="col-xs-12"><button id="btnPros" class="btn btn-success float-right" onclick="downloadPDF('${responseData?.[0]?.docs}'); return false;"><i class="fas fa-download"></i> Prospectus</button></div>`;
+                            $(prospectusBtn).insertBefore(".cus-grid-table-two");
+
+                        }
+                    }
+                    $("#table3").DataTable({
+                        data: responseData,
+                        dom: 't',
+                        paging: false,
+                        destroy: true,
+                        "order": [[0, "asc"]],
+                        columns: [
+                            { data: "coursename", title: "Course Name"  },
+                            { data: "sectionname", title: "Section Name" },
+                            { data: "totalseats", title: "Total Seats",class: "dt-center" },
+                            { data: "sports_seats", title: "Additional sports seats (if any)", class: 'dt-center'/*, render: () => { return 0;}*/ },
+                            {
+                                data: "coursefee", title: "Course Fee<span class='text-danger'>*</span>", class: "dt-center", render: (d, t, r) =>
+                                {
+                                    console.log(d);
+                                    console.log(r["practical_fee"]);
+                                    console.log(parseInt(d) + parseInt(r["practical_fee"]));
+                                    var res = parseInt( d) + parseInt(r["practical_fee"] );
+                                    return isNaN(res)?'Not Defined':res;
+                                }
+                            },
+                            { data: "practical_fee", title: "Practical Fee", class: "dt-center", visible: false }
+
+
+                        ]
+                    });
+
+
+
+                    $("#mydatamodel2.modal-body > div.cus-grid-table-two").empty();
+                    $("#mydatamodel2.modal-body > div.cus-grid-table-two").append(`
+                        <table class="table table-bordered table-striped table-hover table-custom">
+                                    <tbody>
+                                        <tr class="info">
+                                            <td colspan="1">
+                                                <label>College Name</label></td>
+                                            <td id="tdCName" colspan="3">${ responseData?.[0]?.collegename || '-' }</td>
+
+                                        </tr>
+                                        <tr class="warning">
+                                            <td>
+                                                <label>College Type</label></td>
+                                            <td id="tdCType">${responseData?.[0]?.collegetype || '-' }</td>
+
+                                            <td>
+                                                <label>District</label></td>
+                                            <td id="tdDist">${ responseData?.[0]?.districtname || '-'}</td>
+
+                                        </tr>
+                                        <tr class="success">
+                                            <td>
+                                                <label>College Address</label></td>
+                                            <td id="tdAddress">${ responseData?.[0]?.address || '-'}</td>
+
+                                            <td>
+                                                <label>Education Mode</label></td>
+                                            <td id="tdEduMode">${ responseData?.[0]?.EduMode || '-'}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>College Contact</label></td>
+                                            <td id="tdContact"><a href="`+ (responseData[0].phoneno == null || responseData[0].phoneno == '' ? '#' : ('tel:' + responseData[0].phoneno)) + `">${responseData?.[0]?.phoneno || '-'}</a></td>
+
+                                            <td>
+                                                <label>College Email</label></td>
+                                            <td id="tdEmail">${ responseData?.[0]?.emailid || '-'}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Name of Principal</label></td>
+                                            <td id="tdPrincipalName">${ responseData?.[0]?.Principal_Name || '-'}</td>
+
+                                            <td>
+                                                <label>Principal Phone</label></td>
+                                            <td id="tdPrincipalPhoneNo">${ responseData?.[0]?.Principal_PhoneNo || '-'}</td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <label>Nodal Officer (Online Admission)</label></td>
+                                            <td id="tdNodalOfficer">${ responseData?.[0]?.NodalAdmissions || '-'}</td>
+
+                                            <td>
+                                                <label>Phone</label></td>
+                                            <td id="tdNodalPhone">${ responseData?.[0]?.NodalAdm_PhoneNo || '-' }</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Co-ordinator (Arts Stream)</label></td>
+                                            <td id="tdArts">${ responseData?.[0]?.CordArts || '-'}</td>
+
+                                            <td>
+                                                <label>Phone</label></td>
+                                            <td id="tdArtsPhone">${ responseData?.[0]?.CordArts_PhoneNo || '-'}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Co-ordinator (Commerce Stream)</label></td>
+                                            <td id="tdComm">${ responseData?.[0]?.CordComm || '-'}</td>
+
+                                            <td>
+                                                <label>Phone</label></td>
+                                            <td id="tdCommPhone">${ responseData?.[0]?.CordComm_PhoneNo || '-'}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Co-ordinator (Science Stream)</label></td>
+                                            <td id="tdSc">${ responseData?.[0]?.CordSc || '-' }</td>
+
+                                            <td>
+                                                <label>Phone</label></td>
+                                            <td id="tdScPhone">${ responseData?.[0]?.CordSC_PhoneNo || '-' }</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Co-ordinator (Job-Oriented Courses)</label></td>
+                                            <td id="tdJobOrd">${ responseData?.[0]?.CordJob || '-'}</td>
+
+                                            <td>
+                                                <label>Phone</label></td>
+                                            <td id="tdJobOrdPhone">${ responseData?.[0]?.CordJob_PhoneNo || '-'}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Co-ordinator (Fee Structure)</label></td>
+                                            <td id="tdFeeStruct">${ responseData?.[0]?.CordFee || '-' }</td>
+
+                                            <td>
+                                                <label>Phone</label></td>
+                                            <td id="tdFeeStructPhone">${ responseData?.[0]?.CordFee_PhoneNo || '-'}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Website URL</label></td>
+                                            <td id="tdWebsite" colspan="3"><a target="_blank" href="http://${ responseData?.[0]?.website || '#'}" >${ responseData?.[0]?.website || '-'}</a></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" style="text-align: center; font-weight: 800;background:#213F71;">
+                                                <label style="color:#fff !important;">Main Attraction of College</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td id="tdMainAttract" colspan="4">${ responseData?.[0]?.MainAttract || '-' }</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+
+`);
+
+                    $("#myModal2").modal('show');
+
+                    $("#cover").fadeOut();
+                },
+                error: errorFn,
+
+
+            });
+
+        }
+
+
+       var GetCollegeFiltered_action = '@Url.Action("d_getCollegeFilter", "Reports")';
+       function getCollegeFiltered(UGPG)
+        {
+            $("#cover").fadeIn();
+              var dataToSend = {};
+            dataToSend.p_college_id     = null;
+            dataToSend.p_course_id      = null;
+            dataToSend.p_section_id     = null;
+            dataToSend.p_district_id    = null;
+            dataToSend.p_collegeType_id = null;
+            dataToSend.p_iswomen_id     = null;
+            dataToSend.p_UGPG           = UGPG;
+
+            $.ajax({
+
+                url: GetCollegeFiltered_action,
+                type: 'GET',
+
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: dataToSend,
+                success: function (data)
+                {
+                    //debugger;
+                    var responseData = JSON.parse(data);
+                    $("#FilteredCollegeList").empty();
+                    //We will use response data to create filters
+                    var lookupDis = {};
+                    var lookupColTyp = {};
+                    var lookupIsWom = {};
+                    var lookupDiscipline = {};
+                    var items = responseData;
+                    var FilterLocArr = [];
+                    var FilterColTypArr= [];
+                    var FilterIsWomArr = [];
+                    var FilterDisciplineArr = [];
+                    var listofdisciplineid = '';
+
+
+                    for (var item, i = 0; item = items[i++];)
+                    {
+                        listofdisciplineid += (item.discipline + "|");
+
+                        var districtid = item.districtid;
+                        var coltypid = item.collegetypeid;
+                        var IsWomid = item.iswomen;
+
+                        if (!(districtid in lookupDis))
+                        {
+                            lookupDis[districtid] = 1;
+                            FilterLocArr.push({ "id": districtid, "nam": item.districtName, cnt: 0 });
+                        }
+
+                        if (!(coltypid in lookupColTyp))
+                        {
+                            lookupColTyp[coltypid] = 1;
+                            FilterColTypArr.push({ "id": coltypid, "nam": item.collegetype, cnt: 0 });
+                        }
+                        if (!(IsWomid in lookupIsWom))
+                        {
+                            lookupIsWom[IsWomid] = 1;
+                            switch (IsWomid)
+                            {
+                                case 0:
+                                    FilterIsWomArr.push({ "id": IsWomid, "nam": 'Co-Ed', cnt: 0 });
+                                    break;
+                                case 1:
+                                    FilterIsWomArr.push({ "id": IsWomid, "nam": 'Only Boys', cnt: 0 });
+                                    break;
+                                case 2:
+                                    FilterIsWomArr.push({ "id": IsWomid, "nam": 'Only Girls', cnt: 0 });
+                                default:
+                            }
+
+                        }
+
+                    }
+                    var ff = listofdisciplineid.split('|').filter(function (value, index, self)
+                    {
+                        return self.indexOf(value) === index;
+                    })
+                    ff.splice(ff.indexOf(''), 1)
+                   // alert(ff);
+                    ff.forEach(function (X)
+                    {
+                        var temp = X.split("^");
+                        FilterDisciplineArr.push({ "id": temp[1], "nam": temp[0], cnt: 0 });
+                    })
+                    /////YEH CODE LAGANA HAI !!!!!!!!!!!!!!!!! $("#FilteredCollegeList").children().filter('.cb_2_3.cb_1_58').show()
+                    //console.log(FilterLocArr);
+                    //Remove all Previously Made Filters
+                    $("#AccordionFilter").empty();
+                    //$(".cus-rightsection").append(`<div class="row mb-2"><div class="col-lg-12 cus-search"><input type="text" id="tbcollegeFilter" class="form-control" placeholder="Search college name" onkeyup="searchCollege(this.value)"><i class="fa fa-search"></i></div></div>`)
+                    var FilterLocation = {
+                        filter_id: '1',
+                        filter_name: 'Location',
+                        filter_data: FilterLocArr
+                    };
+                    AccordionFilters(FilterLocation);
+                    var FilterCollegeType = {
+                        filter_id: '2',
+                        filter_name: 'College Type',
+                        filter_data: FilterColTypArr
+                    }
+                    AccordionFilters(FilterCollegeType);
+                    var FilterEduMod = {
+                        filter_id: '3',
+                        filter_name: 'Education Mode',
+                        filter_data: FilterIsWomArr
+                    }
+                    AccordionFilters(FilterEduMod);
+                    var FilterDiscipline= {
+                        filter_id: '4',
+                        filter_name: 'Discipline',
+                        filter_data: FilterDisciplineArr
+                    }
+                    AccordionFilters(FilterDiscipline);
+
+                    generateListofSelectedCollegeType('CollegeTypeFilter');
+                    generateListofSelectedDistrict('LocationFilter');
+                    generateListofSelectedEduMod('EducationModeFilter');
+                    generateListofSelectedDiscipline('DisciplineFilter');
+                    //when we bind this to changeevent this checkbox should exist other wise it wont work
+                    $('#DisciplineFilter > div > input[type=checkbox],#LocationFilter > div > input[type=checkbox],#CollegeTypeFilter > div > input[type=checkbox],#EducationModeFilter > div > input[type=checkbox]').change(function ()
+                    {
+                        $("#FilteredCollegeList > div").hide();
+
+                        //Show loader for loading items on this pane
+                        var idOfDiv = $(this).parent().parent().prop('id');
+
+                        switch (idOfDiv)
+                        {
+                            case 'CollegeTypeFilter':
+                                generateListofSelectedCollegeType(idOfDiv);
+                                break;
+                            case 'LocationFilter':
+                                generateListofSelectedDistrict(idOfDiv);
+                                break;
+                            case 'EducationModeFilter':
+                                generateListofSelectedEduMod(idOfDiv);
+                                break;
+                            case 'DisciplineFilter':
+                                generateListofSelectedDiscipline(idOfDiv);
+                                break;
+                            default:
+                                alert('wrong Selection!');
+                        }
+
+                        var showItems = '';
+                        if (dis.length >= 1 && coltyp.length >= 1 && edumod.length >=1 )
+                        {
+                            lazyProduct([dis, coltyp, edumod], function (c,d,e)
+                            {
+                                showItems += '.' + c + '.' + d + '.'+ e + ',';
+                            })
+                        }
+                        else if (dis.length >= 1 && coltyp.length >= 1 && edumod.length >= 0)
+                        {
+                            lazyProduct([dis, coltyp], function (c, d)
+                            {
+                                showItems += '.' + c + '.' + d + ',';
+                            })
+                        }
+                        else if (dis.length >= 1 && coltyp.length >= 0&& edumod.length >= 1)
+                        {
+                            lazyProduct([dis, edumod], function (c, d)
+                            {
+                                showItems += '.' + c + '.' + d + ',';
+                            })
+                        }
+                        else if (dis.length >= 0 && coltyp.length >= 1 && edumod.length >= 1)
+                        {
+                            lazyProduct([coltyp, edumod], function (c, d)
+                            {
+                                showItems += '.' + c + '.' + d + ',';
+                            })
+                        }
+                        else if (dis.length == 0 && edumod.length == 0 && coltyp.length >= 1 )
+                        {
+                            showItems += '.' + coltyp.join(',.') + ',';
+                        }
+                        else if (coltyp.length == 0 && edumod.length == 0 && dis.length >= 1 )
+                        {
+                            showItems += '.' + dis.join(',.') + ',';
+                        }
+                        else if (coltyp.length == 0 && dis.length == 0 && edumod.length >= 1 )
+                        {
+                            showItems += '.' + edumod.join(',.') + ',';
+                        }
+                        else if (coltyp.length == 0 && dis.length == 0 && edumod.length == 0 && discipline.length >= 1)
+                        {
+                            showItems += '.' + discipline.join(',.') + ',';
+                        }
+                        else
+                        {
+                            console.log('Selection too short');
+                        }
+
+                        //debugger;
+
+                        showItems = showItems.slice(0, -1);
+
+                        $("#FilteredCollegeList > div").hide();
+                        if (coltyp.length == 0 && dis.length == 0 && edumod==0 && discipline==0)
+                        {
+                            alert('Nothing is selected!\nShowing All');
+                            $("#FilteredCollegeList > div").show();
+                        }
+                        else
+                        {
+                            $("#FilteredCollegeList").children().filter(showItems).show();
+                        }
+
+                        var showDiscipline = '.' + discipline.join(',.') + ',';
+
+                        $("#FilteredCollegeList").children(':visible').filter(':not(' + showDiscipline.slice(0, -1) + ')').hide();
+
+                        $("#ContentInfromation > input").val(`Showing ${$('.card.infoCard:visible').length} College(s) of ${$('.card.infoCard').length}`);
+
+
+                        //$("#FilteredCollegeList > " + showItems).show()
+
+                    });
+
+                    //out of visible items onlyshow the selected ones
+                    //$("#DisciplineFilter > div > input[type=radio]").click(function ()
+                    //{
+                    //    //debugger;
+                    //    console.log($(this).val());
+                    //    searchCollegeNew($(this).siblings('label').text());
+                    //})
+
+
+                    var DIVHTML = '';
+                    for (var i = 0; i < responseData.length; i++)
+                    {
+                        cbid = 'cb_1_' + responseData[i].districtid;
+                        cbidcoltype = 'cb_2_' + responseData[i].collegetypeid;
+                        cbidwom = 'cb_3_' + responseData[i].iswomen;
+                        cbidisp = '';
+                        var X = responseData[i].discipline.split('|');
+                        var Y = [];
+                        X.forEach((Y) =>
+                        {
+                            //console.log(Y.split('^')[1]);
+                            cbidisp += 'cb_4_' + Y.split('^')[1] +" ";
+                        })
+                       // console.log(cbidisp);
+
+
+                        DIVHTML += `
+                                    <div class="card infoCard `+ cbid + ` ` + cbidcoltype + ` ` + cbidwom + ` ` + cbidisp +`">
+                                        <div class="card-body infoCardBody">
+                                            <div class="row">
+                                                <div class="infoCardHeader col-lg-10 col-md-10 col-12">
+                                                    <div class="cus-icon">
+                                                    <h5>`  + responseData[i].collegename + `
+                                                    (`+ responseData[i].districtName + `)</h5>
+                                                    <p class='cus-subject'>`+ responseData[i].courseName + /*', ' + responseData[i].SubjectCombination+*/ `</p>
+
+                                                    <p>`+ '' + `</p>
+                                                    <p>`+ (responseData[i].iswomen == 2 ? '<span class="badge badge-danger"><i class="fas fa-female"></i>&nbsp;Girls Only</span>' : responseData[i].iswomen == 0 ? '<span class="badge badge-primary"><i class="fas fa-school"></i>&nbsp;Co-Ed.</span>' : '<span class="badge badge-info"><i class="fas fa-user-graduate"></i>&nbsp;Boys Only</span>') + '<span class="badge badge-success"><i class="fas fa-university"></i>&nbsp;' +  responseData[i].collegetype + `</span></p>
+                                                </div>
+                                                </div>
+                                            <div class="col-lg-2 col-md-2 col-12 cus-more-button">
+                                                <button onclick="getCollegeDetails('`+ responseData[i].collegeid +`')" ><i class="fas fa-eye"></i>&nbsp;View More</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    </div>
+                                    `;
+                    }
+                    /*  <p>`+ responseData[i].UGPG + `</p><p>`+ responseData[i].sectionname + `</p><p>`+ responseData[i].is_active_for_pg + `</p>*/
+
+                    $("#FilteredCollegeList").append(DIVHTML)
+
+
+
+                    $("#cover").fadeOut();
+                },
+                error: errorFn,
+
+
+            });
+        };
+        function CreateFilteredCollegeList()
+        {
+
+        }
+       //----------------
+       @*var GetFilterMenu_action = '@Url.Action("f_getFilterMenu", "Reports")';
+       function getFilterMenu(filterCollegeLevel)
+       {
+           //alert(filterCollegeLevel+":filterCollegeLevel");
+           $("#AccordionFilter").empty();
+           $("#cover").fadeIn();
+           $.ajax({
+                url: GetFilterMenu_action,
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    //debugger;
+                    var responseData =  JSON.parse(data);
+                    //var filter1 =
+                    //{
+                    //    filter_id: '1',
+                    //    filter_name: 'Location',
+                    //    filter_data: responseData.Table
+                    //}
+
+                    //var filter2 =
+                    //{
+                    //    filter_id: '2',
+                    //    filter_name: 'College Type',
+                    //    filter_data: responseData.Table1
+                    //}
+
+                    //var filter3 =
+                    //{
+                    //    filter_id: '3',
+                    //    filter_name: 'Education Mode',
+                    //    filter_data: responseData.Table2
+                    //}
+
+                    //var filter4 =
+                    //{
+                    //    filter_id: '4',
+                    //    filter_name: 'Course',
+                    //    filter_data: responseData.Table3
+                    //}
+
+                    //AccordionFilters(filter1);
+                    //AccordionFilters(filter2);
+                    //AccordionFilters(filter2);
+                   // AccordionFilters(filter3);
+                  //  AccordionFilters(filter4);
+
+                    //$('#LocationFilter > div > input[type=checkbox]').change(function ()
+                    //{
+                    //    //alert($(this).prop('checked'));
+                    //    generateListofSelectedDistrict();
+                    //});
+
+                    $("#cover").fadeOut();
+                },
+                error: errorFn,
+
+
+            });
+        };*@
+
+        function selectNoneCb(event, filterID)
+        {
+            $("#" + filterID + " > div > [type=checkbox]").each(function () { $(this).prop('checked', false) });
+            //$($("#"+filterID+ " > div > [type=checkbox]")[0]).prop('checked', true)
+            $("#" + filterID + " > div > [type=checkbox]").change();
+            //$($("#" + filterID + " > div > [type=checkbox]")[0]).prop('checked', false)
+            event.stopPropagation();
+
+        }
+        function selectAllCb(event, filterID)
+        {
+            $("#" + filterID + " > div > [type=checkbox]").each(function () { console.log($(this).prop('checked', true)) });
+            //$($("#" + filterID + " > div > [type=checkbox]")[0]).prop('checked', false)
+           $("#" + filterID + " > div > [type=checkbox]").change();
+            //$($("#" + filterID + " > div > [type=checkbox]")[0]).prop('checked', false)
+            event.stopPropagation();
+        }
+    </script>
+
+</head>
+<body class="homepage">
+
+    <div id="cover">
+        <i class="fa fa-spinner fa-spin" style="font-size:xx-large"></i>
+    </div>
+    <input id="hdnlang" type="hidden" value="e" />
+
+    <!-- Main Content Body -->
+    <div class="container-fluid main">
+        <div class="row">
+            <div class="col-lg-2 col-sm-2 col-0"></div>
+            <div class="col-lg-8 col-md-8 col-sm-8 col-8 justify-content-md-center top-heading">
+                <h4 class="heading">Search College / Course</h4>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-4 text-right back-btn" style="margin-top: 5px;">
+                <a href="#" id="btnBack" class="btn btn-icon icon-left btn-sm btn-info" onclick="javascript: window.history.back();"><i class="fas fa-angle-double-left"></i>&nbsp;Go Back</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="cus-top-section">
+
+                    <label>
+                        Select Course Level&nbsp;:&nbsp;&nbsp;&nbsp;
+                    </label>
+
+                    <div class="form-check-inline">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optradio" value="UG">&nbsp;Under Graduate (UG)
+                        </label>
+                    </div>
+                    <div class="form-check-inline">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optradio" value="PG">&nbsp;Post Graduate (PG)
+                        </label>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="col-lg-12 cus-college-serach">
+                <div class="row">
+                    <div class="col-lg-3 cus-leftsection">
+                        <div class="accordion" id="AccordionFilter">
+                        </div>
+
+                    </div>
+                    <div class="col-lg-9 cus-rightsection">
+
+                        <div class="row mb-2">
+                            <div class="col-lg-8 cus-search"><input type="text" id="tbcollegeFilter" class="form-control" placeholder="Search by college name" onkeyup="searchCollege(this.value)"><i class="fa fa-search"></i></div>
+                            <div class="col-lg-4 text-right"><div id="ContentInfromation" class="contentinformation cus-top-rightsection-inner"><input type="text" class="form-control bg-primary text-white" value="Showing All" style="" readonly="readonly" autocomplete="off"></div></div>
+                        </div>
+
+
+                        <div class="cus-rightsection-inner" id="FilteredCollegeList">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="modal cus-modal cus-inner-modal" id="myModal2" role="dialog">
+        <div class="modal-dialog  modal-lg" style="margin-top: 1%;">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row" style="width:100%">
+                        <div class="col-lg-10 col-md-10 col-10 cus-modal-heading">
+                            <h6 class="modal-title">College Details</h6>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-2">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body" id="mydatamodel2" style="display: block;">
+                    <div class="cus-grid-table-two table-responsive">
+
+                    </div>
+                    <div class="" style="background-color: #213F71; text-align: center; color: #fff; font-weight: 700 !important; font-size: 14px !important; margin-bottom: 0px ">
+                        <table class="table">
+                            <tbody>
+                                <tr><td>Courses Offered</td></tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="table-responsive cus-grid-table-three" style="padding:0.1rem;">
+                        <table id="table3" class="table table-bordered table-striped table-hover">
+                        </table>
+
+                    </div>
+                    <p class="text-danger"><i>(*) Note:Subject Combination fee shall be charged extra from the student, if applicable</i></p>
+                </div>
+                <div class="modal-footer">
+                    @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12 text-center">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 text-left" style="">
+                            <div class="credits">
+                                <a>Site is technically designed, hosted and maintained by National Informatics Centre, Haryana</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <img src="../assets/images/nic-logo.png" style="width:100px;">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </footer>
+    <!-- End Footer -->
+</body>
+</html>
+
+

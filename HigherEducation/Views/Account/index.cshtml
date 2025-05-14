@@ -1,0 +1,1109 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Online Admission Portal - ITI</title>
+    <meta content="" name="descriptison">
+    <meta content="" name="keywords">
+
+    <!-- Google Fonts -->
+    <link href="/assets/assets/css/google-font.css" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="/assets/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/assets/css/all.min.css" rel="stylesheet">
+    <link href="/assets/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/assets/assets/vendor/animatecss/animate.min.css" rel="stylesheet">
+    <link href="/assets/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+    <!-- Template Main CSS File -->
+    <link href="/assets/assets/css/styleindex.css" rel="stylesheet">
+    <link href="/assets/assets/css/theme.css" rel="stylesheet" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-175784086-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-175784086-1');
+    </script>
+
+
+    <style>
+        .blinking {
+            animation: blinkingText 1s infinite;
+        }
+
+        @*@keyframes blinkingText {
+            0% {
+                color: #fff;
+            }
+
+            49% {
+                color: #fff;
+            }
+
+            50% {
+                color: #300a9d;
+            }
+
+            99% {
+                color: #300a9d;
+            }
+
+            100% {
+                color: #fff;
+            }
+        }*@
+
+        .blinking-id {
+            animation: blinkingid 1s infinite;
+        }
+
+        @*@keyframes blinkingid {
+            0% {
+                color: #E91E63;
+            }*@
+
+            49% {
+                color: #fff;
+            }
+
+            50% {
+                color: #fff;
+            }
+
+            99% {
+                color: #E91E63;
+            }
+
+            100% {
+                color: #E91E63;
+            }
+        }
+
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+
+            .iframe-container iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 95%;
+                height: 100%;
+            }
+
+        #exchanger ul {
+            list-style: none;
+            position: absolute;
+            right: -75px;
+            transform: translate(0% -30%);
+            z-index: 1000;
+        }
+
+        .cus-language ul {
+            list-style: none;
+            text-align: right;
+        }
+
+        .cus-language .list-item .active {
+            background: #F6822F;
+            color: #fff;
+            border: 0;
+        }
+
+        .cus-language ul.list-item li {
+            padding: 0.1rem;
+            text-align: center;
+            display: inline-block;
+        }
+
+            .cus-language ul.list-item li a {
+                font-size: 13px;
+                cursor: pointer;
+                transition: all 0.3s linear;
+            }
+			 .img-modal .modal-dialog{
+            max-width:800px !important;
+        }
+                .img-modal .modal-dialog li {
+                    font-size: 14px;
+                    padding: 0.2rem;
+                }
+                .highlight-news h3 {
+                    font-size: 17px !important;
+                }
+
+        .inner-list {
+            box-shadow: 0px 1px 10px 0px #ccc;
+            padding: 0.3rem;
+            margin-bottom:10px;
+        }
+
+		        .dropbtn {
+            background-color: #009231;
+            color: snow;
+
+            font-size: 16px;
+            border: none;
+            padding-top: 7px;
+            font-weight: 900;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+                .dropdown-content a:hover {
+                    background-color: #ddd;
+                    color:black;
+                }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+            background-color: #3e8e41;
+        }
+        .blink_me {
+  animation: blinker 1s linear infinite;
+}
+
+@@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+.close {
+            position: absolute;
+            top: -25px;
+            right: -20px;
+            transition: all 200ms;
+            font-size: 40px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #fff;
+            opacity: 1;
+            background: #0d6d9b !important;
+            padding: 0.1rem 0.6rem !important;
+            z-index: 1;
+        }
+
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5); /* Adjust the alpha value as needed for transparency */
+        }
+        #myModalPviewerPdf .modal-dialog {
+  pointer-events: inherit !important;
+}
+    </style>
+</head>
+
+<body class="homepage">
+    <input id="hdnlang" type="hidden" value="e" />
+    <!--=========== topbar========== -->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-12 cus-maintop-banner d-none d-sm-block">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-7 col-12">
+                <!--<a href="reports/showdash" target="_blank"><span class="english"><img src="assets/assets/images/dashboard.png">&nbsp;Dashbboard-UG</span><span class="hindi" style="display:none;">डैशबोर्ड</span></a>
+
+                 <a href="reports/showdashpg" target="_blank"><span class="english"><img src="assets/assets/images/dashboard.png">&nbsp;Dashbboard-PG</span><span class="hindi" style="display:none;">डैशबोर्ड</span></a> -->
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-7 col-12">
+                <div id="exchanger" class="text-right selectbox">
+                    <ul>
+                        <li>
+                            <a href="#topbar" class="skip-content scroll" title="skip to main content"><span class="english">Skip to Main Content</span><span class="hindi" style="display:none;">मुख्य विषयवस्तु पर जाएं</span></a>
+                            <a href="#!" class="button-toggle-remove" title="Standard">A</a>
+                            <a href="#!" class="button-toggle-highcontrast" title="Black/Yellow">A</a>
+                            <a href="#" id="incfont" class="increase" title="Increased Text">A+</a>
+                            <a href="#" id="decfont" class="decrease" title="Decreased text">A-</a>
+                            <a href="#" id="decfont" class="resetMe" title="Reset Text">A</a>
+
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-5 col-12 cus-language">
+                <ul class="list-item">
+                    <li class="active"><a id="Eenglish">English</a></li>
+                    <li><a id="Hhindi">हिन्दी</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- ======= banner ======= -->
+    <img class="img-fluid w-100" src="assets/assets/images/main-banner.jpg" style="border-bottom: 4px solid #EBEBEB;" />
+
+
+    @*<div class="modal cus-modal" tabindex="-1" id="myModalPviewerPdf" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div class="modal-dialog" role="document">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <img src="assets/assets/images/election-img.jpg" alt="sakhsham" usemap="#election-map" />
+
+        </div>
+    </div>*@
+
+    <!-- <div id="popup" style="display: block;">
+              <img src="assets/assets/images/sakhsham.png" alt="sakhsham" class="img-fluid" style="height: 600px;">
+              <a class="close" id="close" href="#">×</a>
+
+          </div> -->
+    <!-- ======= Header =======-->
+    <div class="container-fluid">
+
+        <div class="row header">
+            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                <nav class="nav-menu d-none d-lg-block">
+                    <ul class="list">
+                        <li class="active"><a href="#"><span class="english">Home</span><span class="hindi" style="display:none;">होम</span></a></li>
+                        <li><a href="DHE/frmDistrictWiseCollege.aspx"><span class="english">District Wise Institutes List</span><span class="hindi" style="display:none;">जिला वार संस्थान सूची</span></a></li>
+
+                        <li class="blink_me"><strong><a href="OldSessionQuarterFee/Login"><span class="english">Pay Quaterly Fee</span><span class="hindi" style="display:none;">भुगतान त्रैमासिक शुल्क</span></a></strong></li>
+                        <li><a href="DHE/frmResultUGAdmissions.aspx"><span class="english">Know Your Result</span><span class="hindi" style="display:none;">Know Your Result</span></a></li>
+
+
+
+
+                        <li><a href="DHE/frmViewCollegeSeatMatrix.aspx"><span class="english">View Vacant Seats</span><span class="hindi" style="display:none;">View Vacant Seats</span></a></li>
+
+                        <!--  <li><a href="DHE/frmViewVacantSeatsPG.aspx"><span class="english">View Vacant Seats-PG </span><span class="hindi" style="display:none;">खाली सीट देखें</span></a></li> -->
+                        <!--<li><a href="DHE/frmUpdateFamilyId.aspx"><span class="english">Trade List</span><span class="hindi" style="display:none;">व्यापार सूची </span></a></li>-->
+                        <!--   <li><a href="#" onclick="javascript: alert('Integration of Merit Module with Fee Module is in progress. Revised merit list along with fee payment option will be available shortly');"><span class="english">Merit List</span><span class="hindi" style="display:none;">योग्यता क्रम सूची</span></a></li> -->
+                        <!--<li><a href="reports/meritList"><span class="english">Search Institute</span><span class="hindi" style="display:none;">संस्थान खोजें </span></a></li>
+        <li><a href="DHE/frmResultUGAdmissions.aspx"><span class="english">Know Your Result</span><span class="hindi" style="display:none;"> </span></a><666/li>
+      <!--<li><a href="DHE/frmViewPaymentStatus.aspx"><span class="english">Admission Schedules </span><span class="hindi" style="display:none;">भुगतान की स्थिति देखें</span></a></li>-->
+                        <!--  <li><a href="#" onclick="javascript: alert('Integration of Merit Module with Fee Module is in progress. Revised merit list along with fee payment option will be available shortly');"><span class="english">Know Your Result</span><span class="hindi" style="display:none;">अपना परिणाम जानिए</span></a></li> -->
+                        <!-- <li><a href="DHE/CutOffList.aspx"><span class="english">Cut Off List</span><span class="hindi" style="display:none;">कट ऑफ लिस्ट</span></a></li>-->
+
+
+                    </ul>
+
+                </nav><!-- .nav-menu -->
+
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 cus-date-extend">
+
+
+            </div>
+            <div class="col-xl-2 col-lg-3 col-md-12 col-sm-12 col-12 cus-right-button text-right">
+
+
+                <a href="DHE/frmlogin.aspx" target="_blank"><span class="english"><img src="assets/assets/images/login.png">&nbsp;Official Login</span><span class="hindi" style="display:none;">आधिकारिक लॉगिन</span></a>
+                <a href="reports/showdash" target="_blank"><span class="english"><img src="assets/assets/images/dashboard.png">&nbsp;Dashbboard</span><span class="hindi" style="display:none;">डैशबोर्ड</span></a>
+            </div>
+        </div>
+
+    </div>
+    <main id="main">
+        <div class="container-fluid cus-headline">
+            <!--start code-->
+            <div class="row mb-1">
+                <div class="col-12 py-1 bg-warning">
+                    <div class="row">
+                        <!--Breaking box-->
+                        <div class="col-md-3 col-lg-2 pr-md-0">
+                            <div class="p-2 bg-dark text-white text-center breaking-caret"><span class="font-weight-bold"><span class="english">Latest Headlines</span><span class="hindi" style="display:none;">नवीनतम हेडलाइंस </span></span></div>
+                        </div>
+                        <!--end breaking box-->
+                        <!--Breaking content-->
+                        <div class="col-md-9 col-lg-10 pl-md-4 py-2">
+                            <div class="breaking-box">
+                                <div id="carouselbreaking" class="carousel slide" data-ride="carousel">
+                                    <!--breaking news-->
+                                    <div class="carousel-inner">
+
+                                        <!--post-->
+                                        <!--<div class="carousel-item ">
+                                        <a class="text-white" href="javascript:void(0);">Candidates can revise their preferences of trades/ ITIs upto 1:00 PM on 21.10.2021 for Second counseling.</a>
+                                            </div>
+                                                                   <div class="carousel-item ">
+                                                                       <a class="text-white" href="javascript:void(0);">Such candidates who were allotted seats in first counseling have not taken admission, will have to deposit fine of Rs 500 for males and Rs 250 for females, before participation in second counseling.</a>
+                                                                       </div>-->
+
+
+                                        <div class="carousel-item active">
+                                            <a class="text-white" href="javascript:void(0);">आई०टी०आई० का कोर्स पूरा होने पर अगर नौकरी का अवसर पाना चाहते हैं तो दोहरी प्रशिक्षण  प्रणाली (Dual mode) ट्रेड यूनिट में दाखिला लें ।</a>
+                                        </div>
+                                        <!--post-->
+                                        <div class="carousel-item">
+                                            <a class="text-white" href="javascript:void(0);">दोहरी प्रशिक्षण प्रणाली (Dual mode) ट्रेड यूनिट में दाखिला उपरान्त, उद्योग में प्रशिक्षण के समय सरकार की तरफ से रुपये दो लाख तक का मुफ्त दुर्घटना बीमा पॉलिसी का प्रावधान ।</a>
+                                        </div>
+                                        <!--post-->
+                                        <div class="carousel-item">
+                                            <a class="text-white" href="javascript:void(0);">आई०टी०आई० का कोर्स पूरा होने उपरान्त, आई०टी०आई० में दाखिला योग्यता के आधार पर, हरियाणा विद्यालय शिक्षा बोर्ड से दसवीं व बारहवीं की सशर्त समकक्षता पाने के सुअवसर । </a>
+                                        </div>
+                                        <!--post-->
+                                        <div class="carousel-item">
+                                            <a class="text-white" href="javascript:void(0);">राजकीय औद्योगिक प्रशिक्षण संस्थानों में 30 प्रतिशत सीटें महिलाओं के दाखिले हेतू आरक्षित ।</a>
+                                        </div>
+                                        <!--post-->
+                                        <div class="carousel-item">
+                                            <a class="text-white" href="javascript:void(0);">महिलाओं को कुशल दस्तकार बनाने हेतू 36 महिला राजकीय औद्योगिक प्रशिक्षण संस्थान ।</a>
+                                        </div>
+                                        <!--post-->
+                                        <div class="carousel-item">
+                                            <a class="text-white" href="javascript:void(0);">महिलाओं की पूर्णतया टयूशन फीस माफ़ ।</a>
+                                        </div>
+                                        <!--post-->
+                                        <div class="carousel-item">
+                                            <a class="text-white" href="javascript:void(0);">स्वरोजगार स्थापित करने हेतू संस्थानों में रोजगार उन्मुख व्यवसाय – कटाई – सिलाई, कढ़ाई, ब्यूटीशियन आदि में प्रशिक्षण । </a>
+                                        </div>
+                                        <!--post-->
+                                        <div class="carousel-item">
+                                            <a class="text-white" href="javascript:void(0);">प्रत्येक छात्रा व एस०सी० श्रेणी के छात्रों को टूल किट हेतू 1000 रुपये तक की सहायता राशि ।</a>
+                                        </div>
+                                        <!--post-->
+                                        <div class="carousel-item">
+                                            <a class="text-white" href="javascript:void(0);">इंजीनियरिंग व्यवसाय जैसे फीटर, वेल्डर, मशीनिष्ट, टर्नर आदि में दाखिला लेने पर महिला प्रशिक्षणार्थियों को 6000 रुपये प्रति वर्ष की प्रोत्साहन राशि ।</a>
+                                        </div>
+                                        <!--post-->
+                                        <div class="carousel-item">
+                                            <a class="text-white" href="javascript:void(0);">प्रशिक्षण उपरान्त सरकारी व निजी प्रतिष्ठानों / संस्थानों में अप्रेंटिसशिप के सुअवसर। </a>
+                                        </div>
+                                        <!--post-->
+                                        <div class="carousel-item">
+                                            <a class="text-white" href="javascript:void(0);">प्रशिक्षण के दौरान विभिन्न प्रकार की छात्रवृतियों की सुविधा ।</a>
+                                        </div>
+                                        <!--post-->
+                                        <div class="carousel-item">
+                                            <a class="text-white" href="javascript:void(0);">प्रशिक्षण के दौरान रियायती बस पास की सुविधा  |</a>
+                                        </div>
+                                        <!--post-->
+                                        <div class="carousel-item">
+                                            <a class="text-white" href="javascript:void(0);">कोरोना जैसी वैश्विक महामारी की परिस्थितियों में आई०टी०आई० के प्रशिक्षणार्थियों के लिए ऑनलाइन पढ़ने के लिए ई-लर्निंग की सुविधा ।  </a>
+                                        </div>
+                                    </div>
+                                    <!--end breaking news-->
+                                    <!--navigation slider-->
+                                    <div class="navigation-box p-2 d-none d-sm-block">
+                                        <!--nav left-->
+                                        <a class="carousel-control-prev text-primary" href="#carouselbreaking" role="button" data-slide="prev">
+                                            <i class="fa fa-angle-left" aria-hidden="true"></i>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <!--nav right-->
+                                        <a class="carousel-control-next text-primary" href="#carouselbreaking" role="button" data-slide="next">
+                                            <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </div>
+                                    <!--end navigation slider-->
+                                </div>
+                            </div>
+                        </div>
+                        <!--end breaking content-->
+                    </div>
+                </div>
+            </div>
+            <!--end code-->
+        </div>
+        <div class="container-fluid" id="topbar">
+            <div class="row">
+                <div class="col-lg-6 clearfix">
+                    <div data-aos="zoom-in" data-aos-delay="100">
+                        <div class="card pmd-card cus-ad">
+                            <div class="card-header">
+                                <h5><span></span>आवेदन फॉर्म में पसंद  अनुसार/ संस्थान भरने के लिए आवश्यक दिशा – निर्देश </span></h5>
+                            </div>
+                            <div class="card-body">
+                                <ol class="cus-activities">
+                                    <li><span>आवेदक अपनी योग्यता  अनुसार उन व्यवसायों की सूची तैयार करें , जिनके लिए वह आवेदन करना चाहते है | आप वेबसाइट पर “ All  Insitutes” पेज पर सभी संस्थानों में उपलब्ध व्यवसायों की सूची देख सकते है </span></li>
+                                    <li><span>उपलब्ध विकल्पों मे से जिले, व्यवसायों, व्यवसाय के प्रकार का चयन करें</span></li>
+                                    <li><span>आप एक से अधिक जिले एव  व्यवसाय का चयन कर सकते है  तथा अधिकतम  15 व्यवसायों का विकल्प जमा करवा सकते है </span></li>
+                                    <li><span>दाखिला फार्म में चयनित व्यवसायों मे सिर्फ फार्म भरने की अंतिम तिथि से पहले ही बदलाव किया जा सकता है</span></li>
+                                    <li><span>आवेदन करने के बाद आवेदक दाखिला फार्म भरने की अंतिम तिथि से पहले अपने प्रोफाइल मे लोगिन कर आवेदन फार्म को प्रिंट या डाउनलोड कर सकते है| और final confirmation  बटन पर क्लिक करने से पहले व्यवसाय सम्बंधित जानकारी बदल सकते है </span></li>
+                                    <li>
+                                        <h6 class="badge badge-success">दोहरी प्रशिक्षण प्रणाली (Dual System of Training)&nbsp;:</h6>
+                                        <p>सरकार द्वारा राज्य की विभिन औधोगिक प्रतिष्ठानो से भिन-2 व्यवसायों में ‘ दोहरी प्रशिक्षण प्रणाली’ के अंतर्गत प्रशिक्षण प्रदान करने के लिए समझौते किए गए है| सत्र 2024-25 मे इस प्रणाली के अंतर्गत दाखिले के लिए उपलब्ध संस्थानवर व्यवसाय यूनिटों की सूचि विवरण- पत्रिका के ‘ Annexure-B’ पर उपलब्ध है| इन व्यवसाय यूनिटों मे दाखिला प्राप्त प्रशिक्षणार्थियो को दोहरी प्रशिक्षण प्रणाली के अंतर्गत प्रशिक्षण दिया जाएगा जिससे की  एक वर्षीय कोर्स के लिए 3-6 माह अवधि का तथा दो वर्षीय कोर्स के लिए  6 से 12  माह अवधि का प्रशिक्षण संस्थान मे प्रदान किया जाएगा | इसके पश्चात् कोर्स की शेष अवधि मे on job training सम्बंधित औधोगिक प्रतिष्ठान मे करवाई जाएगी | दोहरी प्रशिक्षण प्रणाली के अंतर्गत दाखिले हेतु प्रार्थी को (02.09.2024)  आयु एंव शारीरिक स्वास्थय  सम्बन्धी निमंलिखित शर्तें पूर्ण करनी अनिवार्य हैं |</p>
+                                        <ul style="list-style-type: square;">
+                                            <li><span>चिन्हित किये गए जोखिमपूर्ण व्यवसाय यूनिट्स में दाखिले के लिए प्रार्थी की न्यूनतम आयु (02.09.2024 को) 17 वर्ष 9 महीने तथा अन्य व्यवसायों के लिए न्यूनतम आयु 14 वर्ष होनी चाहिए</span></li>
+                                            <li><span>प्रार्थी शारीरिक रूप से फिट होना चाहिए तथा on job training पर जाने से पहले वे सम्बंधित औधोगिक प्रतिष्ठान को मुख्य चिकित्सा अधिकारी से जारी किया गया मूल मेडिकल प्रमाण-पत्र जिसमे की blood pressure, chest X-Ray, B.M.I., Colour Blindness etc की जाँच की गई प्रस्तुत करेंगे </span></li>
+                                            <li><span>On job training के लिए  दोहरी प्रशिक्षण प्रणाली के अंतर्गत दाखिला प्राप्त प्रार्थियों की सुझबूझ एंव मनोभाव का विशलेषण सम्बंधित प्रतिष्ठान के प्रतिनिधि द्वारा किया जाएगा जिसके लिए प्रतेक प्रार्थी’ से पारम्परिक विचार-विमर्श किया जाएगा | इस विचार-विमर्श के आधार पर ही किसी प्रार्थी को on job training के लिए चुना जाएगा अथवा प्रार्थी को अयोग्य भी ठहराया जा सकता है </span></li>
+                                        </ul>
+                                    </li>
+                                    <li><span>JIM-Uncha Majra ( Gurugram) के लिए पात्रता मानदंड की जाँच करने के लिए यहाँ क्लिक करें </span></li>
+
+                                </ol>
+                                <!--      <div class="col-lg-12 text-right cus-download">
+                                          <a href="assets/assets/pdf/instruction.pdf" target="_blank" title="Instruction for form filling" class="btn btn-success btn-sm"><i class="fas fa-download"></i>&nbsp;निर्देश डाउनलोड करें </a>
+                                      </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div data-aos="zoom-in" data-aos-delay="100">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><span class="english">Important Links</span><span class="hindi" style="display:none;">महत्वपूर्ण लिंक </span></h5>
+                            </div>
+                            <div class="card-body" style="padding: 1rem;">
+                                <ul class="cus-imp-links">
+                                    <li><a href="https://itiharyana.gov.in/" title="Skill Development & Industrial Training Department" target="_blank"><i class="fas fa-hand-point-right"></i>&nbsp;<span class="english">Skill Development & Industrial Training Department</span><span class="hindi" style="display: none;">कौशल विकास एवं औद्योगिक प्रशिक्षण विभाग </span></a></li>
+                                    <li><a href="https://mistry.itiharyana.gov.in/" title="Mistry Haryana" target="_blank"><i class="fas fa-hand-point-right"></i>&nbsp;<span class="english">Mistry Haryana</span><span class="hindi" style="display: none;">मिस्त्री हरियाणा </span></a></li>
+
+                                </ul>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--
+                    <div data-aos="zoom-in" data-aos-delay="100">
+                        <div class="card">
+                            <div class="card-body" style="padding: 1rem;">
+                               <img src="assets/assets/images/har_ghar_tiranga.png" alt="har_ghar_tiranga" width="100%">
+
+                            </div>
+                        </div>
+                    </div>
+                    -->
+                </div>
+                <div class="col-lg-6 clearfix">
+                    <div data-aos="zoom-in" data-aos-delay="100">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><span class="english">Online Admission 2024-25</span><span class="hindi" style="display:none;">ऑनलाइन एडमिशन 2024-25</span></h5>
+                            </div>
+                            <div class="card-body text-center" style="padding: 2rem;color: red;">
+                                <!--<p style="font-weight:600;">On spot admissions for "SCVT only" will be done till 31th January 2022.</p>-->
+                                <!--			<h5 style="margin-top:1rem;">Third Merit List is live now. Check by clicking "Know your result" link in Home Page</h5>  -->
+                                <div class="cta cta-btn-link">
+                                    <a class="btn btn-sm btn-success" href="/Account/Registration" title="_self">New Registration</a>
+                                    <a class="btn btn-sm btn-primary" href="/Account/Login" title="_self">Student Login</a>
+
+                                </div>
+
+                                <!-- <h6>To check your result click on <b style="color:blue;">
+                                    Know your result</b> link provided on home page.</h6> -->
+                            </div>
+                        </div>
+
+                    </div>
+                    <div data-aos="zoom-in" data-aos-delay="100">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><span class="english">Important Notice</span><span class="hindi" style="display:none;">महत्वपूर्ण सूचना</span></h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <!--<p style="font-weight:600;">On spot admissions for "SCVT only" will be done till 31th January 2022.</p>-->
+
+                                <img src="assets/assets/images/notice2022.png" alt="Notice" class="img-fluid" height="500px" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div data-aos="zoom-in" data-aos-delay="100">
+                        <div class="card pmd-card">
+                            <div class="card-header">
+                                <h5><span class="english">Know About Admission</span><span class="hindi" style="display: none;">एडमिशन के बारे में जानें </span></h5>
+                            </div>
+                            <div class="card-body" style="padding:0rem;">
+                                <div class="row text-center no-gutters pmd-col-listing pmd-col-listing-hover">
+                                    <div class="col-md-4 col-6">
+                                        <a href="assets/assets/pdf/advt.2021.pdf" title="Features of ITI Admission " target="_blank" class="pmd-col-listing-item">
+                                            <i class="far fa-file-alt"></i>
+                                            <h4 class="card-title"><span class="english">Features of ITI Admission </span><span class="hindi" style="display: none;">आईटीआई दाखिले की विशेषताएं</span></h4>
+                                        </a>
+                                    </div>
+                                    <!--<div class="col-md-4 col-6">
+                                        <a href="#admissionschedule" title="" class="pmd-col-listing-item">
+                                            <i class="fas fa-graduation-cap"></i>
+                                            <h4 class="card-title"><span class="english">Admission Schedule 2023-24</span><span class="hindi" style="display:none;">प्रवेश अनुसूची 2023-24 </span></h4>
+                                        </a>
+                                    </div>-->
+                                    <div class="col-md-4 col-6">
+                                        <a href="assets/assets/pdf/GOVT_ITI_Seat_Release.pdf" title="Govt ITI Seat" target="_blank" class="pmd-col-listing-item">
+                                            <i class="far fa-file-alt"></i>
+                                            <h4 class="card-title"><span class="english">Govt ITI seat release 2024-25</span><span class="hindi" style="display: none;">सरकारी आईटीआई सीट रिलीज 2024-25 </span></h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 col-6">
+                                        <a href="assets/assets/pdf/Department_Activities_Achievements.pdf" title="Department Activities & Achievements" target="_blank" class="pmd-col-listing-item">
+                                            <i class="fas fa-trophy"></i>
+                                            <h4 class="card-title"><span class="english">Department Activities & Achievements</span><span class="hindi" style="display: none;">विभाग की गतिविधियां और उपलब्धियां </span></h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 col-6">
+                                        <a href="assets/assets/pdf/final_prospectus.pdf" title="Admission Prospectus" target="_blank" class="pmd-col-listing-item">
+                                            <i class="fas fa-portrait"></i>
+                                            <h4 class="card-title"><span class="english">Admission Prospectus 2024-25</span><span class="hindi" style="display: none;">प्रवेश विवरणिका 2024-25 </span></h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 col-6">
+                                        <a href="assets/assets/pdf/Course_eligibility_2022.pdf" title="Course Eligibility" target="_blank" class="pmd-col-listing-item">
+                                            <i class="fas fa-file-alt"></i>
+                                            <h4 class="card-title"><span class="english">Course Eligibility</span><span class="hindi" style="display: none;">पाठ्यक्रम पात्रता </span></h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 col-6 d-none">
+                                        <a href="assets/assets/pdf/Trade_eligibility_under_RPWD.pdf" title="" target="_blank" class="pmd-col-listing-item">
+                                            <i class="fas fa-university"></i>
+                                            <h4 class="card-title"><span class="english">DST Trade Units along with DST Industry</span><span class="hindi" style="display: none;">डीएसटी उद्योग के साथ डीएसटी व्यापार इकाइयाँ  </span></h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 col-6">
+                                        <a href="assets/assets/pdf/PVT_ITI_Seat_release.pdf" title="Pvt. ITI Seat Release" target="_blank" class="pmd-col-listing-item">
+                                            <i class="far fa-file-alt"></i>
+                                            <h4 class="card-title"><span class="english">Pvt. ITI Seat Release 2024-25</span><span class="hindi" style="display: none;">प्राइवेट आईटीआई सीट रिलीज 2024-25</span></h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 col-6">
+                                        <a href="assets/assets/pdf/Trade PH Suitability.pdf" title="Trade Suitability for Divyang Candidates" target="_blank" class="pmd-col-listing-item">
+                                            <i class="fas fa-graduation-cap"></i>
+                                            <h4 class="card-title"><span class="english">Trade Suitability for Divyang Candidates</span><span class="hindi" style="display: none;">दिव्यांग उम्मीदवारों के लिए व्यापार उपयुक्तता </span></h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 col-6">
+                                        <a href="https://meraparivar.haryana.gov.in/" title="Parivar Pehchan Patra" target="_blank" class="pmd-col-listing-item">
+                                            <i class="fas fa-house-user"></i>
+                                            <h4 class="card-title"><span class="english">Create/Search Family ID</span><span class="hindi" style="display: none;">परिवार आईडी बनाएं/खोजें </span></h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 col-6">
+                                        <a href="assets/assets/pdf/AdmissionNotice26092023.pdf" title="Admission Schedule" target="_blank" class="pmd-col-listing-item">
+                                            <i class="far fa-file-alt"></i>
+                                            <h4 class="card-title" style="font-size: 14px;"><span class="english">Admission Schedule</span><span class="hindi" style="display: none;"></span></h4>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-lg-4 clearfix">
+
+                </div>
+            </div>
+        </div>
+        <!-- ======= About Section ======= -->
+        <!--<section  class="about">
+            <div class="container-fluid" data-aos="fade-up">
+                <div class="row content">
+                    <div class="col-lg-12 clearfix">
+
+                        <div class="cus-important" id="admissionschedule">
+                            <div data-aos="zoom-in" data-aos-delay="100">
+                                    <div class="card cus-admission" >
+                                        <div class="card-header">
+                                        <h5><span class="english">Tentative Schedule for Online Admission in Govt./Private ITI, Haryana</span><span class="hindi" style="display:none;">सरकारी/निजी आईटीआई, हरियाणा में ऑनलाइन प्रवेश के लिए संभावित कार्यक्रम  </span></h5>
+                                        </div>
+                                        <div class="card-body table-responsive" style="padding:0;font-size:14px;">
+                                            <table class="table table-bordered table-hover table-striped table-styling">
+                                                <thead class="thead-dark">
+                                                    <tr>
+                                                        <th scope="col">Counseling Round</th>
+                                                        <th scope="col">Activity</th>
+                                                        <th scope="col">Dates</th>
+
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row"></th>
+                                                        <td>Inviting Application Forms</td>
+                                                        <td>16th September to 7th October 2021</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row" rowspan="3" style="vertical-align: middle;text-align:center">1st Counseling</th>
+                                                        <td>Merit cum  seat  allotment (1st  counseling  round)</td>
+                                                        <td>11th October</td>
+
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>*Physical  Verification of  documents  of  admitted  trainees  at  ITI Level </td>
+                                                        <td>12th October - 14th October</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Fee  Deposit  (After  successfully  verification  fee link  is open)/Seat Allotment</td>
+                                                        <td>12th October to 16th October</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row" rowspan="5" style="vertical-align: middle;text-align:center">2nd Counseling</th>
+                                                        <td>Display  of vacant  seats  for 2nd Round</td>
+                                                        <td>18th October</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Opening  of Portal  for revision  of options/preferences by  candidates</td>
+                                                        <td>18th to 20th October</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Merit  cum  seat  allotment (2nd Round) </td>
+                                                        <td>22nd October</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>*Physical  Verification of Documents  of admitted  trainees  at ITI  Level</td>
+                                                        <td>22nd October to 25th October</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Fee  Deposit  (After  successfully  verification  fee  link  is open)/
+                                                            Seat  allotment </td>
+                                                        <td>22nd to 26th October</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row" rowspan="5" style="vertical-align: middle;text-align:center">3rd Counseling</th>
+                                                        <td>Display  of vacant  seats  for  3rd Round </td>
+                                                        <td>28th October</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Opening  of  Portal for revision  of options/preferences </td>
+                                                        <td>28th Oct - 30th October</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Merit  cum seat  allotment (3rd  Round) </td>
+                                                        <td>2nd November</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>*Physical  Verification of Documents  of admitted  trainees  at ITI  Level</td>
+                                                        <td>2nd to 7th November(4th and 5th Holiday)</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Fee  Deposit  (After  successfully  verification  fee link  is open)/
+                                                            Seat  allotment </td>
+                                                        <td>2nd Nov to 8th November</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row" rowspan="6" style="vertical-align: middle;text-align:center">4th Counseling</th>
+                                                        <td>Display  of vacant  seats  for  4th Round </td>
+                                                        <td>10th November</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Opening  of  Portal for revision  of options/preferences </td>
+                                                        <td>10th November to 12th November</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Merit  cum seat  allotment (4th  Round) </td>
+                                                        <td>15th November</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>*Physical  Verification of Documents  of admitted  trainees  at ITI  Level</td>
+                                                        <td>15th to 17th November</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Online Deposit  of admission  fee in Govt  ITIs/seat  allotment<br/>
+                                                            Offline Deposit  of admission  fee in Pvt  ITIs/seat  allotment</td>
+                                                        <td>15th Nov to 18th November</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Confirmation of Seat Allotment</td>
+                                                        <td>15th to 20th November</td>
+                                                    </tr>
+                                                     <tr>
+                                                        <th scope="row" rowspan="6" style="vertical-align: middle;text-align:center">5th Counseling</th>
+                                                        <td>Display  of vacant  seats  for  5th Round </td>
+                                                        <td>21st November</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Opening  of  Portal for revision  of options/preferences </td>
+                                                        <td>22nd November to 23rd November</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Merit cum seat allotment</td>
+                                                        <td>24th November</td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>Physical  Verification of documents  of admitted  trainees  at ITI  Level and fee deposit</td>
+                                                        <td>24th to 26th November</td>
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </section>-->
+        <!-- End About Section -->
+        <div class="col-lg-12 col-md-12 col-12" style="box-shadow: 0px 0px 10px 0px #ccc;margin-top:1rem;">
+
+            <!-- <a href="https://amritmahotsav.nic.in/har-ghar-tiranga.htm" target="_blank"><img src="assets/assets/images/harGhar1.jpg" style="width:100%;margin-top:5px;height:350px;"></a>
+                -->
+        </div>
+
+    </main><!-- End #main -->
+
+
+    <div class="col-lg-12 col-md-12 col-12 cus-helpdesk" style="padding-top:0.6rem;box-shadow:0 0 30px rgba(214, 215, 216, 0.6);">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-12 text-left" style="padding-left:10px;">
+                <h3><i class="bx bx-time" style="color:#F6822F;font-size:20px;position:relative;top:3px;"></i>&nbsp;<span class="english" style="color:#F6822F;font-weight:700;font-size:14px;"><strong>Our Timing:</strong></span><span class="hindi" style="display:none;font-weight:700;font-size:14px;"><strong>हमारा समय:</strong></span>&nbsp; <span style="font-size:14px;font-weight:700;">9:00 AM to 5:00 PM <span class="english">&#40;All Working Days&#41;</span><span class="hindi" style="display:none;">&#40;सभी कार्य दिवस&#41;</span></span></h3>
+            </div>
+            <div class="col-lg-4 col-md-4 col-12 text-center">
+                <h3><i class="bx bx-phone-call" style="color:#F6822F;font-size:20px;position:relative;top:3px;"></i>&nbsp;<span class="english" style="color:#F6822F;font-weight:700;font-size:14px;"><strong>TollFree Number:</strong></span><span class="hindi" style="display:none;font-weight:700;font-size:14px;"><strong>टोल फ्री नंबर:</strong></span>&nbsp;<span style="font-size:14px;font-weight:700;">0172-2996321,2997265,2586071</span></h3>
+            </div>
+            <div class="col-lg-4 col-md-4 col-12 text-right">
+                <h3><i class="bx bx-envelope" style="color:#F6822F;font-size:20px;position:relative;top:3px;"></i>&nbsp;<span class="english" style="color:#F6822F;font-weight:700;font-size:14px;"><strong>Email Us:</strong></span><span class="hindi" style="display:none;font-weight:700;font-size:14px;">हमे ईमेल करे:</span>&nbsp;<span style="font-size:14px;font-weight:700;">helpdesk.itiadmission@gmail.com</span></h3>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12 text-center">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 text-left" style="margin-top:10px;">
+                            <div class="credits">
+                                <a>Site is technically designed, hosted and maintained by National Informatics Centre, Haryana</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <img src="assets/assets/images/nic-logo.png" style="width:100px;" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </footer><!-- End Footer -->
+
+
+
+    <div id="preloader"></div>
+    <!--<a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>-->
+    <!-- Vendor JS Files -->
+    <script src="assets/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="assets/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/assets/vendor/jqueryeasing/jquery.easing.min.js"></script>
+
+
+
+    <!-- Template Main JS File -->
+    <script src="assets/assets/js/main.js"></script>
+    <script src="assets/assets/js/jquery.cookie.js"></script>
+    <link href="swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="swalJs/swal-forms.css" rel="stylesheet" />
+    <script src="swalJs/sweetalert.min.js"></script>
+    <script src="swalJs/swal-forms.js"></script>
+    <script src="assets/assets/js/Duplicate.js"></script>
+
+</body>
+
+</html>
+<script type="text/javascript">
+    jQuery.fn.liScroll = function (settings) {
+        settings = jQuery.extend({
+            travelocity: 0.09
+        }, settings);
+        return this.each(function () {
+            var $strip = jQuery(this);
+            $strip.addClass("newsticker")
+            var stripHeight = 1;
+            $strip.find("li").each(function (i) {
+                stripHeight += jQuery(this, i).outerHeight(true);
+            });
+            var $mask = $strip.wrap("<div class='mask'></div>");
+            var $tickercontainer = $strip.parent().wrap("<div class='tickercontainer'></div>");
+            var containerHeight = $strip.parent().parent().height();
+            $strip.height(stripHeight);
+            var totalTravel = stripHeight;
+            var defTiming = totalTravel / settings.travelocity;
+            function scrollnews(spazio, tempo) {
+                $strip.animate({ top: '-=' + spazio }, tempo, "linear", function () { $strip.css("top", containerHeight); scrollnews(totalTravel, defTiming); });
+            }
+            scrollnews(totalTravel, defTiming);
+            $strip.hover(function () {
+                jQuery(this).stop();
+            },
+                function () {
+                    var offset = jQuery(this).offset();
+                    var residualSpace = offset.top + stripHeight;
+                    var residualTime = residualSpace / settings.travelocity;
+                    scrollnews(residualSpace, residualTime);
+                });
+        });
+    };
+
+    $(function () {
+        $("ul#ticker01").liScroll();
+    });
+
+    // change active button color
+    $('.list-item').on('click', 'li', function () {
+        $('.list-item li.active').removeClass('active');
+        $(this).addClass('active');
+    });
+
+
+
+    //Text Increase and Decrease jquery start
+    jQuery(document).ready(function () {
+        //language change script
+        $('#Hhindi').click(function () {
+            if ($('#hdnlang').val() == 'e') {
+                $('.english').toggle();
+                $('.hindi').toggle();
+                $('#hdnlang').val('h');
+
+
+            }
+        });
+
+        $('#Eenglish').click(function () {
+            if ($('#hdnlang').val() == 'h') {
+                $('.english').toggle();
+                $('.hindi').toggle();
+                $('#hdnlang').val('e');
+
+            }
+        });
+        //font and css changer script
+        var all_tags = { "h1": '36', "h2": '30', "h3": '26', "h4": '20', "h5": '16', "h6": '12', "p": '14' };
+        jQuery.each(all_tags, function (i, val) {
+            jQuery(i).css('font-size', val + 'px');
+        });
+        checkBesicSize();
+        jQuery(".resetMe").click(function () {
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+
+            });
+
+        });
+        jQuery(".increase").click(function () {
+            jQuery.each(all_tags, function (i) {
+                changeFontSize(i, 2);
+            });
+            return false;
+        });
+        jQuery(".decrease").click(function () {
+            jQuery.each(all_tags, function (i) {
+                changeFontSize(i, -2);
+            });
+            return false;
+        });
+
+        function changeFontSize(tag, size) {
+            var currentSize = jQuery(tag).css('font-size');
+            var currentSize = parseFloat(currentSize) + parseFloat(size);
+            jQuery(tag).css('font-size', currentSize);
+        }
+        $("#myModalPviewerPdf").modal('show');
+    });
+    jQuery(window).resize(function () {
+        checkBesicSize();
+    });
+    function checkBesicSize() {
+        var width = jQuery(window).width();
+        if (width > 1290) {
+            var all_tags = { "h1": '50', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1290) {
+            var all_tags = { "h1": '50', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1100) {
+            var all_tags = { "h1": '40', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1024) {
+            var all_tags = { "h1": '40', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 980) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '24', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 800) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 768) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 640) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 480) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 400) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 360) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+    }
+    //Text Increase and Decrease jquery end
+    //Css Color Change jquery start
+    // color-changing-script
+    // Check (onLoad) if the cookie is there and set the class if it is
+    if (jQuery.cookie('highcontrast') == "yes") {
+        jQuery("body").addClass("highcontrast");
+    }
+    // When the element is clicked
+    jQuery("a.button-toggle-highcontrast").click(function () {
+        if (jQuery.cookie('highcontrast') == "undefined" || jQuery.cookie('highcontrast') == "no") {
+            jQuery.cookie('highcontrast', 'yes', {
+                expires: 7,
+                path: '/'
+            });
+            jQuery("body").addClass("highcontrast");
+        } else {
+            jQuery.cookie('highcontrast', 'yes', {
+                expires: 7,
+                path: '/'
+            });
+            jQuery("body").addClass("highcontrast");
+        }
+    });
+    jQuery("a.button-toggle-remove").click(function () {
+        jQuery('body').removeClass('highcontrast');
+        if (jQuery.cookie('highcontrast') == "yes") {
+            jQuery.cookie("highcontrast", null, {
+                path: '/'
+            });
+        }
+    });
+    $(document).ready(function () {
+
+        if (window.IsDuplicate()) {
+            swal({
+                title: "Oops!!",
+                text: "This is duplicate window. Kindly close this window!",
+                showCancelButton: false,
+                showConfirmButton: false,
+                confirmButtonClass: "btn-info",
+                confirmButtonText: "Ok",
+                closeOnConfirm: true
+            },
+                function (isConfirm) {
+                    if (isConfirm) {
+
+                        window.open(location, '_self').close()
+                    }
+                    else {
+
+                    }
+                });
+        }
+
+        let scroll_link = $('.scroll');
+
+        //smooth scrolling -----------------------
+        scroll_link.click(function (e) {
+            e.preventDefault();
+            let url = $('body').find($(this).attr('href')).offset().top;
+            $('html, body').animate({
+                scrollTop: url
+            }, 1000);
+            $(this).parent().addClass('active');
+            $(this).parent().siblings().removeClass('active');
+            return false;
+        });
+    });
+</script>
+<!-- <script>
+
+    $(document).ready(function () {
+
+        // $("#popup").hide().fadeIn(1000);
+
+        // $("#close").on("click", function (e) {
+        //     e.preventDefault();
+        //     $("#popup").fadeOut(1000);
+        // });
+        $("#myModalPviewerPdf").modal('show');
+
+    });
+</script> -->

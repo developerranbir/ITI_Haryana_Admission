@@ -1,0 +1,483 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+}
+<style>
+    .ui-datepicker select.ui-datepicker-month, .ui-datepicker select.ui-datepicker-year {
+        color: black;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .col-md-6 {
+        font-weight: normal;
+    }
+
+    .amcharts-chart-div a {
+        display: none !important;
+    }
+</style>
+<head>
+
+    <link href="~/Content/amChart/index.css" rel="stylesheet" />
+    <link href="~/Content/amChart/PieChart/index.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+    <link href="~/Content/Js/sweetalert.css" rel="stylesheet" />
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="~/Content/amChart/core.js"></script>
+    <script src="~/Content/amChart/charts.js"></script>
+    <script src="~/Content/amChart/animated.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    @*<script src="https://www.amcharts.com/lib/3/themes/light.js"></script>*@
+    <script type="text/javascript" src="~/assets/js/jquery/jquery.min.js"></script>
+    <script src="~/Content/Js/sweetalert.min.js"></script>
+</head>
+<div class="main-body">
+    <div class="page-wrapper">
+        <div class="page-body">
+            <div class="row">
+                <!-- order-card start -->               
+                    <div class="col-md-6 col-xl-3">
+                        <a href="@Url.Action("InsertDevDetails", "Contractual")" , title="{Click to view list}">
+                            <div class="card bg-grass order-card small-box">
+                                <div class="card-block">
+                                    <h4 class="m-b-20 sweet">Registration</h4>
+                                    <div style="border-bottom:1px solid #ffffff; margin-bottom:30px;"></div>
+                                    <h2><i class="fa fa-user" style="font-size: 30px;"></i><span>&nbsp;</span></h2>
+                                    <p class="m-b-0 sweet" style="font-size:16px;font-weight:bold;">Register for new case<span class="f-right"></span></p>
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>                
+                <div class="col-md-6 col-xl-3">
+                    <a href="@Url.Action("ViewCases", "Court", new { Area = "CourtCase" })" , title="{Click to view list}">
+                        <div class="card bg-wood order-card small-box">
+                            <div class="card-block">
+                                <h4 class="m-b-20 sweet">View & Edit Cases</h4>
+                                <div style="border-bottom:1px solid #ffffff; margin-bottom:30px;"></div>
+                                <h2><i class="fa fa-eye" style="font-size: 30px;"></i><span>&nbsp;</span></h2>
+                                <p class="m-b-0 sweet" style="font-size:16px;font-weight:bold;">Total No. of Cases<span class="f-right">@ViewBag.CountCases</span></p>
+                                @*<p class="m-b-0 sweet" style="font-size:12px;font-weight:bold;">(Completed and Pending cases)</p>*@
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <a href="@Url.Action("SearchByCaseNo", "Court", new { Area = "CourtCase" })" , title="{Click to search cases}">
+                        <div class="card order-card bg-yellow small-box">
+                            <div class="card-block">
+                                <h4 class="m-b-20 sweet">Search Cases</h4>
+                                <div style="border-bottom:1px solid #ffffff; margin-bottom:30px;"></div>
+                                <h2><i class="fa fa-search" style="font-size: 30px;"></i><span>&nbsp;</span></h2>
+                                <p class="m-b-0 sweet" style="font-size:16px;font-weight:bold;">Search the all cases<span class="f-right"></span></p>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <a href="@Url.Action("CompleteCases", "Court", new { Area = "CourtCase" })" , title="{Click to view pending cases}">
+                        <div class="card bg-red order-card small-box">
+                            <div class="card-block">
+                                <h5 class="m-b-20">Complete Cases</h5>
+                                <div style="border-bottom:1px solid #ffffff; margin-bottom:30px;"></div>
+                                <h2><i class="fa fa-lock" style="font-size: 30px;"></i><span>&nbsp;</span></h2>
+                                <p class="m-b-0 sweet" style="font-size:16px;font-weight:bold;">Completed Cases<span class="f-right">@ViewBag.CountCompleteCases</span></p>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <!-- order-card end -->
+                <!-- statustic and process start -->
+                <div class="col-lg-5 col-md-12">
+                    <div class="card card-shadow">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label for="FromDate" style="font-size:15px;color: black; font-weight:bold;">From Date</label>
+                                    <input class="form-control text-xl default-cursor input-shadow" type="text" autocomplete="off" id="FromDate" name="FromDate">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="ToDate" style="font-size:15px;color: black; font-weight:bold;">To Date</label>
+                                    <input class="form-control text-xl default-cursor input-shadow" type="text" autocomplete="off" id="ToDate" name="ToDate">
+                                </div>
+                                <div class="col-md-4 form-group" style="padding: 15px 0px 0px 0px; margin: 14px 0px 0px 0px;">
+                                    <button id="btnSearch" type="button" class="btn btn-primary c-shadow-1">Search</button>
+                                </div>
+                            </div>
+                            <div id="chartdiv3" style="height: auto; min-height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7 col-md-12">
+                    <div class="card card-shadow">
+                        <div class="card-header">
+                            <span style="font-weight:bold;font-size: 15px;">Total Cases with PIE Chart</span>
+                            <div id="chartdiv2"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- statustic and process end -->
+                <!-- tabs card start -->
+                <div class="col-lg-12 col-md-12">
+                    <div class="card card-shadow">
+                        <div class="row">
+                            <div class="col-md-6 form-group" style="padding-top: 10px; padding-left: 35px; margin-bottom: 0;">
+                                <label for="CaseStatus" style="font-size:16px;color:black; font-weight:bold;">Case Status : </label>
+                                @*@Html.DropDownListFor(model => model.CaseStatus, new List<SelectListItem>{
+                                      new SelectListItem{ Text="Registered", Value="Registered"},
+                                      new SelectListItem{ Text="Pending", Value="Pending"},
+                                      new SelectListItem{ Text="Completed", Value="Completed"}}, new { @class = "form-control input-shadow", id = "ddlCaseStatus", onchange = "GetAllCaseByGraph();", @style = "width:180px; display: inline-block; margin-left: 5px;" })*@
+                            </div>
+                        </div>
+                        <div class="card-header">
+                            @*<span style="font-size:15px;font-weight:bold;">CaseStatus Cases</span>*@
+                            <div id="chartdiv4" style="height: auto; min-height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- tabs card end -->
+                <!-- social statustic start -->
+                @*<div class="col-md-12 col-lg-4">
+                        <div class="card card-shadow">
+                            <div class="card-block text-center">
+                                <i class="fa fa-envelope-open text-c-blue d-block f-40"></i>
+                                <h4 class="m-t-20"><span class="text-c-blue">8.62k</span> Subscribers</h4>
+                                <p class="m-b-20">Your main list is growing</p>
+                                <button class="btn btn-primary btn-sm btn-round">Manage List</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card card-shadow">
+                            <div class="card-block text-center">
+                                <i class="fa fa-twitter text-c-green d-block f-40"></i>
+                                <h4 class="m-t-20"><span class="text-c-blgreenue">+40</span> Followers</h4>
+                                <p class="m-b-20">Your main list is growing</p>
+                                <button class="btn btn-success btn-sm btn-round">Check them out</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card card-shadow">
+                            <div class="card-block text-center">
+                                <i class="fa fa-puzzle-piece text-c-pink d-block f-40"></i>
+                                <h4 class="m-t-20">Business Plan</h4>
+                                <p class="m-b-20">This is your current active plan</p>
+                                <button class="btn btn-danger btn-sm btn-round">Upgrade to VIP</button>
+                            </div>
+                        </div>
+                    </div>*@
+
+                <!-- users visite and profile end -->
+            </div>
+        </div>
+        <div id="styleSelector">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetCaseWithPieChart();
+        GetCountCaseEmpty();
+        GetAllCaseByGraph();
+        $(function () {
+            $("#FromDate").datepicker({
+                changeMonth: true,
+                yearRange: "-100:+0",
+                changeYear: true,
+                dateFormat: 'mm/dd/yy',
+                maxDate: "new Date()",
+                showOn: 'focus',
+                showButtonPanel: true,
+                closeText: 'Clear', // Text to show for "close" button
+                onSelect: function (selected) {
+                    var dt = new Date(selected);
+                    dt.setDate(dt.getDate() + 1);
+                    $("#ToDate").datepicker("option", "minDate", dt);
+                },
+                onClose: function () {
+                    var event = arguments.callee.caller.caller.arguments[0];
+                    // If "Clear" gets clicked, then really clear it
+                    if ($(event.delegateTarget).hasClass('ui-datepicker-close')) {
+                        $(this).val('');
+                    }
+                }
+            });
+        });
+        $(function () {
+            $("#ToDate").datepicker({
+                changeMonth: true,
+                yearRange: "-100:+0",
+                changeYear: true,
+                format: 'mm/dd/yy',
+                controlType: 'select',
+                //timeFormat: 'HH:mm:ss',
+                showOn: 'focus',
+                showButtonPanel: true,
+                closeText: 'Clear', // Text to show for "close" button
+                onSelect: function (selected) {
+                    var dt = new Date(selected);
+                    dt.setDate(dt.getDate() - 1);
+                    $("#FromDate").datepicker("option", "maxDate", dt);
+                },
+                onClose: function () {
+                    var event = arguments.callee.caller.caller.arguments[0];
+                    // If "Clear" gets clicked, then really clear it
+                    if ($(event.delegateTarget).hasClass('ui-datepicker-close')) {
+                        $(this).val('');
+                    }
+                }
+            });
+        });
+    });
+    $('#btnSearch').on('click', function (e) {
+        e.preventDefault();
+        var btn = $(this),
+            theme = "blue";
+        var fDate = $('#FromDate').val();
+        var tDate = $('#ToDate').val();
+        if (fDate == '') {
+            swal("Alert!", "Please select From Date", "warning")
+        }
+        else if (tDate == '') {
+            swal("Alert!", "Please select To Date", "warning")
+        }
+        else {
+            GetCountCaseByDate();
+        }
+
+    });
+
+</script>
+<script language="javascript" type="text/javascript">
+    function noBack() { window.history.forward() }
+    noBack();
+    window.onload = noBack;
+    window.onpageshow = function (evt) { if (evt.persisted) noBack() }
+    window.onunload = function () { void (0) }
+
+    history.go(1);
+    function GetCountCaseEmpty() {
+        var arrayColor = [{ "color": "#04D215" }, { "color": "#0D52D1" }, { "color": "#FF0F00" }]
+        $.ajax({
+            url: "/Court/CountCaseForChart",
+            type: 'POST',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: "{}",
+            //data: dataString,
+            success: function (data) {
+                if (data != "Fail") {
+                    var array1 = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var aa = {};
+                        aa.CaseStatus = data[i].CaseStatus;
+                        aa.TotalCount = data[i].TotalCount;
+                        aa.color = arrayColor[i].color;
+                        array1.push(aa);
+                    }
+                    var chart = AmCharts.makeChart("chartdiv3", {
+                        "type": "serial",
+                        "theme": "light",
+                        "marginRight": 70,
+                        "dataProvider": array1,
+                        "startDuration": 3,
+                        "valueAxes": [{
+                            "position": "left",
+                            "title": "Total Cases"
+                        }],
+                        "graphs": [{
+                            "balloonText": "<b>[[category]]: [[value]]</b>",
+                            "fillColorsField": "color",
+                            "fillAlphas": 0.9,
+                            "lineAlpha": 0.2,
+                            "type": "column",
+                            "valueField": "TotalCount",
+                            "labelText": "[[value]]"
+                        }],
+                        "depth3D": 20,
+                        "angle": 30,
+                        "chartCursor": {
+                            "categoryBalloonEnabled": false,
+                            "cursorAlpha": 0,
+                            "zoomable": false
+                        },
+                        "categoryField": "CaseStatus",
+                        "categoryAxis": {
+                            "gridPosition": "start",
+                            "labelRotation": 45
+                        },
+                        "export": {
+                            "enabled": true
+                        }
+                    });
+                }
+            }
+        });
+    }
+    function GetCountCaseByDate() {
+        var arrayColor = [{ "color": "#04D215" }, { "color": "#0D52D1" }, { "color": "#FF0F00" }]
+        var FromDate = $('#FromDate').val();
+        var ToDate = $('#ToDate').val();
+        var dataDate = { 'FromDate': FromDate, 'ToDate': ToDate };
+        $.ajax({
+            url: "/Court/getCaseGraphByDate",
+            type: 'POST',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify(dataDate),
+            //data: dataString,
+            success: function (data) {
+                if (data != "Fail") {
+                    var array1 = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var aa = {};
+                        aa.CaseStatus = data[i].CaseStatus;
+                        aa.TotalCount = data[i].TotalCount;
+                        aa.color = arrayColor[i].color;
+                        array1.push(aa);
+                    }
+                    var chart = AmCharts.makeChart("chartdiv3", {
+                        "type": "serial",
+                        "theme": "light",
+                        "marginRight": 70,
+                        "dataProvider": array1,
+                        "startDuration": 3,
+                        "valueAxes": [{
+                            "position": "left",
+                            "title": "Total Cases"
+                        }],
+                        "graphs": [{
+                            "balloonText": "<b>[[category]]: [[value]]</b>",
+                            "fillColorsField": "color",
+                            "fillAlphas": 0.9,
+                            "lineAlpha": 0.2,
+                            "type": "column",
+                            "valueField": "TotalCount",
+                            "labelText": "[[value]]"
+                        }],
+                        "depth3D": 20,
+                        "angle": 30,
+                        "chartCursor": {
+                            "categoryBalloonEnabled": true,
+                            "cursorAlpha": 0,
+                            "zoomable": false
+                        },
+                        "categoryField": "CaseStatus",
+                        "categoryAxis": {
+                            "gridPosition": "start",
+                            "labelRotation": 45
+                        },
+                        "export": {
+                            "enabled": true
+                        }
+                    });
+                }
+            }
+        });
+    }
+    function GetCaseWithPieChart() {
+        $.ajax({
+            url: "/Court/CountCaseForChart",
+            type: 'POST',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: "{}",
+            //data: dataString,
+            success: function (data) {
+                if (data != "Fail") {
+                    var array1 = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var aa = {};
+                        aa.CaseStatus = data[i].CaseStatus;
+                        aa.TotalCount = data[i].TotalCount;
+                        array1.push(aa);
+                    }
+                    am4core.useTheme(am4themes_animated);
+                    var chart = am4core.create("chartdiv2", am4charts.PieChart);
+                    chart.data = array1;
+                    var series = chart.series.push(new am4charts.PieSeries());
+                    series.dataFields.value = "TotalCount";
+                    series.dataFields.radiusValue = "TotalCount";
+                    series.dataFields.category = "CaseStatus";
+                    // this makes initial animation
+                    series.hiddenState.properties.opacity = 1;
+                    series.hiddenState.properties.endAngle = -90;
+                    series.hiddenState.properties.startAngle = -90;
+
+                    chart.legend = new am4charts.Legend();
+                }
+            }
+        });
+    }
+    function GetAllCaseByGraph() {
+        var arrayColor = [{ "color": "#FF0F00" }, { "color": "#FF6600" }, { "color": "#C5E1A5" }, { "color": "#FCD202" }, { "color": "#FF7000" },
+        { "color": "#B0DE09" }, { "color": "#04D215" }, { "color": "#0D8ECF" }, { "color": "#0D52D1" }, { "color": "#009688" }, { "color": "#8A0CCF" },
+        { "color": "#CD0D74" }, { "color": "#754DEB" }, { "color": "#DDDDDD" }, { "color": "#999999" }, { "color": "#333333" }, { "color": "#F8FF01" },
+        { "color": "#B0DE09" }, { "color": "#FFEB3B" }, { "color": "#FF9E01" }, { "color": "#84FFFF" }, { "color": "#2A0CD0" }]
+        var cStatus = $('#ddlCaseStatus').val();
+        var dataSet = {'cStatus':cStatus};
+        debugger;
+        $.ajax({
+            url: "/Court/GetAllCasesWithGraph",
+            type: 'POST',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify(dataSet),
+            success: function (data) {
+                if (data != "Fail") {
+                    var array1 = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var aa = {};
+                        aa.CaseStatus = data[i].CaseStatus;
+                        aa.TotalCount = data[i].TotalCount;
+                        aa.color = arrayColor[i].color;
+                        array1.push(aa);
+                    }
+                    var chart = AmCharts.makeChart("chartdiv4", {
+                        "type": "serial",
+                        "theme": "light",
+                        "marginRight": 70,
+                        "dataProvider": array1,
+                        "startDuration": 3,
+                        "valueAxes": [{
+                            "position": "left",
+                            "title": "Total Cases"
+                        }],
+                        "graphs": [{
+                            "balloonText": "<b>[[category]]: [[value]]</b>",
+                            "fillColorsField": "color",
+                            "fillAlphas": 0.9,
+                            "lineAlpha": 0.2,
+                            "type": "column",
+                            "valueField": "TotalCount",
+                            "labelText": "[[value]]"
+                        }],
+                        "depth3D": 20,
+                        "angle": 30,
+                        "chartCursor": {
+                            "categoryBalloonEnabled": true,
+                            "cursorAlpha": 0,
+                            "zoomable": false
+                        },
+                        "categoryField": "CaseStatus",
+                        "categoryAxis": {
+                            "gridPosition": "start",
+                            "labelRotation": 45
+                        },
+                        "export": {
+                            "enabled": true
+                        }
+                    });
+                }
+            }
+        });
+    }
+</script>

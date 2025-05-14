@@ -1,0 +1,79 @@
+
+Log Entry : 10.38.47 AM 02 August 2020
+  :
+  :Method Name -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet)
+   at HigherEducation.BusinessLayer.CourseCombinationDB.GetCollegeCourse(String Sessionid, String CourseType) in D:\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\CourseCombinationDB.cs:line 76
+Target Website - MySql.Data.MySqlClient.MySqlPacket ReadPacket()
+ Error - Incorrect integer value: '' for column 'Course_Type' at row 1
+
+-------------------------------
+
+Log Entry : 10.38.47 AM 02 August 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.GetCourseName(String Sessionid, String CourseType) in D:\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\CourseCombinationController.cs:line 32
+Target Website - System.Web.Mvc.JsonResult GetCourseName(System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 10.48.31 AM 02 August 2020
+  :
+  :Method Name -    at MySql.Data.MySqlClient.MySqlParameterCollection.GetParameterFlexible(String parameterName, Boolean throwOnNotFound)
+   at MySql.Data.MySqlClient.StoredProcedure.GetAndFixParameter(String spName, MySqlSchemaRow param, Boolean realAsFloat, MySqlParameter returnParameter)
+   at MySql.Data.MySqlClient.StoredProcedure.CheckParameters(String spName)
+   at MySql.Data.MySqlClient.StoredProcedure.Resolve(Boolean preparing)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet)
+   at HigherEducation.BusinessLayer.CourseCombinationDB.GetCollegeCourse(String Sessionid) in D:\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\CourseCombinationDB.cs:line 76
+Target Website - MySql.Data.MySqlClient.MySqlParameter GetParameterFlexible(System.String, Boolean)
+ Error - Parameter 'Course_Type' not found in the collection.
+
+-------------------------------
+
+Log Entry : 10.48.31 AM 02 August 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.GetCourseName(String Sessionid) in D:\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\CourseCombinationController.cs:line 32
+Target Website - System.Web.Mvc.JsonResult GetCourseName(System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 10.49.48 AM 02 August 2020
+  :
+  :Method Name -    at MySql.Data.MySqlClient.MySqlParameterCollection.GetParameterFlexible(String parameterName, Boolean throwOnNotFound)
+   at MySql.Data.MySqlClient.StoredProcedure.GetAndFixParameter(String spName, MySqlSchemaRow param, Boolean realAsFloat, MySqlParameter returnParameter)
+   at MySql.Data.MySqlClient.StoredProcedure.CheckParameters(String spName)
+   at MySql.Data.MySqlClient.StoredProcedure.Resolve(Boolean preparing)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet)
+   at HigherEducation.BusinessLayer.CourseCombinationDB.GetCollegeCourse(String Sessionid) in D:\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\CourseCombinationDB.cs:line 76
+Target Website - MySql.Data.MySqlClient.MySqlParameter GetParameterFlexible(System.String, Boolean)
+ Error - Parameter 'Course_Type' not found in the collection.
+
+-------------------------------
+
+Log Entry : 10.49.48 AM 02 August 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.GetCourseName(String Sessionid) in D:\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\CourseCombinationController.cs:line 32
+Target Website - System.Web.Mvc.JsonResult GetCourseName(System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------

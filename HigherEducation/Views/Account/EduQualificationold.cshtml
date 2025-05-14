@@ -1,0 +1,981 @@
+﻿@{
+    Session["currentPage"] = 2;
+}
+@{
+    if (Session["MaxPage"] == null)
+    {
+        Session["currentPage"] = 1;
+        Session["MaxPage"] = 1;
+    }
+    else if (Convert.ToInt32(Session["currentPage"]) > Convert.ToInt32(Session["MaxPage"]))
+    {
+        Session["MaxPage"] = Session["currentPage"];
+    }
+
+}
+
+<head>
+    <!--  jquery script  -->
+    @*<script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>*@
+    <!--  validation script  -->
+    @*<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.0/jquery.validate.min.js"></script>*@
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/additional-methods.min.js"></script>*@
+
+    <script src="~/Content/assets/js/libs/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/assets/js/additional-methods.min.js"></script>
+
+    <link href="~/assets/css/styleedu.css" rel="stylesheet" />
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <script src="~/swalJs/sweetalert.min.js"></script>
+    <script src="~/swalJs/swal-forms.js"></script>
+    <style type="text/css">
+        .disabledbutton {
+            pointer-events: none;
+            cursor: not-allowed;
+            /*opacity: 0.4;*/
+        }
+
+        .error {
+            color: #e74c3c;
+        }
+    </style>
+    <style>
+        .loader,
+        .outer-loader {
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        .outer-loader {
+            background: rgba(0, 0, 0, .3);
+            width: 100%;
+            height: 100%;
+            z-index: 999
+        }
+
+        .loader {
+            width: 69px;
+            height: 89px;
+            border: 1px solid #000;
+            margin: auto
+        }
+
+        .loader-img {
+            border: 15px solid #415bbb;
+            border-radius: 50%;
+            border-top: 15px solid #000;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0)
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg)
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .row_new {
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+        #logo img {
+            height: auto;
+            padding-left: 3px;
+            width: 40px
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        .validation {
+            color: red;
+        }
+    </style>
+</head>
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        alert(@ViewBag.ErrorMessage);
+    </script>
+}
+@if (Convert.ToString(TempData["validationmsgequ"]) != "")
+{
+    var validationsummar = TempData["validationmsgequ"].ToString();
+    <h4 class="card container text-danger" style="margin-top:40px">
+        <i class="fa fa-exclamation-circle"></i>
+        Kindly Check following Errors: <br /> @validationsummar
+    </h4>
+    @*<script>
+            alert(@validationsummar);
+
+            //swal("Alert!", "Please fill all the mandatory information.!!", "warning")
+        </script>*@
+}
+@if (Convert.ToInt32(TempData["CandidateInsertData"]) == 1)
+{
+    <script>
+        swal("Success!", "Personal details successfully updated!", "success");
+    </script>
+}
+<form class="form form-validate" id="saveEduDataId" autocomplete="off" action="@Url.Action("EduQualification", "Account")" onsubmit="startPreloader()" accept-charset="utf-8" method="post" enctype="multipart/form-data">
+    <div class="col-lg-12 col-md-12 cus-heading">
+        <h3>Educational Qualification </h3>
+    </div>
+    <div class="card c-shadow">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <label for="Stream" style="font-size:16px;color: #34495E;"><span class="english">Your selected stream <span style="color:red;"><strong>*</strong></span><span style="color:red; font-size:15px; font-weight:bold">  (Note:- Edit if your selected stream is not correctly displayed)</span></span></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    @Html.DropDownList("streamid", new SelectList(ViewBag.Stream as System.Collections.IEnumerable, "Value", "Text"),
+                    "Select", new { id = "streamid", @class = "form-control input-shadow disabledbutton", @required = "required" })
+                    <span id="stream_error" style="color:red"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                    <input type="button" id="btneditStream" class="btn btn-info" value="Edit" />
+                </div>
+                <div class="col-md-3 form-group">
+                </div>
+                @if (Session["Verificationstatus"].ToString() != "F")
+                {
+                    <div class="col-md-3 form-group">
+                        <input type="button" id="btnEditReappear" onclick="javascript: return SetApiStatusNo();" class="btn btn-info" value="Edit Marks" />
+                    </div>
+                }
+            </div>
+            @if (Session["Verificationstatus"].ToString() != "F")
+            {
+                <div class="row">
+                    <div class="col-md-12 form-group  text-right">
+                        <span style="color:red; font-size:12px; font-weight:bold">  (Note:- Edit your marks if and only if you fall in compartment/ Re-evaluation/Improvement category.)</span>
+                    </div>
+                </div>
+            }
+
+            <div class="table-responsive">
+                <table id="#print-content" class="table no-margin table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th hidden="hidden">
+                                ID
+                            </th>
+                            <th>
+                                Exam Passed
+                            </th>
+                            <th>
+                                Univ/Board
+                            <th>
+                                School/College
+                            </th>
+                            <th>
+                                Roll no
+                            </th>
+                            <th>
+                                Result Status
+                            </th>
+                            <th>
+                                Passing Year
+                            </th>
+                            <th>
+                                CGPA
+                            </th>
+                            <th>
+                                Max. Marks
+                            </th>
+                            <th>
+                                Marks obta/CGPA
+                            </th>
+                            <th title="Kindly enter all subject names separated by comma(,)">
+                                Subject
+                            </th>
+                            <th>
+                                Percentage
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="tbody1">
+                        <tr>
+                            <td>
+                                @Html.DropDownList("exampassed", new List<SelectListItem>{
+                            new SelectListItem{ Text="10th", Value="10th",Selected=true},
+                            new SelectListItem{ Text="12th", Value="12th"},
+                            new SelectListItem{ Text="Diploma", Value="Diploma"}}, new { @class = "form-control input-shadow", id = "exampassed", @required = "required", @disabled = "disabled" })
+                            </td>
+                            <td>
+                                @Html.DropDownList("univboard", new SelectList(ViewBag.BoardCode as System.Collections.IEnumerable, "Value", "Text"),
+                                "Select", new { id = "univboard", @class = "form-control input-shadow", @required = "required" })
+                            </td>
+                            <td><input pattern="[a-zA-Z0-9,|.-\s]+" placeholder="School College" type="text" maxlength="40" minlength="1" class="form-control" id="schoolcollege" autocomplete="off" name="schoolcollege" required></td>
+                            <td><input pattern="[0-9]+" placeholder="Rollno" maxlength="15" minlength="1" type="number" class="form-control" id="regroll" autocomplete="off" name="regroll" required oninvalid="setCustomValidity('Only numbers are allowed in Roll No. Feild')" oninput="setCustomValidity('')" onchange="reportValidity();"></td>
+
+                            <td>
+                                @Html.DropDownList("resultstatus", new List<SelectListItem>{
+                            new SelectListItem{ Text="Select", Value=""},
+                            new SelectListItem{ Text="Pass", Value="Pass"}}, null, new { @class = "form-control input-shadow readonly", id = "resultstatus", @required = "required", @readonly = "readonly" })
+                            </td>
+
+                            <td><input pattern="[0-9\s]+" placeholder="Passing Year" type="number" max="2020" min="1950" class="form-control" id="passingyear" autocomplete="off" name="passingyear" required></td>
+                            <td><input pattern="[a-zA-Z0-9\s]+" placeholder="CGPA" type="checkbox" class="form-control" id="cgpa" autocomplete="off" name="cgpa"></td>
+                            <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Max Marks" max="1000" min="0" type="number" class="form-control" id="maxmarks" autocomplete="off" name="maxmarks" required></td>
+                            <td><input pattern="[a-zA-Z0-9\.s]+" placeholder="Marks Obt" step=".01" max="1000" min="0" type="number" class="form-control" id="marksobt" autocomplete="off" value="0" name="marksobt" required oninvalid="setCustomValidity('Marks Obtained cannot be more than Max. Marks')" oninput="setCustomValidity('')"></td>
+                            <td><input pattern="^[a-zA-Z,\s]*$" placeholder="Subject" maxlength="60" minlength="1" type="text" class="form-control" id="subject" autocomplete="off" name="subject" required readonly="readonly"></td>
+                            <td><input pattern="[0-9\.s]+" step=".01" max="100" min="0" type="number" placeholder="Percentage" class="form-control" id="percentage" autocomplete="off" name="percentage" required></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.DropDownList("exampassed2", new List<SelectListItem>{
+                            new SelectListItem{ Text="10th", Value="10th"},
+                            new SelectListItem{ Text="12th", Value="12th",Selected=true},
+                            new SelectListItem{ Text="Diploma", Value="Diploma"}}, new { @class = "form-control input-shadow twelth", id = "exampassed2", required = "required", @disabled = "disabled" })
+                            </td>
+                            @if (ViewBag.CheckValue == "WithAPI")
+                            {
+                                <td>
+                                    @Html.DropDownList("univboard2", new SelectList(ViewBag.BoardCode as System.Collections.IEnumerable, "Value", "Text"),
+                                    "Select", new { id = "univboard2", @class = "form-control input-shadow twelth", required = "required" })
+                                </td>
+                                <td><input placeholder="School College" maxlength="40" minlength="1" type="text" class="form-control" id="schoolcollege2" autocomplete="off" name="schoolcollege2" readonly="readonly" required></td>
+                                <td><input pattern="[0-9]+" placeholder="Rollno" maxlength="15" minlength="1" type="number" class="form-control" id="regroll2" autocomplete="off" name="regroll2" readonly="readonly" required oninvalid="setCustomValidity('Only numbers are allowed in Roll No. Feild')" oninput="setCustomValidity('')" onchange="reportValidity();"></td>
+                                <td>
+                                    @Html.DropDownList("resultstatus2", new List<SelectListItem>{
+                                new SelectListItem{ Text="Select", Value=""},
+                                new SelectListItem{ Text="Pass", Value="Pass"},
+                                new SelectListItem{ Text="Reappear", Value="COMPARTMENT"}}, null, new { @class = "form-control input-shadow twelth", id = "resultstatus2", required = "required" })
+                                </td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Passing Year" type="number" max="2020" min="1950" class="form-control" id="passingyear2" autocomplete="off" name="passingyear2" readonly="readonly" required></td>
+                            }
+                            @if (ViewBag.CheckValue == "WithoutAPI")
+                            {
+                                <td>
+                                    @Html.DropDownList("univboard2", new SelectList(ViewBag.BoardCode as System.Collections.IEnumerable, "Value", "Text"),
+                                     "Select", new { id = "univboard2", @class = "form-control input-shadow twelth", required = "required" })
+                                </td>
+                                <td><input pattern="[a-zA-Z0-9,|&.-\s]+" placeholder="School College" maxlength="40" minlength="1" type="text" class="form-control twelth" id="schoolcollege2" autocomplete="off" name="schoolcollege2" required></td>
+                                <td><input pattern="[0-9]+" placeholder="Rollno" maxlength="15" minlength="1" type="text" class="form-control twelth" id="regroll2" autocomplete="off" name="regroll2" required></td>
+                                <td>
+                                    @Html.DropDownList("resultstatus2", new List<SelectListItem>{
+                                new SelectListItem{ Text="Select", Value=""},
+                                new SelectListItem{ Text="Pass", Value="Pass"},
+                                new SelectListItem{ Text="Reappear", Value="Reappear"}}, null, new { @class = "form-control input-shadow twelth", id = "resultstatus2", required = "required" })
+                                </td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Passing Year" type="number" max="2020" min="1950" class="form-control twelth" id="passingyear2" autocomplete="off" name="passingyear2" required></td>
+                            }
+                            <td><input pattern="[a-zA-Z0-9\s]+" placeholder="CGPA" type="checkbox" class="form-control" id="cgpa2" disabled autocomplete="off" name="cgpa2"></td>
+                            <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Max Marks" max="1000" min="0" type="number" class="form-control twelth" id="maxmarks2" autocomplete="off" name="maxmarks2" required></td>
+                            <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" step=".01" max="1000" min="0" type="number" class="form-control twelth" id="marksobt2" autocomplete="off" name="marksobt2" required oninvalid="setCustomValidity('Marks Obtained cannot be more than Max. Marks')" oninput="$(this).val()!==''?setCustomValidity(''):''"></td>
+                            <td><input pattern="^[a-zA-Z,\s]*$" placeholder="Subject" maxlength="60" minlength="1" type="text" class="form-control twelth" id="subject2" autocomplete="off" name="subject2" required></td>
+                            <td><input pattern="[0-9\.s]+" placeholder="Percentage" step=".01" max="100" min="0" type="number" class="form-control twelth" id="percentage2" readonly="readonly" autocomplete="off" name="percentage2" required></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.DropDownList("exampassed3", new List<SelectListItem>{
+                            new SelectListItem{ Text="Select", Value=""},
+                            new SelectListItem{ Text="Diploma", Value="Diploma"}}, new { @class = "form-control input-shadow diploma", id = "exampassed3", required = "required" })
+                            </td>
+                            <td>
+                                @Html.DropDownList("univboard3", new SelectList(ViewBag.BoardCode as System.Collections.IEnumerable, "Value", "Text"),
+                                "Select", new { id = "univboard3", @class = "form-control input-shadow diploma", required = "required" })
+                            </td>
+                            <td><input pattern="[a-zA-Z0-9,|.-\s]+" placeholder="School College" maxlength="40" minlength="1" type="text" class="form-control diploma" id="schoolcollege3" autocomplete="off" name="schoolcollege3" required></td>
+                            <td><input pattern="[0-9]+" placeholder="Rollno" maxlength="15" minlength="1" type="text" class="form-control diploma" id="regroll3" autocomplete="off" name="regroll3" oninvalid="setCustomValidity('Only numbers are allowed in Roll No. Feild')" oninput="setCustomValidity('')" onchange="reportValidity();" required></td>
+
+                            <td>
+                                @Html.DropDownList("resultstatus3", new List<SelectListItem>{
+                            new SelectListItem{ Text="Select", Value=""},
+                            new SelectListItem{ Text="Pass", Value="Pass"},
+                            new SelectListItem{ Text="Reappear", Value="Reappear"}}, null, new { @class = "form-control input-shadow diploma", id = "resultstatus3", required = "required" })
+                            </td>
+                            <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Passing Year" type="number" max="2020" min="2000" class="form-control diploma" id="passingyear3" autocomplete="off" name="passingyear3" required></td>
+                            <td><input pattern="[a-zA-Z0-9\s]+" placeholder="CGPA" type="checkbox" class="form-control diploma" id="cgpa3" autocomplete="off" name="cgpa3" style="display:none"></td>
+                            <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Max Marks" max="9000" min="0" type="number" class="form-control diploma" id="maxmarks3" autocomplete="off" name="maxmarks3" required></td>
+                            <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" step=".01" max="9000" min="0" type="number" class="form-control diploma" id="marksobt3" autocomplete="off" name="marksobt3" oninvalid="setCustomValidity('Marks Obtained cannot be more than Max. Marks')" oninput="setCustomValidity('')" required></td>
+                            <td><input pattern="^[a-zA-Z,\s]*$" placeholder="Subject" maxlength="60" minlength="1" type="text" class="form-control diploma" id="subject3" autocomplete="off" name="subject3"></td>
+                            <td><input pattern="[0-9\.s]+" placeholder="Percentage" step=".01" max="100" min="0" type="number" class="form-control diploma" id="percentage3" autocomplete="off" name="percentage3" required></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div><!--end .table-responsive -->
+
+        </div>
+    </div>
+
+    @if (@ViewBag.StreamId != 9)
+    {
+        <div class="col-lg-12 col-md-12 cus-heading1">
+            <h3>
+                12th Marks Detail &nbsp;&nbsp;&nbsp;
+                <span style="color:#000000 ; font-weight:600;font-size:18px">(The percentage towards merit will be computed by the system automatically by adding the weightage, if any.)</span>
+            </h3>
+        </div>
+        <div class="col-lg-12 col-md-12 cus-heading1" id="compid" style="display:none">
+            <div style="background-color:yellow ; height:20px; width:20px;border:1px solid #ccc;margin-right:5px;float:left;"></div>
+            <h3>
+
+                <span style="color:#000000 ; font-weight:600;font-size:14px">
+                    The applicants having COMPARTMENT will be considered towards open counselling only subject to the
+                    fulfilment of eligibility conditions of the affiliating University. Such students will be assigned PASS marks as 33 provisionally in the COMPARTMENT subject while calculating the Merit.
+                </span>
+            </h3>
+        </div>
+
+        <span style="        color: #fff;
+        text-align: center;
+        font-size: 18px;
+        color: #492A7F;
+        font-weight: 700;
+        margin-bottom: 4px;
+">     </span>
+        <div class="card c-shadow">
+            <div class="card-body">
+
+                <div class="table-responsive">
+                    <table id="#print-content" class="table no-margin table-bordered table-hover table-hover">
+                        <tr>
+                            <th hidden="hidden">
+                                ID
+                            </th>
+                            <th title="Kindly enter all subject names separated by comma(,)">
+                                Subject
+                            </th>
+                            <th>
+                                Marks Obtained
+                            <th>
+                                Maximum Marks
+                            </th>
+                        </tr>
+
+                        <tbody class="tbody2"></tbody>
+                        @if (ViewBag.CheckValue == "WithoutAPI")
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DropDownList("b_subjectid", new SelectList(ViewBag.DefaultSubject as System.Collections.IEnumerable, "Value", "Text")
+                                                  , new { id = "b_subjectid", @class = "form-control input-shadow", required = "required" })
+                                </td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" max="100" min="10" type="number" class="form-control" id="b_marksobt" autocomplete="off" name="b_marksobt" required></td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Maximum Marks" max="100" value="100" type="text" class="form-control" id="b_maxmarks" autocomplete="off" name="b_maxmarks" required></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DropDownList("b_subjectid2", new SelectList(ViewBag.AllSubject as System.Collections.IEnumerable, "Value", "Text"),
+                                                  "Select", new { id = "b_subjectid2", @class = "form-control input-shadow", required = "required" })
+                                </td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" max="100" min="10" type="number" class="form-control" id="b_marksobt2" autocomplete="off" name="b_marksobt2" required></td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" max="100" value="100" placeholder="Maximum Marks" type="text" class="form-control" id="b_maxmarks2" autocomplete="off" name="b_maxmarks2" required></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DropDownList("b_subjectid3", new SelectList(ViewBag.AllSubject as System.Collections.IEnumerable, "Value", "Text")
+                                                  , "Select", new { id = "b_subjectid3", @class = "form-control input-shadow", required = "required" })
+                                </td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" max="100" min="10" type="number" class="form-control" id="b_marksobt3" autocomplete="off" name="b_marksobt3" required></td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" max="100" value="100" placeholder="Maximum Marks" type="text" class="form-control" id="b_maxmarks3" autocomplete="off" name="b_maxmarks3" required></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DropDownList("b_subjectid4", new SelectList(ViewBag.AllSubject as System.Collections.IEnumerable, "Value", "Text")
+                                                  , "Select", new { id = "b_subjectid4", @class = "form-control input-shadow", required = "required" })
+                                </td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" max="100" min="10" type="number" class="form-control" id="b_marksobt4" autocomplete="off" name="b_marksobt4" required></td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" max="100" value="100" placeholder="Maximum Marks" type="text" class="form-control" id="b_maxmarks4" autocomplete="off" name="b_maxmarks4" required></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DropDownList("b_subjectid5", new SelectList(ViewBag.AllSubject as System.Collections.IEnumerable, "Value", "Text"),
+                                                    "Select", new { id = "b_subjectid5", @class = "form-control input-shadow", required = "required" })
+                                </td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" max="100" min="10" type="number" class="form-control" id="b_marksobt5" autocomplete="off" name="b_marksobt5" required></td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" value="100" placeholder="Maximum Marks" type="text" class="form-control" id="b_maxmarks5" autocomplete="off" name="b_maxmarks5" required></td>
+                            </tr>
+                        }
+                        @if (ViewBag.CheckValue == "WithAPI")
+                        {
+                            <tbody class="tbody3">
+                                <tr>
+                                    <td>
+                                        @Html.DropDownList("b_subjectid", new SelectList(ViewBag.AllSubject as System.Collections.IEnumerable, "Value", "Text"),
+                                                      "Select", new { id = "b_subjectid", @class = "form-control input-shadow", @required = "required", @disabled = "disabled" })
+                                    </td>
+                                    <td><input pattern="[a-zA-Z0-9\s]+" readonly="readonly" placeholder="Marks Obt" max="100" min="0" type="number" class="form-control" id="b_marksobt" autocomplete="off" name="b_marksobt" required></td>
+                                    <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Maximum Marks" readonly="readonly" value="100" type="text" class="form-control" id="b_maxmarks" autocomplete="off" name="b_maxmarks" required></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.DropDownList("b_subjectid2", new SelectList(ViewBag.AllSubject as System.Collections.IEnumerable, "Value", "Text"),
+                                                      "Select", new { id = "b_subjectid2", @class = "form-control input-shadow", @required = "required", @disabled = "disabled" })
+                                    </td>
+                                    <td><input pattern="[a-zA-Z0-9\s]+" readonly="readonly" placeholder="Marks Obt" max="100" min="0" type="number" class="form-control" id="b_marksobt2" autocomplete="off" name="b_marksobt2" required></td>
+                                    <td><input pattern="[a-zA-Z0-9\s]+" readonly="readonly" value="100" placeholder="Maximum Marks" type="text" class="form-control" id="b_maxmarks2" autocomplete="off" name="b_maxmarks2" required></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.DropDownList("b_subjectid3", new SelectList(ViewBag.AllSubject as System.Collections.IEnumerable, "Value", "Text")
+                                                      , "Select", new { id = "b_subjectid3", @class = "form-control input-shadow", @required = "required", @disabled = "disabled" })
+                                    </td>
+                                    <td><input pattern="[a-zA-Z0-9\s]+" readonly="readonly" placeholder="Marks Obt" max="100" min="0" type="number" class="form-control" id="b_marksobt3" autocomplete="off" name="b_marksobt3" required></td>
+                                    <td><input pattern="[a-zA-Z0-9\s]+" readonly="readonly" value="100" placeholder="Maximum Marks" type="text" class="form-control" id="b_maxmarks3" autocomplete="off" name="b_maxmarks3" required></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.DropDownList("b_subjectid4", new SelectList(ViewBag.AllSubject as System.Collections.IEnumerable, "Value", "Text")
+                                                      , "Select", new { id = "b_subjectid4", @class = "form-control input-shadow", @required = "required", @disabled = "disabled" })
+                                    </td>
+                                    <td><input pattern="[a-zA-Z0-9\s]+" readonly="readonly" placeholder="Marks Obt" max="100" min="0" type="number" class="form-control" id="b_marksobt4" autocomplete="off" name="b_marksobt4" required></td>
+                                    <td><input pattern="[a-zA-Z0-9\s]+" readonly="readonly" value="100" placeholder="Maximum Marks" type="text" class="form-control" id="b_maxmarks4" autocomplete="off" name="b_maxmarks4" required></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.DropDownList("b_subjectid5", new SelectList(ViewBag.AllSubject as System.Collections.IEnumerable, "Value", "Text"),
+                                                        "Select", new { id = "b_subjectid5", @class = "form-control input-shadow", @required = "required", @disabled = "disabled" })
+                                    </td>
+                                    <td><input pattern="[a-zA-Z0-9\s]+" readonly="readonly" placeholder="Marks Obt" max="100" min="0" type="number" class="form-control" id="b_marksobt5" autocomplete="off" name="b_marksobt5" required></td>
+                                    <td><input pattern="[a-zA-Z0-9\s]+" readonly="readonly" value="100" placeholder="Maximum Marks" type="text" class="form-control" id="b_maxmarks5" autocomplete="off" name="b_maxmarks5" required></td>
+                                </tr>
+                            </tbody>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    @if (Session["Verificationstatus"].ToString() != "F")
+
+    {
+        <div class="col-md-12 text-right cus-registerbtn" style="margin-top: 1%; margin-bottom: 3%;">
+            <button class="btn btn-primary c-shadow-1" id="btnNext" value="Next" type="submit"><i class="fa fa-save"></i>&nbsp;Next</button>
+        </div>
+    }
+    <div class="outer-loader" style="display: none;">
+        <div class="loader-img loader" style="display: none;"></div>
+    </div>
+</form>
+<script language="javascript" type="text/javascript">
+    $(function () {
+            $("#marksobt, #maxmarks").change(function () {
+                if ($('#cgpa').is(":checked")) {
+                    var markobt = $("#marksobt").val();
+                   // var resultval = parseInt(markobt * 9.5);
+                  //  $('#percentage').val(resultval || ''); //shows value in "#rate"
+                }
+                else {
+                    var result = parseFloat(parseInt($("#marksobt").val(), 10) * 100) / parseInt($("#maxmarks").val(), 10);
+                    $('#percentage').val(result.toFixed(1) || ''); //shows value in "#rate"
+                }
+            })
+            $('#cgpa').change(function () {
+                if ($('#cgpa').is(":checked")) {
+                    $("#maxmarks").val(10);
+                    $("#marksobt").attr("max","10");
+                    $("#maxmarks").attr("readonly", "readonly");
+                    // $("#maxmarks").val('');
+                    $('#percentage').attr("readonly", "readonly");
+                    $("#percentage").removeAttr("required");
+                    $("#marksobt").val('');
+                    $('#percentage').val('')
+                }
+                else {
+                     //$("#marksobt").attr("max","10");
+                    $("#maxmarks").removeAttr("readonly", "readonly");
+                    $("#marksobt").val('');
+                    $("#maxmarks").val('');
+                    $('#percentage').val('')
+                    $('#percentage').attr("required", "required");
+                    $("#percentage").removeAttr("readonly");
+                }
+            });
+        });
+        $(function () {
+            $("#marksobt2, #maxmarks2").change(function () {
+                if (($("#marksobt2").val() != '@ViewBag.MarksObt2') && ($('#percentage2').val()!="")) {
+                  swal('Alert!','If there is any choice of courses, will be deleted ','warning');
+                }
+
+                if ($('#cgpa2').is(":checked")) {
+                    var markobt = $("#marksobt2").val();
+                    $('#percentage2').removeAttr("readonly");
+                    //var resultval = parseInt(markobt * 9.5);
+                    //$('#percentage2').val(resultval || ''); //shows value in "#rate"
+                }
+                else {
+                    var result = parseFloat(parseInt($("#marksobt2").val(), 10) * 100) / parseInt($("#maxmarks2").val(), 10);
+                    $('#percentage2').val(result.toFixed(1) || ''); //shows value in "#rate"
+                    $('#percentage2').attr("readonly", "readonly");
+                }
+            })
+            $('#cgpa2').change(function () {
+
+                if ($('#cgpa2').is(":checked")) {
+                    // $("#maxmarks2").val('');
+                   // $("#maxmarks2").attr("readonly", "readonly");
+                  //  $("#marksobt2").val('');
+                    $('#percentage2').val('')
+                    $("#maxmarks2").removeAttr("readonly", "readonly");
+                    $("#marksobt2").removeAttr("readonly", "readonly");
+
+                }
+                else {
+                   // $("#maxmarks2").removeAttr("readonly", "readonly");
+                  //  $("#marksobt2").val('');
+                  //  $("#maxmarks2").val('');
+                    $('#percentage2').val('')
+                }
+            });
+        });
+        $(function () {
+            $("#maxmarks3, #marksobt3").change(function () {
+                if ($('#cgpa3').is(":checked")) {
+                    var markobt = $("#marksobt3").val();
+                    $('#percentage3').removeAttr("readonly");
+
+                   // var resultval = parseInt(markobt * 9.5);
+                   // $('#percentage3').val(resultval || ''); //shows value in "#rate"
+                }
+                else {
+                    var result = parseFloat(parseInt($("#marksobt3").val(), 10) * 100) / parseInt($("#maxmarks3").val(), 10);
+                    $('#percentage3').val(result.toFixed(1) || ''); //shows value in "#rate"
+                }
+            })
+            $('#cgpa3').change(function () {
+                if ($('#cgpa3').is(":checked")) {
+                    $("#maxmarks3").val('');
+                  //  $("#maxmarks3").attr("readonly", "readonly");
+                    $("#marksobt3").val('');
+                    $('#percentage3').val('')
+                }
+                else {
+                   // $("#maxmarks3").removeAttr("readonly", "readonly");
+                    $("#marksobt3").val('');
+                    $("#marksobt3").val('');
+                    $('#percentage3').val('')
+                }
+            });
+        });
+
+                $('#passingyear,#passingyear2').change(function () {
+
+                    var DOB = @ViewBag.DOB;
+                    var year1oth = $('#passingyear').val();
+                    var year12th = $('#passingyear2').val();
+                    var totaldiff = parseInt(year12th) - parseInt(year1oth);
+
+                    if (parseInt(DOB+10)> parseInt(year1oth))
+                    {
+                        swal("Alert", "10th passing year should be justify to your DOB", "warning");
+                        $(this).val('');
+                    }
+                    if (parseInt(DOB+10)> parseInt(year12th))
+                    {
+                        swal("Alert", "12th passing year should be justify to your DOB", "warning");
+                        $(this).val('');
+                    }
+                    if ( totaldiff<1)
+                    {
+                        swal("Alert", "10th passing year should be less than 10+2 passing year", "warning");
+                        $(this).val('');
+                    }
+            });
+
+    $(document).ready(function () {
+
+
+
+
+
+        var MaxPages = '@Session["MaxPage"]';
+        var currentPage = '@Session["currentPage"]';
+
+
+        for (var i = 0; i < parseInt(MaxPages); i++)
+        {
+            if ((i+1) != currentPage) $("#tablist > li:eq(" + i + ")").addClass('done');
+            else $("#tablist > li:eq(" + i + ")").addClass('current');
+        }
+                for (i = 7; i > MaxPages; i--) {
+            $("#tablist > li:eq("+(i-1)+")>a").attr("href","#");
+        }
+
+
+          //validate diploma
+        if ('@ViewBag.StreamId' != '9') {
+
+            $('.diploma').removeAttr('required')
+        }
+        else {
+            $('.twelth').removeAttr('required')
+
+        }
+
+        $('#streamid').on('change', function () {
+
+            swal('Alert!','If there is any choice of courses it will be deleted ','warning');
+
+            if ($('#streamid').val() == "9") {
+                $('.diploma').attr('required', 'required')
+                $('.twelth').removeAttr('required')
+            }
+            else {
+                 $('.diploma').removeAttr('required')
+                 $('.twelth').attr('required', 'required')
+            }
+        });
+
+
+            // $("#imgId").attr("src",+ '@*ViewBag.UserImage' + "");*@
+        if ('@ViewBag.P_Id' != '0') {
+
+            $("#univboard").val('@ViewBag.UnivBoard');
+
+               $("#univboard2").val('@ViewBag.UnivBoard2');
+            $("#univboard3").val('@ViewBag.UnivBoard3');
+            $("#marksobt").val('@ViewBag.MarksObt');
+            $("#maxmarks").val('@ViewBag.MaxMarks');
+             $("#percentage").val('@ViewBag.Percentage');
+             $("#marksobt2").val('@ViewBag.MarksObt2');
+             $("#maxmarks2").val('@ViewBag.MaxMarks2');
+             $("#percentage2").val('@ViewBag.Percentage2');
+               $("#marksobt3").val('@ViewBag.MarksObt3');
+             $("#maxmarks3").val('@ViewBag.MaxMarks3');
+             $("#percentage3").val('@ViewBag.Percentage3');
+        }
+        //$("#exampassed").val('@ViewBag.ExamPassed');
+        $("#schoolcollege").val('@ViewBag.SchoolCollege');
+        $("#regroll").val('@ViewBag.RegistrationRollNo');
+        $("#resultstatus").val('@ViewBag.ResultStatus');
+        $("#passingyear").val('@ViewBag.PassingYear');
+
+        if ('@ViewBag.CGPA' == 'True')
+        {
+            $("#cgpa").prop("checked", true);
+            $("#maxmarks").val('@ViewBag.MaxMarks');
+            $("#marksobt").attr('max', '@ViewBag.MaxMarks');
+            $('#percentage').attr("readonly", "readonly");
+            $("#percentage").removeAttr("required");
+            $("#percentage").val('');
+            //$("#maxmarks").attr('readonly', 'readonly');
+
+        }
+        $("#subject").val('@ViewBag.Subject');
+
+
+        $("#schoolcollege2").val('@ViewBag.SchoolCollege2');
+        //$("#regroll2").val('@ViewBag.RegistrationRollNo2');
+        $("#resultstatus2").val('@ViewBag.ResultStatus2');
+        //$("#passingyear2").val('@ViewBag.PassingYear2');
+
+        if ('@ViewBag.StreamId' == '9') {
+
+                     @*$("#regroll3").val('@ViewBag.TXii_Rollno').attr("readonly", true);
+            $("#passingyear3").val('@ViewBag.TPassing_Year').attr("readonly", true);*@
+            $("#exampassed3").val('Diploma');
+
+
+            if ('@ViewBag.TBoard_Name' != null || '@ViewBag.TBoard_Name' !="") {
+                @*$("#univboard3").val('@ViewBag.TBoard_Name').attr("readonly", true);
+                $("#univboard3").addClass("disabledbutton");*@
+
+            }
+            else {
+                $("#univboard3").val('@ViewBag.UnivBoard2');
+                $("#univboard3").addClass("disabledbutton");
+            }
+        }
+        else {
+
+            $("#regroll2").val('@ViewBag.TXii_Rollno').attr("readonly", true);
+        $("#passingyear2").val('@ViewBag.TPassing_Year').attr("readonly", true);
+
+            if ('@ViewBag.TBoard_Name' != null || '@ViewBag.TBoard_Name' !="") {
+                $("#univboard2").val('@ViewBag.TBoard_Name').attr("readonly", true);
+                $("#univboard2").addClass("disabledbutton");
+
+            }
+            else {
+                $("#univboard2").val('@ViewBag.UnivBoard2');
+                $("#univboard2").addClass("disabledbutton");
+            }
+        }
+
+        if ('@ViewBag.CGPA2' == 'True')
+        {
+          $("#cgpa2").prop("checked",true);
+        }
+        $("#subject2").val('@ViewBag.Subject2');
+
+        //$("#exampassed3").val('Diploma');
+        $("#schoolcollege3").val('@ViewBag.SchoolCollege3');
+        $("#regroll3").val('@ViewBag.RegistrationRollNo3');
+        $("#resultstatus3").val('@ViewBag.ResultStatus3');
+        $("#passingyear3").val('@ViewBag.PassingYear3');
+        if ('@ViewBag.CGPA3' == 'True')
+        {
+          $("#cgpa3").prop("checked",true);
+        }
+        $("#subject3").val('@ViewBag.Subject3');
+//Abhishek Code Begin
+if($('[name="maxmarks"]').val()!==''){$('[name="marksobt"]').attr('max',$('[name="maxmarks"]').val());}
+$('[name="maxmarks"]').on('change',function() {$('[name="marksobt"]').attr('max',$('[name="maxmarks"]').val());});
+
+$('[name="marksobt"]').on('change',function()
+{ if(!document.getElementsByName('marksobt')[0].checkValidity())
+    {
+        document.getElementsByName('marksobt')[0].reportValidity();
+        document.getElementsByName('marksobt')[0].value='';
+    }
+});
+$('[name="maxmarks"]').on('change',function()
+{ if(!document.getElementsByName('marksobt')[0].checkValidity())
+    {
+        document.getElementsByName('marksobt')[0].reportValidity();
+        document.getElementsByName('marksobt')[0].value='';
+    }
+});
+if($('[name="maxmarks2"]').val()!==''){$('[name="marksobt2"]').attr('max',$('[name="maxmarks2"]').val());}
+$('[name="maxmarks2"]').on('change',function() {$('[name="marksobt2"]').attr('max',$('[name="maxmarks2"]').val());});
+
+$('[name="marksobt2"]').on('change',function()
+{ if(!document.getElementsByName('marksobt2')[0].checkValidity())
+    {
+        document.getElementsByName('marksobt2')[0].reportValidity();
+        document.getElementsByName('marksobt2')[0].value='';
+    }
+});
+$('[name="maxmarks2"]').on('change',function()
+{ if(!document.getElementsByName('marksobt2')[0].checkValidity())
+    {
+        document.getElementsByName('marksobt2')[0].reportValidity();
+        document.getElementsByName('marksobt2')[0].value='';
+    }
+});
+
+if($('[name="maxmarks3"]').val()!==''){$('[name="marksobt3"]').attr('max',$('[name="maxmarks3"]').val());}
+$('[name="maxmarks3"]').on('change',function() {$('[name="marksobt3"]').attr('max',$('[name="maxmarks3"]').val());});
+
+$('[name="marksobt3"]').on('change',function()
+{ if(!document.getElementsByName('marksobt3')[0].checkValidity())
+    {
+        document.getElementsByName('marksobt3')[0].reportValidity();
+        document.getElementsByName('marksobt3')[0].value='';
+    }
+});
+$('[name="maxmarks3"]').on('change',function()
+{ if(!document.getElementsByName('marksobt3')[0].checkValidity())
+    {
+        document.getElementsByName('marksobt3')[0].reportValidity();
+        document.getElementsByName('marksobt3')[0].value='';
+    }
+});
+
+
+//Abhishek Code End
+        if ('@ViewBag.B_P_Id' != '0') {
+            $("#b_subjectid").val('@ViewBag.B_SubjectId');
+            $("#b_subjectid2").val('@ViewBag.B_SubjectId2');
+            $("#b_subjectid3").val('@ViewBag.B_SubjectId3');
+            $("#b_subjectid4").val('@ViewBag.B_SubjectId4');
+            $("#b_subjectid5").val('@ViewBag.B_SubjectId5');
+        $("#b_marksobt").val('@ViewBag.B_MarksObtained');
+        $("#b_marksobt2").val('@ViewBag.B_MarksObtained2');
+        $("#b_marksobt3").val('@ViewBag.B_MarksObtained3');
+        $("#b_marksobt4").val('@ViewBag.B_MarksObtained4');
+        $("#b_marksobt5").val('@ViewBag.B_MarksObtained5');
+
+        $("#b_maxmarks").val('@ViewBag.B_MaxMarks');
+        $("#b_maxmarks2").val('@ViewBag.B_MaxMarks2');
+        $("#b_maxmarks3").val('@ViewBag.B_MaxMarks3');
+        $("#b_maxmarks4").val('@ViewBag.B_MaxMarks4');
+        $("#b_maxmarks5").val('@ViewBag.B_MaxMarks5');
+
+
+        }
+        else
+        {
+        $("#b_marksobt").val('@ViewBag.B_MarksObtained');
+        $("#b_marksobt2").val('@ViewBag.B_MarksObtained2');
+        $("#b_marksobt3").val('@ViewBag.B_MarksObtained3');
+        $("#b_marksobt4").val('@ViewBag.B_MarksObtained4');
+        $("#b_marksobt5").val('@ViewBag.B_MarksObtained5');
+
+
+
+        }
+        $('.unselectable').prop("disabled", true)
+
+
+        $('#streamid').val('@ViewBag.StreamId');
+
+        if ($('#resultstatus').val() == "") {
+             $('#resultstatus').val("Pass");
+
+        }
+        if ($('#subject').val()==""){
+            $('#subject').val("ALL");
+
+        }
+        $('#btneditStream').on('click', function () {
+            $('#streamid').removeClass('disabledbutton');
+
+        });
+        //prashant
+        if ('@ViewBag.APiMaxobt' != '') {
+
+            $("#marksobt2").val('@ViewBag.APiMaxobt').attr("readonly",true);
+            $("#maxmarks2").val('@ViewBag.ApiMaxMarks').attr("readonly", true);
+
+            $("#percentage2").val('@ViewBag.APIPercentage').attr("readonly", true);
+            if ('@ViewBag.ApiPassStatus' == 'PASS') {
+                $("#resultstatus2").val('Pass').attr("readonly", true);
+                $("#resultstatus2").addClass("disabledbutton");
+            }
+            else if ('@ViewBag.ApiPassStatus' == 'COMPARTMENT' || '@ViewBag.ApiPassStatus' == 'COMP') {
+
+                $("#resultstatus2").val('COMPARTMENT').attr("readonly", true);
+
+                if ('@ViewBag.UnivBoard2' == '119') {
+
+                if ($('#b_marksobt').val() == "33") {
+                    $('#b_marksobt').css("background-color", "yellow");
+                }
+                 else if ($('#b_marksobt2').val() == "33") {
+                    $('#b_marksobt2').css("background-color", "yellow");
+                }
+                                 else if ($('#b_marksobt3').val() == "33") {
+                    $('#b_marksobt3').css("background-color", "yellow");
+                }
+                                 else if ($('#b_marksobt4').val() == "33") {
+                    $('#b_marksobt4').css("background-color", "yellow");
+                }
+                                 else if ($('#b_marksobt5').val() == "33") {
+                    $('#b_marksobt5').css("background-color", "yellow");
+                    }
+                }
+
+                $('#compid').show();
+
+            }
+            else {
+                $("#resultstatus2").val('@ViewBag.ResultStatus2');
+            }
+        $("#subject2").val('ALL').attr("readonly",true);
+
+        }
+
+
+          // sum 	Marks Obtained in case of Auto fetched
+          @*var sumofmarks= @ViewBag.B_MarksObtained +@ViewBag.B_MarksObtained1 +@ViewBag.B_MarksObtaine2+@ViewBag.B_MarksObtained3+@ViewBag.B_MarksObtained4+@ViewBag.B_MarksObtained5;
+        $('marksobt2').val(sumofmarks).attr("readonly",true);*@
+
+      });
+    //$('#btnNext').on('click', function () {
+    //    if ($("#b_subjectid").val() != $("#b_subjectid2").val() != $("#b_subjectid3").val() != $("#b_subjectid4").val() != $("#b_subjectid5").val()) {
+    //         $('#saveEduDataId').validate({});
+    //    }
+    //    else {
+    //        swal("Alert!", "Please select different subject", "warning");
+    //        return false;
+    //    }
+    //});
+
+
+     //$('#saveEduDataId').validate({
+     //rules: [
+
+     //{
+     //    input: '#passingyear',
+     //    message: 'Passing is required!',
+     //    action: 'blur',
+     //    rule: 'required'
+
+     //}]
+     //});
+
+
+  //$('#saveEduDataId').validate({});
+
+
+
+
+    function startPreloader() {
+        $(".loader").css("display", "block");
+        $(".outer-loader").css("display", "block");
+
+    }
+    function stopPreloader() {
+
+        $(".loader").css("display", "none");
+        $(".outer-loader").css("display", "none");
+    }
+
+      function SetApiStatusNo() {
+           startPreloader();
+          $.ajax({
+               type: "POST",
+               url: '@Url.Action("SetApiStatusNo", "Account")',
+               data: {},
+               contentType: "application/json; charset=utf-8",
+               dataType: "json",
+               success: function (data) {
+                   stopPreloader();
+                   if (data == "1") {
+
+                       alert("You can edit your marks now. Please upload relevant DMCs/Marks-sheets.");
+                       window.location.href = '@Url.Action("EduQualification", "Account")';
+
+                   }
+                   else if (data == "00") {
+                       alert("Session has been expired");
+                       window.location.href = '@Url.Action("LogOut", "Account")';
+                   }
+                   else
+                   {
+                       swal("Error!", "Something went wrong. Plz try again later", "error");
+                   }
+               },
+              failure: function (data) {
+                   stopPreloader();
+                   swal('Error', 'Something went wrong', 'error');
+               }
+           });
+
+        }
+
+</script>
+@*<script>
+        $(".readonly").keydown(function (e) {
+            alert("asd");
+            e.preventDefault();
+        });
+    </script>*@
+@if (Session["Verificationstatus"].ToString() == "F")
+{
+    <script>
+        $('#saveEduDataId').removeClass('active');
+        $('#saveEduDataId').addClass('disabledbutton');
+    </script>
+}

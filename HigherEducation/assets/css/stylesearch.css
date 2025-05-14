@@ -1,0 +1,280 @@
+﻿a {
+    cursor: pointer;
+    
+}
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+.main-banner img {
+    width: 100%;
+    border-bottom: 4px solid #f9f9f9;
+}
+
+.cus-top-section {
+    display: flex;
+    justify-content: center;
+}
+
+    .cus-top-section label {
+        color: #223f73;
+        font-weight: 700;
+        font-size: 16px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+.cus-grid-table {
+    height: 100%;
+    min-height:100vh;
+    overflow: auto; 
+    padding: 0.1rem;
+    margin-top: 1%;
+  
+}
+
+    .cus-grid-table table th {
+        border-bottom: 2px solid #ccc;
+        box-shadow: 0px 0px 5px 0px #ccc;
+        font-family: 'Poppins', sans-serif;
+    }
+
+.cus-select-label {
+    margin-top: 5px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.cus-getbtn .btn.btn-primary {
+    background: #F6822F;
+    cursor: pointer;
+    border: 1px solid #F6822F;
+    font-family: 'Poppins', sans-serif;
+}
+
+    .cus-getbtn .btn.btn-primary:hover {
+        background: #009231;
+        transition: all 0.5s;
+        border-radius: 10px;
+        box-shadow: 0px 6px 10px #009231;
+        color: #fff;
+        border: 1px solid #009231;
+    }
+
+.cus-grid-table .btn.btn-danger {
+    background: rgba(105, 181, 63, 0.7);
+    cursor: pointer;
+    border: 1px solid rgba(105, 181, 63, 0.7);
+}
+
+    .cus-grid-table .btn.btn-danger:hover {
+        background: rgba(223, 138, 28, 0.64);
+        transition: all 1s;
+        border-radius: 10px;
+        box-shadow: 0px 6px 10px rgba(223, 138, 28, 0.64);
+        color: #fff;
+        border: none;
+    }
+
+.cus-modal-heading h6 {
+    color: #fff;
+    font-weight: 700;
+    font-family: "Montserrat", sans-serif;
+}
+
+.cus-cross .close {
+    background:#fff;
+    color: #f45e04;
+    opacity: 1;
+    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    font-size: 1.9rem;
+    position: absolute;
+    right: -15px;
+}
+
+.cus-grid-table-one {
+    height: 220px;
+    overflow: auto;
+    padding: 1rem;
+    margin-bottom: 15px;
+}
+
+.cus-grid-table-three {
+    height: 300px;
+    overflow: auto;
+    margin-bottom: 15px;
+}
+
+    .cus-grid-table-three table tr th {
+        color: #492A7F;
+        font-size: 15px;
+    }
+
+.cus-grid-table-four {
+    overflow-y: scroll;
+    margin-bottom: 10%;
+}
+
+    .cus-grid-table-four table tr th {
+        color: #223f73;
+        font-size: 14px;
+    }
+
+.cus-grid-table-five table tr th {
+    color: #223f73;
+    font-size: 14px;
+}
+.table td, .table th{
+    font-size:13px;
+}
+.cus-grid-table-five {
+    overflow-y: scroll;
+    margin-bottom: 1%;
+}
+
+.back-btn .btn.btn-primary {
+    background: #223f73;
+    border: 1px solid #223f73;
+    box-shadow: 0 2px 6px #223f73;
+}
+
+
+/*footer*/
+#footer {
+    background: #225132;
+    padding: 10px 0 10px 0;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+    #footer a {
+        color: #fff;
+        font-family: "Montserrat", sans-serif;
+    }
+
+.top-heading h4 {
+    color: #F6822F;
+    font-weight: 800;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+}
+    .top-heading h4::after {
+        content: '';
+        position: absolute;
+        height: 4px;
+        bottom: -8px;
+        margin: 0 auto;
+        top: 45px;
+        left: 0;
+        right: 0;
+        width: 8%;
+        background: #009231;
+        -o-transition: .5s;
+        -ms-transition: .5s;
+        -moz-transition: .5s;
+        -webkit-transition: .5s;
+        transition: .5s;
+    }
+    .top-heading h4:hover:after {
+        width: 20%;
+        background: #F6822F;
+    }
+.cus-modal .modal-dialog {
+    max-width: 1000px !important;
+}
+
+.cus-grid-table-one table tr td label {
+    color: #333;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: "Montserrat", sans-serif;
+}
+
+.cus-grid-table-two table tbody tr td label {
+    color: #492A7F !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    font-family: "Montserrat", sans-serif;
+}
+
+.top-section-btn .btn.btn-success {
+    background-color: #F6822F;
+    border-color: #F6822F;
+    color: #fff;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    font-family: "Montserrat", sans-serif;
+}
+
+    .top-section-btn .btn.btn-success:hover {
+        background: #F6822F;
+        transition: all 0.5s;
+        border-radius: 10px;
+        box-shadow: 0px 6px 10px #F6822F;
+        color: #fff;
+    }
+.cus-modal .modal-header {
+    background-color: #F6822F;
+    color:#fff;
+}
+
+@media only screen and (max-width: 640px) {
+    .top-heading h4::after {
+        display:none;
+    }
+    .cus-top-section {
+        display: block !important;
+    }
+
+    .cus-getbtn {
+        margin-top: 2px !important;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .cus-grid-table {
+        margin-bottom: 25%;
+    }
+
+    .pop-note {
+        margin-top: 10px;
+    }
+
+    .cus-grid-table-one {
+        height: 250px !important;
+    }
+    .btn-freeze {
+        margin-bottom: 30% !important;
+    }
+    .cus-grid-table-four{
+        margin-bottom:50%;
+    }
+
+}
+
+/*New css for ITI Project*/
+.cus-left-section {
+    background: #f9f9f9;
+    margin-top: 1%;
+    padding-top: 1rem;
+    box-shadow: 0px 0px 10px 2px #d8d8d8;
+}
+.cus-right-section {
+    background: #f9f9f9;
+    border-right: 4px double #c9c9c9;
+    box-shadow: 0px 0px 10px 2px #d8d8d8;
+}
+.cus-left-section label{
+    font-weight:500;
+    font-size:14px;
+}

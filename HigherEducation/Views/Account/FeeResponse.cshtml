@@ -1,0 +1,54 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+@{
+    if (Convert.ToString(TempData["Paymentstatus"]) == "F")
+    {
+        <script>
+            //swal("Payment Failed.!!", "The Payment has been failed", "error");
+            alert("The Payment has been failed");
+        </script>
+    }
+    if (Convert.ToString(TempData["Paymentstatus"]) == "A")
+    {
+        <script>
+            //swal("Payment Cancelled.!!", "The Payment has been Cancelled", "warning");
+            alert("The Payment has been Cancelled by user");
+        </script>
+    }
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Pay</title>
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/stylepayment.css">
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <link href="~/assets/css/all.css" rel="stylesheet" />
+    <link href="~/assets/css/jquery-ui.css" rel="stylesheet" />
+    <script src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-12 form-group text-center" style="margin-top:10%">
+            <span style="font-size:14px;font-weight:bold;color:red">
+                <b>
+                    Status :   @ViewBag.status_message
+                </b>
+            </span>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-md-12 form-group text-accent" style="margin-top:20px;">
+            <a href='@Url.Action("LogOut","Account")' class="badge badge-danger" style="font-size: 20px;margin-left: 40%; margin-top: 10%;">Go to Home Page & Try again.</a>
+        </div>
+    </div>
+</body>
+
+</html>

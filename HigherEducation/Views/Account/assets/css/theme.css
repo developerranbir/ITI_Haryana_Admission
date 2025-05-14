@@ -1,0 +1,82 @@
+.homepage.highcontrast .cus-maintop-banner{
+		background:#333;
+}
+.homepage.highcontrast .cus-maintop-banner a{
+	color:#FFFF00;
+}
+.homepage.highcontrast .header {
+    background: #333;
+}
+.homepage.highcontrast .cus-dates h5 {
+    color: #FFFF00;
+}
+.homepage.highcontrast .cus-dates h6 {
+    color: #FFFF00;
+}
+.homepage.highcontrast .card ul li a {
+    color: #FFFF00;
+}
+.homepage.highcontrast .contact .info-box {
+    color: #FFFF00;
+    background:#333
+}
+    .homepage.highcontrast .contact .info-box h3 {
+        color: #FFFF00;
+    }
+.homepage.highcontrast section {
+    background: #333;
+}
+.homepage.highcontrast .section-title h2 {
+    color: #FFFF00;
+}
+.homepage.highcontrast .section-title h2::after {
+        background: #FFFF00;
+    }
+.homepage.highcontrast .cta {
+        background: #333;
+}
+    .homepage.highcontrast .cta h5 {
+        color: #FFFF00;
+    }
+.homepage.highcontrast .holder {
+    background: #333;
+}
+.homepage.highcontrast .login-form {
+    background: #333;
+}
+.homepage.highcontrast .rightsection h3 {
+    color: #FFFF00;
+}
+.homepage.highcontrast .left-section h3 {
+    color: #FFFF00;
+}
+.homepage.highcontrast .cus-heading h3 {
+    color: #FFFF00;
+}
+.homepage.highcontrast .top-section label {
+    color: #FFFF00;
+}
+.homepage.highcontrast .card {
+    background: #333;
+}
+.homepage.highcontrast .login-box {
+    background: #333;
+}
+    .homepage.highcontrast .login-box .title-box {
+        background: #333;
+        color: #FFFF00;
+    }
+    .homepage.highcontrast .login-box .submot-row .btn-md {
+        background: #333;
+        color: #FFFF00;
+    }
+.homepage.highcontrast input#btnlogin {
+    color: #FFFF00;
+}
+.homepage.highcontrast #footer{
+    color: #FFFF00;
+    background: #333
+}
+    .homepage.highcontrast #footer .credits {
+        color: #FFFF00;
+    }

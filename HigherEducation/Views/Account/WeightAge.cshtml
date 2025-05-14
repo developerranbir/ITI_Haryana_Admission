@@ -1,0 +1,398 @@
+﻿
+@model HigherEducation.Models.WeightageViewModel
+@{
+    Session["currentPage"] = 3;
+
+
+}
+@{
+    if (Session["MaxPage"] == null)
+    {
+        Session["currentPage"] = 1;
+        Session["MaxPage"] = 1;
+    }
+    else if (Convert.ToInt32(Session["currentPage"]) > Convert.ToInt32(Session["MaxPage"]))
+    {
+        Session["MaxPage"] = Session["currentPage"];
+    }
+
+}
+<style>
+    .ui-datepicker select.ui-datepicker-month, .ui-datepicker select.ui-datepicker-year {
+        color: black;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .col-md-6 {
+        font-weight: normal;
+    }
+</style>
+<style type="text/css">
+    .tab-pane .tools .btn.btn-flat {
+        /* padding: 4.5px 7px; */
+        margin-bottom: 5px;
+        margin-top: -30px;
+        margin-right: 10px;
+    }
+
+    .txtSize {
+        font-size: 16px;
+    }
+
+    .ctrlPosition {
+        text-align: center;
+        margin-top: 40px;
+        color: #34495E;
+        font-weight: bold;
+    }
+
+        .ctrlPosition:hover {
+            color: blue;
+        }
+
+    .pdfFile {
+        margin-left: 50px;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+        .pdfFile:hover {
+            text-decoration: underline;
+        }
+
+    .btnAdd {
+        color: white;
+        outline: 0;
+        padding: 10px 16px;
+        font-size: 16px;
+        line-height: 1.33;
+        border-radius: 6px;
+    }
+
+    .my-input {
+        width: 100%;
+    }
+
+    .my-icon {
+        position: absolute;
+        right: 20px;
+        color: red;
+        top: 7px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .redBorder {
+        border: 1px solid red !important;
+    }
+
+    .greenBorder {
+        border: 1px solid green !important;
+    }
+
+    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+        background: linear-gradient(to right, #004ef9, #79a3ff) !important;
+        color: #fff;
+        border-color: #79a3ff !important;
+    }
+
+    .disabledbutton {
+        pointer-events: none;
+        cursor: not-allowed;
+        /*opacity: 0.4;*/
+    }
+
+    .error {
+        color: #e74c3c;
+    }
+
+    .validation {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+</style>
+<style>
+    .loader,
+    .outer-loader {
+        display: inline-block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0
+    }
+
+    .outer-loader {
+        background: rgba(0, 0, 0, .3);
+        width: 100%;
+        height: 100%;
+        z-index: 999
+    }
+
+    .loader {
+        width: 69px;
+        height: 89px;
+        border: 1px solid #000;
+        margin: auto
+    }
+
+    .loader-img {
+        border: 15px solid #415bbb;
+        border-radius: 50%;
+        border-top: 15px solid #000;
+        width: 80px;
+        height: 80px;
+        -webkit-animation: spin 1s linear infinite;
+        animation: spin 1s linear infinite
+    }
+
+    @@-webkit-keyframes spin {
+        0% {
+            -webkit-transform: rotate(0)
+        }
+
+        100% {
+            -webkit-transform: rotate(360deg)
+        }
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0)
+        }
+
+        100% {
+            transform: rotate(360deg)
+        }
+    }
+
+    .row_new {
+        margin-left: 10px;
+        margin-right: 10px
+    }
+
+    #logo img {
+        height: auto;
+        padding-left: 3px;
+        width: 40px
+    }
+
+    body:not(.menu-on-top).desktop-detected {
+        min-height: 907px !important
+    }
+
+
+
+
+    .tooltip-inner {
+        max-width: 700px !important;
+        height: auto;
+        font-size: 14px;
+        padding: 10px 15px 10px 20px;
+        background: #223f73;
+        color: #fff;
+        border: 1px solid #737373;
+        text-align: left;
+    }
+</style>
+<head>
+    <link href="~/assets/css/jquery-ui.css" rel="stylesheet" />
+    <link href="~/assets/css/stylecommon.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/assets/js/jquery/jquery.min.js"></script>
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <script src="~/swalJs/sweetalert.min.js"></script>
+    <script src="~/swalJs/swal-forms.js"></script>
+    <script src="~/Content/assets/js/libs/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/assets/js/additional-methods.min.js"></script>
+</head>
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        alert(@ViewBag.ErrorMessage);
+    </script>
+}
+
+@if (Convert.ToInt32(TempData["EduqualificationSave"]) == 1)
+{
+    <script>
+        swal("Success!", "Education Qualification Details has been successfully saved.", "success");
+    </script>
+}
+<section class="cus-background">
+    <div class="section-body contain-lg">
+        <div class="col-lg-12 col-md-12 cus-heading">
+            <h3>WEIGHTAGE/ महत्व </h3>
+        </div>
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="Case Details-tab">
+            <form class="form form-validate" id="formLogin3" autocomplete="off" action="@Url.Action("Weightage", "Account")" onsubmit="startPreloader();" accept-charset="utf-8" method="post" enctype="multipart/form-data">
+                @Html.ValidationSummary(true)
+
+                <div class="card c-shadow" style="padding:1rem;">
+                    <span style="color: #223f73;font-weight: 700;text-align: center;margin-bottom: 5px;">Maximum weightage of 10 Marks towards merit will be given to the students, therefore answer these questions very carefully.<br /> मेरिट के प्रति 10 मार्क्स का अधिकतम वेटेज छात्रों को दिया जाएगा, इसलिए इन प्रश्नों का उत्तर बहुत ध्यान से दें। </span>
+                    <div class="top-section">
+
+                        <div class="row cus-firstrow">
+                            <div class="col-md-9 form-group">
+                                <span><strong class="cus-no">1.1</strong>&nbsp;Are you a widow or ward of widow?</span><span style="color: red;"><strong>*</strong></span>  <br />
+                                <span class="badge badge-success"><strong>(5 Marks)</strong></span>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                @Html.RadioButtonFor(model => model.Widow_Ward, "Yes", new { @required = "required" })  Yes &nbsp;
+                                @Html.RadioButtonFor(model => model.Widow_Ward, "No", new { @required = "required" })  No
+                                @Html.ValidationMessageFor(model => model.Widow_Ward, "", new { @class = "validation" })
+
+                            </div>
+                        </div>
+                        <div class="row cus-firstrow">
+                            <div class="col-md-9 form-group">
+                                <span><strong class="cus-no">1.2</strong>&nbsp;Are you Orphan? </span><span style="color: red;"><strong>*</strong></span>  <br />
+                                <span class="badge badge-success"><strong>(5 Marks)</strong></span>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                @Html.RadioButtonFor(model => model.Orphan, "Yes", new { @required = "required" })  Yes &nbsp;
+                                @Html.RadioButtonFor(model => model.Orphan, "No", new { @required = "required" })  No
+                                @Html.ValidationMessageFor(model => model.Orphan, "", new { @class = "validation" })
+
+                            </div>
+                        </div>
+                        <div class="row cus-firstrow">
+                            <div class="col-md-9 form-group">
+                                <span><strong class="cus-no">2.</strong>&nbsp;Are you Applying for Gram Panchayat Weightage? </span><span style="color: red;"><strong>*</strong></span>  <br />
+                                <span class="badge badge-success"><strong>(5 Marks)</strong></span>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                @Html.RadioButtonFor(model => model.Panch_Weightage, "Yes", new { @id = "panchYes", @required = "required" })  Yes &nbsp;
+                                @Html.RadioButtonFor(model => model.Panch_Weightage, "No", new { @id = "panchNo", @required = "required" })  No
+                                @Html.ValidationMessageFor(model => model.Panch_Weightage, "", new { @class = "validation" })
+
+                            </div>
+                            <div class="col-md-2 form-group">
+                                @Html.DropDownListFor(model => model.Panch_Weightage_Village, new SelectList(ViewBag.Villages as System.Collections.IEnumerable, "Value", "Text"),
+                    "--Please Select Village--", new { id = "PanchWeightageVillage", @class = "form-control input-shadow", @style = "display: none;" })
+                            </div>
+                        </div>
+                        @if (Session["Verificationstatus"].ToString() == "" || Session["Verificationstatus"].ToString() == "R")
+                        {
+                            <div class="col-xs-12 text-right cus-registerbtn">
+                                <button class="btn btn-primary c-shadow-1" id="btnWeightage" type="submit"><i class="fa fa-save"></i>&nbsp;Save & Next</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="outer-loader" style="display: none;">
+        <div class="loader-img loader" style="display: none;"></div>
+    </div>
+</section>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+
+        // prevent form submit from console window
+        //$("#formLogin3").submit(function (e) {
+        //    alert('submit intercepted');
+        //    stopPreloader();
+        //    e.preventDefault(e);
+        //});
+
+
+        var ispanch = '@Model.Panch_Weightage';
+
+        if (ispanch == 'Yes') {
+            $("#PanchWeightageVillage").prop("required", true);
+            $("#PanchWeightageVillage").removeAttr("style");
+             $("#panchYes").change();
+        }
+
+        $("[rel=tooltip]").tooltip({ html: true });
+        // bar progress
+        var MaxPages = '@Session["MaxPage"]';
+var currentPage = '@Session["currentPage"]';
+for (var i = 0; i < parseInt(MaxPages); i++) {
+    if ((i + 1) != currentPage) $("#tablist > li:eq(" + i + ")").addClass('done');
+    else $("#tablist > li:eq(" + i + ")").addClass('current');
+}
+for (i = 8; i > MaxPages; i--) {
+    $("#tablist > li:eq(" + (i - 1) + ")>a").attr("href", "#");
+        }
+
+        $(document).on("keyup", "#HaryanaRuralAreaSchool", function () {
+            var userinput = this.value;
+            var pattern = /^[a-zA-Z0-9\.\,\s\/\#]*$/i
+
+            if (!pattern.test(userinput)) {
+                swal('warning', 'Only Alphabet,Number, space, comma, dot, slash(/), # allowed', 'warning');
+                this.value = this.value.replace(/[^a-z\s]/g, '');
+                return false;
+            }
+        });
+
+        $('input:radio[name="IsRuralArea"]').on('change', function () {
+
+            var isrural = $(this).val();
+            if (isrural == "Yes") {
+                $('#HaryanaRuralAreaSchool').attr('required', 'required');
+                $('#ruraladdrssspan').show();
+                $('#HaryanaRuralAreaSchool').removeAttr('readonly');
+            }
+            else {
+                $('#HaryanaRuralAreaSchool').removeAttr('required');
+                $('#ruraladdrssspan').hide();
+                $('#HaryanaRuralAreaSchool').val('');
+                $('#HaryanaRuralAreaSchool').attr('readonly', 'readonly');
+
+            }
+        });
+
+        $(document).on("change", "#panchYes", function () {
+            var radioVal = $("#panchYes").val();
+            if (radioVal == "Yes") {
+                $("#PanchWeightageVillage").prop("required", true);
+                $("#PanchWeightageVillage").removeAttr("style");
+            }
+        });
+        $(document).on("change", "#panchNo", function () {
+            var radioVal = $("#panchNo").val();
+
+            if (radioVal == "No") {
+                $("#PanchWeightageVillage").removeAttr("required");
+                $("#PanchWeightageVillage").css("display", "none");
+            }
+        });
+
+        // disable enter as submit button
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+
+
+    function startPreloader() {
+        $(".loader").css("display", "block");
+        $(".outer-loader").css("display", "block");
+    }
+    function stopPreloader() {
+
+        $(".loader").css("display", "none");
+        $(".outer-loader").css("display", "none");
+    }
+</script>
+<script type="text/javascript" language="Javascript">
+    history.go(1);
+</script>
+
+
+@if (Session["Verificationstatus"].ToString() == "F" )
+{
+
+    <script>
+        $('#home').removeClass('active');
+        $('#home').addClass('disabledbutton');
+    </script>
+}

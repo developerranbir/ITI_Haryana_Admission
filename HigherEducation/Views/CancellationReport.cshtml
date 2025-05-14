@@ -1,0 +1,840 @@
+﻿@{
+
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Cancellation Report</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/sweetalert.css" rel="stylesheet" />
+    <link href="../assets/css/stylesearch.css" rel="stylesheet" />
+    <link href="../assets/css/stylehome.css" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/jquery-3.5.1.js"></script>
+    <script src="../assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../assets/dataTable/dataTables/jquery.dataTables.min.js"></script>
+    <script src="../assets/js/popperjs/popper.min.js"></script>
+    @*<script src="../assets/js/moment-with-locales.min.js"></script>*@
+    <script src="../assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../scripts/sweetalert.min.js"></script>
+    <link href="../assets/css/all.css" rel="stylesheet" />
+    <link href="../assets/css/stylereport.css" rel="stylesheet" />
+    <link href="../assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="../assets/dataTable/dataTables/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="../assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/dataTables.buttons.min.js"></script>
+    <script src="../assets/dataTable/dataTables/buttons.html5.min.js"></script>
+    <script src="../assets/dataTable/dataTables/jszip.min.js"></script>
+    <script src="../assets/dataTable/dataTables/pdfmake.min.js"></script>
+    <script src="../assets/dataTable/dataTables/vfs_fonts.js"></script>
+    <script src="../assets/dataTable/dataTables/buttons.print.min.js"></script>
+
+    <style type="text/css">
+        .cus-grid-table {
+            height: 100%;
+            overflow: auto;
+            box-shadow: 0px 0px 5px 0px #ccc;
+            padding: 1rem;
+            margin-bottom: 5%;
+        }
+
+        #cover {
+            /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+            background-color: rgba(178, 0, 255, 0.81);
+            position: fixed;
+            top: 0px;
+            bottom: 0px;
+            height: 100%;
+            width: 100%;
+            z-index: 100000;
+        }
+
+            #cover i {
+                /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+                margin-left: 50%;
+                margin-top: 50vh;
+            }
+
+        .btn:disabled {
+            opacity: 0.2 !important;
+        }
+
+        .card-counter {
+            box-shadow: 4px 4px 2px -1px rgba(0,0,0,0.4);
+            margin: 5px;
+            padding: 10px 10px;
+            background-color: #fff;
+            height: 75px;
+            border-radius: 5px;
+            transition: .3s linear all;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+            .card-counter:hover {
+                box-shadow: 4px 4px 20px #DADADA;
+                transition: .3s linear all;
+            }
+
+            .card-counter.primary {
+                /*background-color: #007bff;*/
+                background: linear-gradient(to right, #0d47a1, #1976d2 99%) !important;
+                background: -webkit-gradient(linear, left top, right top, from(#0d47a1), color-stop(99%, #1976d2)) !important;
+                color: #FFF;
+            }
+
+            .card-counter.danger {
+                background-color: #ef5350;
+                color: #FFF;
+            }
+
+            .card-counter.success {
+                background-color: #66bb6a;
+                color: #FFF;
+            }
+
+            .card-counter.info {
+                background: linear-gradient(to right, #4527a0, #5e35b1) !important;
+                background: -webkit-gradient(linear, left top, right top, from(#4527a0), to(#5e35b1)) !important;
+                color: #FFF;
+            }
+
+            .card-counter i {
+                font-size: 4em;
+                opacity: 0.5;
+                margin-top: -1px;
+            }
+
+            .card-counter .fa.fa-spinner {
+                font-size: 1.5em !important;
+                opacity: 0.5;
+            }
+
+            .card-counter .count-numbers {
+                position: absolute;
+                right: 30px;
+                top: 10px;
+                font-size: 28px;
+                display: block;
+                /*font-weight:800;*/
+                text-shadow: 10px 10px 0px 0px #333;
+            }
+
+            .card-counter .count-name {
+                position: absolute;
+                right: 30px;
+                top: 55px;
+                font-style: italic;
+                text-transform: capitalize;
+                opacity: 0.8;
+                display: block;
+                font-size: 12px;
+                /*font-weight: 700;*/
+            }
+
+        .cus-top-cards {
+            border: 1px solid #ccc;
+            padding: 0.8rem;
+            box-shadow: inset 0px 1px 8px 2px #a9a9a9;
+        }
+
+        button.dt-button, div.dt-button, a.dt-button {
+            padding: 0.01em 0.5em !important;
+            font-size: x-large;
+        }
+
+        .modalBackground {
+            background-color: rgb(192,234,255);
+            filter: alpha(opacity=70);
+            opacity: 0.7;
+            z-index: 100 !important;
+        }
+
+        .modalPopup {
+            background-color: #ffffff;
+            border-width: 3px;
+            border-style: solid;
+            border-color: Gray;
+            padding: 3px;
+            /*width: 250px;*/
+            z-index: 100;
+        }
+
+        .btnPop {
+            background-color: #033280;
+            color: White;
+            font-size: 12px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+
+        table {
+            width: 100% !important;
+            font-size: small;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#cover").fadeOut();
+            $("#ddlUGPG").on('change', function () {
+                getCollegeList();
+            });
+
+            $("#ddlCollege").on('change', function () {
+                getCourseListArPerCollege($(this).val());
+            });
+
+            $('#cancelModal').on('hidden.bs.modal', function () {
+                removeImageFromControl('CandidateApp');
+            });
+
+        });
+        function removeImageFromControl(element) {
+
+            $('#'+element).attr('src', "../assets/images/no-img.png").show();
+
+            $('#'+element+'_PDF').attr('src', 'about:blank').hide();
+
+            $('#' + element + '_PDF > p > a').attr('href', 'about:blank');
+
+
+
+        }
+       var url1 = '@Url.Action("GetSectionList", "Reports")';
+        function getSectionListAsPerCourse(courseId, collegeId) {
+            $("#cover").fadeIn();
+            var dataToSend = {};
+            dataToSend.CollegeId = $("#ddlCollege").val();
+            dataToSend.CourseId = $("#ddlCourse").val();
+
+            $.ajax({
+                url: url1,
+                type: 'POST',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(dataToSend),
+                success: function (data) {
+                    var ListOfSections = JSON.parse(data);
+                    $("#ddlSection").empty();
+                    $("#ddlSection").append(`<option value='0'>Please select section</option>`);
+                    $.each(ListOfSections.Table, function (i) {
+                        $("#ddlSection").append(`<option value='` + ListOfSections.Table[i].SectionId + `'>` + ListOfSections.Table[i].sectionName + `</option>`);
+                    })
+                    $("#cover").fadeOut();
+                },
+                error: function (jqXHR, exception) {
+
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert("Error: " + msg);
+                    $("#cover").fadeOut("slow");
+                }
+            })
+        }
+
+        var url2 = '@Url.Action("GetCollegeListUGPG", "Reports")';
+         function getCollegeList() {
+            $("#cover").fadeIn();
+             var datatosend = {}
+             if ($("ddlUGPG").val() != '')
+                 datatosend.UGPG = $("#ddlUGPG").val();
+             else {
+                 swal('error', 'select PG or UG Type');
+             }
+             $.ajax({
+
+                url: url2,
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                 dataType: 'json',
+                data:datatosend,
+                success: function (data)
+                {
+                var ListOfColleges = JSON.parse(data);
+
+                    $("#ddlCollege").empty();
+                    $("#ddlCollege").append(`<option value=''>Please select college</option>`);
+
+                    $.each(ListOfColleges, function (i) {
+                        $("#ddlCollege").append(`<option value='` + ListOfColleges[i].collegeid + `'>` + ListOfColleges[i].collegename + `</option>`);
+                    });
+                      var test = '@Session["UserId"]';
+                    if (test != 'dhepkl' && test!='')
+                    {
+                            $("#ddlCollege").val('@Session["collegeId"]');
+                            $("#ddlCollege").change();
+                    }
+                $("#cover").fadeOut();
+                },
+                error: function (jqXHR, exception) {
+
+                     var msg = '';
+                     if (jqXHR.status === 0) {
+                         msg = 'Not connect.\n Verify Network.';
+                     } else if (jqXHR.status == 404) {
+                         msg = 'Requested page not found. [404]';
+                     } else if (jqXHR.status == 500) {
+                         msg = 'Internal Server Error [500].';
+                     } else if (exception === 'parsererror') {
+                         msg = 'Requested JSON parse failed.';
+                     } else if (exception === 'timeout') {
+                         msg = 'Time out error.';
+                     } else if (exception === 'abort') {
+                         msg = 'Ajax request aborted.';
+                     } else {
+                         msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                     }
+                     alert("Error: " + msg);
+                     $("#cover").fadeOut("slow");
+                 }
+             })
+         }
+
+       var url3 = '@Url.Action("GetCourseListUGPG", "Reports")';
+        function getCourseListArPerCollege(collegeId) {
+            $("#cover").fadeIn();
+            var dataToSend = {};
+            dataToSend.collegeId = $("#ddlCollege").val();
+            if ($("ddlUGPG").val() != '')
+            {
+                dataToSend.UGPG = $("#ddlUGPG").val();
+                DOC_UGPG = $("#ddlUGPG").val();
+            }
+            else
+            {
+                swal('error', 'select PG or UG Type')
+            }
+            $.ajax({
+            //url: "/higher/Account/getdata",
+            url: url3,
+            type: 'get',
+            //type: 'POST',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: dataToSend,
+            success: function (data)
+            {
+                var ListOfCourses = JSON.parse(data);
+                $("#ddlCourse").empty();
+                $("#ddlCourse").append(`<option value='0'>Please select course</option>`);
+                $.each(ListOfCourses, function (i) {
+                    $("#ddlCourse").append(`<option value='` + ListOfCourses[i].courseid + `'>` + ListOfCourses[i].name+`</option>`);
+                })
+                $("#cover").fadeOut();
+                },
+            error: function (jqXHR, exception) {
+
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert("Error: " + msg);
+                    $("#cover").fadeOut("slow");
+                }
+            })
+        }
+        var DOC_UGPG = '';
+        var url5 = '@Url.Action("d_getCancelAppDoc", "Reports")';
+        function getDoc(regid)
+        {
+            $("#cover").fadeIn();
+              var dataToSend = {};
+            dataToSend.RegId = regid;
+            if ($("ddlUGPG").val() != '' && DOC_UGPG !='')
+                dataToSend.UGPG = DOC_UGPG;
+            else {
+                swal('error', 'select PG or UG Type');
+                return false;
+            }
+
+            $.ajax({
+            //url: "/higher/Account/getdata",
+            url: url5,
+            //type: 'get',
+            type: 'POST',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify(dataToSend),
+            success: function (data)
+            {
+                if (data == "1" || data == "{}" || data == "{ \"Table\": [] }") {
+                        window.location.replace('@Url.Action("Error", "Account")');
+                        return false;
+                    }
+                var DocumentObject = JSON.parse(data);
+                //console.log(ListOfCourses);
+                addImageToControl('CandidateApp', DocumentObject.Table[0].docs);
+                $("#cancelModal").modal('show')
+                $("#cover").fadeOut();
+                },
+            error: function (jqXHR, exception) {
+
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert("Error: " + msg);
+                    $("#cover").fadeOut("slow");
+                }
+            })
+        }
+        var MeritListSelected;
+        var CollegeNameSelected;
+        var SectionNameSelected;
+        function getData() {
+
+            if ($("#ddlCollege").val() == "" || $("#ddlUGPG").val() == 0 )//|| $("#ddlCourse").val()==0 || $("#ddlSection").val()==0 || $("ddlMerit").val() == 0)
+            {
+                    swal('Error!', 'Please Select Admission Type and College ', 'error'); return;
+            }
+            $("#cover").fadeIn();
+             var dataToSend = {};
+            dataToSend.CollegeId = $("#ddlCollege").val();
+            dataToSend.CourseId = $("#ddlCourse").val();
+            dataToSend.SectionId = $("#ddlSection").val();
+            dataToSend.MeritId = $("#ddlMerit").val() == 14 ? "2" : $("#ddlMerit").val() == 8 ? "1" : "0";
+            if ($("ddlUGPG").val() != '')
+                dataToSend.UGPG = $("#ddlUGPG").val();
+            else {
+                swal('error', 'select PG or UG Type');
+                return false;
+            }
+            //Setting up for Header and Footer of All Exportable Files
+            CollegeNameSelected = $("#ddlCollege :selected").text();
+            SectionNameSelected = $("#ddlSection :selected").text();
+            MeritListSelected = $("#ddlMerit :selected");
+
+            $.ajax({
+                url: '@Url.Action("d_getCancellationReport", "Reports")',
+                type: 'POST',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(dataToSend),
+                success: function (data) {
+                    if (data == "1" || data =="{}") {
+                        window.location.replace('@Url.Action("Error", "Account")');
+                        return false;
+                    }
+                    var CompleteDataSet = JSON.parse(data);
+                    //var SumOfComfirmed = 0;
+                    //$.each(CompleteDataSet.Table[0], function (key, value) {
+                    //    $('#' + key).html(value == null ? '---' : value);
+
+                    //    switch (key) {
+                    //        case 'AIOCC': SumOfComfirmed += value!=null || value!=''?value:0 ;                  break;
+                    //        case 'HOGCC': SumOfComfirmed += value != null || value != '' ? value : 0;           break;
+                    //        case 'EWSC': SumOfComfirmed += value != null || value != '' ? value : 0;            break;
+                    //        case 'ESMFFGC': SumOfComfirmed += value != null || value != '' ? value : 0;         break;
+                    //        case 'SCC': SumOfComfirmed += value != null || value != '' ? value : 0;             break;
+                    //        case 'DSCC': SumOfComfirmed += value != null || value != '' ? value : 0;            break;
+                    //        case 'ESMFFDSCC': SumOfComfirmed += value != null || value != '' ? value : 0;       break;
+                    //        case 'BCAC': SumOfComfirmed += value != null || value != '' ? value : 0;            break;
+                    //        case 'BCBC': SumOfComfirmed += value != null || value != '' ? value : 0;            break;
+                    //        case 'ESMFFBCAC': SumOfComfirmed += value != null || value != '' ? value : 0;       break;
+                    //        case 'DAC': SumOfComfirmed += value != null || value != '' ? value : 0; break;
+                    //    }
+
+                    //});
+                    //$('#TotalSeatsC').text(SumOfComfirmed);
+                    var buttonsArray = [{ text: '<i class="fa fa-file-pdf" style="color:RED;"></i>', extend: 'pdfHtml5', title: 'Admission Cancelled Report', messageTop: 'College: ' + CollegeNameSelected , messageBottom: '', pagesize: 'legal', orientation: 'landscape', exportOptions: { columns: ':visible' } }, { text: '<i class="fa fa-file-excel" style="color:GREEN;"></i>', extend: 'excelHtml5', exportOptions: { columns: ':visible' } }, { text: '<i class="fa fa-file-csv" style="color:BLUE;"></i>', extend: 'csvHtml5', exportOptions: { columns: ':visible' } }, { text: '<i class="fa fa-print" style="color:Black;"></i>', extend: 'print', exportOptions: { columns: ':visible' } }];
+                    var columnsArray = [
+                        { data: null, title: '#', render: function (data, type, row, meta) { return meta.row + meta.settings._iDisplayStart + 1; } }
+                      ,{data:"Reg_id",title:"Registration ID"                              }
+                      ,{data:"rollNo",title:"XII Roll No."                              }
+                      ,{data:"applicant_name",title:"Name"              }
+                      ,{data:"applicant_father_name",title:"Father Name"}
+                      ,{data:"categoryname",title:"Category",visible:false    }
+                      ,{data:"Emailid",title:"Email ID"          ,visible:false    }
+                      ,{data:"mobileno",title:"Mobile"        ,visible:false    }
+                      ,{data:"collegename",title:"College Name"                    }
+                      ,{data:"courseName",title:"Course"                      }
+                      ,{ data: "SectionName", title: "Section" }
+                      ,{ data: "subjectCombination", title: "Subject Combination" }
+                      ,{data:"college_course_id",title:"college_course_id"    ,visible:false    }
+                      ,{data:"counselling",title:"Counselling Round"                    }
+                      ,{data:"CancelledBy",title:"Cancelled By"                    }
+                        , { data: "CancellationDate", title: "Cancellation Date" }
+                        , { data: "Remarks", title: "Remarks" }
+                        , {
+                            data: null,className:'dt-center', title: "Application", render: function (d, t, r) {
+                                return '<button class="btn btn-warning" onclick="getDoc(\'' + r["Reg_id"]+'\');return false;"><i class="fa fa-file-pdf"></i></button>';}                 }
+
+                    ] ;
+                    $("#tblMeritList1").DataTable({
+                        data: CompleteDataSet.Table,
+                        dom: 'Bfrti', buttons: buttonsArray,
+                        paging: false,
+                        destroy: true,
+                        //"order": [[1, "asc"]],
+                        columns:columnsArray,
+                        "footerCallback": function (row, data, start, end, display) {
+                            this.api().columns('.sum').every(function () {
+                                var column = this;
+
+                                var sum = column
+                                    .data()
+                                    .reduce(function (a, b) {
+                                        a = parseInt(a, 10);
+                                        if (isNaN(a)) { a = 0; }
+
+                                        b = parseInt(b, 10);
+                                        if (isNaN(b)) { b = 0; }
+
+                                        return a + b;
+                                    });
+
+                                $(column.footer()).html(sum);
+                            })
+                        }
+
+                    });
+
+
+
+                $("#cover").fadeOut("slow");
+                },
+                error: function (jqXHR, exception) {
+
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert("Error: " + msg);
+                    $("#cover").fadeOut("slow");
+                }
+        })
+        }
+        function addImageToControl(imgId, base64) {
+            var switch_on = base64.toString().substr(0, 5);
+            $("#" + imgId).show();
+            $("#" + imgId + '_PDF').hide();
+            switch (switch_on) {
+                case 'iVBOR':
+
+                    $("#" + imgId).attr("src", "data:image/png;base64," + base64);
+
+                    break;
+                case '/9j/4':
+
+                    $("#" + imgId).attr("src", "data:image/jpeg;base64," + base64);
+
+                    break;
+                case 'R0lGO':
+
+                    $("#" + imgId).attr("src", "data:image/gif;base64," + base64);
+
+                    break;
+                case 'JVBER':
+
+                    var newUrl = "data:application/pdf;base64," + base64;
+                    var divEl = document.getElementById(imgId + '_CONTAINER');
+                    var objEl = document.getElementById(imgId + '_PDF');
+                    objEl.data = newUrl;
+                    // Refresh the content
+                    divEl.innerHTML = divEl.innerHTML;
+                    $("#" + imgId).hide();
+                    $("#" + imgId + '_PDF').show();
+                    /*$("#" + imgId + '_PDF').children().remove();*/
+                    $("#" + imgId + '_PDF > p > a').attr("href", ("data:application/pdf;base64," + base64));
+                    break;
+                default:
+                    $("#" + imgId).attr("src", "../assets/images/no-img.png" + base64);
+
+
+            }
+        }
+    </script>
+
+</head>
+<body>
+
+    <div id="cover">
+        <i class="fa fa-spinner fa-spin" style="font-size:xx-large"></i>
+    </div>
+    <div class="container-fluid">
+        <div class="row main-banner">
+            <img src="../assets/images/banner.png" style="width: 100%" alt="online admission portal" />
+        </div>
+        <div class="row header">
+            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
+                <nav class="nav-menu d-none d-lg-block">
+                    <ul>
+                        @*<li><a href="../index.html">Home</a></li>
+                            <li class="active"><a href='@Url.Action("CollegeCourseWiseAppRec","Reports")'>College Course Wise Application Received</a></li>
+
+                            <li><a href="#">Search College</a></li>*@
+                    </ul>
+                </nav>
+                <!-- .nav-menu -->
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-2"></div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-8 text-center top-heading" style="margin-top: 5px;"><h4 class="heading">Admission Cancellation Report</h4></div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-2 text-right back-btn" style="margin-top: 5px;">
+                <a href="#" id="btnBack" class="btn btn-icon icon-left btn-primary" onclick="javascript: window.history.back();"><i class="fas fa-arrow-alt-circle-left"></i></a>
+            </div>
+        </div>
+
+    </div>
+    <div class="container-fluid">
+
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top: 20px;margin-bottom: 20px;">
+                <div class="cus-top-section">
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-12">
+                        <label for="ddlUGPG">Select Course <span class="" style="color:red;">*</span></label>
+                        <select id="ddlUGPG" class="form-control custom-select">
+                            <option value="0">Please select Admission Type</option>
+                            <option value="UG">UG</option>
+                            <option value="PG">PG</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-12">
+                        <label for="ddlCollege">Select College <span class="" style="color:red;">*</span></label>
+                        <select id="ddlCollege" class="form-control custom-select">
+                            @if (Session["UserId"] != null)
+                            {
+                                if (Session["UserId"].ToString() == "dhepkl")
+                                {
+                                    <option value="0">Select All</option>
+                                }
+                                else
+                                {
+                                    <option value="">Select College</option>
+                                }
+                            }
+
+                        </select>
+                    </div>
+
+                    @*<div class="col-lg-2 col-md-2 col-sm-4 col-12">
+                            <label for="ddlCourse">Select Course <span class="" style="color:red;">*</span></label>
+                            <select id="ddlCourse" class="form-control custom-select">
+                                <option value="0">Please select course</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-12">
+                            <label for="ddlSection">Select Section <span class="" style="color:red;">*</span></label>
+                            <select id="ddlSection" class="form-control custom-select">
+                                <option value="0">Please select section</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-12">
+                            <label for="ddlMerit">Select Merit list <span class="" style="color:red;">*</span></label>
+                            <select id="ddlMerit" class="form-control custom-select">
+                                <option value="0">Please select Merit List</option>
+                                <option value="8">First Merit List </option>
+                                <option value="14">Second Merit List</option>
+                            </select>
+                        </div>*@
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-12 cus-getbtn">
+                        <label style="margin-top:17px;"></label><br />
+                        <button class="btn btn-primary" onclick="getData(); return false;">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*OMGOMG*@
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 cus-merit-table" style="padding: 0;">
+            <h5 style="display:none;" id="meritHead8">First Round Merit List (Valid upto 8<sup>th</sup> October, 2020)</h5>
+            <h5 style="display:none;" id="meritHead14">Second Round Merit List (Valid upto 14<sup>th</sup> October, 2020)</h5>
+        </div>
+
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 cus-grid-table-down">
+
+            <div class="bg-white rounded shadow mb-5">
+
+                @*<ul id="myTab2" role="tablist" class="nav nav-tabs nav-pills with-arrow lined flex-column flex-sm-row text-center">
+                        <li class="nav-item flex-sm-fill">
+                            <a id="aioc" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true" class="nav-link text-uppercase font-weight-bold mr-sm-3 rounded-0 active">AIOC</a>
+                        </li>
+
+                    </ul>
+                    <div id="myTab2Content" class="tab-content">*@
+                <div id="tab1" role="tabpanel" aria-labelledby="aioc" class="tab-pane fade py-3 show active">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="tblMeritList1">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                @*</div>
+
+                    </div>*@
+            </div>
+            @*OMGOMG*@
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color:navy;color:white;">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Attached Document</h5>
+                            <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card">
+                                <div id="modalContent">
+                                    <a href="#" class="pop">
+                                        <img src="../assets/images/no-img.png" class="img-fluid img-thumbnail" id="CandidateApp" />
+                                    </a>
+                                    <div class="Object-Container" id="CandidateApp_CONTAINER">
+                                        <object data="about:blank" type="application/pdf" id="CandidateApp_PDF" style="width:100%;height:70vh;">
+                                            <p>
+                                                Your web browser doesn't have a PDF plugin.
+                                                Instead you can <a href="#">
+                                                    click here to
+                                                    download the PDF file.
+                                                </a>
+                                            </p>
+                                        </object>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12 text-center">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 text-left" style="margin-top:10px;">
+                            <div class="credits">
+                                <a>Site is technically designed, hosted and maintained by National Informatics Centre, Haryana</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <img src="../assets/images/nic-logo.png" style="width:100px;">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </footer>
+    <!-- End Footer -->
+</body>
+</html>
+
+

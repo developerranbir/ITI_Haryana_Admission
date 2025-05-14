@@ -1,0 +1,792 @@
+﻿
+@{
+    ViewBag.Title = "Institute-Trade Wise Applications";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/sweetalert.css" rel="stylesheet" />
+    <link href="../assets/css/stylesearch.css" rel="stylesheet" />
+    <link href="../assets/css/stylehome.css" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/jquery-3.5.1.js"></script>
+    <script src="../assets/js/jquery-ui/jquery-ui.min.js"></script>
+
+
+    <script src="../assets/js/popperjs/popper.min.js"></script>
+    @*<script src="../assets/js/moment-with-locales.min.js"></script>*@
+    <script src="../assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../scripts/sweetalert.min.js"></script>
+    <link href="../assets/dataTable/dataTables/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/jquery.dataTables.min.js"></script>
+    <link href="~/assets/css/styleverification.css" rel="stylesheet" />
+    <link href="~/assets/css/all.css" rel="stylesheet" />
+    <style>
+        .cus-grid-table {
+            height: 100%;
+            overflow: auto;
+            box-shadow: 0px 1px 8px 2px #a9a9a9;
+            padding: 1rem;
+            margin-bottom: 5%;
+        }
+
+        #cover {
+            /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+            background-color: rgba(33,63,113, 0.6);
+            position: fixed;
+            top: 0px;
+            bottom: 0px;
+            height: 100%;
+            width: 100%;
+            z-index: 100000;
+        }
+
+            #cover i {
+                /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+                margin-left: 50%;
+                margin-top: 50vh;
+            }
+
+        .btn:disabled {
+            opacity: 0.2 !important;
+        }
+
+        .card-counter {
+            box-shadow: 4px 4px 2px -1px rgba(0,0,0,0.4);
+            margin: 5px;
+            padding: 10px 10px;
+            background-color: #fff;
+            height: 75px;
+            border-radius: 5px;
+            transition: .3s linear all;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+            .card-counter:hover {
+                box-shadow: 4px 4px 20px #DADADA;
+                transition: .3s linear all;
+            }
+
+            .card-counter.primary {
+                /*background-color: #007bff;*/
+                background: linear-gradient(to top,#30cfd0 0,#330867 100%) !important;
+                background: -webkit-gradient(linear-gradient(to top,#30cfd0 0,#330867 100%)) !important;
+                color: #FFF;
+            }
+
+            .card-counter.danger {
+                background-color: #ef5350;
+                color: #FFF;
+            }
+
+            .card-counter.success {
+                background-color: #66bb6a;
+                color: #FFF;
+            }
+
+            .card-counter.info {
+                background: linear-gradient(to right, #667eea, #764ba2) !important;
+                background: -webkit-gradient(linear-gradient(to right, #667eea, #764ba2)) !important;
+                color: #FFF;
+            }
+
+            .card-counter i {
+                font-size: 3.5em;
+                opacity: 0.5;
+                margin-top: -1px;
+            }
+
+            .card-counter .fa.fa-spinner {
+                font-size: 1.5em !important;
+                opacity: 0.5;
+            }
+
+            .card-counter .count-numbers {
+                position: absolute;
+                right: 30px;
+                top: 10px;
+                font-size: 28px;
+                display: block;
+                /*font-weight:800;*/
+                text-shadow: 10px 10px 0px 0px #333;
+            }
+
+            .card-counter .count-name {
+                position: absolute;
+                right: 30px;
+                top: 55px;
+                font-style: italic;
+                text-transform: capitalize;
+                opacity: 0.8;
+                display: block;
+                font-size: 12px;
+                /*font-weight: 700;*/
+            }
+
+        .cus-top-cards {
+            border: 1px solid #ccc;
+            padding: 0.8rem;
+            box-shadow: inset 0px 1px 8px 2px #a9a9a9;
+        }
+
+        .modalBackground {
+            background-color: rgb(192,234,255);
+            filter: alpha(opacity=70);
+            opacity: 0.7;
+            z-index: 100 !important;
+        }
+
+        .modalPopup {
+            background-color: #ffffff;
+            border-width: 3px;
+            border-style: solid;
+            border-color: Gray;
+            padding: 3px;
+            /*width: 250px;*/
+            z-index: 100;
+        }
+
+        .btnPop {
+            background-color: #033280;
+            color: White;
+            font-size: 12px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+        .table td, .table th {
+            padding: 0.8rem !important;
+            font-size:13px !important;
+        }
+    </style>
+
+
+    <script>
+        var errorFn = function (jqXHR, exception)
+        {
+
+            var msg = '';
+            if (jqXHR.status === 0)
+            {
+                msg = 'Not connect.\n Verify Network.';
+            } else if (jqXHR.status == 404)
+            {
+                msg = 'Requested page not found. [404]';
+            } else if (jqXHR.status == 500)
+            {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'parsererror')
+            {
+                msg = 'Requested JSON parse failed.';
+            } else if (exception === 'timeout')
+            {
+                msg = 'Time out error.';
+            } else if (exception === 'abort')
+            {
+                msg = 'Ajax request aborted.';
+            } else
+            {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            alert("Error: " + msg);
+            $("#cover").fadeOut("slow");
+        };
+        $(document).ready(
+            function () {
+
+                //getCollegeList();
+                getDashboardData();
+               $("#ddlUGPG").on('change', function ()
+               {
+                    getCollegeList();
+                })
+                $("#ddlCollege").on('change', function ()
+                {
+                    getCourseListArPerCollege($(this).val());
+                })
+                $("#ddlUGPG").val("UG").change();
+
+            })
+
+        function getCollegeList()
+        {
+            $("#cover").fadeIn();
+
+             $.ajax({
+
+            url: '@Url.Action("GetCollegeListUGPG", "Reports")',
+            type: 'GET',
+                 contentType: 'application/json;charset=utf-8',
+                 data: {UGPG:$("#ddlUGPG").val()},
+            dataType: 'json',
+            success: function (data)
+            {
+                var ListOfColleges = JSON.parse(data);
+
+                $("#ddlCollege").empty();
+                $("#ddlCollege").append(`
+                @if (Session["UserId"].ToString() == "testcpkl" || Session["collegeId"].ToString() == "0")
+                {
+
+                                <option value   ="0">All Institutes</option>
+                }
+                else
+                {
+                <option value="-1">Please Select</option>
+                }
+                `);
+
+                $.each(ListOfColleges, function (i) {
+                    $("#ddlCollege").append(`<option value='` + ListOfColleges[i].collegeid + `'>` + ListOfColleges[i].collegename+`</option>`);
+                })
+
+                $("#cover").fadeOut();
+                 },
+                 error: errorFn
+        })
+        }
+
+        function getDashboardData() {
+              $("#cover").fadeIn();
+              var dataToSend = {};
+                dataToSend.collegeId = $("#ddlCollege").val();
+
+            $.ajax({
+            //url: "/higher/Account/getdata",
+            url: '@Url.Action("d_GetHeaderStateData", "Reports")',
+            type: 'get',
+            //type: 'POST',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: dataToSend,
+            success: function (data)
+            {
+                var responseJson = JSON.parse(data);
+                //$("#ddlCourse").empty();
+                //$("#ddlCourse").append(`<option value='0'>All Courses</option>`);
+                //$.each(ListOfCourses, function (i) {
+                //    $("#ddlCourse").append(`<option value='` + ListOfCourses[i].courseid + `'>` + ListOfCourses[i].name+`</option>`);
+                //})
+                var SumOfAll = 0;
+                $("#tblListOfCourse").DataTable({
+                    data: responseJson.Table,
+                    dom: 't',
+                    paging: false,
+                    destroy: true,
+                    "order": [[1, "desc"]],
+                    "footerCallback": function (row, data, start, end, display) {
+                        this.api().columns('.sum').every(function () {
+                            var column = this;
+
+                            var sum = column
+                                .data()
+                                .reduce(function (a, b) {
+                                    a = parseInt(a, 10);
+                                    if (isNaN(a)) { a = 0; }
+
+                                    b = parseInt(b, 10);
+                                    if (isNaN(b)) { b = 0; }
+
+                                    return a + b;
+                                },0);
+
+                            $(column.footer()).html(sum);
+                        })
+                    },
+                    columns: [
+
+                        { data: 'CourseName' },// render: function (d, t, r) { return d + ', ' + r["districtname"]; } },
+                        { data: 'Counts', className: 'dt-right' }//, title:'Preference No.'},
+
+                    ]
+                });
+                if (responseJson.Table1[0] != null || responseJson.Table2[0] != null) {
+                    //debugger;
+
+                    $.each(responseJson.Table1[0], function (key, value) {
+                        //console.log(key + ": " + value);
+                        if (key == 'AadhaarNo' && value !== null && value !== '')
+                        {
+                            $('#' + key).text('XXXXXXXX' + value.substr(8, 12));
+                        }
+                        else if (key == 'datetime')
+                        {
+                            var a = value.split('T')[0].split('-');
+                            //var d = new Date(a[2], a[1] - 1, a[0]);
+                            //var d = new Date(a);
+                            //var d = value;
+                            //var BDate = d.getDate() < 10 ? ('0' + d.getDate()) : d.getDate();
+                            //Tmonth = d.getMonth() + 1;
+                            //var BMonth = Tmonth < 10 ? ('0' + Tmonth) : Tmonth;
+                            $('#' + key).text(a[2] + '/' + a[1] + '/' + a[0] + ' ' + value.split('T')[1]);
+                        }
+                        else if (key == 'AllocatedforVerification' ||
+                            key == 'VerificationOK' ||
+                            key == 'ObjectionRaised' ||
+                            key == 'ObjectionRemovedbigint' ||
+                            key == 'ReAllocated' ||
+                            key == 'Unlocked'
+                            )
+                        {
+                            SumOfAll += value;
+
+                            $('#' + key).text(value == null || value == '' ? '---' : value);
+                        }
+                        else
+                        {
+                            $('#' + key).text(value == null || value == '' ? '---' : value);
+                        }
+                        console.log(key + ':' + value);
+                    });
+                    $.each(responseJson.Table2[0], function (key, value) {
+                        //console.log(key + ": " + value);
+                        if (key == 'AadhaarNo' && value !== null && value !== '') { $('#' + key).text('XXXXXXXX' + value.substr(8, 12)); }
+                        else if (key == 'DateData') {
+                            var a = value.split('T')[0].split('-');
+                            //var d = new Date(a[2], a[1] - 1, a[0]);
+                            //var d = new Date(a);
+                            //var d = value;
+                            //var BDate = d.getDate() < 10 ? ('0' + d.getDate()) : d.getDate();
+                            //Tmonth = d.getMonth() + 1;
+                            //var BMonth = Tmonth < 10 ? ('0' + Tmonth) : Tmonth;
+                            $('#' + key).text(a[2] + '/' + a[1] + '/' + a[0] + ' ' + value.split('T')[1]);
+                        }
+                        else if (key == 'AllocatedforVerification' ||
+                            key == 'VerificationOK' ||
+                            key == 'ObjectionRaised' ||
+                            key == 'ObjectionRemovedbigint' ||
+                            key == 'ReAllocated' ||
+                            key == 'Unlocked'
+                        ) {
+                            SumOfAll += value;
+                            $('#' + key).text(value == null || value == '' ? '---' : value);
+                        }
+                        else {
+                            $('#' + key).text(value == null || value == '' ? '---' : value);
+
+                        }
+                        console.log(key + ':' + value);
+                    });
+                    console.log($("#AllocatedforVerification").text().trim());
+                    console.log($("#ReAllocated").text().trim());
+                    var allo =parseInt($("#AllocatedforVerification").text().trim());
+                    var reallo =parseInt($("#ReAllocated").text().trim());
+
+                    $("#AllocatedforVerification").text( (isNaN(allo) ? 0 : allo) + (isNaN(reallo) ? 0 : reallo)  );
+                }
+                else
+                {
+                    $(".fa.fa-spinner").parent().html('---');
+                }
+                $("#cover").fadeOut();
+                //alert(SumOfAll);
+                },
+                error: errorFn
+        })
+        }
+        function getCourseListArPerCollege(collegeId)
+        {
+            $("#cover").fadeIn();
+            var dataToSend = {};
+            dataToSend.collegeId = $("#ddlCollege").val();
+            dataToSend.UGPG = $("#ddlUGPG").val();
+
+            $.ajax({
+            //url: "/higher/Account/getdata",
+            url: '@Url.Action("GetCourseListUGPG", "Reports")',
+            type: 'get',
+            //type: 'POST',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: dataToSend,
+            success: function (data)
+            {
+                var ListOfCourses = JSON.parse(data);
+                $("#ddlCourse").empty();
+                $("#ddlCourse").append(`<option value='0'>All Trades</option>`);
+                $.each(ListOfCourses, function (i) {
+                    $("#ddlCourse").append(`<option value='` + ListOfCourses[i].courseid + `'>` + ListOfCourses[i].name+`</option>`);
+                })
+                $("#cover").fadeOut();
+                },
+                error: function (jqXHR, exception) {
+
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert("Error: " + msg);
+                    $("#cover").fadeOut("slow");
+                }
+        })
+        }
+
+        function getData() {
+            $("#cover").fadeIn();
+             var dataToSend = {};
+                dataToSend.collegeId = $("#ddlCollege").val();
+                dataToSend.courseId = $("#ddlCourse").val();
+                dataToSend.UGPG = $("#ddlUGPG").val();
+
+            $.ajax({
+            //url: "/higher/Account/getdata",
+            url: '@Url.Action("GetCourseCollegeWiseReport", "Reports")',
+            type: 'get',
+            //type: 'POST',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: dataToSend,
+            success: function (data)
+            {
+                $("#tblListOfCourse").DataTable({
+                    data: JSON.parse(data),
+                    dom: 't',
+                    paging: false,
+                    destroy:true,
+                    "order": [[1, "desc"]],
+                    "footerCallback": function (row, data, start, end, display) {
+                        this.api().columns('.sum').every(function () {
+                            var column = this;
+
+                            var sum = column
+                                .data()
+                                .reduce(function (a, b) {
+                                    a = parseInt(a, 10);
+                                    if (isNaN(a)) { a = 0; }
+
+                                    b = parseInt(b, 10);
+                                    if (isNaN(b)) { b = 0; }
+
+                                    return a + b;
+                                },0);
+
+                            $(column.footer()).html(sum);
+                        })
+                    },
+                    columns: [
+
+                        { data: 'CourseName' },// render: function (d, t, r) { return d + ', ' + r["districtname"]; } },
+                        { data: 'ApplicantCount',className:'dt-right' }//, title:'Preference No.'},
+
+                    ]
+                });
+                $("#cover").fadeOut("slow");
+                },
+                error: errorFn
+        })
+        }
+    </script>
+
+</head>
+<body>
+
+    <div id="cover">
+        <i class="fa fa-spinner fa-spin" style="font-size:xx-large"></i>
+    </div>
+    <div class="container-fluid">
+        <div class="row main-banner">
+            <img src="../assets/images/banner.jpg" style="width: 100%" alt="online admission portal" />
+        </div>
+        <div class="row header">
+            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
+                <nav class="nav-menu d-none d-lg-block">
+                    <ul>
+                        @*<li><a href="../index.html">Home</a></li>
+                            <li class="active"><a href='@Url.Action("CollegeCourseWiseAppRec","Reports")'>College Course Wise Application Received</a></li>
+
+                            <li><a href="#">Search College</a></li>*@
+                    </ul>
+                </nav>
+                <!-- .nav-menu -->
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid cus-top-body">
+        <div class="row">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-1"></div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-10 text-center top-heading" style="margin-top: 5px;">
+                <h4 class="heading" style="display:block;">State Statistics</h4>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-1 text-right back-btn" style="margin-top: 5px;">
+                <a href="~/dhe/HEMenu.aspx" id="btnBack" class="btn btn-icon icon-left btn-primary"><i class="fas fa-arrow-alt-circle-left"></i></a>
+            </div>
+        </div>
+
+
+        <div class="cus-top-cards" style="display:block;">
+            <div class="row">
+                <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12">
+                    <div class="row">
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-file-alt"></i>
+                                <span class="count-numbers" id="TotalRegistration"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Total Registration</span>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-list"></i>
+                                <span class="count-numbers" id="TotalFinalSubmission"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Total Applications</span>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-cloud"></i>
+                                <span class="count-numbers" id="APICOUNT"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">API Data</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-users"></i>
+                                <span class="count-numbers" id="FamilyIDCount"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Family IDs</span>
+                            </div>
+                        </div>
+                        @*<div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
+            <div class="card-counter primary">
+                <i class="fa fa-id-card"></i>
+                <span class="count-numbers" id="AadhaarIDCount"><i class="fa fa-spinner fa-spin"></i></span>
+                <span class="count-name">Aadhaar IDs</span>
+            </div>
+        </div>*@
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-id-card"></i>
+                                <span class="count-numbers" id="CollegeCount">381</span>
+                                <span class="count-name">Participating Institutes</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-tag"></i>
+                                <span class="count-numbers" id="Reservation_CatCount"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Reservation Category</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-female"></i>
+                                <span class="count-numbers" id="TotaFemale"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Female Applicants</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="card-counter primary">
+                                <i class="fa fa-unlock-alt"></i>
+                                <span class="count-numbers" id="Unlocked"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Unlocked</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card-counter info">
+                                <i class="fa fa-check"></i>
+                                <span class="count-numbers" id="VerificationOK"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Verified</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card-counter info">
+                                <i class="fa fa-pen"></i>
+                                <span class="count-numbers" id="AllocatedforVerification"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Verification Pending</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" style="display:none;">
+                            <div class="card-counter info">
+                                <i class="fa fa-info"></i>
+                                <span class="count-numbers" id="DateData"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Date Data</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card-counter info">
+                                <i class="fa fa-info-circle"></i>
+                                <span class="count-numbers" id="ObjectionRaised"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Objection Raised</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card-counter info">
+                                <i class="fa fa-check-circle"></i>
+                                <span class="count-numbers" id="ObjectionRemovedbigint"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Objection Removed</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" style="display:none;">
+                            <div class="card-counter info">
+                                <i class="fa fa-backward"></i>
+                                <span class="count-numbers" id="ReAllocated"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Re-Allocated</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" style="display:none;">
+                            <div class="card-counter info">
+                                <i class="fa fa-info"></i>
+                                <span class="count-numbers" id="ReplyFiledbyCandidate"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Reply Filed by Candidate</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" style="display:none;">
+                            <div class="card-counter info">
+                                <i class="fa fa-file-excel"></i>
+                                <span class="count-numbers" id="NotSet"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="count-name">Forms Incomplete</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+
+            </div>
+        </div>
+        <div class="row cus-section-heading" style="margin-top:20px;">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-12 top-heading text-center">
+                <h4 class="heading">Trade-Insitute Wise Applications</h4>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-12 text-right" style="margin-top:10px; display:none;">
+                <i class="fa fa-clock" style="color:#F25D63;font-size:15px;"></i>
+                <span class="count-name" style="color:#F25D63;font-size:15px;">Last Updated</span>
+                <span class="count-numbers" id="datetime" style="font-size:15px;"><i class="fa fa-spinner fa-spin"></i></span>
+
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top: 20px;margin-bottom: 20px;">
+                <div class="cus-top-section">
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-12" style="display:none;">
+
+                        <label for="ddlUGPG">Select Admission Type</label>
+                        <select id="ddlUGPG" class="form-control custom-select">
+                            <option value="">Select Admission Type</option>
+                            <option value="UG">UG</option>
+                            <option value="PG">PG</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-12">
+                        <label for="ddlCollege">Select Institute</label>
+
+                        <select id="ddlCollege" class="form-control custom-select">
+
+                            @if (Session["UserId"].ToString() == "testcpkl" || Session["collegeId"].ToString() == "0")
+                            {
+                                //$("#ddlCollege").append(`<option value='0'>All Colleges</option>`);
+                                <option value="0">All Institutes</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-12">
+
+                        <label for="ddlCourse">Select Trade</label>
+                        <select id="ddlCourse" class="form-control custom-select">
+                            <option value="0">All Trades</option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-12 cus-getbtn">
+                        <label style="margin-top:17px;"></label></br>
+                        <button class="btn btn-primary" onclick="getData(); return false;">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding:1rem;">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 cus-grid-table">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="tblListOfCourse">
+                        <thead>
+                            <tr>
+                                <th>List of Trades</th>
+                                <th class="sum">No. of Applications Received</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal cus-modal cus-inner-modal" id="myModal2" role="dialog">
+            <div class="modal-dialog  modal-lg" style="margin-top: 1%;">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-body" id="mydatamodel2" style="display: block;">
+                        <div class="table-responsive cus-grid-table-three">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group input-group-sm mb-3">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12 text-center">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 text-left" style="margin-top:10px;">
+                            <div class="credits">
+                                <a>Site is technically designed, hosted and maintained by National Informatics Centre, Haryana</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <img src="/assets/images/nic-logo.png" style="width:100px;">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </footer>
+    <!-- End Footer -->
+</body>
+</html>
+
+

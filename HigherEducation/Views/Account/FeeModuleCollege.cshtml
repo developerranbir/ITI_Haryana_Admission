@@ -1,0 +1,684 @@
+﻿@*@model  IEnumerable<HigherEducation.Models.FeeModule>*@
+@model  HigherEducation.Models.FeeModule
+
+@{
+    int totalamount = 0;
+
+}
+
+@{
+    Layout = null;
+    //Layout = "~/Views/Shared/_LayoutFee.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Pay</title>
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/stylepayment.css">
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <link href="~/assets/css/all.css" rel="stylesheet" />
+    <link href="~/assets/css/jquery-ui.css" rel="stylesheet" />
+    <script src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <style>
+
+        .loader,
+        .outer-loader {
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        .outer-loader {
+            background: rgba(0, 0, 0, .3);
+            width: 100%;
+            height: 100%;
+            z-index: 999
+        }
+
+        .loader {
+            width: 69px;
+            height: 89px;
+            border: 1px solid #000;
+            margin: auto
+        }
+
+        .loader-img {
+            border: 15px solid #415bbb;
+            border-radius: 50%;
+            border-top: 15px solid #000;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0)
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg)
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .row_new {
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+        #logo img {
+            height: auto;
+            padding-left: 3px;
+            width: 40px
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        @@media print {
+            /*div{
+                  display:none;
+              }
+
+              #dvPrint,body
+              ,body > form
+              ,body > form > section,
+               body > form > section > div,
+              body > form > section > div > div:nth-child(2),
+              body > form > section > div > div:nth-child(2) > div,
+               body > form > section > div > div:nth-child(2) > div > div,
+               body > form > section > div > div:nth-child(2) > div > div >h5,
+               body > form > section > div > div:nth-child(2) > div > div > div
+              ,body > form > section > div > div:nth-child(2) > div > div * div
+              {
+                  display:block;
+              }*/
+            #dvIsSc, #cmd1 {
+                display: none;
+            }
+
+            .top-heading {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    @using (Html.BeginForm("FeeModuleCollege", "Account", FormMethod.Post, new { @enctype = "multipart/form-data", onsubmit = "startPreloader();" }))
+    {
+        @*<form runat="server" method="post" name="customerData" action="~/DHE/ccavRequestHandler.aspx">*@
+
+
+
+        @Html.HiddenFor(m => m.merchant_param3, new { @Value = Model.merchant_param3 })
+        @Html.HiddenFor(m => m.merchant_param5, new { @Value = Model.merchant_param5 })
+        @Html.HiddenFor(m => m.billing_state, new { @Value = Model.billing_state })
+
+
+        @Html.ValidationSummary(true)
+        <div class="container-fluid">
+            <div class="row main-banner">
+                <img src="../assets/images/banner.jpg" style="width: 100%" alt="online admission portal" />
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 top-heading text-center">
+            <div class="row">
+                <div class="col-lg-1 col-md-1 col-sm-1 col-12">
+                </div>
+                <div class="col-lg-10 col-md-10 col-sm-10 col-10">
+                    <h4 class="heading">Payment</h4>
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1 col-1 text-right back-btn" style="margin-top: 5px;">
+                    <a href="~/DHE/HEMenu.aspx" id="btnBack" class="btn btn-icon icon-left btn-primary"><i class="fas fa-arrow-alt-circle-left"></i></a>
+                </div>
+            </div>
+        </div>
+        if (Convert.ToString(Model.OrderStatus) == "Success")
+        {
+            <div class="row" style="margin-top:37px;">
+                <div class="col-md-12 form-group text-center">
+                    <span style="font-size:16px;font-weight:bold;color:red"><b>The candidate has given consent before the college authorities that the seat booked earlier stands cancelled and the candidate wish to book fresh seat through open counselling/merit list </b></span>
+                </div>
+            </div>
+        }
+
+
+        <section class="cus-background" style="margin-bottom:4%;">
+            <div class="container-fluid">
+                @if (Convert.ToString(Model.OrderStatus) != "Success")
+                {
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center top-heading" style="margin-top:1px;padding:0;">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-12 cus-heading">
+                                <h3>Candidate Detail</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card c-shadow">
+                            <div class="card-body">
+                                <div class="row cus-inner-border">
+                                    <div class="col-md-3 form-group b-3">
+                                        <label for="RegistrationId"><span class="english">Registration Id:</span></label>
+                                    </div>
+                                    <div class="col-md-3 form-group b-3">
+                                        @Html.TextBoxFor(model => model.RegistrationId, new { @class = "form-control input-shadow", @id = "RegistrationId", @readonly = true })
+                                        @*@Html.DisplayFor(model => model.RegistrationId, new { @class = "form-control" })*@
+                                    </div>
+                                    <div class="col-md-3 form-group b-3">
+                                        <label for="Rollno"><span class="english">Roll No:</span></label>
+                                    </div>
+                                    <div class="col-md-3 form-group b-3">
+                                        @Html.DisplayFor(model => model.Rollno, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-3 form-group b-3">
+                                        <label for="CandidateName"><span class="english">Candidate Name:</span></label>
+                                    </div>
+                                    <div class="col-md-3 form-group b-3">
+                                        @Html.DisplayFor(model => model.CandidateName, new { @class = "form-control" })
+                                    </div>
+
+                                    <div class="col-md-3 form-group b-3">
+                                        <label for="CollegeName"><span class="english">College:</span></label>
+                                    </div>
+                                    <div class="col-md-3 form-group b-3">
+                                        @Html.DisplayFor(model => model.CollegeName, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-3 form-group b-3">
+                                        <label for="CourseName"><span class="english">Course:</span></label>
+                                    </div>
+                                    <div class="col-md-3 form-group b-3">
+                                        @Html.DisplayFor(model => model.CourseName, new { @class = "form-control" })
+                                    </div>
+
+                                    <div class="col-md-3 form-group b-3">
+                                        <label for="SubjectCombination"><span class="english">Subject Combination:</span></label>
+                                    </div>
+                                    <div class="col-md-3 form-group b-3">
+                                        @Html.DisplayFor(model => model.SubjectCombination, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-3 form-group b-3">
+                                        <label for="CategoryName"><span class="english">Student Category:</span></label>
+                                    </div>
+                                    <div class="col-md-3 form-group b-3">
+                                        @Html.DisplayFor(model => model.CategoryName, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-3 form-group b-3">
+                                        <label for="SeatAllocationCategory"><span class="english">Seat Allocation Category:</span></label>
+                                    </div>
+                                    <div class="col-md-3 form-group b-3">
+                                        @Html.DisplayFor(model => model.SeatAllocationCategory, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-3 form-group b-3">
+                                        <label for="SectionName"><span class="english">Section:</span></label>
+                                    </div>
+                                    <div class="col-md-9 form-group b-3">
+                                        @Html.DisplayFor(model => model.SectionName, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <span style="color:#492A7F;"><strong>a. You will be given Provisional Admission in this course, subject to the verification of your eligibility in this course by the College/Affiliating University. In case of any discrepancy, the college is authorized to cancel the Provisional Admission of the student.</strong></span><br />
+                            <span style="color:#492A7F;"><strong>b. The college is authorized to take the short payment, if any discrepancy, from the student at later stage as per Affiliating University/State Government norms.</strong></span><br />
+                        </div>
+                    </div>
+
+                }
+
+                @if (Model.IsSCcondition == "Y")
+                {
+                    <div id="dvConfirmSeat" style="display:none">
+                        <div class="row">
+                            <div class="col-md-12 form-group text-center">
+                                <input type="text" id="txtOtp" maxlength="4" onkeyup="javascript: return checknumbereonly(this);" placeholder="Please Enter OTP" /><br />
+                                <span id="errormsg" style="color:red"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 form-group text-center">
+                                <input type="button" id="btnSubmitOtp" onclick="javascript:return CheckOtp();" class="btn btn-success" value="Confirm Seat" />
+                                <input type="button" id="btnResendOtp" onclick="javascript:return SendOTP();" style="display:none" class="btn btn-info" value="Resend OTP" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group text-center">
+                            <input type="button" value="Sent OTP to Confirm Seat" id="btnconfirm" onclick="javascript:return SendOTP();" class="btn btn-danger" />
+                        </div>
+                    </div>
+                }
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center top-heading" style="padding:0;" id="paymentdetail">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12 cus-heading">
+                            <h3>Payment Detail</h3>
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.IsSCcondition == "N" || Model.IsSCcondition == "Y")
+                {
+                    <div id="dvIsSc">
+                        <div class="row">
+                            <div class="card c-shadow">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 form-group table-responsive">
+
+                                            <table class="table table-bordered table-hover table-striped" style="width:100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sub Head</th>
+                                                        <th>Fee</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.CandidateFee)
+                                                    {
+
+                                                        <tr>
+                                                            <td>
+                                                                @Html.DisplayFor(model => item.FeeSubHeadName, new { @class = "form-control" })
+
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(model => item.FeeAmountYearly, new { @class = "form-control" })
+                                                                @*@Html.TextBoxFor(m => item.FeeAmountYearly, new { @readonly = true })*@
+
+                                                                @{
+                                                                    totalamount += Convert.ToInt32(item.FeeAmountYearly);
+                                                                }
+                                                            </td>
+                                                        </tr>
+
+                                                    }
+                                                    <tr>
+                                                        <td>
+                                                            @Html.Label("Subject/Course Combination Fee")
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(model => model.SubjectCombinationFee, new { @class = "form-control" })
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+
+                                                <tfoot>
+                                                    <tr>
+                                                        <th style="color: #492A7F;">
+                                                            @Html.Label("Total Fee")
+                                                        </th>
+                                                        <th>
+                                                            @Html.TextBoxFor(m => m.TotalFee, new { @class = "form-control input-shadow alert alert-primary", @id = "totalamount", @readonly = true, @Value = Model.TotalFee })
+                                                        </th>
+                                                    </tr>
+                                                    @if (Model.CollegeType != "1")
+                                                    {
+                                                        <tr>
+                                                            <th style="color: #492A7F;">
+                                                                @Html.Label("Concession")
+                                                            </th>
+                                                            <th>
+                                                                @Html.TextBoxFor(m => m.Concession, new { @class = "form-control input-shadow alert alert-primary", @id = "Concession" })
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th style="color: #492A7F;">
+                                                                @Html.Label("Total Fee after Concession")
+                                                            </th>
+                                                            <th>
+                                                                @Html.TextBoxFor(m => m.PendingFee, new { @class = "form-control input-shadow alert alert-primary", @id = "PendingFee", @readonly = true })
+                                                            </th>
+                                                        </tr>
+                                                    }
+
+                                                    <tr>
+                                                        <th style="color: #492A7F;">
+                                                            @Html.Label("Fee Collected")
+                                                        </th>
+                                                        <th>
+                                                            @Html.TextBoxFor(m => m.Feetobepay, new { @class = "form-control input-shadow alert alert-primary", @id = "Feetobepay", @Value = Model.PendingFee })
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style="color: #492A7F;">
+                                                            @Html.Label("Balance Amount")
+                                                        </th>
+                                                        <th>
+                                                            <input type="text" class="form-control input-shadow alert alert-primary" id="balanceFee" readonly="readonly" />
+                                                            @*@Html.TextBoxFor(m => m.Feetobepay, new { @class = "form-control input-shadow alert alert-primary", @id = "Feetobepay", @Value = Model.PendingFee })*@
+                                                        </th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (Convert.ToString(Model.OrderStatus) != "Success")
+                        {
+                            <div class="row">
+                                <div class="col-md-12 form-group text-center cus-registerbtn">
+                                    <button class="btn btn-primary" type="submit"><i class="fa fa-credit-card"></i>&nbsp;Pay Cash</button>
+                                    <button class="btn btn-primary" type="button" onclick="PayLater();" id="btnPayLater"><i class="fa fa-credit-card"></i>&nbsp;Activate Concession for Online Payment</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                }
+
+            </div>
+        </section>
+        <div class="outer-loader" style="display: none;">
+            <div class="loader-img loader" style="display: none;"></div>
+        </div>
+        @*</form>*@
+    }
+
+    <script type="text/javascript" src="../assets/js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../assets/js/popperjs/popper.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap/Js/bootstrap.min.js"></script>
+    <script src="~/swalJs/sweetalert.min.js"></script>
+    <script src="~/swalJs/swal-forms.js"></script>
+    <script src="~/scripts/printThis.js"></script>
+    <script type="text/javascript">
+        var MaxPages = '@Session["MaxPage"]';
+        var currentPage = '@Session["currentPage"]';
+        $(document).ready(function () {
+            if ('@Model.CollegeType' == '1')
+            {
+             $('#Feetobepay').val(Math.round(@Model.PendingFee));
+            }
+
+            $('#cmd1').on('click', function () {
+                window.print();
+            })
+
+            $("input[name=incomeradio]").on("change", function () {
+                var selectedval = $(this).val();
+                if (selectedval == "Y") {
+                    $('#dvIncome').show();
+                    $('#dvIsSc').hide();
+                    $('#paymentdetail').hide();
+
+                }
+                else {
+                    $('#dvIncome').hide();
+                    $('#dvIsSc').show();
+                    $('#paymentdetail').show();
+
+                }
+            });
+
+            $(document).on("keyup", "#IncomeCertificate", function () {
+                if (/\D/g.test(this.value)) {
+                    this.value = this.value.replace(/\D/g, '');
+                    swal("Warning!", "Please enter only numeric value", "warning")
+                }
+            });
+
+             //
+             $('input[name="FullPart"]').prop('checked', false);
+
+            $(document).on("keyup", "#Concession", function () {
+                var totalfee =@Model.TotalFee;
+                var concession = $('#Concession').val();
+                if (parseInt(concession) >= 0) {
+
+                    if (parseInt(concession) > parseInt(totalfee)) {
+                        swal("Alert!", "The concession can not be more than the Total Fee", "warning");
+                        $('#Concession').val(0);
+                        $('#PendingFee').val(@Model.PendingFee);
+                        $('#Feetobepay').val(@Model.PendingFee);
+                    }
+                    else {
+                        var afterfee = parseInt(totalfee) - parseInt(concession);
+                        $('#PendingFee').val(afterfee);
+                        $('#Feetobepay').val(afterfee);
+                    }
+                }
+                else if (concession=="") {
+                        $('#PendingFee').val(@Model.PendingFee);
+                        $('#Feetobepay').val(@Model.PendingFee);
+                }
+
+            });
+
+        $(document).on("keyup", "#Feetobepay", function () {
+                var totalfee = $('#PendingFee').val();
+                var Feetobepay = $('#Feetobepay').val();
+                var feecollected = parseInt(totalfee) - parseInt(Feetobepay);
+                $('#balanceFee').val(feecollected);
+
+            });
+
+        });
+
+     function VerifyDocument(elem) {
+        startPreloader();
+
+        item = {
+            RegistrationId: '@Model.RegistrationId',
+            CollegeId :'@Model.merchant_param3',
+            CombinationId :'@Model.merchant_param5'
+        }
+
+          $.ajax({
+                  type: "POST",
+                  url: '@Url.Action("ConfirmSeatofSCCandidate", "Account")',
+                  data: "{item:" + JSON.stringify(item) + "}",
+                  contentType: "application/json; charset=utf-8",
+                  dataType: "json",
+                  success: function (data) {
+                      if (data == "1") {
+                          Unlockmsg();
+                      }
+
+                     stopPreloader();
+
+                  },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                     stopPreloader();
+
+                }
+          });
+
+
+        }
+
+
+   function PayLater() {
+        startPreloader();
+
+        item = {
+            RegistrationId: '@Model.RegistrationId',
+            CollegeId :'@Model.merchant_param3',
+            CombinationId :'@Model.merchant_param5',
+            Concession: $('#Concession').val()
+        }
+
+          $.ajax({
+                  type: "POST",
+                  url: '@Url.Action("PayLater", "Account")',
+                  data: "{item:" + JSON.stringify(item) + "}",
+                  contentType: "application/json; charset=utf-8",
+                  dataType: "json",
+                  success: function (data) {
+                      if (data == "1") {
+                          Concessionmsg();
+                      }
+                     stopPreloader();
+                  },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                     stopPreloader();
+                }
+          });
+
+
+        }
+
+function SendOTP() {
+        startPreloader();
+                  $('#errormsg').fadeIn();
+                  $('#errormsg').text('');
+           $.ajax({
+               type: "POST",
+               url: '@Url.Action("SendOTPConfirmSeat", "Account")',
+               data: "{}",
+               contentType: "application/json; charset=utf-8",
+               dataType: "json",
+               success: function (data) {
+                 stopPreloader();
+
+                   if (data == "1") {
+                       $('#dvConfirmSeat').show();
+                       $('#btnconfirm').hide();
+                       $('#btnResendOtp').show();
+                       $('#errormsg').text('OTP has been sent to your registered mobile no and email id');
+                   }
+                   else {
+                       swal("Alert!","Some issue to send OTP","warning");
+                   }
+               },
+               failure: function (data) {
+                 stopPreloader();
+
+                   swal('Error', 'Something went wrong', 'error');
+               }
+
+           });
+    };
+
+     function CheckOtp() {
+
+         var MobileOtp = $('#txtOtp').val();
+         $('#errormsg').fadeIn();
+
+        if (MobileOtp == "") {
+              $('#errormsg').text('Please Enter OTP..!');
+               $('#errormsg').delay(2000).fadeOut();
+            return;
+        }
+        startPreloader();
+
+            $.ajax({
+                  type: "POST",
+                  url: '@Url.Action("CheckOTPFee", "Account")',
+                  data: "{OTP:" + MobileOtp + "}",
+                  contentType: "application/json; charset=utf-8",
+                  dataType: "json",
+                  success: function (data) {
+                 stopPreloader();
+                      if (data == "0") {
+
+                          $('#errormsg').text('Invalid OTP..!');
+                          $('#errormsg').delay(3000).fadeOut();
+                          return;
+                      }
+                      else if (data == "1") {
+                          VerifyDocument();
+                      }
+
+                  },
+                failure: function (data) {
+                 stopPreloader();
+
+                    swal('Error', 'Something went wrong', 'error');
+                }
+
+            });
+    }
+      function Unlockmsg() {
+                    swal({
+            title: "Success",
+            text: "Seat has been confirmed successfully",
+            type: "success",
+            showCancelButton: false,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Ok",
+            closeOnConfirm: false
+                    },
+              function (isConfirm) {
+                if (isConfirm) {
+                   window.location.href = "@Url.Action("FeeReceiptCollege","Account")";
+                }
+                else {
+
+                }
+            });
+
+        }
+     function Concessionmsg() {
+                    swal({
+            title: "Success",
+            text: "Seat has been offered to student with concession, Now student have to pay fee online from their login.",
+            type: "success",
+            showCancelButton: false,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Ok",
+            closeOnConfirm: false
+                    },
+              function (isConfirm) {
+                if (isConfirm) {
+                   window.location.href = "/dhe/frmOfferingSeats.aspx";
+                }
+                else {
+
+                }
+            });
+
+        }
+    function startPreloader() {
+        $(".loader").css("display", "block");
+        $(".outer-loader").css("display", "block");
+
+    }
+    function stopPreloader() {
+
+        $(".loader").css("display", "none");
+        $(".outer-loader").css("display", "none");
+    }
+    </script>
+    @if (Model.IsSCcondition == "Y")
+    {
+        <script>
+            $('#dvIsSc').hide();
+            $('#paymentdetail').hide();
+        </script>
+    }
+    <script type="text/javascript" language="Javascript">
+        history.go(1); // disable the browser's back button
+    </script>
+</body>
+</html>

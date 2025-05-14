@@ -1,0 +1,600 @@
+﻿@{
+	Layout = null;
+}
+@{
+	ViewBag.Title = "SubjectConfiguration";
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+	<title>Subject Configuration</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<!-- Google font-->
+	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600" rel="stylesheet" />
+	<link href="../assets/css/all.css" rel="stylesheet" />
+	<link href="../Content/Js/sweetalert.css" rel="stylesheet" />
+	<link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="../assets/css/styleconfi.css" rel="stylesheet" />
+	<link href="../Content/DataTables11020/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+	<link href="../Content/DataTables11020/css/jquery.dataTables.min.css" rel="stylesheet" />
+	<style>
+		.loader,
+		.outer-loader {
+			display: inline-block;
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0
+		}
+
+		.outer-loader {
+			background: rgba(0, 0, 0, .3);
+			width: 100%;
+			height: 100%;
+			z-index: 999
+		}
+
+		.loader {
+			width: 69px;
+			height: 89px;
+			border: 1px solid #000;
+			margin: auto
+		}
+
+		.loader-img {
+			border: 15px solid #415bbb;
+			border-radius: 50%;
+			border-top: 15px solid #000;
+			width: 80px;
+			height: 80px;
+			-webkit-animation: spin 1s linear infinite;
+			animation: spin 1s linear infinite
+		}
+
+		@@-webkit-keyframes spin {
+			0% {
+				-webkit-transform: rotate(0)
+			}
+
+			100% {
+				-webkit-transform: rotate(360deg)
+			}
+		}
+
+		@@keyframes spin {
+			0% {
+				transform: rotate(0)
+			}
+
+			100% {
+				transform: rotate(360deg)
+			}
+		}
+
+		.row_new {
+			margin-left: 10px;
+			margin-right: 10px
+		}
+
+		#logo img {
+			height: auto;
+			padding-left: 3px;
+			width: 40px
+		}
+
+		body:not(.menu-on-top).desktop-detected {
+			min-height: 907px !important
+		}
+
+		#feetbl {
+			height: 500px;
+			overflow: scroll;
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<form>
+		<div class="container-fluid">
+			<div class="row main-banner">
+				<img src="../assets/images/banner.jpg" alt="Online Admission Portal" />
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center top-heading">
+				<div class="row">
+					<div class="col-lg-11 col-md-11 col-sm-11 col-11">
+						<h4>Subject Configuration</h4>
+					</div>
+					<div class="col-lg-1 col-md-1 col-sm-1 col-1 text-right back-btn" style="margin-top: 5px;">
+						<a href="~/HigherEducations/HEMenu.aspx" id="btnBack" class="btn btn-icon icon-left btn-primary"><i class="fas fa-arrow-alt-circle-left"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid cus-bg-div">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:center">
+				<label style="font-weight:bold"> College : </label>
+				@Session["CollegeName"]
+			</div>
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="row">
+					<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 cus-input-div">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 cus-labels">
+							<label class="cus-label" id="lblsession">Session<span style="color:red;"><strong>*</strong></span></label><br />
+							@Html.DropDownList("ddlSession", (IEnumerable<SelectListItem>)ViewBag.Sessionobj, "Please Select", new { id = "ddlSession", @class = "form-control", required = "required" })
+						</div>
+
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="display:none">
+						<label class="cus-label" id="lblcoursetype">Course Type<span style="color:red;"><strong>*</strong></span></label><br />
+						<select id="ddlCourseType" class="form-control"></select>
+
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 cus-input-div">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 cus-labels">
+							<label class="cus-label" id="lblcourse">Course Name<span style="color:red;"><strong>*</strong></span></label><br />
+							<select id="ddlCourse" class="form-control"></select>
+						</div>
+
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 cus-input-div">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 cus-labels">
+							<label class="cus-label" id="lblsection">Section<span style="color:red;"><strong>*</strong></span></label><br />
+							<select id="ddlSection" class="form-control"></select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-b-10" style="text-align:right;">
+				@*<input type="button" value="Add Subject Detail" id="btnAddSubject" class="btn btn-dark" />*@
+
+				<a href="#" id="btnAddSubject" class="btn icon-left btn-primary"><i class="fas fa-plus"></i>&nbsp;Add Subject Detail</a>
+			</div>
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 table-responsive" style="text-align:left">
+				<input type="hidden" id="totalseatscourse" />
+				<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for Subject.." title="Type Subject">
+				<table class="table table-bordered table-hover table-striped" id="feetbl">
+				</table>
+			</div>
+
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 top-section" style="text-align:center">
+				@*<input type="button" value="Save" id="btnFeeSave" class="btn btn-success" />*@
+				<a href="#" id="btnFeeSave" class="btn icon-left btn-success"><i class="fas fa-save"></i>&nbsp;Save</a>
+			</div>
+			<div class="outer-loader" style="display: none;">
+				<div class="loader-img loader" style="display: none;"></div>
+			</div>
+		</div>
+	</form>
+	<footer id="footer">
+		<div class="container">
+
+			<div class="credits">
+
+				Designed by <a href="#">National Informatics Center, Haryana</a>
+			</div>
+		</div>
+	</footer>
+	<script type="text/javascript" src="../assets/js/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="../Content/Js/sweetalert.min.js"></script>
+	<script type="text/javascript" src="../assets/js/popperjs/popper.min.js"></script>
+	<script type="text/javascript" src="../assets/js/bootstrap/Js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../Content/DataTables11020/js/dataTables.bootstrap.min.js"></script>
+	<script type="text/javascript" src="../Content/DataTables11020/js/jquery.dataTables.min.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+			$(document).on("change", ".checkvalidseat", function () {
+
+                if (parseInt($(this).val()) < 0) {
+
+                    $(this).val('');
+                    swal("Alert!", "Invalid seat value", "warning")
+                    $(this).focus();
+                }
+                else {
+                    var maxLength = 4;
+                    var textlen = maxLength - $(this).val().length;
+                    if (parseInt(textlen) < 0) {
+                        $(this).val('');
+                        swal("Alert!", "Maximum 4 digit allowed", "warning")
+                        $(this).focus();
+
+                    }
+                }
+
+			});
+
+			$(document).on("change", ".checkvalidfee", function () {
+                if (parseInt($(this).val()) < 0) {
+
+                    $(this).val('');
+                    swal("Alert!", "Invalid fee value", "warning")
+                    $(this).focus();
+                }
+                else {
+
+                    var maxLength = 6;
+                    var textlen = maxLength - $(this).val().length;
+                    if (parseInt(textlen) < 0) {
+                        $(this).val('');
+                        swal("Alert!", "Maximum 6 digit allowed", "warning")
+                        $(this).focus();
+
+                    }
+                }
+
+            });
+
+			//GetCourseType();
+            $('#ddlSession').on('change', function () {
+				GetCourse();
+
+            });
+            $('#ddlCourseType').on('change', function () {
+                if ($('#ddlSession :selected').val() == "") {
+
+                    swal('Alert', 'Please select session first to get course name', 'warning');
+                      $('#ddlCourseType').val('0');
+                    return;
+                }
+				GetCourse();
+			});
+
+			  $('#ddlCourse').on('change', function () {
+				GetSection();
+              });
+
+			  $('#ddlSection').on('change', function () {
+				SetSeats();
+              });
+
+
+			$(document).on("click", "#btnAddSubject", function () {
+				//validation
+				var course = $('#ddlCourse :selected').val();
+				var section = $('#ddlSection :selected').val();
+				if ($('#ddlSession :selected').val() == "") {
+
+					swal('Alert', 'Session required', 'warning');
+					return;
+				}
+				if (course == "0" || course == undefined) {
+
+					swal('Alert', 'Course required', 'warning');
+					return;
+				}
+				if (section == "0" || section == undefined) {
+
+					swal('Alert', 'Section required', 'warning');
+					return;
+				}
+				GetSubjectDetails();
+			});
+
+			$(document).on("click", "#btnFeeSave", function () {
+
+				//validation
+				var course = $('#ddlCourse :selected').val();
+				var section = $('#ddlSection :selected').val();
+				if ($('#ddlSession :selected').val() == "") {
+
+					swal('Alert', 'Session required', 'warning');
+					return;
+				}
+				if (course == "0" || course == undefined) {
+
+					swal('Alert', 'Course required', 'warning');
+					return;
+				}
+				if (section == "0" || section == undefined) {
+
+					swal('Alert', 'Section required', 'warning');
+					return;
+				}
+				startPreloader();
+				var Subjectlist = [];
+                var Item = {};
+                var totalcourseseat = $('#totalseatscourse').val();
+                var totalsubseat = 0;
+                var flg = "";
+                var flgcount = 0;
+				 //get cell values, instead of the header text.
+				$("#feetbl tr:not(:first)").each(function () {
+                    if ($(this).find(':nth-child(1)').find('input').is(':checked')) {
+
+                        totalsubseat = parseInt(totalsubseat) +parseInt($(this).find(':nth-child(3)').find('input').val())
+
+                        Item = {
+
+                            Subject_id: $(this).find(':nth-child(1)').find('input').val(),
+                            Subject_name: $(this).find(':nth-child(1)').text(),
+                            Fee: $(this).find(':nth-child(2)').find('input').val(),
+                            Seats: $(this).find(':nth-child(3)').find('input').val(),
+                            IsOptional: $(this).find(':nth-child(4)').find('input').is(':checked') ? 1 : 0,
+                            Sessionid: $('#ddlSession').val(),
+                            Courseid: $('#ddlCourse').val(),
+                            Sectionid: $('#ddlSection').val()
+
+                        };
+
+                        if (Item.Fee == "") {
+                            flg = flg + "Fee" + '\n';
+                            flgcount = 1;
+                        }
+
+                        if (Item.Seats == "") {
+                            flg = flg + "Seats" + '\n';
+                            flgcount = 1;
+
+                        }
+                        //if (Item.IsOptional == "") {
+                        //    flg = flg + "Is Optional" + '\n';
+                        //    flgcount = 1;
+                        //}
+
+
+							Subjectlist.push(Item);
+					}
+
+				});
+				if (Subjectlist.length === 0) {
+					swal('alert', 'Please select subject.!', 'warning');
+					stopPreloader();
+					return;
+                }
+                if (parseInt(totalcourseseat) < parseInt(totalsubseat)) {
+				   stopPreloader();
+                    swal('Alert', 'Total subject seat should be less/equal to Total course seat', 'warning');
+                    return;
+                }
+                if ( parseInt(flgcount) == 1) {
+                    swal('Alert', 'Please enter ' + flg + '', 'warning');
+				   stopPreloader();
+                    return;
+                }
+				 SaveData(Subjectlist);
+			});
+
+		});
+
+		function myFunction() {
+	  var input, filter, table, tr, td, i, txtValue;
+			 input = document.getElementById("myInput");
+		 filter = input.value.toUpperCase();
+		 table = document.getElementById("feetbl");
+		 tr = table.getElementsByTagName("tr");
+		 for (i = 0; i < tr.length; i++) {
+			td = tr[i].getElementsByTagName("td")[0];
+			if (td) {
+			  txtValue = td.textContent || td.innerText;
+	  if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		tr[i].style.display = "";
+	  } else {
+		tr[i].style.display = "none";
+	  }
+	}
+  }
+}
+		 function startPreloader() {
+		   $(".loader").css("display", "block");
+		   $(".outer-loader").css("display", "block");
+
+		   }
+		function stopPreloader() {
+
+		   $(".loader").css("display", "none");
+		   $(".outer-loader").css("display", "none");
+		   }
+		function GetCourse() {
+			$('#ddlCourse').empty();
+			$('#ddlCourse').append($("<option></option>").val(0).html('Select Course'));
+
+			$.ajax({
+				type: "GET",
+				url: '@Url.Action("GetCourseName", "SubjectConfiguration")',
+				contentType: "application/json;charset=utf-8",
+				data: { Sessionid: $('#ddlSession').val()},
+				dataType: "json",
+				success: function (data) {
+
+					   $.each(data, function (key, value) {
+						$('#ddlCourse').append($("<option></option>").val(value.Value).html(value.Text));
+					});
+				}
+				,
+				error: function (x, e) {
+					swal("Error");
+				}
+			});
+		}
+
+		  function GetSection() {
+			$('#ddlSection').empty();
+			$('#ddlSection').append($("<option></option>").val(0).html('Select Section'));
+
+			$.ajax({
+				type: "GET",
+				url: '@Url.Action("GetSection", "SubjectConfiguration")',
+				contentType: "application/json;charset=utf-8",
+				data: { Courseid: $('#ddlCourse').val(),Sessionid: $('#ddlSession').val() },
+				dataType: "json",
+				success: function (data) {
+					if (data == 500) {
+						swal('Alert', 'Something went wrong!! Please try again later.', 'error');
+					}
+					else if (data == 401) {
+						swal('Alert', 'Your Session for Current Login Destroyed. Please refresh this windows and login again', 'warning');
+					}
+					else if (data == 404) {
+						swal('Alert', 'Data not found.', 'warning');
+					}
+					else {
+						  $.each(data, function (key, value) {
+							  $('#ddlSection').append($("<option></option>").val(value.Value).html(value.Text));
+
+						  });
+
+					}
+				}
+				,
+				error: function (x, e) {
+					swal("Error");
+				}
+			});
+		}
+
+		 function GetSubjectDetails() {
+			 startPreloader();
+			$.ajax({
+				type: "GET",
+				url: '@Url.Action("GetSubjectFeeDetails", "SubjectConfiguration")',
+				contentType: "application/json;charset=utf-8",
+				data: {Courseid: $('#ddlCourse').val(),Sessionid: $('#ddlSession').val(),Sectionid:$('#ddlSection').val()},
+				dataType: "json",
+				success: function (data) {
+					  stopPreloader();
+
+					if (data == 500) {
+						swal('Alert', 'Something went wrong!! Please try again later.', 'error');
+					}
+					else if (data == 401) {
+						swal('Alert', 'Your Session for Current Login Destroyed. Please refresh this windows and login again', 'warning');
+					}
+					else if (data == 404) {
+						swal('Alert', 'Data not found.', 'warning');
+					}
+					else {
+						$('#feetbl').empty();
+						if ($('#feetbl thead>tr').length == 0) {
+						  $('#feetbl').append("<thead><tr><th>Select Subject</th><th>Fee</th><th>Seats</th><th>Optional Subject</th><th>Compulsory Subject</th></tr></thead>");
+						}
+						$('#feetbl').append("<tbody id=tbodyid>");
+						//success data
+						$.each(data, function (key, value) {
+
+							$('#tbodyid').append
+								("<tr id='"+value.subjectid+"'><td><input type='checkbox' onchange='Getseats(this)' "+value.subjectcheck+" value='" + value.subjectid + "' name='subjectChk[" + value.subjectid + "]'><span>"+value.subjectname+"</span></td>"
+									+ "<td><input type='number' class='form-control checkvalidfee' name='fee" + value.subjectid + "' value='" + value.fees_amount + "'></td>"
+									+"<td><input type='number' class='form-control checkvalidseat' name='seat" + value.subjectid + "' value='" + value.subject_seats + "'></td>"
+									+ "<td><input type='radio' name='optionalChk" + value.subjectid + "' value='1' "+value.isOptional+"></td>"
+									+"<td><input type='radio' name='optionalChk" + value.subjectid + "' value='2' "+value.compulsory_subject+"></td>"
+									+ "</tr > ")
+						});
+					}
+
+				}
+				,
+				error: function (x, e) {
+					swal("Error");
+				}
+			});
+		}
+
+			function SaveData(jdata) {
+				stopPreloader();
+				$.ajax({
+					type: "POST",
+					url: '@Url.Action("SaveSubjectFee", "SubjectConfiguration")',
+					//data: { Objsubjectfees: jdata },
+					//data:  JSON.stringify(jdata),
+					data: "{jdata:" + JSON.stringify(jdata) + "}",
+						contentType: "application/json; charset=utf-8",
+						dataType: "json",
+						success: function (data) {
+					if (data == 500) {
+						swal('Alert', 'Something went wrong!! Please try again later.', 'error');
+					}
+					else if (data == 401) {
+						swal('Alert', 'Your Session for Current Login Destroyed. Please refresh this windows and login again', 'warning');
+					}
+					else if (data == 404) {
+						swal('Alert', 'Data not found.', 'warning');
+					}
+					else {
+						swal('Alert',data[0].success,'success');
+
+							}
+						GetSubjectDetails();
+
+							},
+						error: function () {
+							alert('Failed');
+						}
+					})
+
+        }
+
+        function SetSeats()
+                   {
+				$.ajax({
+					type: "GET",
+					url: '@Url.Action("GetSeats", "SubjectConfiguration")',
+					contentType: "application/json;charset=utf-8",
+					data: { Courseid: $('#ddlCourse').val(), Sessionid: $('#ddlSession').val(), SectionId: $('#ddlSection').val() },
+					dataType: "json",
+					success: function (data) {
+						if (data == 500) {
+							swal('Alert', 'Something went wrong!! Please try again later.', 'error');
+						}
+						else if (data == 401) {
+							swal('Alert', 'Your Session for Current Login Destroyed. Please refresh this windows and login again', 'warning');
+						}
+						else if (data == 404) {
+							swal('Alert', 'Data not found.', 'warning');
+						}
+						else {
+                            $.each(data, function (key, value) {
+                                $('#totalseatscourse').val(value.totalseats);
+							});
+
+						}
+					}
+					,
+					error: function (x, e) {
+						swal("Error");
+					}
+				});
+        }
+
+        function Getseats(elem) {
+            var aa = $(elem);
+            if ($(elem).is(':checked')) {
+                aa.closest('td').next('td').next('td').find('input').val($('#totalseatscourse').val());
+
+            }
+            else {
+                aa.closest('td').next('td').next('td').find('input').val('');
+            }
+        }
+		 function GetCourseType() {
+            $('#ddlCourseType').empty();
+            $('#ddlCourseType').append($("<option></option>").val(0).html('-Please Select-'));
+
+            $.ajax({
+				type: "GET",
+				url: '@Url.Action("GetCourseType", "CourseCombination")',
+				data: { },
+			    dataType: "json",
+				contentType: "application/json;charset=utf-8",
+				success: function (data) {
+
+                    $.each(data, function (key, value) {
+                        $('#ddlCourseType').append($("<option></option>").val(value.Value).html(value.Text));
+                    });
+                },
+                error: function (x, e) {
+                    swal("Error");
+                }
+            });
+        }
+	</script>
+
+</body>
+
+</html>

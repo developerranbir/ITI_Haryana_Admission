@@ -1,0 +1,24 @@
+
+Log Entry : 8.03.23 AM 06 November 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.GetCombinationReport(String Sessionid, String Sectionid, String CourseId)
+Target Website - System.Web.Mvc.JsonResult GetCombinationReport(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 8.03.29 AM 06 November 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.GetCombinationReport(String Sessionid, String Sectionid, String CourseId)
+Target Website - System.Web.Mvc.JsonResult GetCombinationReport(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 12.49.56 PM 06 November 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.GetCombinationReport(String Sessionid, String Sectionid, String CourseId)
+Target Website - System.Web.Mvc.JsonResult GetCombinationReport(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------

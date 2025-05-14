@@ -1,0 +1,250 @@
+
+.main-banner img {
+    width: 100%;
+    border-bottom: 4px solid #223f73;
+}
+.back-btn .btn-info {
+    background-color: #F6822F !important;
+    border-color: #F6822F !important;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    font-family: "Montserrat", sans-serif;
+    cursor:pointer;
+}
+    .back-btn .btn-info:hover {
+        background-color: #223f73 !important;
+        border-color: #223f73 !important;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+    }
+    .cus-banner {
+        background: #D2E1CC;
+        padding: 0;
+    }
+.cus-banner-img2 img
+{
+    display: inline-block;
+}
+.cus-sub-heading span {
+    text-align: center;
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 16px;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: #F6822F;
+}
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #f6822f;
+    outline: 0;
+    box-shadow: none !important;
+    border: 1px solid #f6822f !important;
+}
+.cus-banner-img2 {
+    text-align: right;
+}
+.cus-navbar
+{
+    background: #D9EDBF;
+    height: 30px;
+}
+.cus-input-values input {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    height: 35px;
+}
+.cus-input-labels span {
+    font-weight: bold;
+    margin-bottom: 4px;
+    display: inline-block;
+}
+.cus-login-div {
+	background: #fff;
+	border: 1px solid #ddd;
+	margin-top: 4%;
+	padding: 0rem;
+	box-shadow: 0 0.46875rem 2.1875rem rgba(4, 9, 20, 0.03), 0 0.9375rem 1.40625rem rgba(4, 9, 20, 0.03), 0 0.25rem 0.53125rem rgba(4, 9, 20, 0.05), 0 0.125rem 0.1875rem rgba(4, 9, 20, 0.03);
+	min-height: 250px;
+}
+.cus-forgot-heading h2 {
+    color: #36B75A;
+    font-size: 26px;
+    margin-top: 0;
+    margin-bottom: 22px;
+    font-family: "Montserrat", sans-serif;
+}
+.cus-forgot-heading {
+	margin-bottom: 15px;
+}
+.cus-submit-bttn {
+    background: #3ac47d;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border: 1px solid;
+    border-color: #31a66a;
+    border-radius: 4px;
+    box-shadow: 0 0.125rem 0.625rem rgba(58, 196, 125, 0.4), 0 0.0625rem 0.125rem rgba(58, 196, 125, 0.5);
+    font-family: "Montserrat", sans-serif;
+}
+.cus-submit-bttn:hover 
+{
+    border: 1px solid;
+    background: #31a66a;
+    border-color: #31a66a;
+    box-shadow: 0 0.125rem 0.625rem rgba(58, 196, 125, 0.5), 0 0.0625rem 0.125rem rgba(58, 196, 125, 0.6);
+    }
+.cus-forgot-bttn {
+    background: #fc7c5f;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border: 1px solid;
+    border-color: #fc7c5f;
+    border-radius: 4px;
+    box-shadow: 0 0.125rem 0.625rem rgba(58, 196, 125, 0.4), 0 0.0625rem 0.125rem rgba(58, 196, 125, 0.5);
+    font-family: "Montserrat", sans-serif;
+}
+.cus-forgot-bttn:hover 
+{
+    border: 1px solid;
+    background: #fb6f50;
+    border-color: #fb6f50;
+    box-shadow: 0 0.125rem 0.625rem rgba(58, 196, 125, 0.5), 0 0.0625rem 0.125rem rgba(58, 196, 125, 0.6);
+    }
+.cus-inputs {
+    margin-bottom: 15px;
+}
+ .label-warning {
+    background-color: #f0ad4e;
+    margin-bottom: 10px;
+}
+.top-login {
+    margin-top: 1rem;
+}
+
+.homepage .login-box {
+    padding: 0rem;
+    background-color: #FFF;
+    float: inherit;
+    margin: auto;
+    -webkit-box-shadow: 0 10px 30px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 10px 30px 0 rgba(0,0,0,0.3);
+    border-radius: 4px;
+    margin-bottom: 5rem;
+}
+
+.login-box .title-box {
+    background-color: #223f73;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    text-align: center;
+    color: #FFF;
+}
+
+    .login-box .title-box h2 {
+        background: #223f73;
+        padding: 1rem;
+        font-size: 20px;
+        font-weight: 700;
+        color: #fff;
+        font-family: "Montserrat", sans-serif;
+    }
+
+    .login-box .title-box p {
+        font-size: 12px;
+        font-family: "Montserrat", sans-serif;
+    }
+
+.login-box .row{
+    margin: 0rem;
+    margin-top: 0.8rem;
+}
+.login-box .form-control::placeholder {
+    color: #999;
+    font-size: 12px;
+    font-family: "Montserrat", sans-serif;
+}
+.cus-bttns-div{
+    margin-bottom:1rem;
+    margin-top:1rem;
+}
+.cus-bttns-div .btn.btn-primary {
+    background-color: #223f73;
+    border: none;
+    color: white;
+    padding: 0.8rem 1.6rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+     font-size: 14px;
+    -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+    box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    font-family: "Montserrat", sans-serif;
+}
+    .cus-bttns-div .btn.btn-primary:hover {
+        background-color: #F6822F !important;
+        border-color: #F6822F !important;
+    }
+    .cus-bttns-div .btn.btn-danger {
+        background-color: #223f73;
+        border: none;
+        color: white;
+        padding: 0.8rem 1.6rem;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+        box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+        -webkit-border-radius: 5px 5px 5px 5px;
+        border-radius: 5px 5px 5px 5px;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+        font-family: "Montserrat", sans-serif;
+    }
+        .cus-bttns-div .btn.btn-danger:hover {
+            background-color: #F6822F !important;
+            border-color: #F6822F !important;
+        }
+#footer {
+    background: #223f73;
+    padding: 10px 0 10px 0;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    font-family: "Montserrat", sans-serif;
+}
+cus-sub-heading
+    #footer a {
+        color: #fff;
+    }
+@media only screen and (max-width: 640px)
+{
+    .cus-login-div {
+        margin: 0.6rem;
+    }
+}

@@ -1,0 +1,186 @@
+﻿@model HigherEducation.Models.ShiftAdmissionTrade
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ShiftAdmissionTrade</title>
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/stylepayment.css">
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <link href="~/assets/css/all.css" rel="stylesheet" />
+    <link href="~/assets/css/jquery-ui.css" rel="stylesheet" />
+    <script src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <link href="../Content/DataTables11020/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <style>
+
+        .loader,
+        .outer-loader {
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        .outer-loader {
+            background: rgba(0, 0, 0, .3);
+            width: 100%;
+            height: 100%;
+            z-index: 999
+        }
+
+        .loader {
+            width: 69px;
+            height: 89px;
+            border: 1px solid #000;
+            margin: auto
+        }
+
+        .loader-img {
+            border: 15px solid #415bbb;
+            border-radius: 50%;
+            border-top: 15px solid #000;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0)
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg)
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .row_new {
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+        #logo img {
+            height: auto;
+            padding-left: 3px;
+            width: 40px
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+    </style>
+</head>
+<body>
+    @using (Html.BeginForm("FeeModuleCollegePartial", "AdmissionFee", FormMethod.Post, new { @enctype = "multipart/form-data", onsubmit = "startPreloader();" }))
+    {
+        <div class="container-fluid">
+            <div class="row main-banner">
+                <img src="../assets/images/banner.jpg" style="width: 100%" alt="online admission portal" />
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 top-heading text-center" style="margin-top:37px">
+            <div class="row">
+                <div class="col-lg-1 col-md-1 col-sm-1 col-12">
+                </div>
+                <div class="col-lg-10 col-md-10 col-sm-10 col-10">
+                    <h4 class="heading">Shift Student Admission Trade</h4>
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1 col-1 text-right back-btn" style="margin-top: 5px;">
+                    <a href="~/DHE/HEMenu.aspx" id="btnBack" class="btn btn-icon icon-left btn-primary"><i class="fas fa-arrow-alt-circle-left"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 form-group b-3">
+                <label for="RegistrationId"><span class="english">Enter Student Registration Id:</span></label>
+            </div>
+            <div class="col-md-3 form-group b-3">
+                <input type="text" class="form-group" id="txtRegId" />
+            </div>
+            <div class="col-md-3 form-group b-3">
+                <input type="button" value="Go" id="btnSearch" class="btn btn-info" />
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 table-responsive">
+            <table class="table table-striped table-bordered table-hover" id="tblAdmissionDetail" style="width: 100%; display:none; border-collapse: collapse; font-size: small; padding: 1px 1px;">
+                <thead>
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Section</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    }
+</body>
+</html>
+<script type="text/javascript">
+    $(document).on("click", "#btnSearch", function () {
+        var regid = $('#txtRegId').val();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetAdmissionDetailForShift", "AdmissionFee")',
+            data: '{RegId:' + regid + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                var obj = jQuery.parseJSON(data);
+                if (obj.Table.length > 0) {
+                    $("#tblAdmissionDetail").DataTable({
+                        dom: 't',
+                        paging: false,
+                        sorting: false,
+                        destroy: true,
+                        data: (obj.Table),
+                        columns: [
+                            { data: 'FGRA_AppealRefId' },
+                            { data: 'ApplicationDate' },
+                            { data: 'AppealNo' },
+                        ]
+                    });
+                }
+                stopPreloader();
+
+            },
+            failure: function (data) {
+                swal('Error', 'Something went wrong', 'error');
+                stopPreloader();
+            }
+        });
+    });
+</script>
+<script type="text/javascript" src="../assets/js/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../assets/js/popperjs/popper.min.js"></script>
+<script type="text/javascript" src="../assets/js/bootstrap/Js/bootstrap.min.js"></script>
+<script src="~/swalJs/sweetalert.min.js"></script>
+<script src="~/swalJs/swal-forms.js"></script>
+<script type="text/javascript" src="../Content/DataTables11020/js/dataTables.bootstrap.min.js"></script>

@@ -1,0 +1,54 @@
+
+Log Entry : 5.22.39 PM 27 August 2020
+  :
+  :Method Name -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet)
+   at HigherEducation.BusinessLayer.CourseCombinationDB.UpdateSubjectCombinationfees(String SubjectCombinationId, String TotalFees, String NoofSeats) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\CourseCombinationDB.cs:line 458
+Target Website - MySql.Data.MySqlClient.MySqlPacket ReadPacket()
+ Error - The user specified as a definer ('root'@'locolhost') does not exist
+
+-------------------------------
+
+Log Entry : 5.22.40 PM 27 August 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.UpdateSubjectCombinationfees(String SubjectCombinationId, String TotalFees, String NoofSeats) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\CourseCombinationController.cs:line 316
+Target Website - System.Web.Mvc.JsonResult UpdateSubjectCombinationfees(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 5.43.29 PM 27 August 2020
+  :
+  :Method Name -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet)
+   at HigherEducation.BusinessLayer.CourseCombinationDB.UpdateSubjectCombinationfees(String SubjectCombinationId, String TotalFees, String NoofSeats) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\CourseCombinationDB.cs:line 458
+Target Website - MySql.Data.MySqlClient.MySqlPacket ReadPacket()
+ Error - The user specified as a definer ('root'@'locolhost') does not exist
+
+-------------------------------
+
+Log Entry : 5.43.29 PM 27 August 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.UpdateSubjectCombinationfees(String SubjectCombinationId, String TotalFees, String NoofSeats) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\CourseCombinationController.cs:line 316
+Target Website - System.Web.Mvc.JsonResult UpdateSubjectCombinationfees(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------

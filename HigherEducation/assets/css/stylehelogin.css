@@ -1,0 +1,847 @@
+﻿/*--------------------------------------
+    Top bar css and css changer
+*/
+body {
+    font-family: "Montserrat", sans-serif;
+    color: #444444;
+    
+}
+
+.homepage .cus-maintop-banner {
+    background: #223f73;
+    height: 32px;
+    border-bottom: 4px solid #EBEBEB;
+}
+
+    .homepage .cus-maintop-banner a {
+        color: #fff;
+        text-decoration: none;
+        transition: all 0.3s ease-in 0s;
+        text-align: center;
+        vertical-align: middle;
+        display: inline-block;
+        padding: 0rem 0.6rem;
+        font-size: 13px;
+    }
+
+.cus-maintop-banner a:hover {
+    color: #fff;
+    text-decoration: none;
+    background: #F6822F;
+    transition: all 0.3s ease-in 0s;
+    padding: 0.2rem 0.6rem;
+}
+
+.cus-maintop-banner .button-toggle-remove {
+    background: #ccc;
+    color: #333;
+}
+
+.cus-maintop-banner .button-toggle-highcontrast {
+    background: #333;
+    color: #fff;
+}
+
+.skip-content {
+    padding: 10px 8px;
+    font-size: 12px;
+    transition: all 0.4s;
+}
+a{
+    cursor:pointer;
+}
+.cus-forgot a {
+    text-align: right;
+    display: block;
+    margin-top: 5px;
+    text-transform: lowercase;
+}
+.cus-forgot a:hover {
+    text-decoration: none;
+}
+button{
+    cursor:pointer;
+}
+.cus-inner-table {
+    background: #f9f9f9;
+    margin-top: 10px;
+    padding: 10px;
+}
+.main-banner img {
+    width: 100%;
+    border-bottom: 4px solid #223f73;
+}
+
+
+.cus-videorequest {
+    border: 1px solid #f9f9f9;
+    margin-top:10px;
+    box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    padding:1rem;
+}
+.cus-videorequest input[type="checkbox"]{
+    position: relative;
+top: 0px;
+left: -2px;
+}
+.cus-information{
+    box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    padding:1rem;
+}
+.cus-declaration {
+    display: inline-block;
+    margin-left: 14%;
+}
+.waves-effect{
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    z-index: 1;
+    box-shadow:0 2px 5px 0 rgba(0,0,0,.16),0 2px 10px 0 rgba(0,0,0,.12);
+}
+.cus-inner-table {
+    text-align:center;
+
+}
+.cus-inner-table table{
+    box-shadow: 0px 0px 10px 0px #ccc;
+    
+}
+.cus-inner-table table tr th {
+    background:#1A3A85;
+    color:#fff;
+    text-align:center;
+font-size:14px;
+   border:2px solid #ccc;
+   vertical-align:middle;
+}
+    .cus-inner-table table:hover {
+        box-shadow: 0px 0px 10px 0px #f9f;
+        -webkit-box-shadow:0px 0px 10px 0px #f9f;
+        
+    }
+.cus-inner-table table tr td {
+border: 1px solid #ccc;
+
+}
+.cus-inner-table .table-striped tbody tr:nth-of-type(2n+1){
+    background-color:#f9f9f9;
+}
+.btn-apintment .btn.btn-primary {
+    background-color: #f6822f !important;
+    border-color: #f6822f !important;
+    font-size: 15px;
+    padding: 5px 10px;
+    cursor:pointer;
+}
+.cus-select-bttn {
+    background: #7889e8;
+    border: 1px solid #7889e8;
+    color: #fff;
+    padding: 5px 10px;
+    margin-bottom: 2px;
+    display: inline-block;
+    border-radius: 4px;
+    margin-top: 2px;
+}
+.btn-dark {
+    font-size: 15px;
+    padding: 5px 10px;
+}
+.btn.btn-info {
+    background-color: #F6822F !important;
+    border-color: #F6822F !important;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+    .btn.btn-info:hover {
+        background-color: #223f73 !important;
+        border-color: #223f73 !important;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+    }
+/*Modal on Scheule button CSS start*/
+.cus-innermodal .modal-dialog{
+    max-width:60% !important;
+}
+.modal-lower h6{
+    color:#1a3a85;
+    margin-top: -10px;
+font-weight: 600;
+text-align:right;
+}
+.header-img img{
+    width: 100px;
+background: #fff;
+position: absolute;
+top: -60px;
+border-radius: 50%;
+z-index: 999;
+padding: 8px;
+box-shadow: 0px 0px 5px 0px #9e76ce;
+}
+.header-img h5 {
+    font-size:1rem;
+    position: relative;
+    left: 120px;
+    top: -10px;
+     color:#1a3a85;
+     font-weight:600;
+}
+.cus-innermodal .modal-header {
+    /*background-image: url('../images/abstract.jpg');*/
+    color:#fff;
+    /*background-position: 10% 20%;
+    background-size:cover;*/
+    display:block;    
+    height:60px;
+    background:#1A3A85;
+}
+.cus-innermodal .modal-title{
+    text-align:right;
+    font-size:25px;
+    font-weight:700;
+}
+.cus-innermodal label {
+    color:#1a3a85 !important;
+}
+.cus-invite .col-lg-9.col-md-9{
+    max-width:72% !important;
+}
+button{
+    cursor:pointer;
+}
+/*Modal on Scheule button CSS end*/
+/*Login Form CSS Start*/
+.top-login{
+    margin-top:1rem;
+}
+.homepage .login-box {
+    padding: 0rem;
+    background-color: #FFF;
+    float: inherit;
+    margin: auto;
+    -webkit-box-shadow: 0 10px 30px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 10px 30px 0 rgba(0,0,0,0.3);
+    border-radius: 4px;
+    margin-bottom:5rem;
+}
+.login-box .title-box {
+    background-color: #223f73;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);  
+    text-align: center;
+    color: #FFF;
+ 
+}
+    .login-box .title-box h2 {
+        background: #223f73;
+        padding: 1rem;
+        font-size: 20px;
+        font-weight: 700;
+        color: #fff;
+    }
+.login-box .title-box p {
+  font-size: 12px;
+}
+.login-box .row {
+  margin:1rem;
+  margin-top: 0.8rem;
+}
+.login-box input[type=text], input[type=password] {
+    background-color: #f6f6f6;
+    border: none;
+    color: #0d0d0d;
+    padding: 10px;
+    text-align: left;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    width: 100%;
+    border: 2px solid #f6f6f6;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.login-box input[type=text]:placeholder {
+    color: #cccccc;
+}
+  
+.login-box .row label {
+  margin-top: 7px;
+  margin-left: 9px;
+  float: left;
+}
+.login-box .row input[type=checkbox] {
+  float: left;
+}
+/*.login-box .chk-lab {
+  margin-top: 20px;
+}*/
+.login-box .chk-lab .colkd {
+  padding-top: 0px;
+  text-align: right;
+}
+.login-box .chk-lab .colkd a {
+  color: #2a2a72;
+  font-size: 13px;
+  cursor:pointer;
+}
+.login-box .submot-row {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+    .login-box .submot-row .btn-md {
+        background-color: #223f73;
+        border: none;
+        color: white;
+        padding: 0.8rem 1.6rem;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        text-transform: uppercase;
+        font-size: 14px;
+        -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+        box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+        -webkit-border-radius: 5px 5px 5px 5px;
+        border-radius: 5px 5px 5px 5px;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+    }
+input#btnlogin {
+    background: transparent;
+    color: #fff;
+    border: 0;
+    cursor: pointer;
+    outline: none;
+}
+.coy-info {
+  padding: absolute;
+  float: right;
+  bottom: 0px;
+  margin-right: 30px;
+  margin-top: 100px;
+}
+input::-webkit-input-placeholder {
+  font-size: 14px;
+  color: #D8D8D8;
+}
+input::-moz-placeholder {
+  font-size: 14px;
+  color: #D8D8D8;
+}
+input::-ms-input-placeholder {
+  font-size: 14px;
+  color: #D8D8D8;
+}
+.btn-success:hover {
+    background-color: #F6822F !important;
+    border-color: #F6822F !important;
+}
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #f6822f;
+  outline: 0;
+  box-shadow: none !important;
+  border: 1px solid #f6822f !important;
+}
+
+/*Login form Css end*/
+/*Request for VC Appointment Page CSS Start*/
+.entry-background{
+    background:#fafafa;
+    padding:20px;
+}
+.cus-entrypage{
+    background:#fff;
+    border-radius:4px;
+    box-shadow:inset 0 4px 4px rgba(0,0,0,.24);
+    height: auto;
+overflow: hidden;
+background-color: #f6f7fb;
+margin-bottom: 3%;
+}
+.cus-entrypage:hover {
+    -webkit-box-shadow: inset 0 4px 4px rgba(0,0,0,.24);
+    box-shadow: inset 0 4px 4px rgba(0,0,0,.24);
+}
+.cus-inputtext input{
+    border:0px;
+    height: 35px;
+    border-bottom: 1px solid #CCC;
+    background-color:#fff !important;
+}
+.cus-inputtext textarea{
+    border:0px;
+    height: 45px;
+    border-bottom: 1px solid #CCC;
+    background-color:#fff !important;
+
+}
+#dvForm3{
+    padding:0;
+}
+.entry-background h3 {
+    margin-top: -5px;
+    font-size: 22px;
+    font-weight: 600;
+}
+.main-formsection{
+    margin-bottom:1%;
+}
+.main-formsection h5 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding: 10px;
+    width: 98%;
+    color: #1a3a85;
+    font-weight: 600;
+    font-size: 18px;
+}
+.col-form-label{
+    margin-bottom:0px;
+    display:inline-block;
+}
+.cus-imguser img{
+    border: 8px double #eee;
+border-radius: 10px;
+}
+
+.main-formsection h5 span {
+    background: #1a3a85;
+    color: #fff;
+    padding: 5px 15px;
+    margin-right: 10px;
+    border-radius: 4px;
+    box-shadow: 0px 0px 5px 0px #1a3a85;
+}
+#PnlModal {
+	/*width: 40% !important;*/
+	margin: auto;
+	padding: 10px;
+	box-shadow: 5px 10px 15px 0px #ccc;
+	border: 4px solid #1B3572;
+	border-radius: 10px;
+    
+}
+#dvEnterOTP {
+    margin-top: 25px;
+}
+/*Request for VC Appointment Page CSS end*/
+/*24June2020 Calender css start*/
+.date-picker-wrapper .month-wrapper {
+    width: 98% !important;
+    background:#fff !important;
+    color:#333 !important;
+}
+.date-picker-wrapper .month-wrapper table .day.toMonth.valid{
+    color: #333;
+}
+.daterangepicker .calendar-time{
+    padding-left:0px !important;
+}
+.daterangepicker.dropdown-menu {
+    background: #e9ecef !important;
+}
+.calendar {
+    border: 2px solid #f9f9f9;
+    box-shadow: 0px 10px 10px 0px #ccc;
+    border-radius: 4px;
+}
+.calendar.second.right {
+   font-size: 13px !important;
+    color: #1A3A85 !important;
+    font-weight: 700 !important;
+}
+.calendar.first.left {
+    font-size: 13px !important;
+    color: #1A3A85 !important;
+    font-weight: 700 !important;
+}
+.daterangepicker_start_input label {
+    font-size: 13px !important;
+    color: #1A3A85 !important;
+    font-weight: 700 !important;
+}
+
+/*24June2020 Calender css end*/
+@media only screen and (max-width: 640px) {
+.cus-videorequest input[type="checkbox"] {
+    position: relative;
+    top: 0px;
+    left: -2px;
+}
+.cus-videorequest{
+    text-align:center;
+}
+.cus-declaration {
+    margin-left:0px;
+}
+    .mobilecaptcha{
+        text-align:right;
+    }
+.cus-topbar-menu{
+    margin-top:0px !important;
+}
+.cus-entrypage{
+margin-bottom:35% !important;
+}
+.cus-powerby {
+text-align:center !important;
+}
+.cus-footer {
+position:relative !important;
+}
+.mb-30{
+    margin-bottom:50% !important;
+}
+    .cus-inputtext textarea{
+font-size:14px;
+}
+
+.cus-inputtext input{
+font-size:14px;
+}
+
+select.form-control:not([size]):not([multiple])
+{
+font-size:14px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered{
+font-size:14px !important;
+}
+        .cus-inner-table th, td {
+    white-space: normal;
+    word-wrap: break-word;
+}
+/*.cus-inner-table td,tr {
+			display: inherit;
+		}*/
+
+		.cus-inner-table th {
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+
+   
+		.cus-inner-table td {
+			/* Behave  like a "row" */
+			border: none;
+			border-bottom: 1px solid #eee;
+			position: relative;
+padding-top: 30px !important;
+text-align:center;
+		}
+
+		.cus-inner-table td:before {
+			position: absolute;
+top: 0px;
+right: 0px;
+padding-right: 10px;
+white-space: nowrap;
+left: 0;
+font-size: 18px;
+color: #6C52B0;
+font-weight: 600;
+		}
+
+		/*
+		Label the data
+    You could also use a data-* attribute and content for this. That way "bloats" the HTML, this way means you need to keep HTML and CSS in sync. Lea Verou has a clever way to handle with text-shadow.
+		*/
+		.cus-inner-table td:nth-of-type(1):before { content: "Request ID/Request On"; }
+		.cus-inner-table td:nth-of-type(2):before { content: "Name"; }
+        .cus-inner-table td:nth-of-type(3):before { content: "Age/Gender"; }
+		.cus-inner-table td:nth-of-type(4):before { content: "Contact Information"; }
+		.cus-inner-table td:nth-of-type(5):before { content: "Proposed Date Time"; }
+        .cus-inner-table td:nth-of-type(6):before { content: "Purpose"; }
+        .cus-inner-table td:nth-of-type(7):before { content: "Documents"; }
+        .cus-inner-table td:nth-of-type(8):before { content: "Action"; }
+
+        .cus-innermodal .modal-dialog{
+    max-width:95% !important;
+}
+         .cus-innermodal .modal-title{
+             margin-left:5%;
+         }
+         .btn-apintment{
+             text-align:center;
+             margin-top:0px !important;
+         }
+         .cus-plusbtn{
+             width:25% !important;
+         }
+         .header-img img{
+             width:70px;
+         }
+         .modal-lower h6{
+             text-align: center;
+         }
+         .btnmodalfooter{
+             text-align:center;
+             display:block !important;
+         }
+         #PnlModal{
+width: 96% !important;
+left: 4.5px !important;
+}
+         /*17jun2020*/
+    .main-formsection h5 {
+        width: 100% !important;
+        padding-left:10px !important;
+        line-height:30px;
+        font-size:16px !important;
+    }
+        .main-formsection h5 span {
+            padding: 2px 10px !important;
+        }
+    .cus-lblsearch {
+        margin-bottom:0px;
+    }
+    .cus-ul-list {
+        margin-left:-10px;
+    }
+      /*24June2020 Calender css start*/
+      .date-picker-wrapper.no-shortcuts.no-gap.two-months {
+          left:0px !important;
+}
+      .date-picker-wrapper.no-shortcuts.no-gap.single-month{
+          left:40px !important;
+      }
+.date-picker-wrapper .month-wrapper {
+    width: 260px !important;
+    background:#fff !important;
+    color:#333 !important;
+}
+.date-picker-wrapper .month-wrapper table .day.toMonth.valid{
+    color: #333 !important;
+}
+.daterangepicker .calendar-time{
+    padding-left:0px !important;
+}
+.daterangepicker.dropdown-menu {
+    background: #e9ecef !important;
+}
+.calendar {
+    border: 2px solid #f9f9f9;
+    box-shadow: 0px 10px 10px 0px #ccc;
+    border-radius: 4px;
+}
+.calendar.second.right {
+   font-size: 13px !important;
+    color: #1A3A85 !important;
+    font-weight: 700 !important;
+}
+.calendar.first.left {
+    font-size: 13px !important;
+    color: #1A3A85 !important;
+    font-weight: 700 !important;
+}
+.daterangepicker_start_input label {
+    font-size: 13px !important;
+    color: #1A3A85 !important;
+    font-weight: 700 !important;
+}
+.date-picker-wrapper .month-wrapper table{
+    width:260px !important;
+}
+.date-picker-wrapper .month-wrapper table.month2{
+    width:400px !important;
+}
+.gap {
+    height: 20px !important;
+}
+/*24June2020 Calender css end*/
+ }
+/*.daterangepicker.dropdown-menu.show-calendar.opensleft {
+    width: 400px !important;
+
+}*/
+.daterangepicker.dropdown-menu.ltr.show-calendar.openscenter {
+    left: 650.894px !important;
+}
+th.prev.available {
+    background: url(/vcmeet/images/left-arrow.png) !important;
+    background-repeat: no-repeat !important;
+    background-size: 22px !important;
+}
+th.next.available {
+    background: url(/vcmeet/images/right.png) !important;
+     background-repeat: no-repeat !important;
+    background-size: 22px !important;
+}
+.cus-ul-list tr td {
+    border: none;
+}
+.cus-ul-list tr td input {
+    vertical-align: middle;
+    margin-right: 5px;
+    height: auto;
+}
+ul.cus-captchalist li {
+    display: inline-block;
+}
+ul.cus-captchalist input {
+    width: 100% !important;
+    border: 1px solid #ddd;
+    height: auto;
+    min-height: 32px;
+    margin-left: 5px;
+    margin-right: 8px;
+    padding: 4px;
+}
+input#imgRefreshCaptcha {
+    width: 28px !important;
+    border: none;
+    position: relative;
+    top: 15px;
+    /* height: 28px !important; */
+}
+.login-captcha #imgRefreshCaptcha {
+    width: 28px !important;
+    border: none;
+    position: relative;
+    top: 4px;
+    left:10px;
+}
+/*
+.chosen-container-single .chosen-single{
+width: 100% !important;
+    padding: .5rem .75rem !important;
+font-size: 1rem !important;
+    line-height: 1.25 !important;
+border-radius: .25rem !important;
+background:#fff !important;
+height:38px !important;
+}*/
+.select2-container .select2-selection--single{
+    height:34px !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #444;
+    line-height: 34px !important;
+    font-size: 0.9rem !important;
+}
+.cus-footer {
+    background: #1A3A85;
+    padding: 2px;
+    position:fixed !important;
+    bottom:0;
+    right:0;
+height:auto;
+    
+}
+.cus-footer p{
+    color:#fff;
+    margin-top:10px;
+}
+.cus-powerby{
+text-align:right;
+}
+.cus-powerby img {
+margin-top:10px;
+}
+/*Top bar hone button css start*/
+.cus-topbar {
+    padding-top: 0px;
+    background: #1B3572;
+    color: #fff;
+    height: 50px;
+}
+
+.cus-topbar-label {
+    margin-top: 10px;
+    text-align: left;
+}
+
+.cus-topbar-menu {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.cus-home-bttn {
+    background: url(../images/dashboard.png);
+    background-position-x: 0%;
+    background-position-y: 0%;
+    background-repeat: repeat;
+    background-size: auto;
+    background-position-x: 0%;
+    background-position-y: 0%;
+    background-repeat: repeat;
+    background-size: auto;
+    background-repeat: no-repeat;
+    border: none;
+    background-size: 20px;
+    padding-left: 28px;
+    font-weight: bold;
+    background-position: 0% 40%;
+    vertical-align: middle;
+    font-size: 15px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.cus-logout-bttn {
+    background: url(../images/off.png);
+    background-position-x: 0%;
+    background-position-y: 0%;
+    background-repeat: repeat;
+    background-size: auto;
+    background-position-x: 0%;
+    background-position-y: 0%;
+    background-repeat: repeat;
+    background-size: auto;
+    background-repeat: no-repeat;
+    border: none;
+    background-size: 20px;
+    padding-left: 28px;
+    font-weight: bold;
+    background-position: 0% 40%;
+    vertical-align: middle;
+    font-size: 15px;
+    color: #fff;
+    cursor: pointer;
+}
+/*Top bar hone button css end*/
+/*footer*/
+#footer {
+    background: #223f73;
+    padding: 10px 0 10px 0;
+    color: #fff;
+    font-size: 14px;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    text-align:center;
+}
+
+    #footer a {
+        color: #fff;
+    }
+
+@media (max-width: 640px) {
+    .cus-fee-top-section {
+        text-align: center !important;
+    }
+}

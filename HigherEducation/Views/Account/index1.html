@@ -1,0 +1,927 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Online Admission Portal</title>
+    <meta content="" name="descriptison">
+    <meta content="" name="keywords">
+
+    <!-- Google Fonts -->
+    <link href="assets/css/google-font.css" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="assets/vendor/animatecss/animate.min.css" rel="stylesheet">
+    <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
+    <link href="assets/vendor/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="assets/css/stylehome.css" rel="stylesheet">
+    <link href="~/assets/css/theme.css" rel="stylesheet" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-175784086-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-175784086-1');
+    </script>
+
+
+    <style>
+        .blinking {
+            animation: blinkingText 1s infinite;
+        }
+
+        @@keyframes blinkingText {
+            0% {
+                color: #fff;
+            }
+
+            49% {
+                color: #fff;
+            }
+
+            50% {
+                color: #300a9d;
+            }
+
+            99% {
+                color: #300a9d;
+            }
+
+            100% {
+                color: #fff;
+            }
+        }
+
+        .blinking-id {
+            animation: blinkingid 1s infinite;
+        }
+
+        @@keyframes blinkingid {
+            0% {
+                color: #E91E63;
+            }
+
+            49% {
+                color: #fff;
+            }
+
+            50% {
+                color: #fff;
+            }
+
+            99% {
+                color: #E91E63;
+            }
+
+            100% {
+                color: #E91E63;
+            }
+        }
+
+        .cus-right-button {
+            margin-top: 10px;
+        }
+
+            .cus-right-button a {
+                text-decoration: none;
+                color: #E91E63;
+                font-size: 14px;
+                font-weight: 800;
+                background-color: #fff;
+                padding: 0.4rem;
+                border-radius: 2px;
+            }
+
+                .cus-right-button a:hover {
+                    color: #E91E63;
+                    background-color: #fff;
+                    transition: 0.3s;
+                    padding: 0.6rem;
+                    text-decoration: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+
+            .iframe-container iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 95%;
+                height: 100%;
+            }
+
+        #exchanger ul {
+            list-style: none;
+            position: absolute;
+            right: -75px;
+            transform: translate(0% -30%);
+            z-index: 1000;
+        }
+
+        .cus-language ul {
+            list-style: none;
+            text-align: right;
+        }
+
+        .cus-language .list-item .active {
+            background: #E91E63;
+            color: #fff;
+            border: 0;
+        }
+
+        .cus-language ul.list-item li {
+            padding: 1px;
+            text-align: center;
+            display: inline-block;
+        }
+
+            .cus-language ul.list-item li a {
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.3s linear;
+            }
+
+        .dropbtn {
+            background-color: #009231;
+            color: snow;
+            font-size: 16px;
+            border: none;
+            padding-top: 7px;
+            font-weight: 900;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+                .dropdown-content a:hover {
+                    background-color: #ddd;
+                    color: black;
+                }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+            background-color: #3e8e41;
+        }
+
+        .blink_me {
+            animation: blinker 1s linear infinite;
+        }
+
+        @@keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="homepage">
+    <input id="hdnlang" type="hidden" value="e" />
+    <!--=========== topbar========== -->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-12 cus-maintop-banner d-none d-sm-block">
+        <div class="row">
+            <div class="col-lg-10 col-md-8 col-sm-7 col-12">
+                <div id="exchanger" class="text-right selectbox" style="">
+                    <ul>
+                        <li>
+                            <a href="#topbar" class="skip-content scroll" title="skip to main content"><span class="english">Skip to Main Content</span><span class="hindi" style="display:none;">मुख्य विषयवस्तु पर जाएं</span></a>
+                            <a href="#!" class="button-toggle-remove" title="Standard">A</a>
+                            <a href="#!" class="button-toggle-highcontrast" title="Black/Yellow">A</a>
+                            <a href="#" id="incfont" class="increase" title="Increased Text">A+</a>
+                            <a href="#" id="decfont" class="decrease" title="Decreased text">A-</a>
+                            <a href="#" id="decfont" class="resetMe" title="Reset Text">A</a>
+
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-5 col-12 cus-language">
+                <ul class="list-item">
+                    <li class="active"><a id="Eenglish">English</a></li>
+                    <li><a id="Hhindi">हिन्दी</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- ======= banner ======= -->
+    <img src="assets/images/banner.jpg" style="width: 100%;" />
+    @*<div id="popup">
+            <img src="~/assets/images/advertisement.jpeg" alt="Admission 2020-2021" class="img-fluid" />
+            <a class="close" id="close" href="#">×</a>
+
+        </div>*@
+    <!-- ======= Header ======= -->
+    <div class="container-fluid">
+        <div class="row header">
+            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+                <nav class="nav-menu d-none d-lg-block">
+                    <ul class="list">
+                        @* <li class="active"><a href="http://164.100.137.137/higher/"><span class="english">Home</span><span class="hindi" style="display:none;">होम</span></a></li>*@
+                        <li class="active"><a href="https://admissions.itiharyana.gov.in/"><span class="english">Home</span><span class="hindi" style="display:none;">होम</span></a></li>
+                        <li><a href="DHE/frmDistrictWiseCollege.aspx"><span class="english">District Wise College</span><span class="hindi" style="display:none;">जिला वार कॉलेज</span></a></li>
+                        <li><a href="DHE/frmViewCollegeSeatMatrix.aspx"><span class="english">View Seat Matrix</span><span class="hindi" style="display:none;">सीट मैट्रिक्स</span></a></li>
+                        <li><a href="DHE/frmUpdateFamilyId.aspx"><span class="english">Update FamilyId</span><span class="hindi" style="display:none;">अपडेट परिवार आईडी</span></a></li>
+                        <li><a href="/Reports/MeritList"><span class="english">Merit List</span><span class="hindi" style="display:none;">योग्यता क्रम सूची</span></a></li>
+                        <li><a href="DHE/frmResultUGAdmissions.aspx"><span class="english">Know Your Result</span><span class="hindi" style="display:none;">अपना परिणाम जानिए</span></a></li>
+                        <!--<li>-->@*<a href="DHE/CutOffList.aspx"><span class="english">Cut Off List</span><span class="hindi" style="display:none;">कट ऑफ लिस्ट</span></a>*@<!--</li>-->
+                        @*<li><a href="/SecondYearLogin/Login"><span class="english">PAY Fee 2nd Year (2021-23)</span><span class="hindi" style="display:none;">भुगतान शुल्क दूसरा वर्ष (2021-23)</span></a></li>
+                        <li><a href="/OldSessionQuarterFee/Login"><span class="english">PAY Quarterly Fee (Old Session)</span><span class="hindi" style="display:none;">भुगतान त्रैमासिक शुल्क (पुराना सत्र)</span></a></li>*@
+
+                        <li class="dropdown">
+                            <button class="dropbtn blink_me">Pay Quaterly Fee</button>
+                            <div class="dropdown-content">
+                                <a href="/SecondYearLogin/Login"><span class="english">PAY Fee 2nd Year (2021-22)</span><span class="hindi" style="display:none;">भुगतान शुल्क दूसरा वर्ष (2021-23)</span></a>
+                                <a href="/OldSessionQuarterFee/Login"><span class="english">PAY Quarterly Fee (2022-23)</span><span class="hindi" style="display:none;">भुगतान त्रैमासिक शुल्क (पुराना सत्र)</span></a>
+
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav><!-- .nav-menu -->
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 cus-right-button text-right">
+
+                <a href="~/Reports/showDash" target="_blank"><span class="english">Dashbboard</span><span class="hindi" style="display:none;">डैशबोर्ड</span></a>
+                @* <a href="http://164.100.137.137/higher/dhe/frmlogin.aspx" target="_blank"><span class="english">Official Login</span><span class="hindi" style="display:none;">आधिकारिक लॉगिन</span></a>*@
+                <a href="dhe/frmlogin.aspx" target="_blank"><span class="english">Official Login</span><span class="hindi" style="display:none;">आधिकारिक लॉगिन</span></a>
+
+            </div>
+        </div>
+    </div>
+    <main id="main">
+        <div class="col-lg-12 col-md-12" style="background:#E91E63;padding:0.6rem;">
+            <h3 style="color:#fff;text-align:center;padding:0.4rem;font-weight:800;border:1px solid #fff;border-radius:4px;" class="blinking"><span class="english">Re-opening of Admission Portal for Registration towards Open Counselling from 13th October</span><span class="hindi" style="display:none;">13 अक्टूबर से ओपन काउंसलिंग पंजीकरण के लिए प्रवेश पोर्टल का फिर से उद्घाटन होगा</span></h3>
+        </div>
+        <!-- ======= About Section ======= -->
+        <section id="topbar" class="about">
+            <div class="container-fluid" data-aos="fade-up">
+
+                <div class="row content">
+
+                    <div class="col-lg-6 clearfix">
+                        <div id="ads">
+                            <div class="col-lg-12 col-md-12" data-aos="zoom-in" data-aos-delay="100">
+                                <div class="section-title">
+                                    <h2><span class="english">Important Dates</span><span class="hindi" style="display:none;">महत्वपूर्ण तिथियाँ</span></h2>
+                                    <div class="card cus-application">
+                                        <div class="card-body">
+                                            <div class="row cus-dates">
+                                                <div class="col-lg-12 col-md-12">
+                                                    <h5><span class="english">Application Form for UG Courses</span><span class="hindi" style="display:none;">स्नातकीय पाठ्यक्रम के लिए आवेदन पत्र</span></h5>
+                                                    <div class="row">
+                                                        <h6 class="col-lg-6 col-md-6"><span class="english" style="color:#E91E63;font-size:14px;">Opening Date:</span><span class="hindi" style="display:none;">प्रारम्भ होने की तारीक:</span>&nbsp;<strong style="font-size:14px;">7th September 2020</strong></h6>
+                                                        <h6 class="col-lg-6 col-md-6 text-right"><span class="english" style="color:#E91E63;font-size:14px;">Closing Date:</span><span class="hindi" style="display:none;">अंतिम तिथि:</span>&nbsp;<strong style="font-size:14px;">24th September 2020</strong></h6>
+                                                    </div>
+                                                </div>
+                                                <!--<div class="col-lg-6 text-right">
+                                                  <h5>Application Form for PG Courses</h5>
+                                                  <h6>Opening Date:<strong>-</strong></h6>
+                                                  <h6>Closing Date:<strong>-</strong></h6>
+                                                </div>-->
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cus-important">
+                            <div class="col-lg-12 col-md-12 " data-aos="zoom-in" data-aos-delay="100">
+                                <div class="section-title">
+                                    <h2><span class="english">Admission Schedule</span><span class="hindi" style="display:none;">प्रवेश अनुसूची</span></h2>
+
+                                    <div class="card">
+                                        <div class="card-body table-responsive" style="padding:0;font-size:14px;">
+                                            <table class="table table-bordered table-hover table-striped table-styling">
+                                                <thead class="thead-dark">
+                                                    <tr>
+                                                        <th scope="col">Sr No.</th>
+                                                        <th scope="col">Title</th>
+                                                        <th scope="col">Date/Timelines</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">1</th>
+                                                        <td>Online submission of Admission form - Start Date</td>
+                                                        <td>7th September (Monday)</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">2</th>
+                                                        <td>Online submission of Admission  form - End Date</td>
+                                                        <td>24th September (Thrusday)</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">3</th>
+                                                        <td>Online Document Verification</td>
+                                                        <td>Upto 27th September (Sunday)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">4</th>
+                                                        <td>Display of 1st Merit  List</td>
+                                                        <td>1st October (Thrusday)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">5</th>
+                                                        <td>Submission of fee</td>
+                                                        <td>1st October to 5th October (Thrusday to Monday)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">6</th>
+                                                        <td>Display of 2nd Merit  List</td>
+                                                        <td>8th October (Thrusday)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">7</th>
+                                                        <td>Submission of Fee</td>
+                                                        <td>8th October to 12th October (Thrusday to Monday)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">8</th>
+                                                        <td>Commencement of teaching</td>
+                                                        <td>13th October (Tuesday)</td>
+                                                    </tr>
+                                                    @*<tr>
+                                                            <th scope="row">9</th>
+                                                            <td>Re-opening of Admission Portal for Registration towards Open Counselling </td>
+                                                            <td>28th September (Monday) to 9th October(Friday)</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">10</th>
+                                                            <td>Display of First Open Merit List/Counselling, if required</td>
+                                                            <td>18th October (Sunday)</td>
+                                                        </tr>*@
+                                                </tbody>
+                                            </table>
+
+                                            @*<div class="text-right" style="margin-top:10px;">
+                                                <a href="https://drive.google.com/file/d/1K15eTQ84XerYyf76J7057LX_j0LZOVJq/view" target="_blank" class="btn btn-danger"><i class="bx bx-download"></i>&nbsp;<span class="english">Video Tutorial</span><span class="hindi" style="display:none;">वीडियो ट्यूटोरियल</span></a>
+                                                    </div>*@
+                                            @*<ul>
+
+                                                    <li><i class="bx bx-caret-right"></i>&nbsp;One last chance to the Undergraduate courses applicants who still not get their documents verified. They can get their documents verified at any of the college applied for and such verified applicants will be considered in the 2nd merit list and subsequent waiting lists( if applicable). Such UG applicants can get the documents verified at any of the college counter w.e.f. 5th July, 2019 to 7th July, 2019.</li>
+                                                    <li><i class="bx bx-caret-right"></i>&nbsp;All PG applicants, please get your documents, category and weightage verified from all applied colleges from 5 July to 9 July 2019 without fail. Otherwise your application stand cancelled.</li>
+
+                                                    <li><i class="bx bx-caret-right"></i>&nbsp;Before filling the application form please check your <a href="#"><strong>eligibility conditions</strong></a> for the applied course as per affiliating university rules. Further please take action as described in the user guide – ENGLISH / HINDI.</li>
+
+                                                </ul>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 clearfix cus-rightsection">
+                        <div class="col-lg-12 col-md-12 cus-online" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="card">
+                                <div class="card-body text-center ">
+                                    <div class="cta">
+                                        <h5><span class="english">Online Admission 2020-21</span><span class="hindi" style="display:none;">ऑनलाइन प्रवेश 2020-21</span></h5>
+                                        <a class="cta-btn" href='@Url.Action("Registration","Account")' title="New Registration"><span class="english">New Registration</span><span class="hindi" style="display:none;">नया पंजीकरण</span></a>
+                                        <a class="cta-btn disabled" href='@Url.Action("Login","Account")' title="Student Login" disabled><span class="english">Student Login</span><span class="hindi" style="display:none;">छात्र लॉग इन</span></a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 cus-botttomsection">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="section-title">
+                                        <h2><span class="english">Admission Info</span><span class="hindi" style="display:none;">प्रवेश संबंधित जानकारी</span></h2>
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <ul>
+
+                                                            @*<li>
+                                                                    <i class="bx bx-caret-right"></i>Online Admissions 2019 – User Guide
+                                                                    <ul>
+                                                                        <li><a href="#"><i class="bx bx-check"></i>English</a></li>
+                                                                        <li><a href="#"><i class="bx bx-check"></i>Hindi</a></li>
+                                                                    </ul>
+                                                                </li>*@
+                                                            <li><a href="#" onclick="window.open('assets/pdf/usermanual.pdf', '_blank', 'fullscreen=yes'); return false;" title="user manual"><i class="bx bx-caret-right"></i>&nbsp;<span class="english">User Manual</span><span class="hindi" style="display:none;">उपयोगकर्ता पुस्तिका</span></a></li>
+                                                            <li><a href="#" onclick="window.open('assets/pdf/guidelinesapplicant.pdf', '_blank', 'fullscreen=yes'); return false;" title="Guidelines for Applicants"><i class="bx bx-caret-right"></i>&nbsp;<span class="english">Guidelines for Applicants</span><span class="hindi" style="display:none;">आवेदकों के लिए दिशा निर्देश</span></a></li>
+                                                            <li><a href="#" onclick="window.open('assets/pdf/guidelinescolleges.pdf', '_blank', 'fullscreen=yes'); return false;" title="Guidelines for Colleges"><i class="bx bx-caret-right"></i>&nbsp;<span class="english">Guidelines for Colleges</span><span class="hindi" style="display:none;">कॉलेजों के लिए दिशा निर्देश</span></a></li>
+                                                            <li><a href="#" onclick="window.open('assets/pdf/faq.pdf', '_blank', 'fullscreen=yes'); return false;" title="FAQ"><i class="bx bx-caret-right"></i>&nbsp;<span class="english">FAQ</span><span class="hindi" style="display:none;">सामान्य प्रश्न</span></a></li>
+                                                            <li><a href="#" onclick="window.open('assets/pdf/ug-notification.pdf', '_blank', 'fullscreen=yes'); return false;" title="FAQ"><i class="bx bx-caret-right"></i>&nbsp;<span class="english">Last Date Extended Notification</span><span class="hindi" style="display:none;">अंतिम तिथि विस्तारित अधिसूचना</span></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="section-title">
+                                        <h2><span class="english">Notifications</span><span class="hindi" style="display:none;">अधिसूचनाएं</span></h2>
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <div class="holder">
+                                                    <marquee behavior="scroll" direction="up" scrolldelay="150" onmouseover="this.stop();"
+                                                             onmouseout="this.start();" style="height:200px;">
+                                                        <ul>
+                                                            <li>
+                                                                <a href="#" style="color:#fff;">
+                                                                    <i class="bx bx-caret-right"></i>
+                                                                    <span class="english">Re-opening of Admission Portal for Registration towards Open Counselling from 28th September to 9th October 2020</span><span class="hindi" style="display:none;">28 सितंबर से 9 अक्टूबर 2020 तक ओपन काउंसलिंग के लिए पंजीकरण के लिए प्रवेश पोर्टल का पुनः उद्घाटन होगा</span>
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="#" style="color:#fff;">
+                                                                    <i class="bx bx-caret-right"></i>
+                                                                    <span class="english">Closing Date of Online Registration for Admissions to UG Courses is 24/09/2020. Hurry up & Apply for Admission.</span><span class="hindi" style="display:none;">स्नातक पाठ्यक्रमों के प्रवेश के लिए ऑनलाइन पंजीकरण की अंतिम तिथि 21/09/2020 है। प्रवेश के लिए जल्दी करें और आवेदन करें।</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#" style="color:#fff;">
+                                                                    <i class="bx bx-caret-right"></i>
+                                                                    <span class="english">Registration on UG Online Admission Portal upto Closing Date is mandatory for admission seekers. In no circumstances, admission without registration on portal will be allowed.</span><span class="hindi" style="display:none;">प्रवेश चाहने वालों के लिए समापन तिथि तक स्नातक ऑनलाइन प्रवेश पोर्टल पर पंजीकरण अनिवार्य है। किसी भी परिस्थिति में पोर्टल पर पंजीकरण के बिना प्रवेश की अनुमति नहीं होगी।</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#" style="color:#fff;">
+                                                                    <i class="bx bx-caret-right"></i>
+                                                                    <span class="english">The admission seekers have to deposit the admission fee/funds in date bound manner subject to their names in the merit list. Initially, you will get provisional admission only subject to the final verification of your eligibility in the allotted course by the College/Affiliating University.</span><span class="hindi" style="display:none;">प्रवेश चाहने वालों को प्रवेश शुल्क / धनराशि को बाउंड तरीके से मेरिट सूची में उनके नाम के अधीन जमा करना होगा। प्रारंभ में, आपको कॉलेज / संबद्ध विश्वविद्यालय द्वारा आवंटित पाठ्यक्रम में अपनी पात्रता के अंतिम सत्यापन के अधीन केवल अनंतिम प्रवेश मिलेगा।</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#" style="color:#fff;">
+                                                                    <i class="bx bx-caret-right"></i>
+                                                                    <span class="english">SC Students seeking admission to UG Courses and who want to avail benefits under Post Metric Scholarship Scheme in Govt-Aided/ Self Financing Colleges must procure Family Income Certificate of less than 2.5 Lac of current Financial Year from the competent authority before submission of Admission Fee/Funds.</span><span class="hindi" style="display:none;">स्नातक पाठ्यक्रमों में प्रवेश पाने के इच्छुक और सरकारी सहायता प्राप्त / स्व वित्त पोषण महाविद्यालयों में पोस्ट मेट्रिक छात्रवृत्ति योजना के तहत लाभ पाने के इच्छुक छात्र, प्रवेश शुल्क जमा करने से पहले सक्षम प्राधिकारी से वर्तमान वित्तीय वर्ष के 2.5 लाख से कम के पारिवारिक आय प्रमाण पत्र की खरीद कर सकते हैं।</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#" style="color:#fff;">
+                                                                    <i class="bx bx-caret-right"></i>
+                                                                    <span class="english">Students seeking admission to UG Courses under Differently Abled/Physically Handicapped category must upload their Disability Certificate issued by the competent authority before submission of Admission Fee/Funds.</span><span class="hindi" style="display:none;">निःशक्तजन / शारीरिक रूप से विकलांग श्रेणी के अंतर्गत के तहत स्नातक पाठ्यक्रम में प्रवेश पाने के इच्छुक छात्रों को एडमिशन फीस / फंड जमा करने से पहले सक्षम प्राधिकारी द्वारा जारी किया गया विकलांगता प्रमाण पत्र अपलोड करना होगा।</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#" style="color:#fff;">
+                                                                    <i class="bx bx-caret-right"></i>
+                                                                    <span class="english">The College is authorized to take the Short Payment, if any from the student as per Affiliating University/State Government norms, if any kind of discrepancy is found at later stage.</span><span class="hindi" style="display:none;">कॉलेज को लघु भुगतान लेने के लिए अधिकृत किया जाता है, यदि कोई छात्र संबद्ध विश्वविद्यालय / राज्य सरकार के मानदंडों के अनुसार, यदि किसी भी प्रकार की विसंगति बाद के चरण में पाई जाती है।</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#" style="color:#fff;">
+                                                                    <i class="bx bx-caret-right"></i>
+                                                                    <span class="english">The College shall be liable to cancel the provisional admission of the student, if any kind of discrepancy is found at later stage.</span><span class="hindi" style="display:none;">यदि किसी प्रकार की विसंगति बाद के चरण में पाई जाती है, तो छात्र के अनंतिम प्रवेश को रद्द करने के लिए कॉलेज उत्तरदायी होगा।</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#" style="color:#fff;">
+                                                                    <i class="bx bx-caret-right"></i>
+                                                                    <span class="english">By filling Registration ID, Name and DoB - Student has to fill their Family ID detail.</span><span class="hindi" style="display:none;">पंजीकरण आईडी, नाम और जन्म तिथि भरकर - छात्र को अपना परिवार आईडी विवरण भरना होगा।</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#" style="color:#fff;">
+                                                                    <i class="bx bx-caret-right"></i>
+                                                                    <span class="english">As per the Govt. instructions, Family ID is mandatory, hence you must ensure that before the admission, student must provide their family ID details.</span><span class="hindi" style="display:none;">सरकार के निर्देश अनुसार, फैमिली आईडी अनिवार्य है, इसलिए आपको यह सुनिश्चित करना होगा कि प्रवेश से पहले, छात्र को अपने परिवार के आईडी का विवरण प्रदान करना होगा।</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#" style="color:#fff;">
+                                                                    <i class="bx bx-caret-right"></i>
+                                                                    <span class="english">Those who do not have family ID, please create their own Family ID The link for the same is also provided on the portal  under the name "Create/Search Family ID".</span><span class="hindi" style="display:none;">जिनके पास फैमिली आईडी नहीं है, कृपया अपनी खुद की फैमिली आईडी बनाएं। उसी के लिए लिंक "क्रिएट / सर्च फैमिली आईडी" नाम से भी पोर्टल पर उपलब्ध कराया गया है।</span>
+                                                                </a>
+                                                            </li>
+
+
+                                                        </ul>
+
+
+                                                    </marquee>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-12 text-center cus-familyid">
+                                    <a href="https://meraparivar.haryana.gov.in/" target="_blank" class="blinking-id"><i class="bx bx-user"></i>&nbsp;<span class="english">Create/Search Family ID</span><span class="hindi" style="display:none;">परिवार पहचान पत्र बनाएं/खोजें</span></a>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-12 text-center cus-college-ranking">
+                                    <a href="http://112.196.99.108/prayaas/ratingboard.aspx" target="_blank" class="blinking"><i class="bx bx-star"></i>&nbsp;<span class="english">Check Government Colleges Ranking</span><span class="hindi" style="display:none;">सरकारी कॉलेज रैंकिंग की जाँच करें</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            </div>
+        </section><!-- End About Section -->
+        <!-- ======= Contact Section ======= -->
+        <section id="contact" class="contact section-bg">
+            <div class="container-fluid" data-aos="fade-up">
+
+
+
+                <div class="row">
+
+                    <div class="col-lg-6">
+                        <div class="section-title">
+                            <h2><span class="english">Video Admission Tutorial </span><span class="hindi" style="display:none;">वीडियो एडमिशन ट्यूटोरियल</span></h2>
+
+                            <div class="card">
+                                <div class="card-body" style="display:flex;">
+                                    <div class="iframe-container">
+                                        <iframe width="295" height="325" src="https://www.youtube.com/embed/QaYQXwpJHpQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                    <div class="iframe-container">
+                                        <iframe width="295" height="325" src="https://www.youtube.com/embed/JWE_I1gcFYw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="section-title">
+                            <h2><span class="english">Online Admission 2020-21</span><span class="hindi" style="display:none;">ऑनलाइन प्रवेश 2020-21</span></h2>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div style="height:340px;">
+                                        <a target="_blank" href="~/assets/pdf/prospectus.pdf"><embed src="~/assets/pdf/prospectus.pdf" type="application/pdf" height="330px" width="100%"></a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section><!-- End Contact Section -->
+
+    </main><!-- End #main -->
+    <div class="col-lg-12 col-md-12 cus-helpdesk" style="padding-top:0.6rem;box-shadow:0 0 30px rgba(214, 215, 216, 0.6);">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 text-left" style="padding-left:10px;">
+                <h3><i class="bx bx-time" style="color:#E91E63;font-size:20px;position:relative;top:3px;"></i>&nbsp;<span class="english" style="color:#E91E63;font-weight:700;font-size:16px;"><strong>Our Timing:</strong></span><span class="hindi" style="display:none;"><strong>हमारा समय:</strong></span>&nbsp; <span style="font-size:16px;font-family:'Times New Roman', Times, serif;font-weight:700;">9:00 AM to 6:00 PM <span class="english">&#40;All Working Days&#41;</span><span class="hindi" style="display:none;">&#40;सभी कार्य दिवस&#41;</span></span></h3>
+            </div>
+            <div class="col-lg-4 col-md-4 text-center">
+                <h3><i class="bx bx-phone-call" style="color:#E91E63;font-size:20px;position:relative;top:3px;"></i>&nbsp;<span class="english" style="color:#E91E63;font-weight:700;font-size:16px;"><strong>TollFree Number:</strong></span><span class="hindi" style="display:none;"><strong>टोल फ्री नंबर:</strong></span>&nbsp;<span style="font-size:18px;font-family:'Times New Roman', Times, serif;font-weight:700;">1800-137-3735</span></h3>
+            </div>
+            <div class="col-lg-4 col-md-4 text-right">
+                <h3><i class="bx bx-envelope" style="color:#E91E63;font-size:20px;position:relative;top:3px;"></i>&nbsp;<span class="english" style="color:#E91E63;font-weight:700;font-size:16px;"><strong>Email Us:</strong></span><span class="hindi" style="display:none;">हमे ईमेल करे:</span>&nbsp;<span style="font-size:18px;font-family:'Times New Roman', Times, serif;font-weight:700;">admissions2021@highereduhry.com</span></h3>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12 text-center">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 text-left" style="margin-top:10px;">
+                            <div class="credits">
+                                <a>Site is technically designed, hosted and maintained by National Informatics Centre, Haryana</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <img src="~/assets/images/nic-logo.png" style="width:100px;" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </footer><!-- End Footer -->
+
+
+
+    <div id="preloader"></div>
+    <!--<a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>-->
+    <div class="socialicons">
+        <ul>
+            @*<li class="cus-write"><a href="#" class="btn btn-primary" title="Write to Helpdesk"><i class="bx bx-edit"></i></a></li>*@
+            <li class="cus-fb">
+                <a href="https://www.facebook.com/highereduhry/" title="Facebook" target="_blank"><img src="assets/images/facebook.png" style="width:44px;height:44px;" /></a>
+            </li>
+            <li class="cus-twitter">
+                <a href="https://twitter.com/highereduHRY?s=20" title="Twitter" target="_blank"><img src="assets/images/twitter.png" style="width:44px;height:44px;" /></a>
+            </li>
+            <li class="cus-insta"><a href="https://instagram.com/highereduhry?igshid=1uaiqmzfyzn28" title="Instagram" target="_blank"><img src="assets/images/instagram.png" style="width:44px;height:44px;" /></a></li>
+            <li class="cus-youtube"><a href="https://www.youtube.com/channel/UClnGVAjgb084SMNIYD1NTxA" title="Youtube" target="_blank"><img src="assets/images/youtube.png" style="width:44px;height:44px;" /></a></li>
+        </ul>
+    </div>
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/jquery/jquery.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/jqueryeasing/jquery.easing.min.js"></script>
+
+    <script src="assets/vendor/counterup/counterup.min.js"></script>
+    <script src="assets/vendor/owlcarousel/owl.carousel.min.js"></script>
+    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="assets/vendor/aos/aos.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="assets/js/main.js"></script>
+    <script src="~/assets/js/jquery.cookie.js"></script>
+    <script id="fsChatWidget" data-view="false" data-anime="bounce" src="https://server19.findabilityplatform.com/HBApplication/resources/js/chatwidget.js"></script>
+</body>
+
+</html>
+<script type="text/javascript">
+    jQuery.fn.liScroll = function (settings) {
+        settings = jQuery.extend({
+            travelocity: 0.09
+        }, settings);
+        return this.each(function () {
+            var $strip = jQuery(this);
+            $strip.addClass("newsticker")
+            var stripHeight = 1;
+            $strip.find("li").each(function (i) {
+                stripHeight += jQuery(this, i).outerHeight(true);
+            });
+            var $mask = $strip.wrap("<div class='mask'></div>");
+            var $tickercontainer = $strip.parent().wrap("<div class='tickercontainer'></div>");
+            var containerHeight = $strip.parent().parent().height();
+            $strip.height(stripHeight);
+            var totalTravel = stripHeight;
+            var defTiming = totalTravel / settings.travelocity;
+            function scrollnews(spazio, tempo) {
+                $strip.animate({ top: '-=' + spazio }, tempo, "linear", function () { $strip.css("top", containerHeight); scrollnews(totalTravel, defTiming); });
+            }
+            scrollnews(totalTravel, defTiming);
+            $strip.hover(function () {
+                jQuery(this).stop();
+            },
+                function () {
+                    var offset = jQuery(this).offset();
+                    var residualSpace = offset.top + stripHeight;
+                    var residualTime = residualSpace / settings.travelocity;
+                    scrollnews(residualSpace, residualTime);
+                });
+        });
+    };
+
+    $(function () {
+        $("ul#ticker01").liScroll();
+    });
+
+    // change active button color
+    $('.list-item').on('click', 'li', function () {
+        $('.list-item li.active').removeClass('active');
+        $(this).addClass('active');
+    });
+
+
+
+    //Text Increase and Decrease jquery start
+    jQuery(document).ready(function () {
+        //language change script
+        $('#Hhindi').click(function () {
+            if ($('#hdnlang').val() == 'e') {
+                $('.english').toggle();
+                $('.hindi').toggle();
+                $('#hdnlang').val('h');
+
+
+            }
+        });
+
+        $('#Eenglish').click(function () {
+            if ($('#hdnlang').val() == 'h') {
+                $('.english').toggle();
+                $('.hindi').toggle();
+                $('#hdnlang').val('e');
+
+            }
+        });
+        //font and css changer script
+        var all_tags = { "h1": '50', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14' };
+        jQuery.each(all_tags, function (i, val) {
+            jQuery(i).css('font-size', val + 'px');
+        });
+        checkBesicSize();
+        jQuery(".resetMe").click(function () {
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+
+            });
+
+        });
+        jQuery(".increase").click(function () {
+            jQuery.each(all_tags, function (i) {
+                changeFontSize(i, 2);
+            });
+            return false;
+        });
+        jQuery(".decrease").click(function () {
+            jQuery.each(all_tags, function (i) {
+                changeFontSize(i, -2);
+            });
+            return false;
+        });
+
+        function changeFontSize(tag, size) {
+            var currentSize = jQuery(tag).css('font-size');
+            var currentSize = parseFloat(currentSize) + parseFloat(size);
+            jQuery(tag).css('font-size', currentSize);
+        }
+
+    });
+    jQuery(window).resize(function () {
+        checkBesicSize();
+    });
+    function checkBesicSize() {
+        var width = jQuery(window).width();
+        if (width > 1290) {
+            var all_tags = { "h1": '50', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1290) {
+            var all_tags = { "h1": '50', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1100) {
+            var all_tags = { "h1": '40', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1024) {
+            var all_tags = { "h1": '40', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 980) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '24', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 800) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 768) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 640) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 480) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 400) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 360) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+    }
+    //Text Increase and Decrease jquery end
+    //Css Color Change jquery start
+    // color-changing-script
+    // Check (onLoad) if the cookie is there and set the class if it is
+    if (jQuery.cookie('highcontrast') == "yes") {
+        jQuery("body").addClass("highcontrast");
+    }
+    // When the element is clicked
+    jQuery("a.button-toggle-highcontrast").click(function () {
+        if (jQuery.cookie('highcontrast') == "undefined" || jQuery.cookie('highcontrast') == "no") {
+            jQuery.cookie('highcontrast', 'yes', {
+                expires: 7,
+                path: '/'
+            });
+            jQuery("body").addClass("highcontrast");
+        } else {
+            jQuery.cookie('highcontrast', 'yes', {
+                expires: 7,
+                path: '/'
+            });
+            jQuery("body").addClass("highcontrast");
+        }
+    });
+    jQuery("a.button-toggle-remove").click(function () {
+        jQuery('body').removeClass('highcontrast');
+        if (jQuery.cookie('highcontrast') == "yes") {
+            jQuery.cookie("highcontrast", null, {
+                path: '/'
+            });
+        }
+    });
+    $(document).ready(function () {
+        let scroll_link = $('.scroll');
+
+        //smooth scrolling -----------------------
+        scroll_link.click(function (e) {
+            e.preventDefault();
+            let url = $('body').find($(this).attr('href')).offset().top;
+            $('html, body').animate({
+                scrollTop: url
+            }, 1000);
+            $(this).parent().addClass('active');
+            $(this).parent().siblings().removeClass('active');
+            return false;
+        });
+    });
+</script>
+<script>
+
+    $(document).ready(function () {
+
+        $("#popup").hide().fadeIn(1000);
+
+        $("#close").on("click", function (e) {
+            e.preventDefault();
+            $("#popup").fadeOut(1000);
+        });
+
+    });
+    //$(function () {
+    //    window.location.href = '/';
+    //});
+</script>

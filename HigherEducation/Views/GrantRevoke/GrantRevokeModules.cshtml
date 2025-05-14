@@ -1,0 +1,829 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Grant Revoke Modules";
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="~/assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/assets/css/sweetalert.css" rel="stylesheet" />
+    <link href="~/assets/css/stylehome.css" rel="stylesheet" />
+    <script src="~/assets/dataTable/dataTables/jquery-3.5.1.js"></script>
+    <script src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/jquery.dataTables.min.js"></script>
+    <script src="~/assets/js/popperjs/popper.min.js"></script>
+    @*<script src="../assets/js/moment-with-locales.min.js"></script>*@
+    <script src="~/assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/scripts/sweetalert.min.js"></script>
+    <link href="~/assets/css/all.css" rel="stylesheet" />
+    <link href="~/assets/css/stylereport.css" rel="stylesheet" />
+    <link href="~/assets/css/stylesearch.css" rel="stylesheet" />
+    <link href="~/assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/assets/dataTable/dataTables/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />
+    <script src="~/assets/dataTable/dataTables/dataTables.buttons.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/buttons.html5.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/jszip.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/pdfmake.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/vfs_fonts.js"></script>
+    <script src="~/assets/dataTable/dataTables/buttons.print.min.js"></script>
+
+    <style type="text/css">
+
+        .nav-link {
+            display: block;
+            padding: .5rem .6rem;
+        }
+
+        .cus-grid-table {
+            height: 100%;
+            overflow: auto;
+            box-shadow: 0px 0px 5px 0px #ccc;
+            padding: 1rem;
+            margin-bottom: 5%;
+        }
+
+        #cover {
+            /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+            background-color: rgba(33,63,113, 0.6);
+            position: fixed;
+            top: 0px;
+            bottom: 0px;
+            height: 100%;
+            width: 100%;
+            z-index: 100000;
+        }
+
+            #cover i {
+                /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+                margin-left: 50%;
+                margin-top: 50vh;
+            }
+
+        .btn:disabled {
+            opacity: 0.2 !important;
+        }
+
+        .card-counter {
+            box-shadow: 4px 4px 2px -1px rgba(0,0,0,0.4);
+            margin: 5px;
+            padding: 10px 10px;
+            background-color: #fff;
+            height: 75px;
+            border-radius: 5px;
+            transition: .3s linear all;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+            .card-counter:hover {
+                box-shadow: 4px 4px 20px #DADADA;
+                transition: .3s linear all;
+            }
+
+            .card-counter.primary {
+                /*background-color: #007bff;*/
+                background: linear-gradient(to right, #0d47a1, #1976d2 99%) !important;
+                background: -webkit-gradient(linear, left top, right top, from(#0d47a1), color-stop(99%, #1976d2)) !important;
+                color: #FFF;
+            }
+
+            .card-counter.danger {
+                background-color: #ef5350;
+                color: #FFF;
+            }
+
+            .card-counter.success {
+                background-color: #66bb6a;
+                color: #FFF;
+            }
+
+            .card-counter.info {
+                background: linear-gradient(to right, #4527a0, #5e35b1) !important;
+                background: -webkit-gradient(linear, left top, right top, from(#4527a0), to(#5e35b1)) !important;
+                color: #FFF;
+            }
+
+            .card-counter i {
+                font-size: 4em;
+                opacity: 0.5;
+                margin-top: -1px;
+            }
+
+            .card-counter .fa.fa-spinner {
+                font-size: 1.5em !important;
+                opacity: 0.5;
+            }
+
+            .card-counter .count-numbers {
+                position: absolute;
+                right: 30px;
+                top: 10px;
+                font-size: 28px;
+                display: block;
+                /*font-weight:800;*/
+                text-shadow: 10px 10px 0px 0px #333;
+            }
+
+            .card-counter .count-name {
+                position: absolute;
+                right: 30px;
+                top: 55px;
+                font-style: italic;
+                text-transform: capitalize;
+                opacity: 0.8;
+                display: block;
+                font-size: 12px;
+                /*font-weight: 700;*/
+            }
+
+        .cus-top-cards {
+            border: 1px solid #ccc;
+            padding: 0.8rem;
+            box-shadow: inset 0px 1px 8px 2px #a9a9a9;
+        }
+
+        button.dt-button, div.dt-button, a.dt-button {
+            padding: 0.01em 0.5em !important;
+            font-size: large;
+        }
+
+        .modalBackground {
+            background-color: rgb(192,234,255);
+            filter: alpha(opacity=70);
+            opacity: 0.7;
+            z-index: 100 !important;
+        }
+
+        .modalPopup {
+            background-color: #ffffff;
+            border-width: 3px;
+            border-style: solid;
+            border-color: Gray;
+            padding: 3px;
+            /*width: 250px;*/
+            z-index: 100;
+        }
+
+        .btnPop {
+            background-color: #033280;
+            color: White;
+            font-size: 12px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+
+        table {
+            width: 100% !important;
+            font-size: small;
+        }
+        #btnGrant{
+            cursor:pointer;
+        }
+    </style>
+
+</head>
+<body>
+
+
+    <div id="cover">
+            <i class="fa fa-spinner fa-spin" style="font-size:xx-large"></i>
+        </div>
+    <div class="container-fluid">
+        <div class="row main-banner">
+            <img src="~/assets/images/banner.jpg" style="width: 100%" alt="online admission portal" />
+        </div>
+        <div class="row header">
+            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
+                <nav class="nav-menu d-none d-lg-block">
+                    <ul>
+                        @*<li><a href="../index.html">Home</a></li>
+                            <li class="active"><a href='@Url.Action("CollegeCourseWiseAppRec","Reports")'>College Course Wise Application Received</a></li>
+
+                            <li><a href="#">Search College</a></li>*@
+                    </ul>
+                </nav>
+                <!-- .nav-menu -->
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-2"></div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-8 text-center top-heading" style="margin-top: 5px;"><h4 class="heading">@ViewBag.Title</h4></div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-2 text-right back-btn" style="margin-top: 5px;">
+                <a href="#" id="btnBack" class="btn btn-icon icon-left btn-primary" onclick="javascript: window.history.back();"><i class="fas fa-arrow-alt-circle-left"></i></a>
+            </div>
+        </div>
+
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+                        <div id="rowUI" class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+                        <label class="col-form-label">User Type</label>
+                        <select class="form-control" id="ddlRole">
+                        </select>
+                        <label id="lblRole" class="text-danger"></label>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-12" id="DivCollege" style="display:none;">
+                        <label class="col-form-label">College Type</label>
+                        <select class="form-control" id="ddlCollegeType">
+                            <option value="0">Select</option>
+                            <option value="1">Government ITI</option>
+                            <option value="3">Private ITI</option>
+                        </select>
+                        <label id="lblCollegeDiv" class="text-danger"></label>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-12" id="DivUser" style="display:none;">
+                        <label class="col-form-label">User</label>
+                        <select class="form-control" id="ddlUser">
+                        </select>
+                        <label id="lblUser" class="text-danger"></label>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-12" id="DivModule">
+                        <label class="col-form-label">Module</label>
+                        <select class="form-control" id="ddlModule">
+                        </select>
+                        <label id="lblModule" class="text-danger"></label>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-12" id="DivGrant">
+                        <div id="btnGrant" style=" margin-top: 35px;" class="btn btn-success">Grant</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top: 2rem">
+                        <table id="tblModuleDetails" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Serial</th>
+                                    <th scope="col">Module</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+        </div>
+    </div>
+        </div>
+    <script>
+        var baseUrl = '@Url.Content("~/GrantRevoke/")';
+
+        $(document).ready(function () {
+
+            getRoleList();
+
+            $("#ddlRole").on('change', function () {
+                $('#DivUser').hide();
+                $('#DivCollege').hide();
+                //$('#DivModule').hide();
+                if ($(this).val() == '1') {
+                    $('#DivUser').show();
+                    getUserList();
+                }
+                else if ($(this).val() == '2') {
+                    $('#DivCollege').show();
+                    //getCollegeTypes();
+                }
+            });
+            $("#ddlUser").on('change', function () {
+
+                ddlModulesUserBasedBind();
+                GetGrantedUserModules();
+
+            });
+            $("#ddlCollegeType").on('change', function () {
+
+                ddlModulesRoleBasedBind();
+                GetGrantedRoleModules(); //table bind
+               /* ddlModulesBind_CollegeType();*/
+            });
+
+
+            $('#btnGrant').on("click", function () {
+                let UserTypeID = $('#ddlRole').val();
+                let CollegeTypeID = $('#ddlCollegeType').val();
+                let UserID = $('#ddlUser').val();
+                let ModuleID = $('#ddlModule').val();
+
+                if (UserTypeID == 'default') {
+                    swal("Alert!", "Please Select User Type!", "warning");
+                    return;
+                }
+                else if (ModuleID == 'default') {
+                    swal("Alert!", "Please Select Module!", "warning");
+                    return;
+                }
+
+                if (parseInt(UserTypeID) === 1) //User Based
+                {
+                    if (UserID == 'default') {
+                        swal("Alert!", "Please Select User!", "warning");
+                        return;
+                    }
+                    GrantUserModules(UserID, ModuleID);
+
+                }
+                else if (parseInt(UserTypeID) === 2) //Role Based
+                {
+                    if (CollegeTypeID == 'default') {
+                        swal("Alert!", "Please Select Collage Type!", "warning");
+                        return;
+                    }
+                    GrantRoleModules(UserTypeID, CollegeTypeID, ModuleID);
+                }
+                else {
+                    alert('Case not defined yet, Contact admin.');
+                }
+            }
+            );
+
+
+
+
+
+            $('#btnAdd').on('click', function () {
+
+
+            });
+            $('#btnCancel').on('click', function () {
+                ClearModuleData();
+            });
+
+
+        });
+
+        function RevokeModule(ModuleID) {
+
+                let UserTypeID = $('#ddlRole').val();
+                let CollegeTypeID = $('#ddlCollegeType').val();
+                let UserID = $('#ddlUser').val();
+
+                if (parseInt(UserTypeID) === 1) //User Based
+                {
+                    RevokeUserModules(UserID, ModuleID);
+                }
+                else if (parseInt(UserTypeID) === 2) //Role Based
+                {
+                    RevokeRoleModules(UserTypeID, CollegeTypeID, ModuleID);
+                }
+                else {
+                    alert('User Type not applicable on this page.');
+                }
+
+        }
+        function GrantUserModules(UserID, ModuleID) {
+
+            //getTypeList();
+            $("#cover").fadeIn();
+            var datatosend = {};
+            datatosend.UserID = UserID;
+            datatosend.ModuleID = ModuleID;
+            $.ajax({
+                url: baseUrl + "GrantUserModules",
+                type: 'POST',
+                //contentType: 'application/json;charset=utf-8',
+               /* dataType: 'json',*/
+                data: datatosend,
+                success: function (data) {
+                    ddlModulesUserBasedBind();
+                    GetGrantedUserModules();
+                    $("#cover").fadeOut();
+                    swal("Saved", "Granted Module Successfully!", 'success');
+                },
+                error: errorFn
+            })
+        }
+        function GrantRoleModules(UserTypeID, CollegeTypeID, ModuleID) {
+            //getTypeList();
+            $("#cover").fadeIn();
+            var datatosend = {};
+            datatosend.UserTypeID = UserTypeID;
+            datatosend.CollegeTypeID = CollegeTypeID;
+            datatosend.ModuleID = ModuleID;
+            $.ajax({
+                url: baseUrl + "GrantRoleModules",
+                type: 'POST',
+                data: datatosend,
+                success: function () {
+                    ddlModulesRoleBasedBind();
+                    GetGrantedRoleModules();
+                    $("#cover").fadeOut();
+                    swal("Saved", "Granted Module Successfully!", 'success');
+                },
+                error: errorFn
+            })
+        }
+
+        function RevokeUserModules(UserID, ModuleID) {
+
+            //getTypeList();
+            $("#cover").fadeIn();
+            var datatosend = {};
+            datatosend.UserID = UserID;
+            datatosend.ModuleID = ModuleID;
+            $.ajax({
+                url: baseUrl + "RevokeUserModules",
+                type: 'POST',
+                //contentType: 'application/json;charset=utf-8',
+                /* dataType: 'json',*/
+                data: datatosend,
+                success: function (data) {
+                    ddlModulesUserBasedBind();
+                    GetGrantedUserModules();
+                    $("#cover").fadeOut();
+                    swal("Saved", "Revoked Module Successfully!", 'success');
+                },
+                error: errorFn
+            })
+        }
+        function RevokeRoleModules(UserTypeID, CollegeTypeID, ModuleID) {
+            //getTypeList();
+            $("#cover").fadeIn();
+            var datatosend = {};
+            datatosend.UserTypeID = UserTypeID;
+            datatosend.CollegeTypeID = CollegeTypeID;
+            datatosend.ModuleID = ModuleID;
+            $.ajax({
+                url: baseUrl + "RevokeRoleModules",
+                type: 'POST',
+                data: datatosend,
+                success: function () {
+                    ddlModulesRoleBasedBind();
+                    GetGrantedRoleModules();
+                    $("#cover").fadeOut();
+                    swal("Saved", "Revoked Module Successfully!", 'success');
+                },
+                error: errorFn
+            })
+        }
+
+
+        function GetGrantedUserModules() {
+            //getTypeList();
+            $("#cover").fadeIn();
+            var datatosend = {};
+            datatosend.UserID = $('#ddlUser').val();
+            //alert($('#ddlUser').val());
+            $.ajax({
+                url: baseUrl + "GetGrantedUserModules",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    console.log(data);
+                    ModulesBind(JSON.parse(data));
+                    $("#cover").fadeOut();
+                },
+                error: errorFn
+            })
+        }
+        function GetGrantedRoleModules() {
+            //getTypeList();
+            $("#cover").fadeIn();
+            let UserTypeID = $('#ddlRole').val();
+            let CollegeTypeID = $('#ddlCollegeType').val();
+            var datatosend = {};
+            datatosend.UserTypeID = UserTypeID;
+            datatosend.CollegeTypeID = CollegeTypeID;
+            //alert($('#ddlUser').val());
+            $.ajax({
+                url: baseUrl + "GetGrantedRoleModules",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    console.log(data);
+                    ModulesBind(JSON.parse(data));
+                    $("#cover").fadeOut();
+                },
+                error: errorFn
+            })
+        }
+
+
+        function DropBind(id, name, list) {
+            var drop = $("#" + id);
+            drop.empty();
+            drop.append(`<option value='default'>Select ` + name + `</option>`);
+            $.each(list, function (i) {
+                drop.append(`<option value='` + list[i].value + `'>` + list[i].text + `</option>`);
+            });
+        }
+        function getRoleList() {
+            $("#cover").fadeIn();
+            var datatosend = {};
+            $.ajax({
+                url: baseUrl + "GetRoles",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    var list = JSON.parse(data);
+                    DropBind('ddlRole', 'Role', list);
+                    $("#cover").fadeOut();
+                },
+                error: errorFn
+            })
+        }
+        function getUserList() {
+            $("#cover").fadeIn();
+            var datatosend = {};
+            datatosend.RoleID = $('#ddlRole').val();
+            $.ajax({
+                url: baseUrl + "GetUsers",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    var list = JSON.parse(data);
+                    DropBind('ddlUser', 'User', list);
+                    $("#cover").fadeOut();
+                },
+                error: errorFn
+            })
+        }
+        function getCollegeTypes() {
+            $("#cover").fadeIn();
+            var datatosend = {};
+            datatosend.RoleID = $('#ddlRole').val();
+            $.ajax({
+                url: baseUrl + "GetUsers",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    var list = JSON.parse(data);
+                    DropBind('ddlUser', 'User', list);
+                    $("#cover").fadeOut();
+                },
+                error: errorFn
+            })
+        }
+        function ddlModulesUserBasedBind() {
+         
+            //getTypeList();
+            $("#cover").fadeIn();
+            var datatosend = {};
+            datatosend.UserID = $('#ddlUser').val();
+            //alert($('#ddlUser').val());
+            $.ajax({
+                url: baseUrl + "BindUserBasedModules",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    //console.log(data.Table,data.Table1);
+                    //console.log(data);
+                    var list = JSON.parse(data);
+                    //console.log('list ', list.Table);
+                    DropBind('ddlModule', 'Module', list);
+                    $("#cover").fadeOut();
+                },
+                error: errorFn
+            })
+        }
+
+        function ddlModulesRoleBasedBind() {
+            //getTypeList();
+            $("#cover").fadeIn();
+            var datatosend = {};
+            datatosend.UserTypeID = $('#ddlRole').val();
+            datatosend.CollegeTypeID = $('#ddlCollegeType').val();
+            //alert($('#ddlUser').val());
+            $.ajax({
+                url: baseUrl + "BindRoleBasedModules",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    //console.log(data.Table,data.Table1);
+                    //console.log(data);
+                    var list = JSON.parse(data);
+                    //console.log('list ', list.Table);
+                    DropBind('ddlModule', 'Module', list);
+                    $("#cover").fadeOut();
+                },
+                error: errorFn
+            })
+        }
+        function ddlModulesBind_CollegeType() {
+            //getTypeList();
+            $("#cover").fadeIn();
+            var datatosend = {};
+            datatosend.CollegeType = $('#ddlCollegeType').val();
+            //alert($('#ddlUser').val());
+            $.ajax({
+                url: baseUrl + "GetCollegeModules",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    //console.log(data.Table,data.Table1);
+                    console.log(data);
+                    var list = JSON.parse(data);
+                    console.log('list ', list.Table);
+                    $('#ddlModule').show();
+                    DropBind('ddlModule', 'Module', list);
+                    $("#cover").fadeOut();
+                },
+                error: errorFn
+            })
+        }
+
+        function getModuleDetails() {
+                var datatosend = {};
+                datatosend.Rolecode = $("#ddlRole").val();
+                datatosend.User = $('#ddlUser').val();
+                datatosend.Module = $('#ddlModule').val();
+
+                $.ajax({
+                    url: baseUrl + "getModuleDetails",
+                    type: "GET",
+                    contentType: "application/json;charset=utf-8",
+                    //data: { "SessionId": $('#ddlSession').val() },
+                    data: datatosend,
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data);
+                        console.log("Already Existed Data" + data);
+                        //ModuleList = JSON.parse(data);
+                        ModulesBind(JSON.parse(data));
+                    },
+
+                    error: function (jqXHR, exception) {
+                        //alertError(jqXHR, exception);
+                        //alert("Error" + jqXHR)
+                        console.log(jqXHR, exception);
+                    }
+                });
+            }
+
+        function ClearModuleData() {
+            $('#lblType').html('');
+            $('#lblShift').html('');
+            $('#lblUnit').html('');
+            $('#lblScheme').html('');
+            $('#ddlType').val('default');
+            $('#ddlShift').val('default');
+            $('#ddlUnit').val('default');
+            $('#ddlScheme').val('default');
+            $('#btnAdd').text('Add');
+
+            $("#ddlType").prop("disabled", false);
+            $("#ddlShift").prop("disabled", false);
+            $("#ddlUnit").prop("disabled", false);
+            $("#ddlScheme").prop("disabled", false);
+            rowNumberToUpdate = null; // it will prevent issue when edit is clicked and then Module gets changed.
+        }
+
+        function ValidDateAddData() {
+            $('#lblType').html('');
+            $('#lblShift').html('');
+            $('#lblUnit').html('');
+            $('#lblScheme').html('');
+            var isValid = true;
+            if ($('#ddlType').val() == 'default' || $('#ddlType').val() == '') {
+                $('#lblType').html('Please Select Type');
+                isValid = false;
+            }
+            if ($('#ddlShift').val() == 'default' || $('#ddlShift').val() == '') {
+                $('#lblShift').html('Please Select Shift');
+                isValid = false;
+            }
+            if ($('#ddlUnit').val() == 'default' || $('#ddlUnit').val() == '') {
+                $('#lblUnit').html('Please Select Unit');
+                isValid = false;
+            }
+            //if ($('#ddlScheme').val() == 0 || $('#ddlScheme').val() == '') {
+            //    $('#lblScheme').html('Please Select Scheme');
+            //    isValid = false;
+            //}
+
+            //check type, shift, unit and scheme are unique
+
+            for (i = 0; i < ModuleList.length; i++) {
+                var objModuleData = getNewModuleData();
+                //JSON.stringify(objModuleData) current object
+                //JSON.stringify(ModuleList[i])   already items
+                var Moduledata1 = ModuleList[i];
+                if (Moduledata1.Type == objModuleData.Type &&
+                    Moduledata1.Shift == objModuleData.Shift &&
+                    Moduledata1.Unit == objModuleData.Unit && Moduledata1.Type!='SCVT') {
+                    //$('#lblScheme').html('Already Existed!');
+                    swal("Alert!", "This Shift-Unit / SCVT-NCVT already Exists!", "warning");
+                    isValid = false;
+                    break;
+                }
+
+                //if (JSON.stringify(ModuleList[i]) === JSON.stringify(objModuleData)) {
+                //    $('#lblScheme').html('Already Existed!');
+                //    isValid = false;
+                //    break;
+                //}
+            }
+
+            return isValid;
+        }
+
+        function ModuleDetailsBind() {
+            return 1;
+        }
+        function ModulesBind(modulesdata) {
+            //alert("refreshing table");
+
+
+            $("#tblModuleDetails").DataTable({
+                data: modulesdata,
+                //rowsGroup: [
+                //    'first:name',
+                //    'second:name'
+                //],
+                dom: 'Bfrtip',
+                paging: false,
+                ordering: false,
+                destroy: true,
+                buttons: [],
+                columns: [
+                    { data: 'SerialNumber' },
+                    { data: 'ModuleName'},
+                    {
+                        "targets": -1,
+                        data: 'ModuleCode',
+                        className: "center",
+                        //visible: false,
+                        "mRender": function (ModuleCode, data, full, meta) {
+
+                            /*return '<a href="#" onclick="editData(' + meta.row + ')" class="editor_edit btn btn-primary btn-sm">Edit </a> <a href="#" class="activated_deactivated btn btn-info btn-sm" data-status="n">Deactivate</a>';*/
+
+                            //console.log("data", data,"full",full);
+
+                            return '<a href="#" onclick="RevokeModule(\'' + full.ModuleCode + '\')" class="btn btn-danger btn-sm">Revoke</a>';
+
+                        }
+
+                    }
+
+                ]
+
+            });
+
+
+            //const $guidCells = $("tbody tr td:nth-child(4)");
+
+            //$guidCells.each(function (i, item) {
+            //    const $nextGuidCell = $guidCells.eq(i + 1);
+            //    if (item.textContent === $nextGuidCell.text()) {
+            //        item.rowSpan = 2;
+            //        $nextGuidCell.remove();
+            //    }g
+            //});
+           // $('#tblModuleDetails').DataTable().ajax.reload();
+        }
+
+        var errorFn = function (jqXHR, exception) {
+
+            var msg = '';
+            if (jqXHR.status === 0) {
+                msg = 'Not connect.\n Verify Network.';
+            } else if (jqXHR.status == 404) {
+                msg = 'Requested page not found. [404]';
+            } else if (jqXHR.status == 500) {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'parsererror') {
+                msg = 'Requested JSON parse failed.';
+            } else if (exception === 'timeout') {
+                msg = 'Time out error.';
+            } else if (exception === 'abort') {
+                msg = 'Ajax request aborted.';
+            } else {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            alert("Error: " + msg);
+            $("#cover").fadeOut("slow");
+
+        }
+    </script>
+
+</body>
+</html>

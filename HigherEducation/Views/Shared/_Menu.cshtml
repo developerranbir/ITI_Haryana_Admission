@@ -1,0 +1,89 @@
+﻿<style>
+    .shadow_text {
+        border-bottom: 1px solid rgba(107, 108, 109, 0.19);
+    }
+
+    .shadow_text:hover {
+        border-bottom: 1px solid rgba(107, 108, 109, 0.19);
+        background: -webkit-gradient(linear, left top, right top, from(#004ef9), to(#79a3ff)) !important;                
+        text-shadow: 1px 1px #283612, 2px 2px #283612, 3px 3px #283612, 4px 4px #283612, 5px 5px #283612, 6px 6px #283612;
+        color:#ffffff !important;
+    }
+
+    .text-size {
+        font-size: 13px;
+        font-weight: bold;
+    }
+    .text-size2 {
+        font-size: 17px;
+        font-weight: bold;
+    }
+    .pcoded .pcoded-navbar[active-item-theme="theme4"] .pcoded-item li:hover > a .pcoded-micon {
+        color: #fff !important;
+    }
+</style> 
+@if(Convert.ToString(Session["UserSession"])!="" && Convert.ToString(Session["UserSession"]) != null)
+{
+
+<nav class="pcoded-navbar" style="box-shadow: 3px 0px 8px -3px #283212;border-radius: 5px;">    
+    <div class="pcoded-inner-navbar main-menu">
+       <ul class="pcoded-item pcoded-left-item">                                    
+         
+                <li class="active shadow_text">
+                    <a href="@Url.Action("Dashborad", "Dashboard")" , title="{Click to view Dashboard}">
+                        <span class="pcoded-micon"><i class="fa fa-dashboard"></i></span>
+                        <span class="pcoded-mtext text-size">Dashboard</span>
+                        <span class="pcoded-mcaret"></span>
+                    </a>
+                </li>
+                <li class="shadow_text">
+                    <a href="@Url.Action("ViewCases", "Court", new { Area =  "CourtCase" })" , title="{Click to view list}">
+                        <span class="pcoded-micon"><i class="fa fa-eye"></i></span>
+                        <span class="pcoded-mtext text-size">View Cases</span>
+                        <span class="pcoded-mcaret"></span>
+                    </a>
+                </li>
+                <li class="shadow_text">
+                    <a href="@Url.Action("InsertCase", "Court", new { Area =  "CourtCase" })" , title="{Click to view list}">
+                        <span class="pcoded-micon"><i class="fa fa-user"></i></span>
+                        <span class="pcoded-mtext text-size">Register Case</span>
+                        <span class="pcoded-mcaret"></span>
+                    </a>
+                </li>
+                <li class="shadow_text">
+                    <a href="@Url.Action("DashBoard", "ARCS", new { Area =  "" })" , title="{Click to view list}">
+                        <span class="pcoded-micon"><i class="fa fa-step-backward"></i></span>
+                        <span class="pcoded-mtext text-size">Back to Dashboard</span>
+                        <span class="pcoded-mcaret"></span>
+                    </a>
+                </li>
+                <li class="shadow_text">
+                    <a href="@Url.Action("SearchByCaseNo", "Court", new { Area =  "CourtCase" })" , title="{Click to serach cases by case number}">
+                        <span class="pcoded-micon"><i class="fa fa-search"></i></span>
+                        <span class="pcoded-mtext text-size">Search By Case Number</span>
+                        <span class="pcoded-mcaret"></span>
+                    </a>
+                </li>                
+                <li class="pcoded-hasmenu">
+                    <a href="javascript:void(0)">
+                        <span class="pcoded-micon"><i class="fa fa-question"></i></span>
+                        <span class="pcoded-mtext text-size">FAQ</span>
+                        <span class="pcoded-mcaret"></span>
+                    </a>
+                    <ul class="pcoded-submenu">
+                        <li class="">
+                            <a id="CourtHelpGuide" href="@Url.Action("GetPdf", "Society", new { Area="", fileName = "PDF", Value = "CourtHelpGuide" })" target="_blank">
+                                <span class="pcoded-micon"><i class="fa fa-question"></i></span>
+                                <span class="pcoded-mtext" style="font-weight:bold;font-size:12px;">User Manual</span>
+                                <span class="pcoded-mcaret"></span>
+                            </a>
+                        </li>                                             
+                    </ul>
+                </li>
+            
+        </ul>
+    </div>
+</nav>
+
+}
+

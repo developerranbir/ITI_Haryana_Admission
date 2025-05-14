@@ -1,0 +1,3678 @@
+﻿@model HigherEducation.Models.CandidateDetail
+@{
+    Session["currentPage"] = 1;
+
+}
+@{
+    if (Session["MaxPage"] == null)
+    {
+        Session["currentPage"] = 1;
+        Session["MaxPage"] = 1;
+    }
+    else if (Convert.ToInt32(Session["currentPage"]) > Convert.ToInt32(Session["MaxPage"]))
+    {
+        Session["MaxPage"] = Session["currentPage"];
+    }
+
+}
+
+
+@*@if (Convert.ToString(TempData["Verificationstatus"]) == "F")
+    {
+        <script>
+
+                                swal({
+                                        title: "Information!!",
+                                        text: "Your Application has already been submitted. You can only take print from the declaration section",
+                                        type: "info",
+                                        showCancelButton: false,
+                                        confirmButtonClass: "btn-danger",
+                                        confirmButtonText: "Ok",
+                                        closeOnConfirm: false
+                                    },
+                                  function (isConfirm) {
+                                    if (isConfirm) {
+
+                                        window.location = "@Url.Action("Declaration", "Account")"
+                                    }
+                                    else {
+
+                                    }
+                                });
+
+
+        </script>
+    }*@
+
+@*@if (Convert.ToString(TempData["CandidatePayment"]) == "Y")
+    {
+        <script>
+                                 swal({
+                            title: "Information!!",
+                            text: "Please check your seat status",
+                           // text: "You can differ your seat to participiate in next counselling round.",
+                            type: "info",
+                            showCancelButton: false,
+                            confirmButtonClass: "btn-danger",
+                            confirmButtonText: "Ok",
+                            closeOnConfirm: false
+                                    },
+                              function (isConfirm) {
+                                if (isConfirm) {
+
+                                    window.location = "@Url.Action("AdmissionFee", "AdmissionFee")"
+                                }
+                                else {
+
+                                }
+                            });
+        </script>
+    }*@
+
+@*@if (Convert.ToString(Session["CandidatePayment"]) == "Y")
+    {
+        if (Convert.ToString(Session["Quarter"]) == "Y")
+        {
+            <script>
+
+                     swal({
+                        title: "Alert!!",
+                         text: "You have to pay your Quarterly Fee.Ignore if already Paid",
+                       // text: "You can differ your seat to participiate in next counselling round.",
+                        type: "info",
+                        showCancelButton: false,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Ok",
+                        closeOnConfirm: false
+                                },
+                          function (isConfirm) {
+                            if (isConfirm) {
+
+                                window.location = "@Url.Action("QuarterlyFee", "QuarterlyFee")"
+                            }
+                            else {
+
+                            }
+                        });
+
+
+            </script>
+        }*@
+@*
+        else
+        {
+            <script>
+
+                         swal({
+                            title: "Alert!!",
+                             text: "Please check your seat status.",
+                           // text: "You can differ your seat to participiate in next counselling round.",
+                            type: "info",
+                            showCancelButton: false,
+                            confirmButtonClass: "btn-danger",
+                            confirmButtonText: "Ok",
+                            closeOnConfirm: false
+                                    },
+                              function (isConfirm) {
+                                if (isConfirm) {
+
+                                    window.location = "@Url.Action("AdmissionFee", "AdmissionFee")"
+                                }
+                                else {
+
+                                }
+                            });
+
+
+            </script>
+        }
+    }*@
+@*@if (Convert.ToString(TempData["IsPanelty"]) == "1")
+{
+    <script>
+
+                             swal({
+                                title: "Information!!",
+                                text: "You were in the merit list and you have not paid fee, So you have to pay panelty to participiate in next merit round.",
+                                type: "info",
+                                showCancelButton: false,
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Ok",
+                                closeOnConfirm: false
+                                        },
+                                  function (isConfirm) {
+                                    if (isConfirm) {
+
+                                        window.location = "@Url.Action("PaneltyFee", "RegistrationPayment")"
+                                    }
+                                    else {
+
+                                    }
+                                });
+    </script>
+}*@
+
+@*@if (Convert.ToString(TempData["Isdiffer"]) == "1")
+    {
+        <script>
+
+                 swal({
+                    title: "Information!!",
+                    text: "You have opted for differ. You can change choice and complete the form",
+                    type: "info",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Ok",
+                    closeOnConfirm: false
+                            },
+                      function (isConfirm) {
+                        if (isConfirm) {
+
+                            window.location = "@Url.Action("ChoiceofCourses", "Account")"
+                        }
+                        else {
+
+                        }
+                    });
+        </script>
+    }*@
+@*@if (Convert.ToString(Session["ChangeChoice"]) == "Y")
+    {
+        <script>
+
+                 swal({
+                    title: "Information!!",
+                    text: "You can change your choice. kindly confirm and submit your form after change the choice",
+                    type: "info",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Ok",
+                    closeOnConfirm: false
+                            },
+                      function (isConfirm) {
+                        if (isConfirm) {
+
+                            window.location = "@Url.Action("ChoiceofCourses", "Account")"
+                        }
+                        else {
+
+                        }
+                    });
+        </script>
+    }*@
+
+
+<style>
+    .ui-datepicker select.ui-datepicker-month, .ui-datepicker select.ui-datepicker-year {
+        color: black;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .col-md-6 {
+        font-weight: normal;
+    }
+</style>
+<style type="text/css">
+    .tab-pane .tools .btn.btn-flat {
+        /* padding: 4.5px 7px; */
+        margin-bottom: 5px;
+        margin-top: -30px;
+        margin-right: 10px;
+    }
+
+    .txtSize {
+        font-size: 16px;
+    }
+
+    .ctrlPosition {
+        text-align: center;
+        margin-top: 40px;
+        color: #34495E;
+        font-weight: bold;
+    }
+
+        .ctrlPosition:hover {
+            color: blue;
+        }
+
+    .pdfFile {
+        margin-left: 50px;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+        .pdfFile:hover {
+            text-decoration: underline;
+        }
+
+    .btnAdd {
+        color: white;
+        outline: 0;
+        padding: 10px 16px;
+        font-size: 16px;
+        line-height: 1.33;
+        border-radius: 6px;
+    }
+
+    .my-input {
+        width: 100%;
+    }
+
+    .my-icon {
+        position: absolute;
+        right: 20px;
+        color: red;
+        top: 7px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .redBorder {
+        border: 1px solid red !important;
+    }
+
+    .greenBorder {
+        border: 1px solid green !important;
+    }
+
+    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+        background: linear-gradient(to right, #004ef9, #79a3ff) !important;
+        color: #fff;
+        border-color: #79a3ff !important;
+    }
+
+    .disabledbutton {
+        pointer-events: none;
+        opacity: 0.4;
+    }
+</style>
+
+<style>
+    .loader,
+    .outer-loader {
+        display: inline-block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0
+    }
+
+    .outer-loader {
+        background: rgba(0, 0, 0, .3);
+        width: 100%;
+        height: 100%;
+        z-index: 999999999999
+    }
+
+    .loader {
+        width: 69px;
+        height: 89px;
+        border: 1px solid #000;
+        margin: auto
+    }
+
+    .loader-img {
+        border: 15px solid #415bbb;
+        border-radius: 50%;
+        border-top: 15px solid #000;
+        width: 80px;
+        height: 80px;
+        -webkit-animation: spin 1s linear infinite;
+        animation: spin 1s linear infinite
+    }
+
+    @@-webkit-keyframes spin {
+        0% {
+            -webkit-transform: rotate(0)
+        }
+
+        100% {
+            -webkit-transform: rotate(360deg)
+        }
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0)
+        }
+
+        100% {
+            transform: rotate(360deg)
+        }
+    }
+
+    .row_new {
+        margin-left: 10px;
+        margin-right: 10px
+    }
+
+    #logo img {
+        height: auto;
+        padding-left: 3px;
+        width: 40px
+    }
+
+    body:not(.menu-on-top).desktop-detected {
+        min-height: 907px !important
+    }
+</style>
+<head>
+    @*<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">*@
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+    @*<link href="~/assets/css/jquery-ui.css" rel="stylesheet" />*@
+    <link href="~/assets/css/stylepersonal.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/assets/js/jquery/jquery.min.js"></script>
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <script src="~/swalJs/sweetalert.min.js"></script>
+    <script src="~/swalJs/swal-forms.js"></script>
+
+</head>
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+		alert(@ViewBag.ErrorMessage);
+    </script>
+}
+
+@if (Convert.ToString(TempData["validationmsg"]) != "")
+{
+    var validationsummar = TempData["validationmsg"].ToString();
+    <h4 class="card container text-danger" style="margin-top:40px">
+        <i class="fa fa-exclamation-circle"></i>
+        Kindly Check following Errors: <br /> @validationsummar
+    </h4>
+}
+
+
+<section class="cus-background">
+    <div class="section-body contain-lg">
+
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="Case Details-tab">
+            <div class="col-lg-12 col-12">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col=12 cus-heading">
+                        <h3>Personal Details/व्यक्तिगत विवरण </h3>
+                    </div>
+                    <div id="dvfamilyMemberId" class="col-lg-6 col-md-6 col-12" style="margin-top:5%;text-align:right;">
+                        <lable class="badge badge-primary" id="lblfamilyIdShow" style="font-size:15px;"></lable>&nbsp;
+                        <lable class="badge badge-success" id="lblMemberIdShow" style="font-size:15px;"></lable>
+                    </div>
+                </div>
+            </div>
+
+
+            <form class="form form-validate" id="formLogin1" autocomplete="off" action="@Url.Action("PersonalDetails", "Account")" onsubmit="startPreloader()" accept-charset="utf-8" method="post" enctype="multipart/form-data">
+                <input type="hidden" id="hdnCandidate" name="hdnCandidate" value="" />
+                <input type="hidden" id="hdnFHName" name="hdnFHName" value="" />
+                <input type="hidden" id="hdnMotherName" name="hdnMotherName" value="" />
+                <input type="hidden" id="hdnDOB" name="hdnDOB" value="" />
+                <input type="hidden" id="hdnGender" name="hdnGender" value="" />
+                <input type="hidden" id="hdnAadhar" name="hdnAadhar" value="" />
+
+                <input type="hidden" id="hdnRuralUrban" name="hdnRuralUrban" value="" />
+                <input type="hidden" id="hdnState" name="hdnState" value="" />
+                <input type="hidden" id="hdnDisRural" name="hdnDisRural" value="" />
+                <input type="hidden" id="hdnDisUrban" name="hdnDisUrban" value="" />
+                <input type="hidden" id="hdnMunicipilty" name="hdnMunicipilty" value="" />
+                <input type="hidden" id="hdnBlock" name="hdnBlock" value="" />
+                <input type="hidden" id="hdnVillage" name="hdnVillage" value="" />
+                <input type="hidden" id="hdnStreetAdd1" name="hdnStreetAdd1" value="" />
+                <input type="hidden" id="hdnStreetAdd2" name="hdnStreetAdd2" value="" />
+                <input type="hidden" id="hdnPin" name="hdnPin" value="" />
+                <input type="hidden" id="hdtxnId" name="hdtxnId" value="" />
+                <input type="hidden" id="hdStatusOTP" name="hdStatusOTP" value="" />
+                <input type="hidden" id="hdStatusMessageOTP" name="hdStatusMessageOTP" value="" />
+                <input type="hidden" id="hdIsCasteVerified" name="hdIsCasteVerified" value="" />
+                <input type="hidden" id="hdIsHryResidentVerified" name="hdIsHryResidentVerified" value="" />
+                <input type="hidden" id="hdIsPhyHandicapVerified" name="hdIsPhyHandicapVerified" value="" />
+                <input type="hidden" id="hdIsIncomeVerified" name="hdIsIncomeVerified" value="" />
+                <input type="hidden" id="hdFamilyId" name="hdFamilyId" value="" />
+                <input type="hidden" id="hdMemberId" name="hdMemberId" value="" />
+                <input type="hidden" id="hdNamePPP" name="hdNamePPP" value="" />
+                <input type="hidden" id="hdGenderPPP" name="hdGenderPPP" value="" />
+                <input type="hidden" id="hdFHNamePPP" name="hdFHNamePPP" value="" />
+                <input type="hidden" id="hdDOBPPP" name="hdDOBPPP" value="" />
+                <input type="hidden" id="hdisNameVerified" name="hdisNameVerified" value="" />
+                <input type="hidden" id="hdisFnameVerified" name="hdisFnameVerified" value="" />
+                <input type="hidden" id="hdisDOBVerified" name="hdisDOBVerified" value="" />
+                <input type="hidden" id="hdDOBVerifiedFrom" name="hdDOBVerifiedFrom" value="" />
+                <input type="hidden" id="hdisCasteCatgMatch_WithPPP" name="hdisCasteCatgMatch_WithPPP" value="" />
+                <input type="hidden" id="hdcasteCategoryPPP" name="hdcasteCategoryPPP" value="" />
+                <input type="hidden" id="hdsubCaste_name_PPP" name="hdsubCaste_name_PPP" value="" />
+                <input type="hidden" id="hdsubCaste_code_PPP" name="hdsubCaste_code_PPP" value="" />
+                <input type="hidden" id="hdcasteDescription_PPP" name="hdcasteDescription_PPP" value="" />
+                <input type="hidden" id="hdJsonPPP" name="hdJsonPPP" value="" />
+                @Html.HiddenFor(o => o.DOBVerifiedFrom, new { @class = "form-control input-shadow", @value = ViewBag.DOBVerifiedFrom })
+                <div class="card c-shadow">
+                    <div class="card-body">
+                        <div class="top-section">
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label for="NationalyType" style="font-size:16px;color: #34495E;"><span class="hindi">राष्ट्रीयता&nbsp;(Nationality)</span><span style="color:red;"><strong>*</strong></span></label><br />
+                                            @Html.RadioButtonFor(model => model.NationalyType, "I", new { @id = "txtIndian", @checked = true })  <span class="hindi">भारतीय&nbsp;(Indian)</span> &nbsp;&nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;
+                                            @Html.RadioButtonFor(model => model.NationalyType, "O", new { @id = "txtOther" }) <span class="hindi">अन्य&nbsp;(Other)</span>
+
+
+                                            @Html.ValidationMessageFor(model => model.NationalyType, "", new { @class = "validation" })
+
+                                        </div>
+                                        <div class="col-md-6 form-group">
+
+                                            <label for="State" id="lblCountry" style="font-size:16px;color: #34495E; display: none;">देश&nbsp;(Country) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.DropDownListFor(model => model.N_Country_Code, new SelectList(ViewBag.CountryName as System.Collections.IEnumerable, "Value", "Text"), new { id = "N_Country_Code", @class = "form-control input-shadow", @style = "display: none;" })
+                                            <span id="country_error" style="color:red"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="dvHaryanaDomicile" class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <span class="hindi">क्या आप हरियाणा के निवासी हैं?&nbsp;(Are you a Residence/Domicile of Haryana?)</span><span style="color:red;"><strong>*</strong></span><br />
+
+
+                                            @Html.RadioButtonFor(model => model.HaryanaDomicile, "Y", new { @id = "checkHaryanaDomicileYes", @required = "required" }) <label>हाँ</label>&nbsp;
+                                            @Html.RadioButtonFor(model => model.HaryanaDomicile, "N", new { @id = "checkHaryanaDomicileNo", @required = "required" }) <label>नहीं</label>
+                                            @Html.ValidationMessageFor(model => model.HaryanaDomicile, "", new { @class = "validation" })
+
+                                        </div>
+                                        <div id="dvNStateCode" class="col-md-6 form-group">
+                                            <label for="State" id="lblState" style="font-size:16px;color: #34495E;">राज्य&nbsp;(State) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.DropDownListFor(model => model.N_State_Code, new SelectList(ViewBag.State as System.Collections.IEnumerable, "Value", "Text"), new { id = "drpState", @class = "form-control input-shadow", @required = "required" })
+
+                                        </div>
+                                        @*<div class="col-md-3 form-group">
+                                                <a href="https://meraparivar.haryana.gov.in/AddNewFamilyDirect/FamilySearch" target="_blank" id="familylink" style="display:none; color:red">Click here to know your family id</a>
+                                            </div>*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="button" id="btnRefreshfromPPP" value="Refresh from PPP" class="btn btn-success btn-sm" style="display:none;" />
+                            </div>
+                            <div id="dvFamMemNote" class="col-lg-12" style="text-align:center;margin-bottom:1rem;">
+                                <label style="color: #213f71;">
+                                    <strong>Note:</strong>&nbsp; <span style="color:red;font-weight:700;">a)</span> In case, Family ID is not known, same can be auto fetched using Aadhaar No. &nbsp; <span style="color:red;font-weight:700;">b)</span> In case, Family ID is not made yet, you have to first generate the same.
+                                </label>
+                            </div>
+
+                            <div id="dvFIDUIDPPP" class="row">
+                                <div id="dvFIDUID" class="col-md-3 form-group">
+
+                                    <label for="lblSearch" id="lblSearch" style="font-size:16px;color: #34495E;">Search By/खोज विधि: <span style="color:red;"><strong>*</strong></span></label><br />
+
+                                    @Html.RadioButtonFor(model => model.FIDUID, "F", new { @id = "chkFID", @required = "required", @name = "FIDUID" }) <label for="FID"><span class="hindi">Family Id</span></label>&nbsp;
+                                    @Html.RadioButtonFor(model => model.FIDUID, "U", new { @id = "chkUID", @required = "required", @name = "FIDUID" }) <label for="UID"><span class="hindi">Aadhaar Id</span></label>
+                                    @Html.ValidationMessageFor(model => model.FIDUID, "", new { @class = "validation" })
+                                </div>
+
+                                <div id="dvFamAadhMem" class="col-md-9">
+                                    <div class="row">
+                                        <div id="dvFamilyID" class="col-md-4 form-group">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label for="FamilyID" id="lblFamilyId" style="font-size:16px;color: #34495E; display:none;"><span style="color:red;"><strong>*</strong></span></label>
+                                                </div>
+                                                <div class="col-md-8 col-8">
+                                                    @Html.TextBoxFor(model => model.FamilyID, new { @class = "form-control input-shadow", @id = "txtFIDUID", @placeholder = "", @style = "display: none;", @maxlength = "13" })
+                                                </div>
+                                                <div class="col-md-4 col-4">
+                                                    <input type="button" id="btnGo" value="GO" class="btn btn-success btn-sm" style="display:none;" />
+                                                    <input type="button" id="btnReset" value="Reset" class="btn btn-success btn-sm" style="display:none;" />
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        @*<div id="dvResetPPP" class="col-md-2 form-group">
+
+                                            </div>*@
+
+                                        <div id="dvfamilyIdViaAadhaar" class="col-md-4 form-group" style="margin-top:2%;">
+                                            <label for="lblFamilyIdViaAadhaarfix" id="lblFamilyIdViaAadhaarfix">FamilyID:</label>
+                                            <label for="lblFamilyIdViaAadhaar" id="lblFamilyIdViaAadhaar" name="lblFamilyIdViaAadhaar" style="font-size:16px;color: #34495E;"></label>
+                                        </div>
+
+                                        <div id="dvMemberId" class="col-md-4 form-group" style="display:none;">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label for="MemberId" id="lblMemberId" style="font-size:16px;color: #34495E;">Select Student<span style="color:red;"><strong>*</strong></span></label>
+                                                </div>
+                                                <div class="col-md-8 col-8">
+                                                    <select id="MemberId" name="MemberId" class="form-control">
+                                                    </select>
+                                                    <span id="MemberId_error" style="color:#f00;"></span>
+                                                </div>
+                                                <div class="col-md-4 col-4">
+                                                    <input type="button" id="sendMemberOTP" class="btn btn-success btn-sm" value="Send OTP" />
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <div id="dvMemberIdViaAadhaar" class="col-md-4 form-group" style="margin-top:2%;">
+                                            <label for="lblMemberIdViaAadhaarfix" id="lblMemberIdViaAadhaarfix">MemberId:</label>
+                                            <label for="lblMemberIdViaAadhaar" id="lblMemberIdViaAadhaar" name="lblMemberIdViaAadhaar" style="font-size:16px;color: #34495E;"></label>
+                                            <input type="button" id="sendMemberViaAadhaarOTP" class="btn btn-success btn-sm" value="Send OTP" />
+                                        </div>
+                                        <div id="dvMemberOTP" class="col-md-4 form-group" style="display:none;">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label for="OTP" id="lblOTP" style="font-size:16px;color: #34495E; display: block;">Enter OTP<span style="color:red;"><strong>*</strong></span></label>
+                                                </div>
+                                                <div class="col-md-8 col-8">
+                                                    @Html.TextBoxFor(model => model.OTP, new { @id = "OTP", @class = "form-control input-shadow", @Value = ViewBag.OTP, autocomplete = "off", MaxLength = 6 })
+
+                                                </div>
+                                                <div class="col-md-4 col-4">
+                                                    <input type="button" id="btnVerifyOTP" value="Verify OTP" class="btn btn-success btn-sm" />
+                                                </div>
+                                                <label class="cus-otp-badge" id="lblOTPMessage"></label>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="disabledDataTop">
+                                <div class="row">
+                                    <div id="dvFamMemNoteLink" class="col-lg-12" style="text-align:center;margin-bottom:1rem;">
+                                        <label style="color: #213f71;">
+                                            <strong>Note:</strong>&nbsp; <span style="color:red;font-weight:700;font-size:13px;"> आपकी आरक्षण श्रेणी से संबंधित सूचना परिवार पहचान पत्र के डेटाबेस से ली गई है, यदि आप इस सूचना से सहमत नहीं हैं तो दिए हुए लिंक <a href="https://meraparivar.haryana.gov.in/" target="_blank">https://meraparivar.haryana.gov.in/</a> पर जाकर अपनी शिकायत दर्ज करें</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="CandidateName" style="font-size:16px;color: #34495E;">विद्यार्थी का पूरा नाम&nbsp;(Student's Full Name) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.TextBoxFor(model => model.CandidateName, new { @id = "CandidateName", @class = "form-control input-shadow", @Value = ViewBag.CandidateName, @required = "required", autocomplete = "off", @maxlength = "100" })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="FatherHusbandName" style="font-size: 16px;color: #34495E;">पिता / पति का नाम&nbsp;(Father's/Husband's Name)<span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.TextBoxFor(model => model.FatherHusbandName, new { @id = "FatherHusbandName", @class = "form-control input-shadow", @Value = ViewBag.FathreName, @required = "required", @maxlength = "100", autocomplete = "off" })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="MotherName" style="font-size:16px;color: #34495E;">माता का नाम&nbsp;(Mother's Name) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.TextBoxFor(model => model.MotherName, new { @class = "form-control input-shadow", @Value = ViewBag.MotherName, @required = "required", @maxlength = "100", autocomplete = "off" })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="BirthDate" style="font-size:16px;color: #34495E;">जन्म की तिथि&nbsp;(Date of Birth) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.TextBoxFor(model => model.BirthDate, new { @class = "form-control input-shadow", @Value = ViewBag.DOB, @required = "required" })
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3 form-group">
+                                        <label for="Sex" style="font-size:16px;color: #34495E;">लिंग&nbsp;(Gender) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.Sex, new SelectList(ViewBag.Sex as System.Collections.IEnumerable, "Value", "Text"),
+                                                "Select", new { id = "Sex", @class = "form-control input-shadow", @required = "required", @Value = ViewBag.SexValue })
+                                    </div>
+
+                                    <div id="dvaadhar" class="col-md-3 form-group">
+                                        <label for="AadharNo" style="font-size:16px;color: #34495E;">आधार कार्ड संख्या &nbsp;(Aadhaar Number)<span style="color:red;"><strong>*</strong></span> </label>
+                                        @Html.TextBoxFor(model => model.AadharNo, new { @class = "form-control input-shadow", @Value = ViewBag.AadharValue, @maxlength = "12", @minlength = "12", @required = "required", autocomplete = "off" })
+
+                                    </div>
+
+                                    <div class="col-md-3 form-group">
+                                        <label for="Email" style="font-size:16px;color: #34495E;">ईमेल आई डी&nbsp;(Email Id) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.TextBoxFor(model => model.Email, new { id = "Email", @class = "form-control input-shadow", @Value = ViewBag.Email, @required = "required", @maxLength = "50", autocomplete = "off" })
+                                        <label style="color:red;" id="lblError"></label>
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="MobileNo" style="font-size:16px;color: #34495E;">मोबाइल नंबर&nbsp;(Mobile Number) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control input-shadow", @maxlength = "10", @Value = ViewBag.Mobile, @required = "required", autocomplete = "off" })
+                                        <label style="color:red;" id="lblMError"></label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 form-group">
+                                        <label for="MaritalStatus" style="font-size:16px;color: #34495E;">वैवाहिक स्थिति&nbsp;(Marital Status) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.Marital_Status, new SelectList(ViewBag.MaritalStatus as System.Collections.IEnumerable, "Value", "Text"), "Select", new { @class = "form-control input-shadow", @required = "required" })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="ReservationCategory" style="font-size:16px;color: #34495E;"><span class="hindi">आरक्षण श्रेणी&nbsp;(Reservation Category)</span><span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.ReservationCategory, new SelectList(ViewBag.Category as System.Collections.IEnumerable, "Value", "Text"), "--Please Select Category--", new { id = "ReservationCategory", @class = "form-control input-shadow", @required = "required" })
+                                        <span id="rescast_error" style="color:red"></span>
+                                        @Html.ValidationMessageFor(model => model.ReservationCategory, "", new { @class = "validation" })
+
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="DisableCategory" style="font-size:16px;color: #34495E;"><span class="hindi">दिव्यांग श्रेणी&nbsp;(Disable Category)</span><span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.DisableCategory, new SelectList(ViewBag.DisableCategories as System.Collections.IEnumerable, "Value", "Text"), "Select Category",
+
+                                                  new { id = "DisableCategory", @class = "form-control input-shadow", @required = "required" })
+                                        <span id="rescast_error" style="color:red"></span>
+                                        @Html.ValidationMessageFor(model => model.DisableCategory, "", new { @class = "validation" })
+
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="CasteCategory" style="font-size:16px;color: #34495E;"><span class="hindi">जाति श्रेणी&nbsp;(Caste Category)</span><span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.CasteCategory, Enumerable.Empty<SelectListItem>(), "-Please Select Caste Category--", new { id = "CasteCategory", @class = "form-control input-shadow", @required = "required" })
+                                        <span id="cascat_error" style="color:red"></span>
+                                        @Html.ValidationMessageFor(m => m.CasteCategory, "", new { @class = "validation" })
+
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="Caste" style="font-size:16px;color: #34495E;"><span class="hindi">जाति&nbsp;(Caste)</span><span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(m => m.Caste, Enumerable.Empty<SelectListItem>(), "--Please Select Caste--", new { id = "Caste", @class = "form-control input-shadow", @required = "required" })
+                                        <span id="cast_error" style="color:red"></span>
+                                        @Html.ValidationMessageFor(m => m.Caste, "", new { @class = "validation" })
+
+                                    </div>
+
+                                    @*</div>
+                                        <div class="row">*@
+
+                                    <div class="col-md-3 form-group">
+                                        <label for="FatherOccupation" style="font-size:16px;color: #34495E;">पिता का व्यवसाय&nbsp;(Father's Occupation) <span style="color: red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.Father_Occupation, new SelectList(ViewBag.Occupation as System.Collections.IEnumerable, "Value", "Text"), "Select", new { @class = "form-control input-shadow", @required = "required" })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="MotherOccupation" style="font-size:16px;color: #34495E;">मां का व्यवसाय&nbsp;(Mother's Occupation) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.Mother_Occupation, new SelectList(ViewBag.Occupation as System.Collections.IEnumerable, "Value", "Text"), "Select", new { @class = "form-control input-shadow", @required = "required" })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="GuradianName" style="font-size:16px;color: #34495E;">अभिभावक का नाम&nbsp;(Guardian's Name) </label>
+                                        @Html.TextBoxFor(model => model.Guardian_Name, new { @class = "form-control input-shadow", autocomplete = "off" })
+                                    </div>
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 form-group">
+                                        <label for="BloodGroup" style="font-size:16px;color: #34495E;">रक्त समूह&nbsp;(Blood Group) </label>
+                                        @Html.DropDownListFor(model => model.BloodGroup, new SelectList(ViewBag.BloodGroup as System.Collections.IEnumerable, "Value", "Text"), "Select", new { id = "BloodGroup", @class = "form-control input-shadow" })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="GuardianMobileNo" style="font-size:16px;color: #34495E;">अभिभावक मोबाइल नंबर&nbsp;(Parent/ Guardian's Mobile No) </label>
+                                        @Html.TextBoxFor(model => model.GuardianMobileNo, new { @class = "form-control input-shadow", @maxlength = "10", @minlength = "10", autocomplete = "off" })
+                                        <label style="color:red;" id="lblGurdianMError"></label>
+                                    </div>
+
+                                    <div class="col-md-3 form-group">
+                                        <label for="TelephoneNo" style="font-size:16px;color: #34495E;">टेलीफोन नंबर(एसटीडी कोड के साथ)&nbsp;(Telephone No(with STD code)) </label>
+                                        @Html.TextBoxFor(model => model.TelephoneNo, new { @class = "form-control input-shadow", @maxlength = "12", @minlength = "12", autocomplete = "off" })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="GuradianEmail" style="font-size:16px;color: #34495E;">अभिभावक ईमेल आई डी&nbsp;(Parent/ Guardian's Email Id) </label>
+                                        @Html.TextBoxFor(model => model.GuradianEmail, new { @class = "form-control input-shadow", autocomplete = "off", @maxLength = "50" })
+                                        <label style="color:red;" id="lblGurdianError"></label>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 form-group">
+                                        <label for="Religion" style="font-size:16px;color: #34495E;">धर्म&nbsp;(Religion) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.Religion, new SelectList(ViewBag.Religion as System.Collections.IEnumerable, "Value", "Text"), "Select", new { id = "Religion", @class = "form-control input-shadow", required = "required" })
+                                    </div>
+                                    <div id="dvfamilyIncome" class="col-md-3 form-group">
+                                        <label for="familyIncomefix" style="font-size:16px;color: #34495E;">कुल घरेलू आय&nbsp;(Family Income as Verified from PPP) </label>
+                                        <label for="familyIncome" name="familyIncome" id="familyIncome" style="font-size:16px;color: #34495E;"></label>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="ParentalIncome" style="font-size:16px;color: #34495E;">सभी स्रोतों से कुल घरेलू आय&nbsp;(Household Income from all Sources) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.ParentalIncome, new SelectList(ViewBag.ParentalIncome as System.Collections.IEnumerable, "Value", "Text"), "Select", new { id = "ParentalIncome", @class = "form-control input-shadow isPPP", required = "required" })
+                                    </div>
+                                </div>
+                            </div> @*Disabled Top*@
+                        </div>
+                        <div id="disabledDataUnder">
+
+                            <fieldset>
+                                <legend style="margin-top:15px;color:#223f73;font-weight: 800;font-size: 18px;">स्थाई पता&nbsp;(Permanent Address)</legend>
+                                <div class="middle-section">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <strong style="margin-bottom: 0.8rem; display: block; color: #213f71;">Note: Permanent address is autofetched for Haryana candidates, otherwise enter it manually.</strong>
+                                        </div>
+
+                                        <div class="col-md-3 form-group">
+                                            <label for="Country" style="font-size:16px;color: #34495E;">ग्रामीण / शहरी&nbsp;(Rural/Urban) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.DropDownListFor(model => model.RuralUrban, new List<SelectListItem>{
+                                                  new SelectListItem{ Text="Urban", Value="Urban"},
+                                                  new SelectListItem{ Text="Rural", Value="Rural"}}, new { @class = "form-control input-shadow isPPP", @required = "required" })
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label for="State" style="font-size:16px;color: #34495E;">राज्य&nbsp;(State) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.DropDownListFor(model => model.State_Code, new SelectList(ViewBag.State as System.Collections.IEnumerable, "Value", "Text"), new { @class = "form-control input-shadow isPPP", @required = "required" })
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <div id="divdistrictUrban">
+                                                <label for="District_Code_Urban" style="font-size:16px;color: #34495E;">जिला&nbsp;(District) <span style="color:red;"><strong>*</strong></span></label>
+                                                @Html.DropDownListFor(model => model.District_Code_Urban, new SelectList(ViewBag.DistrictMaster as System.Collections.IEnumerable, "Value", "Text"), new { @class = "form-control input-shadow isPPP", @required = "required", @Value = ViewBag.DistrictUrbanValue })
+                                            </div>
+                                            <div id="divdistrictRural" style="display:none;">
+                                                <label for="District_Code_Rural" style="font-size:16px;color: #34495E;">जिला&nbsp;(District) <span style="color:red;"><strong>*</strong></span></label>
+                                                @Html.DropDownListFor(model => model.District_Code_Rural, new SelectList(ViewBag.DistrictMaster as System.Collections.IEnumerable, "Value", "Text"), new { @class = "form-control input-shadow isPPP", @required = "required", @Value = ViewBag.DistrictRuralValue })
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <div id="divMuniciplity">
+                                                <label for="Municiplity" style="font-size:16px;color: #34495E;">नगर पालिका&nbsp;(Municipality) @*<span style="color:red;"><strong>*</strong></span>*@</label>
+                                                @Html.DropDownListFor(m => m.Municiplity, Enumerable.Empty<SelectListItem>(), new
+                                                {
+                                                    @class = "form-control input-shadow isPPP"@*, @required = "required"*@,
+@Value = ViewBag.MuniciplityValue
+})
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" id="divVillageTown" style="width:100%; display:none;">
+
+                                        <div class="col-md-3 form-group">
+                                            <label for="Block" style="font-size:16px;color: #34495E;">खंड&nbsp;(Block) @*<span style="color:red;"><strong>*</strong></span>*@</label>
+                                            @Html.DropDownListFor(model => model.Block, Enumerable.Empty<SelectListItem>(), new
+                                            {
+                                                @class = "form-control input-shadow isPPP"@*, @required = "required"*@})
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label for="CityTownVillage" style="font-size:16px;color: #34495E;">गाँव&nbsp;(Village) @*<span style="color:red;"><strong>*</strong></span>*@</label>
+                                            @Html.DropDownListFor(model => model.CityTownVillage, Enumerable.Empty<SelectListItem>(), new
+                                            {
+                                                @class = "form-control input-shadow isPPP"@*, @required = "required"*@})
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 form-group">
+                                            <label for="StreetAddress1" style="font-size:16px;color: #34495E;">घर का पता-1 &nbsp;(Street Address-1) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.TextBoxFor(model => model.StreetAddress1, new { @class = "form-control input-shadow isPPP", @required = "required", @value = ViewBag.StreetAddress1, @maxlength = "200", autocomplete = "off" })
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label for="StreetAddress2" style="font-size:16px;color: #34495E;">घर का पता-2&nbsp;(Street Address-2) </label>
+                                            @Html.TextBoxFor(model => model.StreetAddress2, new { @class = "form-control input-shadow", @maxlength = "200", autocomplete = "off" })
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label for="Pincode" style="font-size:16px;color: #34495E;">पिन कोड&nbsp;(Pin Code) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.TextBoxFor(model => model.Pincode, new { @class = "form-control input-shadow isPPP", @required = "required", @maxlength = "6", @Value = ViewBag.PinCode, autocomplete = "off" })
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </fieldset>
+                            <div class="row">
+                                <div class="col-md-8 form-group">
+                                    <span style="margin-top:15px;color:#223f73;font-weight: 800;font-size: 16px;display:block;">क्या पत्राचार का पता स्थायी पते के समान है?&nbsp;(Is Correspondence Address same as Permanent Address?)</span>
+                                </div>
+                                <div class="col-md-1" style="margin-left:-10px;margin-top:20px;">
+
+                                    @Html.CheckBoxFor(x => x.Is_Correspondence)
+                                </div>
+                            </div>
+                            <div class="middle-section">
+                                <div class="row">
+                                    <div class="col-md-3 form-group">
+                                        <label for="C_RuralUrban" style="font-size:16px;color: #34495E;">ग्रामीण / शहरी&nbsp;(Rural/Urban) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.C_RuralUrban, new List<SelectListItem>{
+                                                  new SelectListItem{ Text="Urban", Value="C_Urban"},
+                                                  new SelectListItem{ Text="Rural", Value="C_Rural"}}, new { @class = "form-control input-shadow", @required = "required" })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="State" style="font-size:16px;color: #34495E;">राज्य&nbsp;(State) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.C_State_Code, new SelectList(ViewBag.State as System.Collections.IEnumerable, "Value", "Text"), new { @class = "form-control input-shadow", @required = "required" })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <div id="divCdistrictUrban">
+                                            <label for="District_Code_Urban" style="font-size:16px;color: #34495E;">जिला&nbsp;(District) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.DropDownListFor(model => model.C_District_Code_Urban, new SelectList(ViewBag.DistrictMaster as System.Collections.IEnumerable, "Value", "Text"), new { @class = "form-control input-shadow", @required = "required" })
+                                        </div>
+                                        <div id="divCdistrictRural" style="display:none;">
+                                            <label for="District_Code_Rural" style="font-size:16px;color: #34495E;">जिला&nbsp;(District) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.DropDownListFor(model => model.C_District_Code_Rural, new SelectList(ViewBag.DistrictMaster as System.Collections.IEnumerable, "Value", "Text"), new { @class = "form-control input-shadow", @required = "required" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <div id="divCMuniciplity">
+                                            <label for="Municiplity" style="font-size:16px;color: #34495E;">नगर पालिका&nbsp;(Municipality) @*<span style="color:red;"><strong>*</strong></span>*@</label>
+                                            @Html.DropDownListFor(m => m.C_Municiplity, Enumerable.Empty<SelectListItem>(), new
+                                            {
+                                                @class = "form-control input-shadow"@*, @required = "required"*@})
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="divCVillageTown" style="width:100%; display:none;">
+
+                                    <div class="col-md-3 form-group">
+                                        <label for="Block" style="font-size:16px;color: #34495E;">खंड&nbsp;(Block) @*<span style="color:red;"><strong>*</strong></span>*@</label>
+                                        @Html.DropDownListFor(model => model.C_Block, Enumerable.Empty<SelectListItem>(), new
+                                        {
+                                            @class = "form-control input-shadow"@*, @required = "required"*@})
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="CityTownVillage" style="font-size:16px;color: #34495E;">गाँव&nbsp;(Village) @*<span style="color:red;"><strong>*</strong></span>*@</label>
+                                        @Html.DropDownListFor(model => model.C_CityTownVillage, Enumerable.Empty<SelectListItem>(), new
+                                        {
+                                            @class = "form-control input-shadow"@*, @required = "required"*@,
+@Value = ViewBag.C_CityTownVillage
+})
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label for="StreetAddress1" style="font-size:16px;color: #34495E;">घर का पता-1 &nbsp;(Street Address-1) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.TextBoxFor(model => model.C_StreetAddress1, new { @class = "form-control input-shadow", @required = "required", @value = ViewBag.C_StreetAddress1, @maxlength = "200", autocomplete = "off" })
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="StreetAddress2" style="font-size:16px;color: #34495E;">घर का पता-2&nbsp;(Street Address-2) </label>
+                                        @Html.TextBoxFor(model => model.C_StreetAddress2, new { @class = "form-control input-shadow", @maxlength = "200", autocomplete = "off" })
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="Pincode" style="font-size:16px;color: #34495E;">पिन कोड&nbsp;(Pin Code) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.TextBoxFor(model => model.C_Pincode, new { @class = "form-control input-shadow", @required = "required", @maxlength = "6", @Value = ViewBag.C_PinCode, autocomplete = "off" })
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3 form-group">
+                                        <label for="ParentalIncome" style="font-size:16px;color: #34495E;">क्या आपको बस पास की आवश्यकता है&nbsp;(DO YOU REQUIRE BUS PASS) </label>
+                                        @Html.DropDownListFor(model => model.ModeOfTransport, new List<SelectListItem>{
+                                                  new SelectListItem{ Text="Select", Value="NA"},
+                                                     new SelectListItem{ Text="No", Value="No"},
+                                                     new SelectListItem{ Text="Yes", Value="Yes"}}, new { @class = "form-control input-shadow" })
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 form-group">
+                                        <label for="IsITICompleted" style="font-size:16px;color: #34495E;">क्या आपने पिछले वर्षों में कोई आईटीआई कोर्स किया है?&nbsp; <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.IsITICompleted, new List<SelectListItem>{
+                                           new SelectListItem{ Text="Select"},
+                                                     new SelectListItem{ Text="No", Value="No"},
+                                                     new SelectListItem{ Text="Yes", Value="Yes"}}, new { @class = "form-control input-shadow ITICompleted", @required = "required", @Value = ViewBag.IsITICompleted })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="IsITICompleted" style="font-size:16px;color: #34495E;">राज्य &nbsp;(State) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.ITICompletedState, new List<SelectListItem>{
+                                           new SelectListItem{ Text="Select State", Value = ""},
+                                                     new SelectListItem{ Text="Haryana", Value="HR"},
+                                                     new SelectListItem{ Text="Other", Value="OT"}}, new { @class = "form-control input-shadow ITI", @required = "required", @Value = ViewBag.ITICompletedState })
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="ITICompletedYear" style="font-size:16px;color: #34495E;">आईटीआई वर्ष &nbsp;(ITI Year) </label>
+                                        @Html.DropDownListFor(model => model.ITICompletedYear, new SelectList(ViewBag.Year as System.Collections.IEnumerable, "Value", "Text"), "--Please Select Year--", new { @class = "form-control input-shadow ITI", @Value = ViewBag.ITICompletedYear })
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="ITICompletedName" style="font-size:16px;color: #34495E;">आईटीआई &nbsp;(ITI Name) </label>
+                                        @Html.TextBoxFor(model => model.ITICompletedName, new { @class = "form-control input-shadow ITI", @Value = ViewBag.ITICompletedName, @maxlength = "100", @minlength = "5", autocomplete = "off" })
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="ITICompletedTrade" style="font-size:16px;color: #34495E;">आईटीआई कोर्स &nbsp;(ITI Trade) </label>
+                                        @Html.TextBoxFor(model => model.ITICompletedTrade, new { @class = "form-control input-shadow ITI", @Value = ViewBag.ITICompletedTrade, @maxlength = "12", @minlength = "2", autocomplete = "off" })
+
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="ITICompletedRollNo" style="font-size:16px;color: #34495E;">आईटीआई &nbsp;(ITI Registration Number) </label>
+                                        @Html.TextBoxFor(model => model.ITICompletedRollNo, new { @class = "form-control input-shadow ITI", @Value = ViewBag.ITICompletedRollNo, @maxlength = "20", @minlength = "2", autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="middle-section">
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <span class="hindi">क्या आपने हरियाणा से 10 वीं की है?<br />(Have you done 10th from Haryana)?</span><span style="color:red;"><strong>*</strong></span>
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        @Html.RadioButtonFor(model => model.TwelveHarana, "Y", new { @required = "required", @id = "rbTwel1" }) <label for="rbTwel1"><span class="english">Yes</span></label>&nbsp;
+                                        @Html.RadioButtonFor(model => model.TwelveHarana, "N", new { @required = "required", @id = "rbTwel2" }) <label for="rbTwel2"><span class="english">No</span> </label>
+                                        @Html.ValidationMessageFor(model => model.TwelveHarana, "", new { @class = "validation" })
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <span class="hindi">क्या आप अल्पसंख्यक वर्ग से हैं?<br />(Are you from Minority Community)?</span><span class="english" style="display:none;">Do you belong to any minority?</span><span style="color:red;"><strong>*</strong></span>
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        @Html.RadioButtonFor(model => model.Minority, "Y", new { @id = "minorityYes", @required = "required" }) <label for="minorityYes"><span class="english" style="display:none;">Yes</span><span class="hindi">हाँ</span></label>&nbsp;
+                                        @Html.RadioButtonFor(model => model.Minority, "N", new { @id = "minorityNo", @required = "required" }) <label for="minorityNo"><span class="english" style="display:none;">No</span><span class="hindi">नहीं</span></label>
+                                        @Html.ValidationMessageFor(model => model.Minority, "", new { @class = "validation" })
+
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        @Html.DropDownListFor(model => model.MinorityData, new SelectList(ViewBag.Minority as System.Collections.IEnumerable, "Value", "Text"),
+                            "--Please Select Minority--", new { id = "MinorityData", @class = "form-control input-shadow", @style = "display: none;" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (Session["Verificationstatus"].ToString() == "" || Session["Verificationstatus"].ToString() == "R")
+                            {
+                                <div class="col-xs-12 text-right cus-registerbtn" style="margin-top:10px;">
+                                    <button class="btn btn-primary c-shadow-1" id="btnNext" value="Next" type="submit"><i class="fa fa-save"></i>&nbsp;Save & Next</button>
+                                </div>
+                            }
+                        </div>@*Disabled Under*@
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal cus-modal" tabindex="-1" id="ChangeCourse" data-backdrop="static" style="margin-top:15%" data-keyboard="false" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    @*<h6 class="modal-title">Open Couselling</h6>*@
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row" style="margin-top:37px;">
+                        <div class="col-md-12 form-group text-center">
+                            <span style="font-size:16px;font-weight:bold;color:red">
+                                <b>Do you wish to edit your form towards your admission to <mark>UG</mark> Course.</b>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group" style="text-align:center">
+                        <label class="containernew">
+                            <input type="radio" id="rbtnChoiceYes" name="Choice" value="Y">
+                            <label for="rbtnChoiceYes">Yes</label>
+                            <span class="checkmark"></span>
+                            <label class="error1" style="color:red"></label>
+                        </label>
+                        <label class="containernew">
+                            <input type="radio" id="rbtnChoiceNo" name="Choice" value="N">
+                            <label for="rbtnChoiceNo">No</label>
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+
+                    <div class="col-md-12 form-group" style="text-align:center">
+                        <input type="button" id="btnconsentYes" onclick="javascript:return ChangeChoiceOfCourses();" class="btn btn-success" value="Go" />
+                    </div>
+                    <div class="col-md-12 form-group text-center">
+                        <span style="font-size:16px;font-weight:bold;color:red">
+                            <b>You can also edit later once only using OTP based  <mark> 'One Time Unlock for Modification'</mark> option available in your login.</b>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="outer-loader" style="display: none;">
+        <div class="loader-img loader" style="display: none;"></div>
+    </div>
+</section>
+<script language="javascript" type="text/javascript">
+    function noBack() { window.history.forward() }
+    noBack();
+    window.onload = noBack;
+    window.onpageshow = function (evt) { if (evt.persisted) noBack() }
+    window.onunload = function () { void (0) }
+</script>
+<script type="text/javascript" language="Javascript">
+    history.go(1);
+</script>
+<script language="javascript" type="text/javascript">
+
+
+    $(document).ready(function () {
+        // prevent form submit from console window
+        //$("#formLogin1").submit(function (e) {
+        //    alert('submit intercepted');
+        //    stopPreloader();
+        //    e.preventDefault(e);
+        //});
+
+        if (window.IsDuplicate()) {
+         swal({
+            title: "Oops!!",
+            text: "This is duplicate window\n\n Kindly close this window...!",
+            showCancelButton: false,
+            confirmButtonClass: "btn-info",
+            confirmButtonText: "Ok",
+            closeOnConfirm: false,
+            showconfirmButton: false,
+
+                    },
+              function (isConfirm) {
+                if (isConfirm) {
+
+                   // window.location.href = "@Url.Action("Logout","Account")";
+                }
+                else {
+
+                }
+            });
+            window.close();
+        }
+
+        $("#dvFamMemNoteLink").hide();
+        $("#dvFamMemNote").hide();
+        $("#dvFIDUIDPPP").hide();
+        $("#dvFamAadhMem").hide();
+        $('#dvfamilyIdViaAadhaar').hide();
+        $('#dvMemberIdViaAadhaar').hide();
+        $('#dvfamilyIncome').hide();
+        $("#dvNStateCode").hide();
+        $("#disabledDataTop").hide();
+        $("#disabledDataUnder").hide();
+
+
+        if ('@ViewBag.IsITICompleted' != null && '@ViewBag.IsITICompleted' != '') {
+            if ('@ViewBag.IsITICompleted'.toLowerCase() == "no") {
+                $('#ITICompletedYear').val('');
+                $('#ITICompletedState').val('');
+                $('#ITICompletedName').val('');
+                $('#ITICompletedTrade').val('');
+                $('#ITICompletedRollNo').val('');
+                $('.ITI').prop('required', false);
+
+
+                $('#ITICompletedYear').prop('disabled', true);
+                $('#ITICompletedState').prop('disabled', true);
+                $('#ITICompletedName').prop('disabled', true);
+                $('#ITICompletedTrade').prop('disabled', true);
+                $('#ITICompletedRollNo').prop('disabled', true);
+            }
+            else {
+                var id = '@ViewBag.ITICompletedName';
+                $('#ITICompletedYear').prop('required', true);
+                $('#ITICompletedState').prop('required', true);
+                $('#ITICompletedName').prop('required', true);
+                $('#ITICompletedTrade').prop('required', true);
+                $('#ITICompletedRollNo').prop('required', true);
+
+                @*$("#ITICompletedTrade").empty();
+                $('#ITICompletedTrade').append($("<option></option>").val(0).html('Please Select Trade'));
+
+                $.get("GetcollgecourseAll", { collageid: id }, function (data) {
+                    $.each(data, function (i, v1) {
+                        $('#ITICompletedTrade').append($("<option></option>").val(v1.Value).html(v1.Text));
+
+                    });
+                    $('#ITICompletedTrade').val('@ViewBag.ITICompletedTrade');
+                });*@
+            }
+    }
+            var MaxPages = '@Session["MaxPage"]';
+		var currentPage = '@Session["currentPage"]';
+		for (var i = 0; i < parseInt(MaxPages) ; i++) {
+			if ((i+1) != currentPage) $("#tablist > li:eq(" + i + ")").addClass('done');
+			else $("#tablist > li:eq(" + i + ")").addClass('current');
+		}
+		for (i = 8; i > MaxPages; i--) {
+			$("#tablist > li:eq("+(i-1)+")>a").attr("href","#");
+        }
+
+        var voter = '@ViewBag.VoterIdValue';
+         if(voter == 'Y')
+        {
+            $("#rbVoter1").change();
+        }
+
+        var minority = '@ViewBag.MinorityValue';
+        if (minority == 'Y') {
+             $("#minorityYes").change();
+        }
+        var Other_Nationality = '@ViewBag.NationalyType'
+        if (Other_Nationality == 'O') {
+            $("#txtOther").change();
+        }
+
+		@*var bpl = '@ViewBag.BplCategoryValue';
+		if (bpl == 'Y')
+		{
+			$("#checkBPLYes").change();
+		}*@
+		var licence = '@ViewBag.LicenceValue';
+		if (licence == 'Y')
+		{
+			$("#checkLicenceYes").change();
+		}
+		var passport = '@ViewBag.PassportValue';
+        if (passport == 'Y')
+		{
+			$("#checkPassportYes").change();
+		}
+		$('#hdnCandidate').val($('#CandidateName').val());
+		$('#hdnFHName').val($('#FatherHusbandName').val());
+		$('#hdnMotherName').val($('#MotherName').val());
+		$('#hdnDOB').val($('#BirthDate').val());
+		$('#hdnGender').val($('#Sex').val());
+		$('#hdnAadhar').val($('#AadharNo').val());
+
+		var checkApiData = '@ViewBag.CheckApi';
+		var checkRuralArea = '@ViewBag.UrbanRuralCode';
+		var C_CheckRuralUrban = '@ViewBag.C_UrbanRuralCode';//1
+        var BoardCode = '@ViewBag.BoardCode';
+
+
+        $('.ITICompleted').change(function () {
+            var val = $('.ITICompleted').val();
+            if (val === "Yes") {
+                $('.ITI').val('');
+                $('.ITI').prop('disabled', false);
+                $('.ITI').removeClass('disabledbutton');
+                $('.ITI').prop('required', true);
+            }
+            else {
+                $('.ITI').val('');
+                $('.ITI').prop('required', false);
+                $('.ITI').addClass('disabledbutton');
+                $('.ITI').prop('disabled', true);
+            }
+        });
+
+        @*if (BoardCode == '119')//Haryan case HB
+        {
+            $('input:radio[name=TwelveHarana][id=rbTwel1]').prop('checked', true);
+            $('input:radio[name=TwelveHarana][id=rbTwel2]').prop('disabled', true);
+        }
+        else if (BoardCode == '68' || BoardCode == '452' || BoardCode == '75' || BoardCode=='335')// center board,ICSE,Haryana Open board, Haryana State Tecnical Education case
+        {
+
+            $('input:radio[name=TwelveHarana][id=rbTwel1]').prop('checked', false);
+            $('input:radio[name=TwelveHarana][id=rbTwel2]').prop('checked', false);
+            $('input:radio[name=TwelveHarana]:not(:checked)').prop('disabled', false);
+        }
+        else// other board
+        {
+            $('input:radio[name=TwelveHarana][id=rbTwel2]').prop('checked', true);
+            $('input:radio[name=TwelveHarana]:not(:checked)').prop('disabled', true);
+        }
+
+        if ('@ViewBag.TwelveHarana' != '') {
+          if  ('@ViewBag.TwelveHarana' == 'Y')
+            {
+                $('input:radio[name=TwelveHarana][id=rbTwel1]').prop('checked', true);
+            }
+            else
+            {
+                $('input:radio[name=TwelveHarana][id=rbTwel2]').prop('checked', true);
+            }
+        }*@
+
+        if ('@ViewBag.AdhaarNo' != '') {
+            $('#AadharNo').val('@ViewBag.AdhaarNo');
+        }
+
+		if (checkRuralArea == 'Urban') {
+			$("#divMuniciplity").show();
+			$("#divVillageTown").hide();
+		}
+		else {
+			$("#divMuniciplity").hide();
+			$("#divVillageTown").show();
+		}
+
+		if (C_CheckRuralUrban == 'C_Urban') {
+			$("#divMuniciplity").show();
+			$("#divVillageTown").hide();
+		}
+		else {
+			$("#divCMuniciplity").hide();
+			$("#divCVillageTown").show();
+		}
+
+        if (checkApiData == "Y") {
+
+            if ('@ViewBag.CandidateName'.toLowerCase() != 'na') {
+
+                $('#CandidateName').addClass("disabledbutton");
+            }
+            if ('@ViewBag.FathreName'.toLowerCase() != 'na') {
+                $('#FatherHusbandName').addClass("disabledbutton");
+            }
+            if ('@ViewBag.MotherName'.toLowerCase() != 'na')
+            {
+                $('#MotherName').addClass("disabledbutton");
+            }
+
+            //$('#AadharNo').addClass("disabledbutton");
+            $('#Sex').addClass("disabledbutton");
+            $('#MobileNo').addClass("disabledbutton");
+            $('#BirthDate').addClass("disabledbutton");
+        }
+        if (checkApiData == "B") {
+              if ('@ViewBag.CandidateName'.toLowerCase() != 'na') {
+
+                $('#CandidateName').addClass("disabledbutton");
+            }
+            if ('@ViewBag.FathreName'.toLowerCase() != 'na') {
+                $('#FatherHusbandName').addClass("disabledbutton");
+            }
+            if ('@ViewBag.MotherName'.toLowerCase() != 'na')
+            {
+                $('#MotherName').addClass("disabledbutton");
+            }
+            $('#BirthDate').addClass("disabledbutton");
+            $('#Sex').addClass("disabledbutton");
+           // $('#AadharNo').addClass("disabledbutton");
+            $('#MobileNo').addClass("disabledbutton");
+        }
+        if ('@ViewBag.NationalyType' != '') {
+            $('#txtIndian').addClass("disabledbutton");
+            $('#txtOther').addClass("disabledbutton");
+
+        }
+
+
+
+        if ('@ViewBag.HasDomicile'!='') {
+            $("#disabledDataTop").show();
+            $("#disabledDataUnder").show();
+            $('#checkHaryanaDomicileYes').addClass("disabledbutton");
+            $('#checkHaryanaDomicileNo').addClass("disabledbutton");
+            $("#dvNStateCode").hide();
+            $('#txtFIDUID').attr('disabled', 'disabled');
+            $('input[name=FIDUID]').removeAttr('required');
+            $('#hdDOBPPP').val("@ViewBag.hdnDOB_PPP");
+
+            if ('@ViewBag.HasDomicile' == 'Y') {
+                $("#dvFamMemNoteLink").show();
+                $("#btnRefreshfromPPP").show();
+                $('#btnRefreshfromPPP').css("display", "block");
+                $('.isPPP').addClass("disabledbutton");
+                $("#hdIsCasteVerified").val('@ViewBag.IsCasteVerified');
+                $("#hdisCasteCatgMatch_WithPPP").val('@ViewBag.isCasteCatgMatch_WithPPP');
+                $("#hdcasteCategoryPPP").val('@ViewBag.CasteCategory_PPP');
+                if ('@ViewBag.FamilyID' != '') {
+                    $("#lblfamilyIdShow").text('FamilyID: ' + '@ViewBag.FamilyID');
+                    $("#lblMemberIdShow").text('MemberID: ' + '@ViewBag.MemberID');
+                }
+
+               // $("#ReservationCategory").addClass("disabledbutton");
+               // $('#CasteCategory').addClass("disabledbutton");
+            }
+            if ('@ViewBag.HasDomicile' == 'N')
+            {
+            $('.isPPP').removeClass("disabledbutton");
+        }
+        }
+
+        if ('@ViewBag.ReservationCategoryCheck' != '') {
+            ReservationCatgShowHide();
+
+            $("#ReservationCategory").val('@ViewBag.ReservationCategoryCheck');
+            var urlForCasteCatgCategory = '@Url.Action("CasteCategory_Bind", "Account")';
+            var urlForCaste =  '@Url.Action("Caste_Bind", "Account")';
+
+            //Bind CasteCategory from ReservationId
+            $("#CasteCategory").empty();
+            $.ajax({
+                type: "GET", url: urlForCasteCatgCategory, data: { reservationCategory_id: '@ViewBag.ReservationCategoryCheck'}, contentType: "application/json; charset=utf-8", dataType: "json", async: false,
+                success: function (data) {
+                    var v = "<option value='0'>--Please Select Caste Category</option>";
+                    $.each(data, function (i, v1) {
+                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                    });
+                    $("#CasteCategory").html(v);
+                    $("#CasteCategory").val('@ViewBag.CasteCategory');
+                },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+
+                }
+            });
+            //Bind Caste from CasteCategory
+            $("#Caste").empty();
+            $.ajax({
+                type: "GET", url: urlForCaste, data: { casteCategory_Id: '@ViewBag.CasteCategory' }, contentType: "application/json; charset=utf-8", dataType: "json", async: false,
+                success: function (data) {
+                    if ('@ViewBag.CasteCategory' == '00') {
+                        $("#Caste").html("<option value='00'>General</option>").val('00');
+                    }
+                    else {
+                        $("#Caste").empty();
+                        $("#Caste").removeAttr("disabled");
+                        $.get("Caste_Bind", { casteCategory_Id: '@ViewBag.CasteCategory' },
+                            function (data) {
+                                var v = "<option value='0'>--Please Select Caste--</option>";
+                                $.each(data, function (i, v1) {
+                                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                                });
+                                $("#Caste").html(v);
+                                $("#Caste").val('@ViewBag.Caste');
+                            });
+                    }
+                }
+                ,failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+
+                }
+            });
+
+
+
+            @*$("#ReservationCategory").change();
+            setTimeout(function () { $('#CasteCategory').val('@ViewBag.CasteCategory') }, 1000);
+
+            setTimeout(function () { $('#CasteCategory').change(); }, 2000);
+            setTimeout(function () { $("#Caste").val('@ViewBag.Caste') }, 3000);*@
+
+
+        }
+
+        if ('@ViewBag.DisableCategory' == '' || '@ViewBag.DisableCategory' == null || '@ViewBag.DisableCategory' == "0") {
+             $("#DisableCategory").val('');
+            $("#DisableCategory").prop("disabled", true);
+        }
+        else {
+            $("#DisableCategory").val('@ViewBag.DisableCategory');
+            $("#DisableCategory").removeAttr("disabled");
+        }
+
+        $("#Marital_Status").val('@ViewBag.MaritalStatusCheck');
+        $("#Sex").val(@ViewBag.SexValue);
+        $("#AadharNo").val(@ViewBag.AadharValue);
+		$("#BloodGroup").val(@ViewBag.BloodGroupVal);
+		$("#Religion").val(@ViewBag.ReligionVal);
+		$("#ParentalIncome").val(@ViewBag.ParentalIncomeVal);
+
+	    $("#RuralUrban").val('@ViewBag.UrbanRuralCode'); //should stay here
+        $("#RuralUrban").change();
+
+		$("#State_Code").val('@ViewBag.StateValue');
+        $("#State_Code").change();
+
+         $("#C_RuralUrban").val('@ViewBag.C_UrbanRuralCode');
+		$("#C_RuralUrban").change();
+
+        $("#C_State_Code").val('@ViewBag.C_StateValue');
+		$("#C_State_Code").change();
+
+		if ( "@ViewBag.UrbanRuralCode"=="Urban")
+        {
+			$('#divVillageTown').hide();
+			$('#divMuniciplity').show();
+			$('#divdistrictRural').hide();
+			$('#divdistrictUrban').show();
+			$('#Block').val("");
+			$('#Block').removeAttr("required");
+			$('#CityTownVillage').val("");
+			$('#CityTownVillage').removeAttr("required");
+			$('#District_Code_Rural').val("");
+			$('#District_Code_Rural').removeAttr("required");
+
+			//URBAN PERM
+            setTimeout(function () { $("#District_Code_Urban").val('@ViewBag.DistrictUrbanValue'); $("#District_Code_Urban").change(); }, 1000);
+
+			setTimeout(function () { $("#Municiplity").val('@ViewBag.MuniciplityValue');  },3000);
+
+            @*$("#District_Code_Urban").val('@ViewBag.DistrictUrbanValue');
+            $("#District_Code_Urban").change();
+            $("#Municiplity").val('@ViewBag.MuniciplityValue');*@
+
+			//
+		}
+		else
+        {
+
+			$('#divMuniciplity').hide();
+			$('#divVillageTown').show();
+			$('#divdistrictRural').show();
+			$('#divdistrictUrban').hide();
+			$('#Municiplity').val("");
+			$('#Municiplity').removeAttr("required")
+			$('#District_Code_Urban').val("");
+			$('#District_Code_Urban').removeAttr("required");
+
+			//RURAL PERM
+            setTimeout(function () { $("#District_Code_Rural").val('@ViewBag.DistrictRuralValue'); $("#District_Code_Rural").change(); },1000);
+            setTimeout(function () { $("#Block").val('@ViewBag.BlockValue'); $("#Block").change(); },3000);
+            setTimeout(function () { $("#CityTownVillage").val('@ViewBag.VillageValue'); }, 4000);
+
+            @*$("#District_Code_Rural").val('@ViewBag.DistrictRuralValue');
+            $("#District_Code_Rural").change();
+            $("#Block").val('@ViewBag.BlockValue');
+            $("#Block").change();
+            $("#CityTownVillage").val('@ViewBag.VillageValue');*@
+			//
+		}
+		if ( "@ViewBag.C_UrbanRuralCode"=="C_Urban")
+        {
+
+			$('#divCVillageTown').hide();
+			$('#divCMuniciplity').show();
+			$('#divCdistrictRural').hide();
+			$('#divCdistrictUrban').show();
+			$('#C_District_Code_Rural').val("");
+			$('#C_District_Code_Rural').removeAttr("required");
+			$('#C_Block').val("");
+			$('#C_Block').removeAttr("required")
+			$('#C_CityTownVillage').val("");
+			$('#C_CityTownVillage').removeAttr("required")
+			//Urban C
+
+            setTimeout(function () {$("#C_District_Code_Urban").val(@ViewBag.C_DistrictUrbanValue);$("#C_District_Code_Urban").change();}, 1000);
+            setTimeout(function () {    $("#C_Municiplity").val('@ViewBag.C_MuniciplityValue');     }, 3000);
+			//
+		}
+		else
+        {
+
+			$('#divCMuniciplity').hide();
+			$('#divCVillageTown').show();
+			$('#divCdistrictRural').show();
+			$('#divCdistrictUrban').hide();
+			$('#C_Municiplity').val("");
+			$('#C_Municiplity').removeAttr("required")
+			$('#C_District_Code_Urban').val("");
+			$('#C_District_Code_Urban').removeAttr("required");
+			//RURAL C
+            setTimeout(function () { $("#C_District_Code_Rural").val(@ViewBag.C_DistrictRuralValue); $("#C_District_Code_Rural").change(); }, 1000);
+			setTimeout(function () { $("#C_Block").val('@ViewBag.C_BlockValue'); $("#C_Block").change();  }, 3000);
+			setTimeout(function () {$("#C_CityTownVillage").val('@ViewBag.C_VillageValue');               }, 4000);
+			//
+        }
+        if ("@ViewBag.IsCorr" == "True")
+        {
+            $("#Is_Correspondence").change();
+            //setTimeout(function () { $("#C_Municiplity").val('@ViewBag.C_MuniciplityValue');     }, 3000);
+        }
+        if ('@ViewBag.StreetAddress1' !='')
+        {
+
+            $("#Pincode").val("@ViewBag.Pincode");
+            $("#C_Pincode").val("@ViewBag.C_Pincode");
+            $("#StreetAddress1").val('@ViewBag.StreetAddress1');
+            $("#C_StreetAddress1").val('@ViewBag.C_StreetAddress1');
+        }
+
+    //    $("#ITICompletedName").change(function () {
+    //    var id = $(this).val();
+    //        $("#ITICompletedTrade").empty();
+    //        $('#ITICompletedTrade').append($("<option></option>").val(0).html('Please Select Trade'));
+
+    //        $.get("GetcollgecourseAll", { collageid: id }, function (data) {
+    //            $.each(data, function (i, v1) {
+    //                console.log(data);
+    //            $('#ITICompletedTrade').append($("<option></option>").val(v1.Value).html(v1.Text));
+
+    //        });
+    //    });
+    //});
+
+		$(function () {
+			$("#BirthDate").datepicker({
+				changeMonth: true,
+				// yearRange: "-100:+0"
+				yearRange: '1950:2009',
+				minDate: '01/01/1950',
+                maxDate: '31/12/2009',
+				changeYear: true,
+				dateFormat: 'dd/mm/yy',
+				controlType: 'select',
+				//timeFormat: 'HH:mm:ss',
+				showOn: 'focus',
+				showButtonPanel: true,
+				closeText: 'Clear', // Text to show for "close" button
+				onClose: function () {
+					var event = arguments.callee.caller.caller.arguments[0];
+					// If "Clear" gets clicked, then really clear it
+					if ($(event.delegateTarget).hasClass('ui-datepicker-close')) {
+						$(this).val('');
+					}
+				}
+			});
+		});
+		// Restricts input for the set of matched elements to the given inputFilter function.
+		(function ($) {
+			$.fn.inputFilter = function (inputFilter) {
+				return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
+					if (inputFilter(this.value)) {
+						this.oldValue = this.value;
+						this.oldSelectionStart = this.selectionStart;
+						this.oldSelectionEnd = this.selectionEnd;
+					} else if (this.hasOwnProperty("oldValue")) {
+						this.value = this.oldValue;
+						this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+					} else {
+						this.value = "";
+					}
+				});
+			};
+		}(jQuery));
+
+        $(document).on("keyup", "#txtFIDUID", function () {
+            var UID = $('[name=FIDUID]:checked').val();
+            if (UID == 'U') {
+                if (/\D/g.test(this.value)) {
+                    // Filter non-digits from input value.
+                    this.value = this.value.replace(/\D/g, '');
+                    swal("Warning!", "Please enter only numeric value", "warning")
+                    return false;
+                }
+            }
+        });
+
+		$(document).on("keyup", "#Guardian_Name,#MotherName,#FatherHusbandName, #CandidateName", function () {
+			if (/[^a-zA-Z\.\s]/g.test(this.value)) {
+				this.value = this.value.replace(/[^a-z\s]/g, '');
+                swal("Warning!", "Please enter alphabets with Dot only", "warning")
+                return false;
+			   // alert("Please enter only alphabets");
+			}
+		});
+		$(document).on("keyup", "#Pincode,#C_Pincode,#GuardianMobileNo,#TelephoneNo,#AadharNo,#MobileNo,#Gap_Year,#OTP", function () {
+			if (/\D/g.test(this.value)) {
+				// Filter non-digits from input value.
+				this.value = this.value.replace(/\D/g, '');
+                swal("Warning!", "Please enter only numeric value", "warning")
+                return false;
+				//alert("Please enter only numeric value");
+			}
+        });
+
+        $(document).on("keyup", "#StreetAddress1,#StreetAddress2,#C_StreetAddress1,#C_StreetAddress2", function () {
+            var userinput = this.value;
+            var pattern = /^[-a-zA-Z0-9\.\,\s\/\#]*$/i
+
+            if (!pattern.test(userinput)) {
+                swal('warning', 'Only Alphabet, space, comma, dot, slash(/), #,-(Hyphen) allowed', 'warning');
+               this.value = this.value.replace(/[^a-z\s]/g, '');
+                //$(elem).focus();
+                return false;
+            }
+        });
+
+        $(document).on("keyup", "#BPLCardNo,#PassportText,#DrivingLicenceText,#txtFIDUID,#VoterCardText", function () {
+            var userinput = this.value;
+            var pattern = /^[a-zA-Z0-9]*$/i
+            if (!pattern.test(userinput)) {
+                swal('warning', 'Only Alphanumeric allowed', 'warning');
+               this.value = this.value.replace(/[^a-zA-Z0-9]/g, '');
+                //$(elem).focus();
+                return false;
+            }
+        });
+
+        //$(document).on("change", "#ParentalIncome", function () {
+
+        //var ParentalIncome=document.getElementById("ParentalIncome");
+        //if (ParentalIncome.value == "1" || ParentalIncome.value == "2" || ParentalIncome.value == "3" || ParentalIncome.value == "4"  ) {
+        //        $('input:radio[name=BPLCategory][id=checkBPLNo]').prop('checked', false);
+        //    $('input:radio[name=BPLCategory]:not(:checked)').prop('disabled', false);
+        //}
+        //else {
+
+        //            $('input:radio[name=BPLCategory][id=checkBPLNo]').prop('checked', true);
+        //    $('input:radio[name=BPLCategory]:not(:checked)').prop('disabled', true);
+
+        //}
+
+        //});
+
+        //        var ParentalIncome=document.getElementById("ParentalIncome");
+        //if (ParentalIncome.value == "1" || ParentalIncome.value == "2" || ParentalIncome.value == "3" || ParentalIncome.value == "4"  ) {
+        //      //  $('input:radio[name=BPLCategory][id=checkBPLNo]').prop('checked', false);
+        //    $('input:radio[name=BPLCategory]:not(:checked)').prop('disabled', false);
+        //}
+        //else {
+
+        //    $('input:radio[name=BPLCategory][id=checkBPLNo]').prop('checked', true);
+        //    $('input:radio[name=BPLCategory]:not(:checked)').prop('disabled', true);
+
+        //}
+
+
+        // ask for edit choice of courses
+
+                 @*if ('@Session["EditForm"]' == '' && '@Session["Verificationstatus"]'=='V' && '@Session["CandidatePayment"]'=='N') {
+                    $("#ChangeCourse").modal();
+                    $('#ChangeCourse').modal({ backdrop: 'static', keyboard: false });
+                }*@
+
+
+        // hide block village in case outside haryana
+
+          if ('@ViewBag.StateValue' == '6') {
+
+        }
+        else
+        {
+            $('#divVillageTown').hide();
+            $('#divMuniciplity').hide();
+            $('#Municiplity').removeAttr('required');
+            $('#CityTownVillage').removeAttr('required');
+            $('#Block').removeAttr('required');
+        }
+        $(document).on("change", "#State_Code", function () {
+            var scode = $('#State_Code').val();
+            var DropVal = $("#RuralUrban").val();
+
+
+            if (scode == "6") {
+                if (DropVal == "Urban") {
+                    $('#divMuniciplity').show();
+                    $('#Municiplity').attr('required', 'required');
+                }
+                else {
+                    $('#divVillageTown').show();
+                    $('#CityTownVillage').attr('required', 'required');
+                    $('#Block').attr('required', 'required');
+                }
+            }
+            else {
+                $('#divVillageTown').hide();
+                $('#divMuniciplity').hide();
+                $('#Municiplity').removeAttr('required');
+                $('#CityTownVillage').removeAttr('required');
+                $('#Block').removeAttr('required');
+            }
+        });
+
+
+        if ('@ViewBag.C_StateValue' == '6') {
+
+        }
+        else
+        {
+            $('#divCVillageTown').hide();
+            $('#divCMuniciplity').hide();
+            $('#C_Municiplity').removeAttr('required');
+            $('#C_CityTownVillage').removeAttr('required');
+            $('#C_Block').removeAttr('required');
+        }
+        $(document).on("change", "#C_State_Code", function () {
+            var scode = $('#C_State_Code').val();
+            var DropVal = $("#RuralUrban").val();
+            if (scode == "6") {
+                if (DropVal == "Urban") {
+                    $('#divCMuniciplity').show();
+                    $('#C_Municiplity').attr('required', 'required');
+                }
+                else {
+                    $('#divCVillageTown').show();
+                    $('#C_CityTownVillage').attr('required', 'required');
+                    $('#C_Block').attr('required', 'required');
+                }
+            }
+            else {
+                $('#divCVillageTown').hide();
+                $('#divCMuniciplity').hide();
+                $('#C_Municiplity').removeAttr('required');
+                $('#C_CityTownVillage').removeAttr('required');
+                $('#C_Block').removeAttr('required');
+            }
+        });
+
+
+        // disable enter as submit button
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+
+    });
+
+
+    function ReservationCatgShowHide() {
+       // $("#CasteCategory").empty();
+        $("#Caste").html("<option value='00'>General</option>").val('00');
+        $("#ReservationCategory").val('').children().attr('disabled', 'disabled').hide().filter((i, elm) => {
+            if ($(elm).val() == "5") { $(elm).text("General"); }
+            /*if ($(elm).val() == "8") { $(elm).text("EWS"); }*/
+            if ($("[name=NationalyType]:checked").val() == 'O' && $(elm).val() == "5")
+                {
+                    return $(elm);
+            }
+            else if ($("[name=NationalyType]:checked").val() == 'I' )
+            {
+                if ($("[name=HaryanaDomicile]:checked").val() == 'N' && ($(elm).val() == "5" || $(elm).val() == "8"))
+                {
+                    //if ($(elm).val() == "5") { $(elm).text("All India General (AIG)"); }
+                    //if ($(elm).val() == "8") { $(elm).text("EWS - AIG");  }
+                    if ($(elm).val() == "5") { $(elm).text("General"); }
+                    return $(elm);
+                }
+                else if ($("[name=HaryanaDomicile]:checked").val() == 'Y' && $(elm).val() != "8") {
+                    return $(elm);
+                }
+            }
+        }
+        ).removeAttr('disabled').show();
+        //$('#ReservationCategory').childern().each(function (X, elm) { console.log(X); console.log($(elm));} )
+    }
+
+    //change here
+    $(document).on("click", "#btnNext", function () {
+        $('#Municiplity').removeAttr("required");
+        $('#C_Municiplity').removeAttr("required");
+        $('#Block').removeAttr("required");
+        $('#C_Block').removeAttr("required");
+        $('#CityTownVillage').removeAttr("required");
+        $('#C_CityTownVillage').removeAttr("required");
+        var ReservationCategory = $('#ReservationCategory').val();
+        var ITICompleted = $('.ITICompleted').val();
+        var CasteCategory = $('#CasteCategory').val();
+        var Caste = $('#Caste').val();
+        if (ReservationCategory == '' || ReservationCategory == null) {
+            $("#ReservationCategory").focus();
+            swal("Alert!", "Please select your reservation category.", "warning")
+            $('#rescast_error').html("* required");
+            return false;
+        }
+
+      if (CasteCategory == '' || CasteCategory == null || CasteCategory == "0") {
+            $("#CasteCategory").focus();
+
+           swal("Alert!", "Please select your caste category.", "warning")
+          $('#cascat_error').html("* required");
+          return false;
+        }
+      else if (Caste == '' || Caste == null || Caste == "0") {
+            $("#Caste").focus();
+            swal("Alert!", "Please select your caste.", "warning")
+          $('#cast_error').html("* required");
+          return false;
+      }
+      else if (ITICompleted == '' || ITICompleted == null || ITICompleted == "Select") {
+            $(".ITICompleted").focus();
+            swal("Alert!", "Please select your ITI completed option.", "warning")
+            $('#rescast_error').html("* required");
+            return false;
+      }
+      else if (!document.getElementById('minorityYes').checkValidity()) {
+          document.getElementById('minorityYes').reportValidity()
+          return false;
+      }
+      else if ($('[name="Minority"]:checked').val() == 'Y' && $("#MinorityData").val() == "") {
+
+          swal("Alert!", "Please choose Minority type you belong!", "warning");
+          return false;
+      }
+     else {
+            $('#rescast_error').html('');
+            $('#cascat_error').html('');
+          $('#cast_error').html('');
+          return true;
+        }
+
+    });
+
+    $('#btnReset').click(function () {
+        $("#disabledDataTop").hide();
+        $("#disabledDataUnder").hide();
+        $('#btnGo').show();
+        $('#MemberId').empty();
+        $('#dvMemberId').hide();
+        $('#lblMemberIdViaAadhaar').text('');
+        $('#dvMemberIdViaAadhaar').hide();
+        $('#lblFamilyIdViaAadhaar').text('');
+        $('#dvFamilyIdViaAadhaar').hide();
+        $('#dvMemberOTP').hide();
+        $('#btnReset').hide();
+        $('#btnRefreshfromPPP').hide();
+    });
+    //PPP Via FamilyID or AadhaarID
+     $("#btnGo").click(function () {
+         //debugger;
+         var radioVal = $('[name="FIDUID"]:checked').val();
+			var id = $(this).val();
+             $('#MemberId').empty();
+         if ($('#txtFIDUID').val() == '') {
+             swal('error', 'Please enter Family Id or Aadhaar Id', 'error');
+             return false;
+         }
+         if (radioVal == 'F') {
+             $.ajax({
+                 type: "GET",
+                 url: '@Url.Action("GetMemberfromPPP", "Account")',
+                 data: { FamilyID: $('#txtFIDUID').val() },
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 success: function (data) {
+
+
+                     if (data != '{}')
+                     {
+                          if (data == '{nosigned}') {
+                              var txt;
+
+                              var r = confirm(" Your family details are not updated or you have not uploaded signed document at PPP portal!\r\nYou may update family ID details and upload signed document using the “Update Family Details” tab provided on the Mera Parivar Portal(https://meraparivar.haryana.gov.in/).\r\nYou may also update family ID details and upload signed document at PPP Portal by visiting your nearest CSC, SARAL Kendra or PPP Operator.\r\n\r\nDo you want to redirect to Mera Parivar Portal ?");
+
+                              if (r == true)
+                                {
+
+                             $.ajax({
+                                 type: "GET",
+                                 url: '@Url.Action("SSOLOGIN", "Account")',
+                                 data: { FamilyID: $('#txtFIDUID').val() },
+                                 contentType: "application/json; charset=utf-8",
+                                 dataType: "json",
+                                 success: function (data) {
+                                     var result = JSON.parse(data);
+                                     window.open(result.URL,"_blank");
+                                 }
+                                 , error: function () {
+                                     swal('Warning', 'No Record Found', 'warning');
+
+                                 }
+                             });
+                                }
+                         }
+                         if (data != '{nosigned}') {
+                             var v = "<option value=''>Select</option>";
+                             $.each(data, function (i, v1) {
+                                 v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                                 // $('#MemberId').append('<option value="' + value.value + '">' + value.text + '</option>');
+                             });
+
+                             $('#MemberId').html(v);
+                             $('#dvMemberId').show();
+                             $("#sendMemberOTP").show();
+                             $('#btnGo').css("display", "none");
+                             $('#btnReset').css("display", "block");
+                         }
+
+                     }
+                     else {
+                         $("#disabledDataTop").hide();
+                         $("#disabledDataUnder").hide();
+                         swal('Warning', 'No Record Found', 'warning');
+
+                     }
+
+
+
+                 },
+                 failure: function (data) {
+                     swal('Error', 'Something went wrong', 'error');
+                     $('#dvMemberId').hide();
+                     $('#dvFamilyIdViaAadhaar').hide();
+                     $('#dvMemberIdViaAadhaar').hide();
+                     $("#disabledDataTop").hide();
+                     $("#disabledDataUnder").hide();
+
+                 }
+
+             });
+         }
+         else if (radioVal == 'U') {
+             //check adhaar
+
+              $.ajax({
+                type: "POST",
+                url: '@Url.Action("CheckAadhar", "Account")',
+                  data: "{'AadharNo':'" + $('#txtFIDUID').val() + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    if (data == "00") {
+                        swal("Warning", "Invalid Aadhar Number", "warning");
+                        $("#AadharNo").val("");
+                        return false;
+                    }
+                    else {
+                //get member from ppp
+                        $('#AadharNo').val($('#txtFIDUID').val());//set aadharno
+              $.ajax({
+             type: "GET",
+             url: '@Url.Action("GetMemberfromPPPViaAadhaar", "Account")',
+                  data: { AadharNo: $('#txtFIDUID').val()},
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+             success: function (data) {
+                // debugger;
+                    var dataX = JSON.parse(data);
+                    if (dataX.status.toLowerCase() === 'successfull') {
+
+                       $('#lblFamilyIdViaAadhaar').text(dataX.result[0].familyid);
+                        $('#lblMemberIdViaAadhaar').text(dataX.result[0].memberid);
+                        $('#hdFamilyId').val(dataX.result[0].familyid);
+                        $('#hdMemberId').val(dataX.result[0].memberid);
+                        $('#dvFamilyIdViaAadhaar').show();
+                        $('#dvMemberIdViaAadhaar').show();
+                        $('#btnGo').css("display", "none");
+                        $('#btnReset').css("display", "block");
+                        $("#sendMemberViaAadhaarOTP").show();
+                    }
+                    else {
+                        swal('Error', 'No Record Found..', 'error');
+                        $('#lblFamilyIdViaAadhaar').text('');
+                        $('#lblMemberIdViaAadhaar').text('');
+                        $('#hdFamilyId').val('');
+                        $('#hdMemberId').val('');
+                        $("#disabledDataTop").hide();
+                        $("#disabledDataUnder").hide();
+                    }
+                },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                    $('#lblFamilyIdViaAadhaar').text('');
+                    $('#lblMemberIdViaAadhaar').text('');
+                    $('#hdFamilyId').val('');
+                    $('#hdMemberId').val('');
+                    $('#dvMemberId').hide();
+                    $('#dvFamilyIdViaAadhaar').hide();
+                    $('#dvMemberIdViaAadhaar').hide();
+                    $("#disabledDataTop").hide();
+                    $("#disabledDataUnder").hide();
+                }
+
+            });
+                    }
+                },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                    $("#disabledDataTop").hide();
+                    $("#disabledDataUnder").hide();
+                }
+
+            });
+
+         }
+	});
+     //Refresh from PPP
+    $("#btnRefreshfromPPP").click(function () {
+
+        var v = "<option value='@ViewBag.MemberID'>Member</option>"
+        $('#MemberId').html(v);
+        $("#sendMemberOTP").hide();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("SendOTPforMEMID", "Account")',
+            data: { MemberId: $('#MemberId').val()},
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                //debugger;
+
+                var dataX = JSON.parse(data);
+                if (dataX.status.toLowerCase() === 'successfull') {
+                    //console.log(data[0].result,'data', typeof(data));
+                    $("#dvFIDUIDPPP").show();
+                    $("#dvFIDUID").hide();
+                    $('#dvFamAadhMem').show();
+                    $('#dvMemberOTP').show();
+                    var dataX = JSON.parse(data);
+                    $('#lblOTPMessage').text(dataX.result.message);
+                    // console.log(data.result.message);
+                    $('#hdtxnId').val(dataX.result.txn);
+
+                    $("#sendMemberOTP").hide();
+                    $('#btnVerifyOTP').show();
+                }
+                else {
+                    swal('Error', 'something went wrong', 'error');
+
+                }
+            },
+            failure: function (data) {
+                swal('Error', 'Something went wrong', 'error');
+
+                $('#dvMemberOTP').hide();
+
+            }
+
+        });
+    });
+
+    $("#sendMemberOTP").click(function SendMemberOTP() {
+
+        var id = $(this).val();
+
+        if ($('#MemberId').val() == '') {
+            swal('error', 'Please select Student', 'error');
+            return false;
+        }
+        $("#sendMemberOTP").hide();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("SendOTPforMEMID", "Account")',
+            data: { MemberId: $('#MemberId').val() },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                //debugger;
+                var dataX = JSON.parse(data);
+                if (dataX.status.toLowerCase() === 'successfull') {
+                    //console.log(data[0].result,'data', typeof(data));
+                    $('#dvMemberOTP').show();
+                    var dataX = JSON.parse(data);
+                    $('#lblOTPMessage').text(dataX.result.message);
+                    // console.log(data.result.message);
+                    $('#hdtxnId').val(dataX.result.txn);
+
+                    $("#sendMemberOTP").hide();
+                    $('#btnVerifyOTP').show();
+                }
+                else {
+                    swal('Error', 'something went wrong', 'error');
+
+                }
+            },
+            failure: function (data) {
+                swal('Error', 'Something went wrong', 'error');
+
+                $('#dvMemberOTP').hide();
+
+            }
+
+        });
+    });
+
+    //sendMemberViaAadhaarOTP
+    var urlForState;
+    var urlForDistrict = '@Url.Action("DistrictP_Bind", "Account")';
+    var urlForBlock =  '@Url.Action("Block__Bind", "Account")';
+    var urlForMuniciplaity = '@Url.Action("Municiplity_Bind", "Account")';
+    var urlVillageCity = '@Url.Action("VillageCity_Bind", "Account")';
+
+    $("#sendMemberViaAadhaarOTP").click(function sendMemberViaAadhaarOTP() {
+
+        var id = $(this).val();
+
+        if ($('#lblMemberIdViaAadhaar').text() == '') {
+            swal('error', 'Something went Wrong', 'error');
+            return false;
+        }
+        $("#sendMemberViaAadhaarOTP").hide();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("SendOTPforMEMID", "Account")',
+            data: { MemberId: $('#lblMemberIdViaAadhaar').text() },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                //debugger;
+                var dataX = JSON.parse(data);
+                if (dataX.status.toLowerCase() === 'successfull') {
+                    //console.log(data[0].result,'data', typeof(data));
+                    $("#dvMemberOTP").show();
+                    var dataX = JSON.parse(data);
+                    $("#lblOTPMessage").text(dataX.result.message);
+                    // console.log(data.result.message);
+                    $('#hdtxnId').val(dataX.result.txn);
+                    $("#sendMemberViaAadhaarOTP").hide();
+                    $('#btnVerifyOTP').show();
+                }
+                else {
+                    swal('Error', 'something went wrong', 'error');
+
+                }
+            },
+            failure: function (data) {
+                swal('Error', 'Something went wrong', 'error');
+                $("#dvMemberOTP").hide();
+
+            }
+
+        });
+    });
+    $("#btnVerifyOTP").click(function VerifyOTP() {
+
+        var id = $(this).val();
+        var datatosend = {};
+        var radioVal = $('[name="FIDUID"]:checked').val();
+    if (radioVal == "F") {
+
+        datatosend.MemberId = $('#MemberId').val();
+    }
+    else if (radioVal == "U") {
+        datatosend.MemberId = $('#lblMemberIdViaAadhaar').text();
+        }
+    else {
+        datatosend.MemberId = $('#MemberId').val();
+    }
+        datatosend.OTP = $('#OTP').val();
+        datatosend.TXN = $('#hdtxnId').val();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("VerifyOTP", "Account")',
+            data: datatosend,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+             //  console.log(data,'data', typeof(data));
+                if (data != '{}')
+                {
+
+                    var dataX = JSON.parse(data);
+                    if (dataX.status.toLowerCase() === 'successfull')
+                    {
+                        $("#disabledDataTop").show();
+                        $("#disabledDataUnder").show();
+                        $("#dvFamMemNoteLink").show();
+                        //$("#CasteCategory").html("<option value='00'>General</option>").val('00');
+                        //$("#CasteCategory").val('00');
+                        $('#hdJsonPPP').val(data);
+                        if (dataX.result.fullName != '')
+                        {
+                            $('#hdNamePPP').val(dataX.result.fullName);
+                        }
+                        if (dataX.result.gender.toUpperCase() == 'F'
+                            && (dataX.result.maritalStatus.toLowerCase() == 'married'
+                                || dataX.result.maritalStatus.toLowerCase() == 'widow')
+
+                        )
+                        {
+                            if (dataX.result.spouseFullName != '')
+                            {
+                                $('#hdFHNamePPP').val(dataX.result.spouseFullName);
+                            }
+
+                        }
+                        else
+                        {
+                            if (dataX.result.fatherFullName != '')
+                            {
+                                $('#hdFHNamePPP').val(dataX.result.fatherFullName);
+                            }
+                        }
+                        if (dataX.result.motherFullName != '')
+                        {
+                            $('#hdnMotherName').val(dataX.result.motherFullName);
+                     }
+                        if (dataX.result.dob != '')
+                        {
+                            $('#hdDOBPPP').val(dataX.result.dob);
+                        }
+                        if (dataX.result.gender != '')
+                        {
+                            if (dataX.result.gender.toUpperCase() == 'M')
+                            {
+                                $('#hdGenderPPP').val(1);
+
+
+                                    $('#Sex').val(1);
+
+
+
+                            }
+                            else if (dataX.result.gender.toUpperCase() == 'F')
+                            {
+                                $('#hdGenderPPP').val(2);
+
+                                    $('#Sex').val(2);
+
+                            }
+                            else
+                            {
+                                $('#hdGenderPPP').val(3);
+
+                                    $('#Sex').val(3);
+
+                            }
+                        }
+                        //if (dataX.result.email != '') {
+                        //    $('#Email').val(dataX.result.email);
+                        //   // $('.isPPP').attr('readonly', 'readonly');
+                        //}
+                        //else {
+                        //   // $('.isPPP').removeAttr('readonly');
+                        //}
+                        //if (dataX.result.mobileNo != '')
+                        //{
+                        //    $('#MobileNo').val(dataX.result.mobileNo);
+                        //}
+                        if (dataX.result.maritalStatus != '')
+                        {
+                            if (dataX.result.maritalStatus.toLowerCase() == 'married')
+                            {
+                                $('#Marital_Status').val(1);
+                            }
+                            else if (dataX.result.maritalStatus.toLowerCase() == 'unmarried')
+                            {
+                                $('#Marital_Status').val(2);
+                            }
+                            else if (dataX.result.maritalStatus.toLowerCase() == 'widow')
+                            {
+                                $('#Marital_Status').val(3);
+                            }
+                            else if (dataX.result.maritalStatus.toLowerCase() == 'divorce')
+                            {
+                                $('#Marital_Status').val(4);
+                            }
+                        }
+                        var a = 'H.No.' + dataX.result.houseNo; // house No
+                        var b = ', Street ' + dataX.result.streetNo; // Street  No
+                        //  var c = ', Locality ' + dataX.result.Locality; // locality
+                        var d = ', Landmark ' + dataX.result.address_LandMark; // Landmark
+                        var e = ', District ' + dataX.result.districtName; // district townname
+                        var PermAddress = a + b + d + e;
+                        $('#StreetAddress1').val(PermAddress);
+                        if (dataX.result.pinCode != '')
+                        {
+                            $('#Pincode').val(dataX.result.pinCode);
+                        }
+                        if (dataX.result.isIncomeVerified != '')
+                        {
+                            $('#hdIsIncomeVerified').val(dataX.result.isIncomeVerified);
+                        }
+                        if (dataX.result.isCasteVerified != '')
+                        {
+                            $('#hdIsCasteVerified').val(dataX.result.isCasteVerified);
+
+                        }
+
+                        if (dataX.result.casteDescription != '') {
+                            $("#ReservationCategory").removeClass("disabledbutton");
+                           // $("#CasteCategory").removeClass("disabledbutton");
+                           // $("#ReservationCategory").val("");
+                           //// $("#CasteCategory").val(0);
+                           // $("#CasteCategory").val('00');
+                            $('#hdcasteDescription_PPP').val(dataX.result.casteDescription);
+                           // $("#DisableCategory").val("");
+                           // $("#DisableCategory").addClass("disabledbutton");
+                            //if (dataX.result.isDivyang.toLowerCase() == 'y' && dataX.result.isDivyangVerified.toLowerCase()=='y') {
+                            //    $("#ReservationCategory").val(4);
+                            //    $("#ReservationCategory").change();
+                            //    $("#ReservationCategory").addClass("disabledbutton");
+                            //    $("#CasteCategory").addClass("disabledbutton");
+                            //    $("#DisableCategory").val(dataX.result.divyangCategory);
+                            //    $("#DisableCategory").addClass("disabledbutton");
+                            //}
+
+                            // else if ((dataX.result.casteDescription.toLowerCase() == 'scheduled caste' || dataX.result.casteDescription.toLowerCase() == 'deprived scheduled castes') && dataX.result.isCasteVerified.toLowerCase() == 'y') {
+
+                            //        $("#ReservationCategory").val(1);
+                            //        $("#ReservationCategory option[value=" + 2 + "]").hide();
+                            //        $("#ReservationCategory option[value=" + 4 + "]").hide();
+                            //        $("#ReservationCategory option[value=" + 5 + "]").hide();
+                            //        $("#ReservationCategory option[value=" + 6 + "]").hide();
+                            //        $("#ReservationCategory option[value=" + 1 + "]").show();
+
+                            //    }
+                            //    else if (dataX.result.casteDescription.toLowerCase() == 'backward class' && dataX.result.isCasteVerified.toLowerCase() == 'y') {
+
+                            //        $("#ReservationCategory").val(2);
+                            //        $("#ReservationCategory option[value=" + 1 + "]").hide();
+                            //        $("#ReservationCategory option[value=" + 4 + "]").hide();
+                            //        $("#ReservationCategory option[value=" + 5 + "]").hide();
+                            //        $("#ReservationCategory option[value=" + 6 + "]").hide();
+                            //        $("#ReservationCategory option[value=" + 2 + "]").show();
+                            //    }
+                            //    else if (dataX.result.casteDescription.toLowerCase() == 'general' && dataX.result.isCasteVerified.toLowerCase() == 'y') {
+
+                            //        $("#ReservationCategory").val(5);
+                            //        $("#ReservationCategory option[value=" + 1 + "]").hide();
+                            //        $("#ReservationCategory option[value=" + 2 + "]").hide();
+                            //        $("#ReservationCategory option[value=" + 4 + "]").hide();
+                            //        $("#ReservationCategory option[value=" + 6 + "]").hide();
+                            //        $("#ReservationCategory option[value=" + 5 + "]").show();
+                            //    }
+                            //    else {
+                            //        $("#ReservationCategory option[value=" + 1 + "]").hide();
+                            //        $("#ReservationCategory option[value=" + 2 + "]").hide();
+                            //        $("#ReservationCategory").removeClass("disabledbutton");
+                            //        $("#DisableCategory").removeClass("disabledbutton");
+                            //    }
+
+
+                        }
+                        if (dataX.result.casteCategory != '') {
+
+                                @*if ((dataX.result.casteCategory == '2' || dataX.result.casteCategory == '3' || dataX.result.casteCategory == '4' || dataX.result.casteCategory == '8') && dataX.result.isCasteVerified.toLowerCase() == 'y') {
+                                    //Bind CasteCategory from ReservationId
+
+                                    var urlForCasteCatgCategory = '@Url.Action("CasteCategory_Bind", "Account")';
+
+                                    $("#CasteCategory").empty();
+                                    $.ajax({
+                                        type: "GET", url: urlForCasteCatgCategory, data: { reservationCategory_id: $("#ReservationCategory").val() }, contentType: "application/json; charset=utf-8", dataType: "json", async: false,
+                                        success: function (data) {
+                                            var v = "<option value='0'>--Please Select Caste Category</option>";
+                                            $.each(data, function (i, v1) {
+                                                v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                                            });
+                                            $("#CasteCategory").html(v);
+
+                                        },
+                                        failure: function (data) {
+                                            swal('Error', 'Something went wrong', 'error');
+
+                                        }
+                                    });
+                                }
+                                else {
+                                    $("#CasteCategory").html("<option value='00'>General</option>").val('00');
+                                   // $("#CasteCategory").val(0);
+                                    $("#CasteCategory").val('00');
+                                }
+                            //Not General and not casteVerified
+                            if (dataX.result.casteCategory != '1' && dataX.result.isCasteVerified.toLowerCase() != 'y') {
+                                swal('Information', 'Your Caste is not Verified in PPP, so you are suggested either to get the caste verified in PPP and then submit the admission form, otherwise your application will be considered in General Category.\n पीपीपी में आपकी जाति सत्यापित नहीं है, इसलिए आपको सुझाव दिया जाता है कि या तो आप पीपीपी में जाति सत्यापित करवाएं और फिर प्रवेश पत्र जमा करें, अन्यथा आपके आवेदन पर सामान्य श्रेणी में विचार किया जाएगा।', 'warning');
+                            }*@
+
+
+                            $('#hdcasteCategoryPPP').val(dataX.result.casteCategory);
+
+                            @*if ((dataX.result.casteCategory == '2' || dataX.result.casteCategory == '8') && dataX.result.isCasteVerified.toLowerCase() == 'y') {
+                                if (dataX.result.casteDescription.toLowerCase() == 'scheduled caste' && dataX.result.isCasteVerified.toLowerCase() == 'y') {
+                                    $("#CasteCategory").val('01');
+                                    $("#CasteCategory option[value='04']").hide();
+                                    $("#CasteCategory").addClass("disabledbutton");
+                                }
+                                else if (dataX.result.casteDescription.toLowerCase() == 'deprived scheduled castes' && dataX.result.isCasteVerified.toLowerCase() == 'y') {
+                                    $("#CasteCategory").val('04');
+                                    $("#CasteCategory option[value='01']").hide();
+                                    $("#CasteCategory").addClass("disabledbutton");
+                                }
+                            }
+                            else if (dataX.result.casteCategory == '3' && dataX.result.isCasteVerified.toLowerCase() == 'y') {
+                                $("#CasteCategory").val('02');
+                                $("#CasteCategory option[value='03']").hide();
+                                $("#CasteCategory").addClass("disabledbutton");
+                            }
+                            else if (dataX.result.casteCategory == '4' && dataX.result.isCasteVerified.toLowerCase() == 'y') {
+                                $("#CasteCategory").val('03');
+                                $("#CasteCategory option[value='02']").hide();
+                                $("#CasteCategory").addClass("disabledbutton");
+                            }
+                            else {
+                                $("#CasteCategory").html("<option value='00'>General</option>").val('00');
+                                $("#CasteCategory").val('00');
+                            }
+                                if ((dataX.result.casteCategory == '2' || dataX.result.casteCategory == '3' || dataX.result.casteCategory == '4' || dataX.result.casteCategory == '8') && dataX.result.isCasteVerified.toLowerCase() == 'y') {
+                                    //Bind Caste from CasteCategory
+                                    var urlForCaste = '@Url.Action("Caste_Bind", "Account")';
+                                    $("#Caste").empty();
+                                    $.ajax({
+                                        type: "GET", url: urlForCaste, data: { casteCategory_Id: $("#CasteCategory").val() }, contentType: "application/json; charset=utf-8", dataType: "json", async: false,
+                                        success: function (data) {
+                                            if ($("#CasteCategory").val() == '00') {
+                                                $("#Caste").html("<option value='00'>General</option>").val('00');
+                                            }
+                                            else {
+                                                $("#Caste").empty();
+                                                $("#Caste").removeAttr("disabled");
+                                                $.get("Caste_Bind", { casteCategory_Id: $("#CasteCategory").val() },
+                                                    function (data) {
+                                                        var v = "<option value='0'>--Please Select Caste--</option>";
+                                                        $.each(data, function (i, v1) {
+                                                            v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                                                        });
+                                                        $("#Caste").html(v);
+
+                                                    });
+                                            }
+                                        }
+                                        , failure: function (data) {
+                                            swal('Error', 'Something went wrong', 'error');
+
+                                        }
+                                    });
+                                }*@
+
+                        }
+                        //$.each(dataX.result.casteList, function (key, value) {
+                        //    $("#Caste").append($('<option></option>').val(value.code).html(value.name));
+                        //});
+                        if (dataX.result.subCaste_name != '') {
+                            $('#hdsubCaste_name_PPP').val(dataX.result.subCaste_name);
+                        }
+                        if (dataX.result.subCaste_code != '') {
+                            $('#hdsubCaste_code_PPP').val(dataX.result.subCaste_code);
+                        }
+
+                        if (dataX.result.isResidenceVerified != '')
+                        {
+                            $('#hdIsHryResidentVerified').val(dataX.result.isResidenceVerified);
+                        }
+                        if (dataX.result.isDivyangVerified != '')
+                        {
+                            $('#hdIsPhyHandicapVerified').val(dataX.result.isDivyangVerified);
+                        }
+
+                        if (dataX.result.isNameVerified != '') {
+                            $('#hdisNameVerified').val(dataX.result.isNameVerified);
+                        }
+                        if (dataX.result.isFnameVerified != '') {
+                            $('#hdisFnameVerified').val(dataX.result.isFnameVerified);
+                        }
+                        if (dataX.result.isDOBVerified != '') {
+                            $('#hdisDOBVerified').val(dataX.result.isDOBVerified);
+                            //if (dataX.result.isDOBVerified.toLowerCase() === 'y') {
+                            //    $('#BirthDate').val(dataX.result.dob);
+                            //}
+                        }
+                        //if FamilyIncome Blank then set PPP value not verified and parentalIncome enabled
+                        // console.log(dataX.result.familyIncome);
+                        //  console.log('length',dataX.result.familyIncome.length);
+                        if (dataX.result.familyIncome == null) {
+
+                            $('#dvfamilyIncome').hide();
+                            $('#ParentalIncome').removeClass("disabledbutton");
+                            $('#hdIsIncomeVerified').val('N');
+
+                        }
+                        else if (dataX.result.familyIncome.length == 0) {
+                            $('#dvfamilyIncome').hide();
+                            $('#ParentalIncome').removeClass("disabledbutton");
+                            $('#hdIsIncomeVerified').val('N');
+                        }
+                        else {
+                            if (parseInt(dataX.result.familyIncome) >= 0)
+                            {
+
+                                    $('#familyIncome').text('Rs. ' + dataX.result.familyIncome + '/-');
+                                    if (dataX.result.familyIncome <= 50000) {
+                                        $('#ParentalIncome').val('1');
+                                    }
+                                    else if (dataX.result.familyIncome > 50000 && dataX.result.familyIncome <= 100000) {
+                                        $('#ParentalIncome').val('2')
+                                    }
+                                    else if (dataX.result.familyIncome > 100000 && dataX.result.familyIncome <= 150000) {
+                                        $('#ParentalIncome').val('3');
+                                    }
+                                    else if (dataX.result.familyIncome > 150000 && dataX.result.familyIncome <= 200000) {
+                                        $('#ParentalIncome').val('4');
+                                    }
+                                    else if (dataX.result.familyIncome > 200000 && dataX.result.familyIncome <= 250000) {
+                                        $('#ParentalIncome').val('5');
+                                    }
+                                    else if (dataX.result.familyIncome > 250000 && dataX.result.familyIncome <= 300000) {
+                                        $('#ParentalIncome').val('6');
+                                    }
+                                    else if (dataX.result.familyIncome > 300000 && dataX.result.familyIncome <= 350000) {
+                                        $('#ParentalIncome').val('7');
+                                    }
+                                    else if (dataX.result.familyIncome > 350000 && dataX.result.familyIncome <= 400000) {
+                                        $('#ParentalIncome').val('8');
+                                    }
+                                    else if (dataX.result.familyIncome > 400000 && dataX.result.familyIncome <= 450000) {
+                                        $('#ParentalIncome').val('9');
+                                    }
+                                    else if (dataX.result.familyIncome > 450000 && dataX.result.familyIncome <= 500000) {
+                                        $('#ParentalIncome').val('10');
+                                    }
+                                    else if (dataX.result.familyIncome > 500000 && dataX.result.familyIncome <= 550000) {
+                                        $('#ParentalIncome').val('11');
+                                    }
+                                    else if (dataX.result.familyIncome > 550000 && dataX.result.familyIncome <= 600000) {
+                                        $('#ParentalIncome').val('12');
+                                    }
+                                    else if (dataX.result.familyIncome > 600000 && dataX.result.familyIncome <= 800000) {
+                                        $('#ParentalIncome').val('13');
+                                    }
+                                    else if (dataX.result.familyIncome > 800000) {
+                                        $('#ParentalIncome').val('14');
+                                    }
+                                }
+                                if (dataX.result.isIncomeVerified.toLowerCase() === 'y') {
+                                    $('#dvfamilyIncome').show();
+                                    $('#ParentalIncome').addClass("disabledbutton");
+                                }
+                                else {
+                                    $('#dvfamilyIncome').hide();
+                                    $('#ParentalIncome').removeClass("disabledbutton");
+                                }
+                            }
+                        // Location DropDowns
+                        if (dataX.result.ruralUrban.toLowerCase() === 'r')
+                        {
+                            var stateid = 6;
+                            var DistrictCodeToSet = dataX.result.dCodeLGD;
+                            var BlockTownCodeToSet = dataX.result.btCodeLGD;
+                            var WardVillageCodeToSet = dataX.result.wvCodeLGD;
+
+                            $('#RuralUrban').val('Rural').change();
+                            $('#State_Code').val(6);
+                            $("#District_Code_Urban").empty();
+                            $("#District_Code_Rural").empty();
+                           $.ajax({
+                                type: "GET", url: urlForDistrict, data: { state_id: stateid }, contentType: "application/json; charset=utf-8", dataType: "json", async: false,
+                                success: function (data)
+                                {
+                                    var v = "<option value=''>Select</option>";
+                                    $.each(data, function (i, v1) { v += "<option value=" + v1.Value + ">" + v1.Text + "</option>"; });
+                                    $("#District_Code_Urban").html(v);
+                                    $("#District_Code_Rural").html(v);
+                                    $("#District_Code_Rural").val(DistrictCodeToSet);
+                                },
+                                failure: function (data)
+                                {
+                                    swal('Error', 'Something went wrong', 'error');
+
+                                }
+                            });
+
+                            $("#Block").empty();
+                            $.ajax({
+                                type: "GET", url: urlForBlock, data: { district_id: DistrictCodeToSet }, contentType: "application/json; charset=utf-8", dataType: "json", async: false,
+                                success: function (data)
+                                {
+
+                                    var v = "<option value=''>Select</option>";
+                                    // var v = "<option>Select</option>";
+                                    $.each(data, function (i, v1)
+                                    {
+                                      v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                              });
+                                    $("#Block").html(v);
+                                    $("#Block").val(BlockTownCodeToSet);
+                                    ////
+                                },
+                                failure: function (data)
+                                {
+                                    swal('Error', 'Something went wrong', 'error');
+
+                                }
+                            });
+                            $("#CityTownVillage").empty();
+                            $.ajax({
+                                type: "GET",
+                                url: urlVillageCity,
+                                data: { block_id: BlockTownCodeToSet, state_id: stateid, district_id: DistrictCodeToSet },
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                async: false,
+                                success: function (data)
+                                {
+
+                                    var v = "<option value=''>Select</option>";
+                                    $.each(data, function (i, v1)
+                                    {
+                                        //debugger;
+                                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                                    });
+
+                                    $("#CityTownVillage").html(v);
+                                    $("#CityTownVillage").val(WardVillageCodeToSet);
+                                },
+                                failure: function (data)
+                                {
+                                    swal('Error', 'Something went wrong', 'error');
+
+                                }
+
+                            });
+                            $('#divMuniciplity').hide();
+                            $('#divCMuniciplity').hide();
+                            $('#divVillageTown').show();
+                            $('#divCVillageTown').show();
+                        }
+                        else if (dataX.result.ruralUrban.toLowerCase() === 'u')
+                        {
+
+                            var DistrictCodeToSet = dataX.result.dCodeLGD;
+                            var BlockTownCodeToSet = dataX.result.btCodeLGD;
+                            var WardVillageCodeToSet = dataX.result.wvCodeLGD;
+                            var MunicipalityCodeToSet = dataX.result.btCodeLGD;
+                            $('#RuralUrban').val('Urban').change();
+                            $('#State_Code').val(6);
+                            $("#District_Code_Urban").empty();
+                            $("#District_Code_Rural").empty();
+                            $.ajax({
+                                type: "GET",
+                                url: urlForDistrict,
+                                data: { state_id: 6 },
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                async: false,
+                                success: function (data)
+                                {
+
+                                    var v = "<option value=''>Select</option>";
+                                    //var v;
+                                    $.each(data, function (i, v1)
+                                    {
+                                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                                    });
+                                    $("#District_Code_Urban").html(v);
+                                    $("#District_Code_Rural").html(v);
+                                    $("#District_Code_Urban").val(DistrictCodeToSet);
+                                    $("#Municiplity").empty();
+
+
+                                },
+                                failure: function (data)
+                                {
+                                    swal('Error', 'Something went wrong', 'error');
+
+                                }
+                            });
+                            $.ajax({
+                                type: "GET",
+                                url: urlForMuniciplaity,
+                                data: { district_id: DistrictCodeToSet },
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                async: false,
+                                success: function (data)
+                                {
+
+                                    var v = "<option value=''>Select</option>";
+                                    $.each(data, function (i, v1)
+                                    {
+                                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                                    });
+                                    $("#Municiplity").html(v);
+                                    $("#Municiplity").val(MunicipalityCodeToSet);
+                                },
+                                failure: function (data)
+                                {
+                                    swal('Error', 'Something went wrong', 'error');
+
+                                }
+
+                            });
+                            $('#divMuniciplity').show();
+                            $('#divCMuniciplity').show();
+                            $('#divVillageTown').hide();
+                            $('#divCVillageTown').hide();
+                        }
+
+                        @*if (dataX.result.casteCategory !== '') {
+
+                            $("#CasteCategory").empty();
+                            $("#ReservationCategory").empty();
+
+                            $.ajax({
+                                type: "GET", url: '@Url.Action("CasteCategory_Bind_PPP", "Account")', data: { CasteCategoryId: dataX.result.casteCategory }, contentType: "application/json; charset=utf-8", dataType: "json", async: false,
+                                success: function (dataCaste) {
+                                    debugger;
+                                    var dataCasteX = JSON.parse(dataCaste);
+
+                                    var v = '<option value="">Please Select</option><option value="' + (typeof (dataCasteX[0].resevationcode) == 'undefined' ? '00' : dataCasteX[0].resevationcode) + '">' + dataCasteX[0].reservationname + '</option>';
+                                    var v1 = '<option value="">Please Select</option><option value="' + (typeof(dataCasteX[0].categorycode) == 'undefined'  ? '00' : dataCasteX[0].categorycode) + '">' + dataCasteX[0].categorydesc + '</option>';
+
+                                    $("#ReservationCategory").html(v);
+
+                                    $("#ReservationCategory").val((typeof (dataCasteX[0].resevationcode) == 'undefined' ? '00' : dataCasteX[0].resevationcode))
+
+                                    $("#CasteCategory").html(v1);
+
+                                    $("#CasteCategory").val(typeof (dataCasteX[0].categorycode) == 'undefined' ? '00' : dataCasteX[0].categorycode);
+                                    $("#CasteCategory").change();
+
+                                },
+                                failure: function (data) {
+                                    swal('Error', 'Something went wrong', 'error');
+                                }
+                            });
+                        }*@
+                        $('#btnVerifyOTP').hide();
+
+                    }
+                    else if (dataX.status.toLowerCase() === 'nodata')
+                    {
+                        swal('Error', 'Wrong OTP/No Data Found', 'error');
+
+                    }
+                    else
+                    {
+                        swal('Error', dataX.message, 'warning');
+
+                    }
+                }
+                    else
+                {
+                    swal('Error', 'Something went wrong. Try again.', 'error');
+
+                }
+            },
+            failure: function (data) {
+                swal('Error', 'Something went wrong', 'error');
+
+
+            }
+
+        });
+    });
+
+
+     $(document).on("change", "#txtIndian", function () {
+        var radioVal = $("#txtIndian").val();
+         if (radioVal == "I") {
+             $("#disabledDataTop").hide();
+             $("#disabledDataUnder").hide();
+             $("#lblCountry").css("display", "none");
+             $("#N_Country_Code").css("display", "none");
+             $("#dvaadhar").show();
+             $("#AadharNo").removeAttr("style");
+             $("#AadharNo").val("@ViewBag.v_aadharno");
+            // $("#lblState").removeAttr("style");
+             $("#lblState").css("display", "none");
+             $("#drpState").css("display", "none");
+             //$("#drpState").removeAttr("style");
+             $('#dvHaryanaDomicile').show();
+             $("#checkHaryanaDomicileYes").prop('checked', false);
+             $("#checkHaryanaDomicileNo").prop('checked', false);
+             $("#dvFamilyIdViaAadhaar").hide();
+             $("#dvMemberIdViaAadhaar").hide();
+             $("#dvFIDUIDPPP").hide();
+             $("#dvFamMemNote").hide();
+             ReservationCatgShowHide();
+             $("#State_Code").val('').children().attr('disabled', 'disabled').hide().filter((i, elm) => {
+                 if ($("[name=NationalyType]:checked").val() == 'O') {
+                     if ($(elm).val() != "6") return $(elm);
+
+                 }
+                 else {
+                     if ($(elm).val() == "6") return $(elm);
+
+                 }
+             }
+             ).removeAttr('disabled').show();
+
+             $("#N_Country_Code option[value='78']").attr('disabled', 'disabled').show();
+        }
+     });
+    $(document).on("change", "#txtOther", function () {
+        var radioVal = $("#txtOther").val();
+        if (radioVal == "O") {
+            $("#disabledDataTop").show();
+            $("#disabledDataUnder").show();
+            $("#dvFamMemNoteLink").hide();
+            $("#AadharNo").removeAttr('required');
+           $("#AadharNo").val("");
+           $("#dvaadhar").hide();
+           $("#AadharNo").css("display", "none");
+            $("#lblCountry").removeAttr("style");
+            $("#N_Country_Code").removeAttr("style");
+            $("#lblState").css("display", "none");
+            $("#drpState").css("display", "none");
+            $('#dvHaryanaDomicile').hide();
+            $("#checkHaryanaDomicileYes").prop('checked', false);
+            $("#checkHaryanaDomicileNo").prop('checked', false);
+            $('#btnGo').css("display", "none");
+            $('#lblFamilyId').css("display", "none");
+            $('#txtFIDUID').css("display", "none");
+            $('#dvMemberId').hide();
+            $('#dvMemberOTP').hide();
+            $("#dvFamilyIdViaAadhaar").hide();
+            $("#dvMemberIdViaAadhaar").hide();
+            $("#dvFIDUIDPPP").hide();
+            $("#dvFamMemNote").hide();
+            $(".isPPP").each(function (i, item) { item.value = ''; })
+            $('.isPPP').removeClass("disabledbutton");
+            $("input[name=HaryanaDomicile]").removeAttr('required');
+            $("input[name=FIDUID]").removeAttr('required');
+            $("#txtFIDUID").removeAttr('required');
+            @*var checkApiData = '@ViewBag.CheckApi';
+            if (checkApiData == "Y") {
+                 $("#Sex").val(@ViewBag.SexValue);
+                $('#Sex').addClass("disabledbutton");
+            }*@
+
+            ReservationCatgShowHide();
+            $("#ReservationCategory").val('5');
+            $("#CasteCategory").html("<option value='00'>General</option>").val('00');
+            $("#State_Code").val('').children().attr('disabled', 'disabled').hide().filter((i, elm) =>
+            {
+                if ($("[name=NationalyType]:checked").val() == 'O')
+                {
+                    if ($(elm).val() != "6") return $(elm);
+
+                }
+                else
+                {
+                    if ($(elm).val() == "6") return $(elm);
+
+                }
+            }
+            ).removeAttr('disabled').show();
+            $("#N_Country_Code option[value='78']").attr('disabled', 'disabled').hide();
+            $("#txtFIDUID").val('');
+            $('#MemberId').empty();
+            $('#lblFamilyIdViaAadhaar').text('');
+            $('#lblMemberIdViaAadhaar').text('');
+            $('#hdFamilyId').val('');
+            $('#hdMemberId').val('');
+
+        }
+    });
+    function ShowHideOptions() {
+        //alert($("[name=HaryanaDomicile]:checked").val());
+        if ($("[name=HaryanaDomicile]:checked").val() == 'Y') {
+            console.log("Y selected");
+        }
+        else {
+            console.log("N Selected");
+        }
+    }
+    $(document).on("change", "#checkHaryanaDomicileYes", function () {
+        var radioVal = $("#checkHaryanaDomicileYes").val();
+        if (radioVal == "Y") {
+            $("#disabledDataTop").hide();
+            $("#disabledDataUnder").hide();
+            $("#dvFamMemNote").show();
+            $("#dvFIDUIDPPP").show();
+            $("#btnReset").hide();
+            $("#dvNStateCode").hide();
+            $("#State_Code").val('').children().attr('disabled', 'disabled').hide().filter((i, elm) => {
+
+                if ($("[name=HaryanaDomicile]:checked").val() == 'N') {
+                    if ($(elm).val() != "6") return $(elm);
+                   // $("#drpState").removeClass("disabledbutton");
+                }
+                else {
+                    if ($(elm).val() == "6") return $(elm);
+
+                   // $("#drpState").addClass("disabledbutton");
+                }
+            }
+            ).removeAttr('disabled').show();
+            $("#drpState").val('6');
+            ReservationCatgShowHide();
+            $("#lblState").css("display", "none");
+            $("#drpState").css("display", "none");
+           // $("#drpState").attr('disabled', 'disabled');
+            $("#chkFID").prop('checked', false);
+            $("#chkUID").prop('checked', false);
+
+            $(".isPPP").each(function (i, item) { item.value = ''; })
+            $('.isPPP').addClass("disabledbutton");
+            $('#AadharNo').val('');
+            //$('#AadharNo').prop('disabled', true);
+            $('#AadharNo').prop('required', true);
+
+        }
+        ShowHideOptions();
+    });
+    $(document).on("change", "#checkHaryanaDomicileNo", function () {
+        var radioVal = $("#checkHaryanaDomicileNo").val();
+        if (radioVal == "N") {
+            $("#CasteCategory").html("<option value='00'>General</option>").val('00');
+            $("#disabledDataTop").show();
+            $("#disabledDataUnder").show();
+
+            $("#dvFamMemNote").hide();
+            $("#State_Code").val('').children().attr('disabled', 'disabled').hide().filter((i, elm) =>
+            {
+                if ($("[name=HaryanaDomicile]:checked").val() == 'N')
+                {
+                    if ($(elm).val() != "6") return $(elm);
+                   // $("#drpState").removeClass("disabledbutton");
+                }
+                else
+                {
+                    if ($(elm).val() == "6") return $(elm);
+                   // $("#drpState").addClass("disabledbutton");
+                }
+            }
+            ).removeAttr('disabled').show();
+            $("#drpState").val('1');
+            $("#lblState").css("display", "none");
+            $("#drpState").css("display", "none");
+
+            $("#dvFIDUIDPPP").hide();
+            $('#dvFamAadhMem').hide();
+            $("#dvNStateCode").hide();
+            $("#FamilyID").removeAttr('style');
+            $("#chkFID").removeAttr('required');
+            $("#chkUID").removeAttr('required');
+
+            //$("#drpState").removeAttr('readonly');
+            $("#txtFIDUID").val('');
+            $("#txtFIDUID").removeAttr('style');
+            $("input[name=FIDUID]").removeAttr('required');
+            $("#txtFIDUID").removeAttr('required');
+
+            $(".isPPP").each(function (i, item) { item.value = ''; })
+            //$('.isPPP').removeAttr('readonly');
+            $('.isPPP').removeClass("disabledbutton");
+            @*var checkApiData = '@ViewBag.CheckApi';
+            if (checkApiData == "Y") {
+                $("#Sex").val(@ViewBag.SexValue);
+                $('#Sex').addClass("disabledbutton");
+            }*@
+            $('#AadharNo').val('');
+            $('#AadharNo').removeAttr('disabled');
+            $('#AadharNo').prop('required', true);
+        }
+        ShowHideOptions();
+        ReservationCatgShowHide();
+        $("#ReservationCategory").val('5');
+        $("#ReservationCategory").addClass("disabledbutton");
+        //$("#ReservationCategory").val('').children().attr('disabled', 'disabled').hide().filter((i, elm) => {
+        //if ($("[name=HaryanaDomicile]:checked").val() == 'N') {
+        //    if ($(elm).val() == "5") {
+        //        return $(elm).text("All India General(AIG)");
+        //    }
+        //    if ($(elm).val() == "8") {
+
+        //        return $(elm).text("EWS-AIG");
+        //    }
+        //    }
+        //}
+        //).removeAttr('disabled').show();
+    });
+    $(document).on("change", "#chkFID", function () {
+        var radioVal = $("#chkFID").val();
+        if (radioVal == "F") {
+            $('#dvFamAadhMem').show();
+            $('#lblFamilyId').text('Enter FamilyID');
+            $("#txtFIDUID").val('');
+            $("#txtFIDUID").removeAttr("style");
+            $("#familylink").css("display", "block");
+            $('#btnGo').css("display", "block");
+            $('#btnReset').css("display", "none");
+            $('#btnRefreshfromPPP').css("display", "none");
+            $('#lblFamilyId').css("display", "block");
+            $('#txtFIDUID').css("display", "block");
+            $('#txtFIDUID').attr("required", "required");
+
+            $('#MemberId').empty();
+            $('#dvMemberId').hide();
+            $('#lblMemberIdViaAadhaar').text('');
+            $('#dvMemberIdViaAadhaar').hide();
+            $('#lblFamilyIdViaAadhaar').text('');
+            $('#dvFamilyIdViaAadhaar').hide();
+            $('#dvMemberOTP').hide();
+            $('#btnReset').hide();
+            $('#btnRefreshfromPPP').hide();
+
+            $(".isPPP").each(function (i, item) { item.value = ''; })
+            $('.isPPP').addClass("disabledbutton");
+
+        }
+    });
+    $(document).on("change", "#chkUID", function () {
+        var radioVal = $("#chkUID").val();
+        if (radioVal == "U") {
+            $('#dvFamAadhMem').show();
+            $('#lblFamilyId').text('Enter AadhaarID');
+            $("#txtFIDUID").val('');
+            $("#txtFIDUID").removeAttr("style");
+            $("#familylink").css("display", "block");
+            $('#btnGo').css("display", "block");
+            $('#btnReset').css("display", "none");
+            $('#btnRefreshfromPPP').css("display", "none");
+            $('#lblFamilyId').css("display", "block");
+            $('#txtFIDUID').css("display", "block");
+            $('#txtFIDUID').attr("required", "required");
+            $('#MemberId').empty();
+            $('#dvMemberId').hide();
+            $('#lblMemberIdViaAadhaar').text('');
+            $('#dvMemberIdViaAadhaar').hide();
+            $('#lblFamilyIdViaAadhaar').text('');
+            $('#dvFamilyIdViaAadhaar').hide();
+            $('#dvMemberOTP').hide();
+            $('#btnReset').hide();
+            $('#btnRefreshfromPPP').hide();
+
+            $(".isPPP").each(function (i, item) { item.value = ''; })
+            $('.isPPP').addClass("disabledbutton");
+
+        }
+    });
+    $(document).on("change", "#rbVoter1", function () {
+        var radioVal = $("#rbVoter1").val();
+        if (radioVal == "Y") {
+            $("#VoterCardText").removeAttr("style");
+        }
+    });
+    $(document).on("change", "#rbVoter2", function () {
+        var radioVal = $("#rbVoter2").val();
+        if (radioVal == "N")
+            $("#VoterCardText").css("display", "none");
+    });
+    $(document).on("change", "#minorityYes", function () {
+        var radioVal = $("#minorityYes").val();
+        if (radioVal == "Y")
+            $("#MinorityData").removeAttr("style");
+    });
+    $(document).on("change", "#minorityNo", function () {
+        var radioVal = $("#minorityNo").val();
+        if (radioVal == "N")
+            $("#MinorityData").css("display", "none");
+    });
+    $("#ReservationCategory").change(function () {
+        var id = $(this).val();
+        $("#CasteCategory").empty();
+
+        $("#DisableCategory").val("");
+        if (id == "4") {
+            $("#DisableCategory").removeAttr("disabled");
+        }
+        else {
+            $("#DisableCategory").prop("disabled", true);
+
+        }
+
+
+        $.get("CasteCategory_Bind", { reservationCategory_id: id }, function (data) {
+            var v = "<option value='0'>--Please Select Caste Category</option>";
+            $.each(data, function (i, v1) {
+                v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+            });
+            $("#CasteCategory").html(v);
+            $("#CasteCategory").val(0);
+        });
+    });
+    $("#CasteCategory").change(function () {
+        $("#cascat_error").html("");
+        var id = $(this).val();
+        if (id == '00') {
+            $("#Caste").html("<option value='00'>General</option>").val('00');
+        }
+        else {
+            $("#Caste").empty();
+            $("#Caste").removeAttr("disabled");
+            $.get("Caste_Bind", { casteCategory_Id: id }, function (data) {
+                var v = "<option value='0'>--Please Select Caste--</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#Caste").html(v);
+            });
+        }
+    });
+     //change here
+
+
+        $("#State_Code").change(function () {
+
+			var id = $(this).val();
+			$("#District_Code_Urban").empty();
+            $("#District_Code_Rural").empty();
+             $.ajax({
+                type: "GET",
+                url: '@Url.Action("DistrictP_Bind", "Account")',
+                data: {state_id: id},
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    var v = "<option value=''>Select</option>";
+                    //var v;
+                    $.each(data, function (i, v1) {
+                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                    });
+                    $("#District_Code_Urban").html(v);
+                    $("#District_Code_Rural").html(v)
+                },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                }
+
+            });
+		});
+
+        $("#District_Code_Urban").change(function () {
+				var id = $(this).val();
+		    	$("#Municiplity").empty();
+             $.ajax({
+                 type: "GET",
+                url: '@Url.Action("Municiplity_Bind", "Account")',
+                data: {district_id: id },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    var v = "<option value=''>Select</option>";
+				    $.each(data, function (i, v1) {
+					  v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+				      });
+				     $("#Municiplity").html(v);
+                },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                }
+
+            });
+		});
+
+        $("#District_Code_Rural").change(function () {
+            var id = $(this).val();
+			$("#Block").empty();
+             $.ajax({
+                 type: "GET",
+                url: '@Url.Action("Block__Bind", "Account")',
+                data: { district_id: id },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    var v = "<option value=''>Select</option>";
+			   // var v = "<option>Select</option>";
+				$.each(data, function (i, v1) {
+					v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+				});
+				$("#Block").html(v);
+                },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                }
+
+            });
+		});
+
+        $("#Block").change(function () {
+          	var stateid = $("#State_Code").val();
+			var districtid = $("#District_Code_Rural").val();
+			var id = $(this).val();
+			$("#CityTownVillage").empty();
+             $.ajax({
+                 type: "GET",
+                url: '@Url.Action("VillageCity_Bind", "Account")',
+                data: {block_id: id , state_id: stateid , district_id: districtid},
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    var v = "<option value=''>Select</option>";
+				$.each(data, function (i, v1) {
+					v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+				});
+
+				$("#CityTownVillage").html(v);
+                },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                }
+
+            });
+		});
+
+        $("#C_State_Code").change(function () {
+
+			var id = $(this).val();
+			$("#C_District_Code_Urban").empty();
+            $("#C_District_Code_Rural").empty();
+             $.ajax({
+                type: "GET",
+                url: '@Url.Action("DistrictP_Bind", "Account")',
+                data: {state_id: id},
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    var v = "<option value=''>Select</option>";
+                    //var v;
+                    $.each(data, function (i, v1) {
+                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                    });
+                    $("#C_District_Code_Urban").html(v);
+                    $("#C_District_Code_Rural").html(v)
+                },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                }
+
+            });
+		});
+
+     $("#C_District_Code_Urban").change(function () {
+				var id = $(this).val();
+		    	$("#C_Municiplity").empty();
+             $.ajax({
+                 type: "GET",
+                url: '@Url.Action("Municiplity_Bind", "Account")',
+                data: {district_id: id },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    var v = "<option value=''>Select</option>";
+				    $.each(data, function (i, v1) {
+					  v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+				      });
+				     $("#C_Municiplity").html(v);
+                },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                }
+
+            });
+		});
+
+     $("#C_District_Code_Rural").change(function () {
+            var id = $(this).val();
+			$("#C_Block").empty();
+             $.ajax({
+                 type: "GET",
+                url: '@Url.Action("Block__Bind", "Account")',
+                data: { district_id: id },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    var v = "<option value=''>Select</option>";
+			   // var v = "<option>Select</option>";
+				$.each(data, function (i, v1) {
+					v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+				});
+				$("#C_Block").html(v);
+                },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                }
+
+            });
+		});
+
+     $("#C_Block").change(function () {
+          	var stateid = $("#C_State_Code").val();
+			var districtid = $("#C_District_Code_Rural").val();
+			var id = $(this).val();
+			$("#C_CityTownVillage").empty();
+             $.ajax({
+                 type: "GET",
+                url: '@Url.Action("VillageCity_Bind", "Account")',
+                data: {block_id: id , state_id: stateid , district_id: districtid},
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    var v = "<option value=''>Select</option>";
+				$.each(data, function (i, v1) {
+					v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+				});
+
+				$("#C_CityTownVillage").html(v);
+                },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                }
+
+            });
+		});
+
+		$("#Is_Correspondence").change(function () {
+            var IsChecked = $('#Is_Correspondence:checkbox:checked').length;
+
+			if (IsChecked > 0) {
+
+				$('#hdnRuralUrban').val('C_'+$('#RuralUrban').val());
+				$('#hdnState').val($('#State_Code').val());
+				$('#hdnDisRural').val($('#District_Code_Rural').val());
+				$('#hdnDisUrban').val($('#District_Code_Urban').val());
+				$('#hdnMunicipilty').val($('#Municiplity').val());
+				$('#hdnBlock').val($('#Block').val());
+				$('#hdnVillage').val($('#CityTownVillage').val());
+				$('#hdnStreetAdd1').val($('#StreetAddress1').val());
+				$('#hdnStreetAdd2').val($('#StreetAddress2').val());
+				$('#hdnPin').val($('#Pincode').val());
+
+
+				$('#RuralUrban').change();
+				$('#C_RuralUrban').val('C_' + $('#RuralUrban').val()).attr('disabled', 'disabled');
+				$('#C_RuralUrban').change();
+				$('#C_Country_Code').val($('#Country_Code').val()).attr('disabled', 'disabled');
+				$('#C_State_Code').html($('#State_Code').html());
+				$('#C_State_Code').val($('#State_Code').val()).attr('disabled', 'disabled');
+				$('#C_District_Code_Rural').html($('#District_Code_Rural').html());
+				$('#C_District_Code_Rural').val($('#District_Code_Rural').val()).attr('disabled', 'disabled');
+				$('#C_District_Code_Urban').html($('#District_Code_Urban').html());
+				$('#C_District_Code_Urban').val($('#District_Code_Urban').val()).attr('disabled', 'disabled');
+				$('#C_Municiplity').html($('#Municiplity').html());
+				$('#C_Municiplity').val($('#Municiplity').val()).attr('disabled', 'disabled');
+				$('#C_Block').html($('#Block').html());
+				$('#C_Block').val($('#Block').val()).attr('disabled', 'disabled');
+				$('#C_CityTownVillage').html($('#CityTownVillage').html());
+				$('#C_CityTownVillage').val($('#CityTownVillage').val()).attr('disabled', 'disabled');
+				$('#C_StreetAddress1').val($('#StreetAddress1').val()).attr('disabled', 'disabled');
+				$('#C_StreetAddress2').val($('#StreetAddress2').val()).attr('disabled', 'disabled');
+                $('#C_Pincode').val($('#Pincode').val()).attr('disabled', 'disabled');
+
+
+			}
+			else {
+
+				$('#C_StreetAddress1').removeAttr("disabled");
+				$('#C_StreetAddress2').removeAttr("disabled");
+				$('#C_Pincode').removeAttr("disabled");
+				$('#C_Country_Code').removeAttr("disabled");
+				$('#C_State_Code').removeAttr("disabled");
+				$('#C_District_Code_Urban').removeAttr("disabled");
+				$('#C_District_Code_Rural').removeAttr("disabled");
+				$('#C_Municiplity').removeAttr("disabled");
+				$('#C_Block').removeAttr("disabled");
+				$('#C_CityTownVillage').removeAttr("disabled");
+				$('#C_RuralUrban').removeAttr("disabled");
+
+				$('#C_Block').removeAttr("required")
+				$('#C_CityTownVillage').removeAttr("required")
+				$('#Block').removeAttr("required")
+                $('#CityTownVillage').removeAttr("required")
+
+			}
+		});
+
+		$(document).on("change", "#checkBPLYes", function () {
+			var radioVal = $("#checkBPLYes").val();
+			if (radioVal == "Y")
+				$("#BPLCardNo").removeAttr("style");
+		});
+		$(document).on("change", "#checkBPLNo", function () {
+			var radioVal = $("#checkBPLNo").val();
+			if (radioVal == "N")
+				$("#BPLCardNo").css("display", "none");
+		});
+		$(document).on("change", "#checkPassportYes", function () {
+			var radioVal = $("#checkPassportYes").val();
+			if (radioVal == "Y")
+				$("#PassportText").removeAttr("style");
+		});
+		$(document).on("change", "#checkPassportNo", function () {
+			var radioVal = $("#checkPassportNo").val();
+			if (radioVal == "N")
+				$("#PassportText").css("display", "none");
+		});
+		$(document).on("change", "#checkLicenceYes", function () {
+			var radioVal = $("#checkLicenceYes").val();
+			if (radioVal == "Y")
+				$("#DrivingLicenceText").removeAttr("style");
+		});
+		$(document).on("change", "#checkLicenceNo", function () {
+			var radioVal = $("#checkLicenceNo").val();
+			if (radioVal == "N")
+				$("#DrivingLicenceText").css("display", "none");
+		});
+        $(document).on("change", "#RuralUrban", function () {
+            var DropVal = $("#RuralUrban").val();
+            var scode = $('#State_Code').val();
+
+
+
+            if (DropVal == "Urban") {
+
+                $('#divVillageTown').hide();
+                $('#divCVillageTown').hide();
+                $('#divMuniciplity').show();
+                 $('#divCMuniciplity').show();
+                $('#divdistrictRural').hide();
+                $('#divCdistrictRural').hide();
+                $('#divdistrictUrban').show();
+               $('#divCdistrictUrban').show();
+                $('#Block').val("");
+                $('#Block').removeAttr("required")
+                $('#CityTownVillage').val("");
+                $('#CityTownVillage').removeAttr("required")
+                $('#District_Code_Rural').val("");
+                $('#District_Code_Rural').removeAttr("required");
+
+                $('#C_Block').val("");
+                $('#C_Block').removeAttr("required")
+                $('#C_CityTownVillage').val("");
+                $('#C_CityTownVillage').removeAttr("required")
+                $('#C_District_Code_Rural').val("");
+                $('#C_District_Code_Rural').removeAttr("required");
+
+                $('#District_Code_Urban').attr("required", "required");
+                $('#C_District_Code_Urban').attr("required", "required");
+
+                    $('#Municiplity').attr("required", "required");
+                    $('#C_Municiplity').attr("required", "required");
+
+
+                $('#C_RuralUrban').val('C_' + $("#RuralUrban").val());
+
+                if (scode != 6) {
+                    $('#divMuniciplity').hide();
+                    $('#divCMuniciplity').hide();
+                    $('#Municiplity').removeAttr("required");
+                    $('#C_Municiplity').removeAttr("required");
+                }
+
+            }
+			else {
+				$('#divMuniciplity').hide();
+                $('#divCMuniciplity').hide();
+
+                    $('#divVillageTown').show();
+                    $('#divCVillageTown').show();
+
+				$('#divdistrictRural').show();
+				$('#divdistrictUrban').hide();
+				$('#divCdistrictRural').show();
+				$('#divCdistrictUrban').hide();
+				$('#Municiplity').val("");
+				$('#Municiplity').removeAttr("required")
+				$('#District_Code_Urban').val("");
+                $('#District_Code_Urban').removeAttr("required");
+
+                $('#C_Municiplity').val("");
+                $('#C_Municiplity').removeAttr("required")
+                $('#C_District_Code_Urban').val("");
+                $('#C_District_Code_Urban').removeAttr("required");
+
+                $('#District_Code_Rural').attr("required", "required");
+
+                    $('#Block').attr("required", "required");
+                    $('#CityTownVillage').attr("required", "required");
+                    $('#C_District_Code_Rural').attr("required", "required");
+                    $('#C_Block').attr("required", "required");
+                    $('#C_CityTownVillage').attr("required", "required");
+
+                $('#C_RuralUrban').val('C_' + $("#RuralUrban").val());
+                if (scode != 6) {
+                    $('#divVillageTown').hide();
+                    $('#divCVillageTown').hide();
+
+                    $('#Block').removeAttr("required");
+                    $('#CityTownVillage').removeAttr("required");
+                    $('#C_District_Code_Rural').removeAttr("required");
+                    $('#C_Block').removeAttr("required");
+                    $('#C_CityTownVillage').removeAttr("required");
+                }
+			}
+
+		});
+		$(document).on("change", "#C_RuralUrban", function () {
+            var DropVal = $("#C_RuralUrban").val();
+            var scode = $('#C_State_Code').val();
+			if (DropVal == "C_Urban") {
+				$('#divCVillageTown').hide();
+				$('#divCMuniciplity').show();
+				$('#divCdistrictRural').hide();
+				$('#divCdistrictUrban').show();
+				$('#C_District_Code_Rural').val("");
+				$('#C_District_Code_Rural').removeAttr("required");
+				$('#C_Block').val("");
+				$('#C_Block').removeAttr("required")
+				$('#C_CityTownVillage').val("");
+                $('#C_CityTownVillage').removeAttr("required")
+                $('#C_District_Code_Urban').attr("required", "required");
+                $('#C_Municiplity').attr("required", "required");
+                if (scode != 6) {
+                    $('#divCMuniciplity').hide();
+                   $('#C_Municiplity').removeAttr("required");
+                }
+            }
+			else  {
+				$('#divCMuniciplity').hide();
+				$('#divCVillageTown').show();
+				$('#divCdistrictRural').show();
+				$('#divCdistrictUrban').hide();
+				$('#C_Municiplity').val("");
+				$('#C_Municiplity').removeAttr("required")
+				$('#C_District_Code_Urban').val("");
+                $('#C_District_Code_Urban').removeAttr("required");
+                $('#C_District_Code_Rural').attr("required", "required");
+                $('#C_Block').attr("required", "required");
+                $('#C_CityTownVillage').attr("required", "required");
+
+                if (scode != 6) {
+                    $('#divCVillageTown').hide();
+                    $('#C_Block').removeAttr("required");
+                    $('#C_CityTownVillage').removeAttr("required");
+                }
+			}
+        });
+
+
+        $(document).on("blur", "#GuardianMobileNo", function () {
+            var InvalideMobileList = ['0000000000', '1111111111', '2222222222', '3333333333', '4444444444', '5555555555', '6666666666', '7777777777', '8888888888', '9999999999', '1234567890', '9876543210']
+            var phoneno = /^\d{10}$/;
+            var GMobileNo = $("#GuardianMobileNo").val();
+            var lblError = document.getElementById("lblGurdianMError");
+            lblError.innerHTML = "";
+            if (GMobileNo == "") {
+                return true;
+            }
+            else {
+                if (GMobileNo.length != 10) {
+                    lblError.innerHTML = "Enter valid 10 digit mobile number";
+                    swal("Alert!", "Enter valid 10 digit mobile number", "warning");
+                }
+                if (InvalideMobileList.indexOf(GMobileNo) > -1) {
+                    //document.getElementById('MobileNo').value = "";
+                    swal("Alert!", "Mobile Number is not valid", "warning");
+                    lblError.innerHTML = "Invalid Mobile number";
+                }
+                else {
+                    return true;
+                }
+            }
+        });
+
+		$(document).on("blur", "#MobileNo", function () {
+			var InvalideMobileList = ['0000000000', '1111111111', '2222222222', '3333333333', '4444444444', '5555555555', '6666666666', '7777777777', '8888888888', '9999999999', '1234567890', '9876543210']
+			var phoneno = /^\d{10}$/;
+			var MobileNo = $("#MobileNo").val();
+			var lblError = document.getElementById("lblMError");
+			lblError.innerHTML = "";
+
+			if (MobileNo.length != 10) {
+				lblError.innerHTML = "Enter valid 10 digit mobile number";
+				swal("Alert!", "Enter valid 10 digit mobile number", "warning");
+			}
+			if (InvalideMobileList.indexOf(MobileNo) > -1) {
+				//document.getElementById('MobileNo').value = "";
+				swal("Alert!", "Mobile Number is not valid", "warning");
+				lblError.innerHTML = "Invalid Mobile number";
+			}
+			else {
+				return true;
+			}
+        });
+
+
+
+ $(document).on("blur", "#GuradianEmail", function () {
+            var email = document.getElementById("GuradianEmail").value;
+        var lblError = document.getElementById("lblGurdianError");
+        lblError.innerHTML = "";
+        if (email == "") {
+            return true;
+        }
+        else {
+            var expr = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+            if (!expr.test(email)) {
+                swal("Alert!", "Invalid email address.", "warning");
+                lblError.innerHTML = "Invalid Email Address";
+            }
+        }
+    });
+
+
+
+		$(document).on("blur", "#Email", function () {
+
+			var email = document.getElementById("Email").value;
+			var lblError = document.getElementById("lblError");
+			lblError.innerHTML = "";
+			var expr = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+			if (!expr.test(email)) {
+				swal("Alert!", "Invalid email address.", "warning");
+				lblError.innerHTML = "* Invalid email address!"
+			}
+		});
+
+        $(document).on("blur", "#AadharNo", function () {
+
+        var AadharNo = $("#AadharNo").val();
+        if (AadharNo == "") {
+            return true;
+        }
+        else {
+           $.ajax({
+                type: "POST",
+                url: '@Url.Action("CheckAadhar", "Account")',
+                data: "{'AadharNo':'" + AadharNo + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    if (data == "00") {
+                        swal("Warning", "Invalid Aadhar Number", "warning");
+                        $("#AadharNo").val("");
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                }
+
+            });
+        }
+        });
+
+
+    function startPreloader() {
+        $(".loader").css("display", "block");
+        $(".outer-loader").css("display", "block");
+
+    }
+    function stopPreloader() {
+
+        $(".loader").css("display", "none");
+        $(".outer-loader").css("display", "none");
+    }
+
+    function ChangeChoiceOfCourses() {
+        $('#btnconsentYes').attr('disabled','disabled');
+        $('.error1').fadeIn();
+
+        var radioValue = $("input[name='Choice']:checked").val();
+
+       if ($("input[name='Choice']").is(':checked') == false) {
+
+           //swal("Alert!", "Do you want to change choice of courses?", "warning");
+           $('.error1').text("required");
+           $('error1').delay(2000).fadeOut();
+           return;
+        }
+        startPreloader();
+
+            var objtosend = {};
+            objtosend.EditChoice = radioValue;
+
+           $.ajax({
+               type: "POST",
+               url: '@Url.Action("ChangeChoiceofCourses", "Account")',
+               data: JSON.stringify(objtosend),
+               contentType: "application/json; charset=utf-8",
+               dataType: "json",
+               success: function (data) {
+                 stopPreloader();
+
+                   if (data == "1") {
+
+                       if (radioValue == "Y") {
+
+                           window.location = "@Url.Action("PersonalDetails", "Account")"
+                       }
+                       else {
+                           window.location = "@Url.Action("Declaration", "Account")"
+                       }
+                   }
+                   else if (data=="00") {
+                      window.location = "@Url.Action("LogOut", "Account")"
+                   }
+                   else {
+                       swal("Alert!",data,"warning");
+                   }
+               },
+               failure: function (data) {
+                   swal('Error', 'Something went wrong', 'error');
+               }
+           });
+    }
+</script>
+
+
+
+@if (Session["Verificationstatus"].ToString() == "F")
+{
+
+    <script>
+        $('#home').removeClass('active');
+        $('#home').addClass('disabledbutton');
+    </script>
+}

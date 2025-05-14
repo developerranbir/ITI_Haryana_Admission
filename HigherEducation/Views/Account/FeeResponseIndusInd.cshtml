@@ -1,0 +1,36 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+@{
+    if (Convert.ToString(TempData["Paymentstatus"]) == "F")
+    {
+        <script>
+            alert("The Payment has been failed");
+        </script>
+    }
+
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>FeeResponse</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Pay</title>
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/stylepayment.css">
+    <link href="~/assets/css/jquery-ui.css" rel="stylesheet" />
+    <script src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-12 form-group text-accent" style="margin-top:20px;">
+            <a href='@Url.Action("LogOut","Account")' class="badge badge-danger" style="font-size: 20px;margin-left: 40%; margin-top: 10%;">Go to Home Page</a>
+        </div>
+    </div>
+</body>
+
+</html>

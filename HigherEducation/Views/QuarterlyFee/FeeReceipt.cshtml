@@ -1,0 +1,286 @@
+﻿@model  HigherEducation.Models.FeeModule
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Receipt</title>
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/stylepayment.css">
+    <link href="~/assets/css/jquery-ui.css" rel="stylesheet" />
+    <style>
+        #dvPrint label {
+            font-weight: 600 !important;
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        @@media print {
+            #printpdf, #btntest, #btnLogout, #tblfeedetail, #footer, #spnAllo, #spnadmi, #backlink, #feeDetailsNoPrint {
+                display: none;
+                visibility: hidden;
+            }
+
+            #marginReceipt {
+                margin-top: -100px;
+            }
+            @@page {
+                size: landscape;
+            }
+            .top-heading {
+                display: none;
+            }
+
+            .main-banner, .cus-progress, .cus-topbar {
+                display: none;
+            }
+
+            .pcoded-wrapper {
+                margin-top: 0px !important;
+            }
+
+            .bt-3 {
+                padding: 0.1rem 0.3rem;
+                margin-bottom: 0px;
+            }
+
+                .bt-3 label {
+                    font-size: 13px;
+                }
+
+            .cus-text h6 {
+                font-size: 12px;
+            }
+
+            .card-body h5 {
+                margin-bottom: 0px !important;
+            }
+
+            .card-body {
+                margin-top: -20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <form id="form1">
+        <div class="container-fluid abc">
+            <div class="row main-banner">
+                <img src="../assets/images/banner.jpg" alt="Online Admission Portal" />
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 cus-topbar abc">
+            <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 cus-topbar-label">
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 cus-topbar-menu text-right">
+                    <ul style="padding: 0;">
+                        <li style="display: inline-block; list-style: none; padding-right: 10px; padding-left: 10px;">
+                            <a id="btnLogout" class="cus-logout-bttn" href="@Url.Action("LogOut", "Account")"><i class="fa fa-fw fa-power-off text-danger"></i>Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <section class="cus-background" style="margin-bottom:4%;">
+            <div class="container-fluid">
+                <div class="row" id="marginReceipt">
+                    <div class="card c-shadow">
+                        <div class="card-body">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="row">
+                                    <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                                        <img src="~/assets/images/Logo_ITI.png" style="width:50px;" />
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-6 col-12 text-center" style="margin-top:10px;">
+                                        <h4 style="color:#1B3572;font-weight:800">Skill Development & Industrial Training Department, Haryana</h4>
+                                        <!--<h5 style="color:#E91E63;font-weight:700;margin-top:5px;margin-bottom:5px;">(Fee Receipt & admission confirmation for session 2022-23)</h5>-->
+                                        @if (Model.QtrNo == "Admission Fee")
+                                        {
+                                            <h5 style="color:#E91E63;font-weight:700;margin-top:5px;margin-bottom:5px;">(Admission Fee Receipt for session 2022-23)</h5>
+                                        }
+                                        else if (Model.QtrNo == "2")
+                                        {
+                                            <h5 style="color:#E91E63;font-weight:700;margin-top:5px;margin-bottom:5px;">(Fee Receipt for 2nd Quarter of session 2022-23)</h5>
+                                        }
+                                        else if (Model.QtrNo == "3")
+                                        {
+                                            <h5 style="color:#E91E63;font-weight:700;margin-top:5px;margin-bottom:5px;">(Fee Receipt for 3rd Quarter of session 2022-23)</h5>
+                                        }
+                                        else
+                                        {
+                                            <h5 style="color:#E91E63;font-weight:700;margin-top:5px;margin-bottom:5px;">(Fee Receipt for @Html.DisplayFor(model => model.QtrNo)th Quarter of session 2022-23)</h5>
+                                        }
+                                        
+
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row cus-inner-data" id="dvPrint" style="font-size:13px">
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    <label>Registration ID</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    @Html.DisplayFor(model => model.RegistrationId, new { @class = "form-control" })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    <label>Name of Student</label>
+                                </div>
+                                @if (Model.gender_name == "Female")
+                                {
+                                    <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                        @Html.DisplayFor(model => model.CandidateName, new { @class = "form-control" })
+                                        <label class="lblBold"><b>D/O Sh.</b></label>
+                                        @Html.DisplayFor(model => model.FatherName, new { @class = "form-control" })
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                        @Html.DisplayFor(model => model.CandidateName, new { @class = "form-control" })
+                                        <label class="lblBold"><b>S/O Sh.</b></label>
+                                        @Html.DisplayFor(model => model.FatherName, new { @class = "form-control" })
+                                    </div>
+                                }
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    <label>Institute Name</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    @Html.DisplayFor(model => model.CollegeName, new { @class = "form-control" })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    <label>Trade</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    @Html.DisplayFor(model => model.SectionName, new { @class = "form-control" })
+
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    <label>Student Category</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    @Html.DisplayFor(model => model.CategoryName, new { @class = "form-control" })
+
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    <label>Gender</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    @Html.DisplayFor(model => model.gender_name, new { @class = "form-control" })
+                                </div>
+                                @*<div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                        <label>Date of Birth</label>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                        @Html.DisplayFor(model => model.ApplicantDOB, new { @class = "form-control" })
+
+                                    </div>*@
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    <label class="lblBold">Total Fee</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3" style="font-size:13px">
+                                    &#8377
+                                    @Html.DisplayFor(model => model.TotalFee, new { @class = "form-control" })
+                                    <span style="position:absolute;">/-</span>
+                                    <br />
+                                    RUPEEES
+                                    @Html.DisplayFor(model => model.TotalFeeNumber, new { @class = "form-control", @style = "font-size:12px" })
+                                    <span>ONLY</span>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    <label class="lblBold">Fee Paid</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3" style="font-size:13px">
+                                    &#8377
+                                    @Html.DisplayFor(model => model.FeePaid, new { @class = "form-control" })
+                                    <span style="position:absolute;">/-</span>
+                                    <br />
+                                    RUPEEES
+                                    @Html.DisplayFor(model => model.FeePaidNumber, new { @class = "form-control" })
+                                    <span>ONLY</span>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    <label>Payment Gateway</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    @Html.DisplayFor(model => model.PaymentGateway, new { @class = "form-control" })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    <label>Mode of Payment</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    @Html.DisplayFor(model => model.PaymentMode, new { @class = "form-control" })
+                                </div>
+
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    <label>Date and Time of Payment</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    @Html.DisplayFor(model => model.Transactiondate, new { @class = "form-control" })
+
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    <label>Transaction Id</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    @Html.DisplayFor(model => model.PaymentTransactionId, new { @class = "form-control" })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    <label>Order Id</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    @Html.DisplayFor(model => model.order_id, new { @class = "form-control" })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    <label>Bank Ref. No.</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 bt-3">
+                                    @Html.DisplayFor(model => model.Bank_ref_no, new { @class = "form-control" })
+                                </div>
+
+                                <div class="col-lg-12 col-md-12 text-center cus-text">
+                                    <h6 style="color:#E91E63;font-weight:800;">This is a system generated fee receipt and does not require any physical signatures.</h6>
+                                </div>
+
+                            </div>
+                            @*<div class="col-lg-12 col-md-12 text-center cus-text">
+                                    <h6 style="color:#E91E63;font-weight:800;">Please attend your classes in alloted ITI on 02/11/2022</h6>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 text-center cus-registerbtn">
+                    <input type="button" class="btn btn-primary c-shadow-1" id="printpdf" value="Print" />
+                    <a href="@Url.Action("LogOut","Account")" class="btn btn-primary c-shadow-1" id="backlink">Back</a>
+                </div>
+        </section>
+    </form>
+
+    <script type="text/javascript" src="../assets/js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../assets/js/popperjs/popper.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap/Js/bootstrap.min.js"></script>
+    <script src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+
+    @*<script src="~/scripts/printThis.js"></script>*@
+<script>
+        $(document).ready(function () {
+            $('#printpdf').on('click', function () {
+                window.print();
+            })
+        });
+</script>
+
+</body>
+</html>

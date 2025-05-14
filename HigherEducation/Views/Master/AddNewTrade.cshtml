@@ -1,0 +1,957 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add New ITI</title>
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/sweetalert.css" rel="stylesheet" />
+    <link href="../assets/css/stylesearch.css" rel="stylesheet" />
+    <link href="../assets/css/stylehome.css" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/jquery-3.5.1.js"></script>
+    <script src="../assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../assets/dataTable/dataTables/jquery.dataTables.min.js"></script>
+    <script src="../assets/js/popperjs/popper.min.js"></script>
+    @*<script src="../assets/js/moment-with-locales.min.js"></script>*@
+    <script src="../assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../scripts/sweetalert.min.js"></script>
+    <link href="../assets/css/all.css" rel="stylesheet" />
+    <link href="../assets/css/stylereport.css" rel="stylesheet" />
+    <link href="../assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="../assets/dataTable/dataTables/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="../assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/dataTables.buttons.min.js"></script>
+    <script src="../assets/dataTable/dataTables/buttons.html5.min.js"></script>
+    <script src="../assets/dataTable/dataTables/jszip.min.js"></script>
+    <script src="../assets/dataTable/dataTables/pdfmake.min.js"></script>
+    <script src="../assets/dataTable/dataTables/vfs_fonts.js"></script>
+    <script src="../assets/dataTable/dataTables/buttons.print.min.js"></script>
+
+
+
+
+
+    <!--<link rel="stylesheet" href="~/assets/css/stylepayment.css">
+    <link href="~/assets/css/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Content/assets/js/libs/jquery/jspdf.js"></script>-->
+    @*<script src="~/scripts/html2canvas.js"></script>*@
+
+    <style>
+        .loader,
+        .outer-loader {
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        .outer-loader {
+            background: rgba(0, 0, 0, .3);
+            width: 100%;
+            height: 100%;
+            z-index: 10000
+        }
+
+        .loader {
+            width: 69px;
+            height: 89px;
+            border: 1px solid #000;
+            margin: auto
+        }
+
+        .loader-img {
+            border: 15px solid #415bbb;
+            border-radius: 50%;
+            border-top: 15px solid #000;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0)
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg)
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .row_new {
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+        #logo img {
+            height: auto;
+            padding-left: 3px;
+            width: 40px
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        .validation {
+            color: red;
+        }
+    </style>
+
+    <style>
+
+        #cover {
+            /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+            background-color: rgba(33,63,113, 0.6);
+            position: fixed;
+            top: 0px;
+            bottom: 0px;
+            height: 100%;
+            width: 100%;
+            z-index: 100000;
+        }
+
+            #cover i {
+                /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+                margin-left: 50%;
+                margin-top: 50vh;
+            }
+
+        .btn:disabled {
+            opacity: 0.2 !important;
+        }
+
+        .card-counter {
+            box-shadow: 4px 4px 2px -1px rgba(0,0,0,0.4);
+            margin: 5px;
+            padding: 10px 10px;
+            background-color: #fff;
+            height: 75px;
+            border-radius: 5px;
+            transition: .3s linear all;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+            .card-counter:hover {
+                box-shadow: 4px 4px 20px #DADADA;
+                transition: .3s linear all;
+            }
+
+            .card-counter.primary {
+                /*background-color: #007bff;*/
+                background: linear-gradient(to top,#30cfd0 0,#330867 100%) !important;
+                background: -webkit-gradient(linear-gradient(to top,#30cfd0 0,#330867 100%)) !important;
+                color: #FFF;
+            }
+
+            .card-counter.danger {
+                background-color: #ef5350;
+                color: #FFF;
+            }
+
+            .card-counter.success {
+                background-color: #66bb6a;
+                color: #FFF;
+            }
+
+            .card-counter.info {
+                background: linear-gradient(to right, #667eea, #764ba2) !important;
+                background: -webkit-gradient(linear-gradient(to right, #667eea, #764ba2)) !important;
+                color: #FFF;
+            }
+
+            .card-counter i {
+                font-size: 3.5em;
+                opacity: 0.5;
+                margin-top: -1px;
+            }
+
+            .card-counter .fa.fa-spinner {
+                font-size: 1.5em !important;
+                opacity: 0.5;
+            }
+
+            .card-counter .count-numbers {
+                position: absolute;
+                right: 30px;
+                top: 10px;
+                font-size: 28px;
+                display: block;
+                /*font-weight:800;*/
+                text-shadow: 10px 10px 0px 0px #333;
+            }
+
+            .card-counter .count-name {
+                position: absolute;
+                right: 30px;
+                top: 55px;
+                font-style: italic;
+                text-transform: capitalize;
+                opacity: 0.8;
+                display: block;
+                font-size: 12px;
+                /*font-weight: 700;*/
+            }
+
+        .cus-top-cards {
+            border: 1px solid #ccc;
+            padding: 0.8rem;
+            box-shadow: inset 0px 1px 8px 2px #a9a9a9;
+        }
+
+        .table td, .table th {
+            padding: 0.8rem !important;
+            font-size: 13px !important;
+        }
+
+        .cus-viewbtn {
+            background: #070088;
+            cursor: pointer;
+            border: 1px solid #070088;
+            background-image: none;
+            color: #fff;
+            font-style: normal;
+        }
+
+            .cus-viewbtn:hover {
+                background: #070088;
+                transition: all 0.5s;
+                box-shadow: 0px 6px 10px #070088;
+                color: #fff;
+            }
+    </style>
+
+    <style type="text/css">
+        .modalBackground {
+            background-color: rgb(192,234,255);
+            filter: alpha(opacity=70);
+            opacity: 0.7;
+            z-index: 100 !important;
+        }
+
+        .modalPopup {
+            background-color: #ffffff;
+            border-width: 3px;
+            border-style: solid;
+            border-color: Gray;
+            padding: 3px;
+            /*width: 250px;*/
+            z-index: 100;
+        }
+
+        .btnPop {
+            background-color: #033280;
+            color: White;
+            font-size: 12px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+    </style>
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+        table,
+        tr,
+        td {
+            word-wrap: break-word;
+            border: 0px solid #fff;
+            vertical-align: top;
+        }
+
+        section {
+            width: 1150px;
+            margin: 0 auto;
+        }
+
+        .wrapper {
+            width: 550px;
+            min-height: 300px;
+            position: relative;
+            border: 2px solid #333;
+            /*border-left: 40px solid #2F308A;*/
+            padding: 15px;
+            font-size: small;
+            display: inline-block;
+        }
+
+        .wrapper1 {
+            width: 550px;
+            min-height: 300px;
+            position: relative;
+            border: 2px solid #333;
+            padding: 10px;
+            color: rgba(black, 0.5);
+            font-size: small;
+            display: inline-block;
+            height: 300px;
+        }
+
+        /* .wrapper h5 {
+                    font-size: 12px;
+                    color: white;
+                    text-transform: uppercase;
+                    margin: 0 auto;
+                    position: absolute;
+                    bottom: 25px;
+                    left: -30px;
+                    transform: rotate(270deg);
+                    transform-origin: 0 0;
+                    word-wrap: break-word;
+                }
+        */
+        div.dt-buttons button.dt-button:last-child {
+            float: right;
+            background: no-repeat;
+            border: none;
+        }
+
+        div.dt-buttons {
+            position: relative;
+            float: left;
+            width: 100%;
+            display: inline-block;
+        }
+    </style>
+
+
+
+
+</head>
+
+<body>
+    <div id="cover">
+        <i class="fa fa-spinner fa-spin" style="font-size:xx-large"></i>
+    </div>
+    <div class="container-fluid">
+        <div class="row main-banner">
+            <img src="../assets/images/banner.jpg" style="width: 100%" alt="online admission portal" />
+        </div>
+
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-2"></div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-8 text-center top-heading" style="margin-top: 5px;"><h4 class="heading hedderstle">Add New ITI</h4></div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-1 text-right back-btn" style="margin-top: 10px;">
+                <a href="~/DHE/HEMenu.aspx" id="btnBack" class="btn btn-icon icon-left btn-primary"><i class="fas fa-arrow-alt-circle-left"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <form class="form form-validate" id="formLogin1" autocomplete="off" action="@Url.Action("AddITI", "Master")" onsubmit="startPreloader()" accept-charset="utf-8" method="post" enctype="multipart/form-data">
+
+            <div class="card c-shadow">
+                <div class="card-body">
+                    <div class="top-section">
+
+                        <div id="disabledDataTop">
+                            <div class="row">
+                                <div id="dvFamMemNoteLink" class="col-lg-12" style="text-align:center;margin-bottom:1rem;">
+                                    <label style="color: #213f71;">
+                                        <strong>Note:</strong>&nbsp; <span style="color:red;font-weight:700;font-size:13px;"> आपकी आरक्षण श्रेणी से संबंधित सूचना परिवार पहचान पत्र के डेटाबेस से ली गई है, यदि आप इस सूचना से सहमत नहीं हैं तो दिए हुए लिंक <a href="https://meraparivar.haryana.gov.in/" target="_blank">https://meraparivar.haryana.gov.in/</a> पर जाकर अपनी शिकायत दर्ज करें</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="CandidateName" style="font-size:16px;color: #34495E;">विद्यार्थी का पूरा नाम&nbsp;(Student's Full Name) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.CandidateName, new { @id = "CandidateName", @class = "form-control input-shadow", @Value = ViewBag.CandidateName, @required = "required", autocomplete = "off", @maxlength = "100" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="FatherHusbandName" style="font-size: 16px;color: #34495E;">पिता / पति का नाम&nbsp;(Father's/Husband's Name)<span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.FatherHusbandName, new { @id = "FatherHusbandName", @class = "form-control input-shadow", @Value = ViewBag.FathreName, @required = "required", @maxlength = "100", autocomplete = "off" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="MotherName" style="font-size:16px;color: #34495E;">माता का नाम&nbsp;(Mother's Name) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.MotherName, new { @class = "form-control input-shadow", @Value = ViewBag.MotherName, @required = "required", @maxlength = "100", autocomplete = "off" })
+                                </div>
+                                
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="Sex" style="font-size:16px;color: #34495E;">लिंग&nbsp;(Gender) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.Sex, new SelectList(ViewBag.Sex as System.Collections.IEnumerable, "Value", "Text"),
+                                            "Select", new { id = "Sex", @class = "form-control input-shadow", @required = "required", @Value = ViewBag.SexValue })
+                                </div>
+
+                                <div id="dvaadhar" class="col-md-3 form-group">
+                                    <label for="AadharNo" style="font-size:16px;color: #34495E;">आधार कार्ड संख्या &nbsp;(Aadhaar Number)<span style="color:red;"><strong>*</strong></span> </label>
+                                    @Html.TextBoxFor(model => model.AadharNo, new { @class = "form-control input-shadow", @Value = ViewBag.AadharValue, @maxlength = "12", @minlength = "12", @required = "required", autocomplete = "off" })
+
+                                </div>
+
+                                <div class="col-md-3 form-group">
+                                    <label for="Email" style="font-size:16px;color: #34495E;">ईमेल आई डी&nbsp;(Email Id) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.Email, new { id = "Email", @class = "form-control input-shadow", @Value = ViewBag.Email, @required = "required", @maxLength = "50", autocomplete = "off" })
+                                    <label style="color:red;" id="lblError"></label>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="MobileNo" style="font-size:16px;color: #34495E;">मोबाइल नंबर&nbsp;(Mobile Number) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control input-shadow", @maxlength = "10", @Value = ViewBag.Mobile, @required = "required", autocomplete = "off" })
+                                    <label style="color:red;" id="lblMError"></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="MaritalStatus" style="font-size:16px;color: #34495E;">वैवाहिक स्थिति&nbsp;(Marital Status) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.Marital_Status, new SelectList(ViewBag.MaritalStatus as System.Collections.IEnumerable, "Value", "Text"), "Select", new { @class = "form-control input-shadow", @required = "required" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="ReservationCategory" style="font-size:16px;color: #34495E;"><span class="hindi">आरक्षण श्रेणी&nbsp;(Reservation Category)</span><span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.ReservationCategory, new SelectList(ViewBag.Category as System.Collections.IEnumerable, "Value", "Text"), "--Please Select Category--", new { id = "ReservationCategory", @class = "form-control input-shadow", @required = "required" })
+                                    <span id="rescast_error" style="color:red"></span>
+                                    @Html.ValidationMessageFor(model => model.ReservationCategory, "", new { @class = "validation" })
+
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="DisableCategory" style="font-size:16px;color: #34495E;"><span class="hindi">दिव्यांग श्रेणी&nbsp;(Disable Category)</span><span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.DisableCategory, new SelectList(ViewBag.DisableCategories as System.Collections.IEnumerable, "Value", "Text"), "Select Category",
+
+                                              new { id = "DisableCategory", @class = "form-control input-shadow", @required = "required" })
+                                    <span id="rescast_error" style="color:red"></span>
+                                    @Html.ValidationMessageFor(model => model.DisableCategory, "", new { @class = "validation" })
+
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="CasteCategory" style="font-size:16px;color: #34495E;"><span class="hindi">जाति श्रेणी&nbsp;(Caste Category)</span><span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.CasteCategory, Enumerable.Empty<SelectListItem>(), "-Please Select Caste Category--", new { id = "CasteCategory", @class = "form-control input-shadow", @required = "required" })
+                                    <span id="cascat_error" style="color:red"></span>
+                                    @Html.ValidationMessageFor(m => m.CasteCategory, "", new { @class = "validation" })
+
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="Caste" style="font-size:16px;color: #34495E;"><span class="hindi">जाति&nbsp;(Caste)</span><span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(m => m.Caste, Enumerable.Empty<SelectListItem>(), "--Please Select Caste--", new { id = "Caste", @class = "form-control input-shadow", @required = "required" })
+                                    <span id="cast_error" style="color:red"></span>
+                                    @Html.ValidationMessageFor(m => m.Caste, "", new { @class = "validation" })
+
+                                </div>
+
+                                @*</div>
+                                <div class="row">*@
+
+                                <div class="col-md-3 form-group">
+                                    <label for="FatherOccupation" style="font-size:16px;color: #34495E;">पिता का व्यवसाय&nbsp;(Father's Occupation) <span style="color: red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.Father_Occupation, new SelectList(ViewBag.Occupation as System.Collections.IEnumerable, "Value", "Text"), "Select", new { @class = "form-control input-shadow", @required = "required" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="MotherOccupation" style="font-size:16px;color: #34495E;">मां का व्यवसाय&nbsp;(Mother's Occupation) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.Mother_Occupation, new SelectList(ViewBag.Occupation as System.Collections.IEnumerable, "Value", "Text"), "Select", new { @class = "form-control input-shadow", @required = "required" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="GuradianName" style="font-size:16px;color: #34495E;">अभिभावक का नाम&nbsp;(Guardian's Name) </label>
+                                    @Html.TextBoxFor(model => model.Guardian_Name, new { @class = "form-control input-shadow", autocomplete = "off" })
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="BloodGroup" style="font-size:16px;color: #34495E;">रक्त समूह&nbsp;(Blood Group) </label>
+                                    @Html.DropDownListFor(model => model.BloodGroup, new SelectList(ViewBag.BloodGroup as System.Collections.IEnumerable, "Value", "Text"), "Select", new { id = "BloodGroup", @class = "form-control input-shadow" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="GuardianMobileNo" style="font-size:16px;color: #34495E;">अभिभावक मोबाइल नंबर&nbsp;(Parent/ Guardian's Mobile No) </label>
+                                    @Html.TextBoxFor(model => model.GuardianMobileNo, new { @class = "form-control input-shadow", @maxlength = "10", @minlength = "10", autocomplete = "off" })
+                                    <label style="color:red;" id="lblGurdianMError"></label>
+                                </div>
+
+                                <div class="col-md-3 form-group">
+                                    <label for="TelephoneNo" style="font-size:16px;color: #34495E;">टेलीफोन नंबर(एसटीडी कोड के साथ)&nbsp;(Telephone No(with STD code)) </label>
+                                    @Html.TextBoxFor(model => model.TelephoneNo, new { @class = "form-control input-shadow", @maxlength = "12", @minlength = "12", autocomplete = "off" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="GuradianEmail" style="font-size:16px;color: #34495E;">अभिभावक ईमेल आई डी&nbsp;(Parent/ Guardian's Email Id) </label>
+                                    @Html.TextBoxFor(model => model.GuradianEmail, new { @class = "form-control input-shadow", autocomplete = "off", @maxLength = "50" })
+                                    <label style="color:red;" id="lblGurdianError"></label>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="Religion" style="font-size:16px;color: #34495E;">धर्म&nbsp;(Religion) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.Religion, new SelectList(ViewBag.Religion as System.Collections.IEnumerable, "Value", "Text"), "Select", new { id = "Religion", @class = "form-control input-shadow", required = "required" })
+                                </div>
+                                <div id="dvfamilyIncome" class="col-md-3 form-group">
+                                    <label for="familyIncomefix" style="font-size:16px;color: #34495E;">कुल घरेलू आय&nbsp;(Family Income as Verified from PPP) </label>
+                                    <label for="familyIncome" name="familyIncome" id="familyIncome" style="font-size:16px;color: #34495E;"></label>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="ParentalIncome" style="font-size:16px;color: #34495E;">सभी स्रोतों से कुल घरेलू आय&nbsp;(Household Income from all Sources) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.ParentalIncome, new SelectList(ViewBag.ParentalIncome as System.Collections.IEnumerable, "Value", "Text"), "Select", new { id = "ParentalIncome", @class = "form-control input-shadow isPPP", required = "required" })
+                                </div>
+                            </div>
+                        </div> @*Disabled Top*@
+                    </div>
+                    <div id="disabledDataUnder">
+
+                        <fieldset>
+                            <legend style="margin-top:15px;color:#223f73;font-weight: 800;font-size: 18px;">स्थाई पता&nbsp;(Permanent Address)</legend>
+                            <div class="middle-section">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <strong style="margin-bottom: 0.8rem; display: block; color: #213f71;">Note: Permanent address is autofetched for Haryana candidates, otherwise enter it manually.</strong>
+                                    </div>
+
+                                    <div class="col-md-3 form-group">
+                                        <label for="Country" style="font-size:16px;color: #34495E;">ग्रामीण / शहरी&nbsp;(Rural/Urban) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.RuralUrban, new List<SelectListItem>{
+                                              new SelectListItem{ Text="Urban", Value="Urban"},
+                                              new SelectListItem{ Text="Rural", Value="Rural"}}, new { @class = "form-control input-shadow isPPP", @required = "required" })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="State" style="font-size:16px;color: #34495E;">राज्य&nbsp;(State) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.State_Code, new SelectList(ViewBag.State as System.Collections.IEnumerable, "Value", "Text"), new { @class = "form-control input-shadow isPPP", @required = "required" })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <div id="divdistrictUrban">
+                                            <label for="District_Code_Urban" style="font-size:16px;color: #34495E;">जिला&nbsp;(District) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.DropDownListFor(model => model.District_Code_Urban, new SelectList(ViewBag.DistrictMaster as System.Collections.IEnumerable, "Value", "Text"), new { @class = "form-control input-shadow isPPP", @required = "required", @Value = ViewBag.DistrictUrbanValue })
+                                        </div>
+                                        <div id="divdistrictRural" style="display:none;">
+                                            <label for="District_Code_Rural" style="font-size:16px;color: #34495E;">जिला&nbsp;(District) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.DropDownListFor(model => model.District_Code_Rural, new SelectList(ViewBag.DistrictMaster as System.Collections.IEnumerable, "Value", "Text"), new { @class = "form-control input-shadow isPPP", @required = "required", @Value = ViewBag.DistrictRuralValue })
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <div id="divMuniciplity">
+                                            <label for="Municiplity" style="font-size:16px;color: #34495E;">नगर पालिका&nbsp;(Municipality) @*<span style="color:red;"><strong>*</strong></span>*@</label>
+                                            @Html.DropDownListFor(m => m.Municiplity, Enumerable.Empty<SelectListItem>(), new
+                                            {
+                                                @class = "form-control input-shadow isPPP"@*, @required = "required"*@,
+@Value = ViewBag.MuniciplityValue
+})
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="divVillageTown" style="width:100%; display:none;">
+
+                                    <div class="col-md-3 form-group">
+                                        <label for="Block" style="font-size:16px;color: #34495E;">खंड&nbsp;(Block) @*<span style="color:red;"><strong>*</strong></span>*@</label>
+                                        @Html.DropDownListFor(model => model.Block, Enumerable.Empty<SelectListItem>(), new
+                                        {
+                                            @class = "form-control input-shadow isPPP"@*, @required = "required"*@})
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="CityTownVillage" style="font-size:16px;color: #34495E;">गाँव&nbsp;(Village) @*<span style="color:red;"><strong>*</strong></span>*@</label>
+                                        @Html.DropDownListFor(model => model.CityTownVillage, Enumerable.Empty<SelectListItem>(), new
+                                        {
+                                            @class = "form-control input-shadow isPPP"@*, @required = "required"*@})
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label for="StreetAddress1" style="font-size:16px;color: #34495E;">घर का पता-1 &nbsp;(Street Address-1) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.TextBoxFor(model => model.StreetAddress1, new { @class = "form-control input-shadow isPPP", @required = "required", @value = ViewBag.StreetAddress1, @maxlength = "200", autocomplete = "off" })
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="StreetAddress2" style="font-size:16px;color: #34495E;">घर का पता-2&nbsp;(Street Address-2) </label>
+                                        @Html.TextBoxFor(model => model.StreetAddress2, new { @class = "form-control input-shadow", @maxlength = "200", autocomplete = "off" })
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="Pincode" style="font-size:16px;color: #34495E;">पिन कोड&nbsp;(Pin Code) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.TextBoxFor(model => model.Pincode, new { @class = "form-control input-shadow isPPP", @required = "required", @maxlength = "6", @Value = ViewBag.PinCode, autocomplete = "off" })
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </fieldset>
+                        <div class="row">
+                            <div class="col-md-8 form-group">
+                                <span style="margin-top:15px;color:#223f73;font-weight: 800;font-size: 16px;display:block;">क्या पत्राचार का पता स्थायी पते के समान है?&nbsp;(Is Correspondence Address same as Permanent Address?)</span>
+                            </div>
+                            <div class="col-md-1" style="margin-left:-10px;margin-top:20px;">
+
+                                @Html.CheckBoxFor(x => x.Is_Correspondence)
+                            </div>
+                        </div>
+                        <div class="middle-section">
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="C_RuralUrban" style="font-size:16px;color: #34495E;">ग्रामीण / शहरी&nbsp;(Rural/Urban) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.C_RuralUrban, new List<SelectListItem>{
+                                              new SelectListItem{ Text="Urban", Value="C_Urban"},
+                                              new SelectListItem{ Text="Rural", Value="C_Rural"}}, new { @class = "form-control input-shadow", @required = "required" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="State" style="font-size:16px;color: #34495E;">राज्य&nbsp;(State) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.C_State_Code, new SelectList(ViewBag.State as System.Collections.IEnumerable, "Value", "Text"), new { @class = "form-control input-shadow", @required = "required" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <div id="divCdistrictUrban">
+                                        <label for="District_Code_Urban" style="font-size:16px;color: #34495E;">जिला&nbsp;(District) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.C_District_Code_Urban, new SelectList(ViewBag.DistrictMaster as System.Collections.IEnumerable, "Value", "Text"), new { @class = "form-control input-shadow", @required = "required" })
+                                    </div>
+                                    <div id="divCdistrictRural" style="display:none;">
+                                        <label for="District_Code_Rural" style="font-size:16px;color: #34495E;">जिला&nbsp;(District) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.C_District_Code_Rural, new SelectList(ViewBag.DistrictMaster as System.Collections.IEnumerable, "Value", "Text"), new { @class = "form-control input-shadow", @required = "required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <div id="divCMuniciplity">
+                                        <label for="Municiplity" style="font-size:16px;color: #34495E;">नगर पालिका&nbsp;(Municipality) @*<span style="color:red;"><strong>*</strong></span>*@</label>
+                                        @Html.DropDownListFor(m => m.C_Municiplity, Enumerable.Empty<SelectListItem>(), new
+                                        {
+                                            @class = "form-control input-shadow"@*, @required = "required"*@})
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" id="divCVillageTown" style="width:100%; display:none;">
+
+                                <div class="col-md-3 form-group">
+                                    <label for="Block" style="font-size:16px;color: #34495E;">खंड&nbsp;(Block) @*<span style="color:red;"><strong>*</strong></span>*@</label>
+                                    @Html.DropDownListFor(model => model.C_Block, Enumerable.Empty<SelectListItem>(), new
+                                    {
+                                        @class = "form-control input-shadow"@*, @required = "required"*@})
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="CityTownVillage" style="font-size:16px;color: #34495E;">गाँव&nbsp;(Village) @*<span style="color:red;"><strong>*</strong></span>*@</label>
+                                    @Html.DropDownListFor(model => model.C_CityTownVillage, Enumerable.Empty<SelectListItem>(), new
+                                    {
+                                        @class = "form-control input-shadow"@*, @required = "required"*@,
+@Value = ViewBag.C_CityTownVillage
+})
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label for="StreetAddress1" style="font-size:16px;color: #34495E;">घर का पता-1 &nbsp;(Street Address-1) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.C_StreetAddress1, new { @class = "form-control input-shadow", @required = "required", @value = ViewBag.C_StreetAddress1, @maxlength = "200", autocomplete = "off" })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="StreetAddress2" style="font-size:16px;color: #34495E;">घर का पता-2&nbsp;(Street Address-2) </label>
+                                    @Html.TextBoxFor(model => model.C_StreetAddress2, new { @class = "form-control input-shadow", @maxlength = "200", autocomplete = "off" })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="Pincode" style="font-size:16px;color: #34495E;">पिन कोड&nbsp;(Pin Code) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.C_Pincode, new { @class = "form-control input-shadow", @required = "required", @maxlength = "6", @Value = ViewBag.C_PinCode, autocomplete = "off" })
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="ParentalIncome" style="font-size:16px;color: #34495E;">क्या आपको बस पास की आवश्यकता है&nbsp;(DO YOU REQUIRE BUS PASS) </label>
+                                    @Html.DropDownListFor(model => model.ModeOfTransport, new List<SelectListItem>{
+                                              new SelectListItem{ Text="Select", Value="NA"},
+                                                 new SelectListItem{ Text="No", Value="No"},
+                                                 new SelectListItem{ Text="Yes", Value="Yes"}}, new { @class = "form-control input-shadow" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="IsITICompleted" style="font-size:16px;color: #34495E;">क्या आपने पिछले वर्षों में कोई आईटीआई कोर्स किया है?&nbsp; <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.IsITICompleted, new List<SelectListItem>{
+                                       new SelectListItem{ Text="Select"},
+                                                 new SelectListItem{ Text="No", Value="No"},
+                                                 new SelectListItem{ Text="Yes", Value="Yes"}}, new { @class = "form-control input-shadow ITICompleted", @required = "required", @Value = ViewBag.IsITICompleted })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="IsITICompleted" style="font-size:16px;color: #34495E;">राज्य &nbsp;(State) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.ITICompletedState, new List<SelectListItem>{
+                                       new SelectListItem{ Text="Select State", Value = ""},
+                                                 new SelectListItem{ Text="Haryana", Value="HR"},
+                                                 new SelectListItem{ Text="Other", Value="OT"}}, new { @class = "form-control input-shadow ITI", @required = "required", @Value = ViewBag.ITICompletedState })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="ITICompletedYear" style="font-size:16px;color: #34495E;">आईटीआई वर्ष &nbsp;(ITI Year) </label>
+                                    @Html.DropDownListFor(model => model.ITICompletedYear, new SelectList(ViewBag.Year as System.Collections.IEnumerable, "Value", "Text"), "--Please Select Year--", new { @class = "form-control input-shadow ITI", @Value = ViewBag.ITICompletedYear })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="ITICompletedName" style="font-size:16px;color: #34495E;">आईटीआई &nbsp;(ITI Name) </label>
+                                    @Html.TextBoxFor(model => model.ITICompletedName, new { @class = "form-control input-shadow ITI", @Value = ViewBag.ITICompletedName, @maxlength = "100", @minlength = "5", autocomplete = "off" })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="ITICompletedTrade" style="font-size:16px;color: #34495E;">आईटीआई कोर्स &nbsp;(ITI Trade) </label>
+                                    @Html.TextBoxFor(model => model.ITICompletedTrade, new { @class = "form-control input-shadow ITI", @Value = ViewBag.ITICompletedTrade, @maxlength = "12", @minlength = "2", autocomplete = "off" })
+
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="ITICompletedRollNo" style="font-size:16px;color: #34495E;">आईटीआई &nbsp;(ITI Registration Number) </label>
+                                    @Html.TextBoxFor(model => model.ITICompletedRollNo, new { @class = "form-control input-shadow ITI", @Value = ViewBag.ITICompletedRollNo, @maxlength = "20", @minlength = "2", autocomplete = "off" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="middle-section">
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <span class="hindi">क्या आपने हरियाणा से 10 वीं की है?<br />(Have you done 10th from Haryana)?</span><span style="color:red;"><strong>*</strong></span>
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    @Html.RadioButtonFor(model => model.TwelveHarana, "Y", new { @required = "required", @id = "rbTwel1" }) <label for="rbTwel1"><span class="english">Yes</span></label>&nbsp;
+                                    @Html.RadioButtonFor(model => model.TwelveHarana, "N", new { @required = "required", @id = "rbTwel2" }) <label for="rbTwel2"><span class="english">No</span> </label>
+                                    @Html.ValidationMessageFor(model => model.TwelveHarana, "", new { @class = "validation" })
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <span class="hindi">क्या आप अल्पसंख्यक वर्ग से हैं?<br />(Are you from Minority Community)?</span><span class="english" style="display:none;">Do you belong to any minority?</span><span style="color:red;"><strong>*</strong></span>
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    @Html.RadioButtonFor(model => model.Minority, "Y", new { @id = "minorityYes", @required = "required" }) <label for="minorityYes"><span class="english" style="display:none;">Yes</span><span class="hindi">हाँ</span></label>&nbsp;
+                                    @Html.RadioButtonFor(model => model.Minority, "N", new { @id = "minorityNo", @required = "required" }) <label for="minorityNo"><span class="english" style="display:none;">No</span><span class="hindi">नहीं</span></label>
+                                    @Html.ValidationMessageFor(model => model.Minority, "", new { @class = "validation" })
+
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    @Html.DropDownListFor(model => model.MinorityData, new SelectList(ViewBag.Minority as System.Collections.IEnumerable, "Value", "Text"),
+                        "--Please Select Minority--", new { id = "MinorityData", @class = "form-control input-shadow", @style = "display: none;" })
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (Session["Verificationstatus"].ToString() == "" || Session["Verificationstatus"].ToString() == "R")
+                        {
+                            <div class="col-xs-12 text-right cus-registerbtn" style="margin-top:10px;">
+                                <button class="btn btn-primary c-shadow-1" id="btnNext" value="Next" type="submit"><i class="fa fa-save"></i>&nbsp;Save & Next</button>
+                            </div>
+                        }
+                    </div>@*Disabled Under*@
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" style="position:relative;">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12 text-center">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 text-left" style="margin-top:10px;">
+                            <div class="credits">
+                                <a>Site is technically designed, hosted and maintained by National Informatics Centre, Haryana</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <img src="../assets/images/nic-logo.png" style="width:100px;">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+    <div class="outer-loader" style="display: none;">
+        <div class="loader-img loader" style="display: none;">
+        </div>
+    </div>
+    <!-- End Footer -->
+</body>
+</html>
+<script>
+var errorFn = function(jqXHR, exception) {
+    var msg = '';
+    if (jqXHR.status === 0) {
+        msg = 'Not connect.\n Verify Network.';
+    } else if (jqXHR.status == 404) {
+        msg = 'Requested page not found. [404]';
+    } else if (jqXHR.status == 500) {
+        msg = 'Internal Server Error [500].';
+    } else if (exception === 'parsererror') {
+        msg = 'Requested JSON parse failed.';
+    } else if (exception === 'timeout') {
+        msg = 'Time out error.';
+    } else if (exception === 'abort') {
+        msg = 'Ajax request aborted.';
+    } else {
+        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+    }
+    alert("Error: " + msg);
+}
+
+$(document).ready(function () {
+    getCollegeType();
+});
+
+function startPreloader() {
+    $(".loader").css("display", "block");
+    $(".outer-loader").css("display", "block");
+
+}
+function stopPreloader() {
+
+    $(".loader").css("display", "none");
+    $(".outer-loader").css("display", "none");
+}
+
+var url_1 = '@Url.Action("d_getCollegeType", "APIData")'; //to fetch college type
+function getCollegeType()
+{
+    $("#cover").fadeIn();
+    $.ajax({
+            url: url_1,
+            type: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                var TypeOfCollege= JSON.parse(data);
+                $("#ddlCollegeType").empty();
+                if (C_ID == '0') {
+                    $("#ddlCollegeType").append('<option value="0">Select All</option>');
+                }
+                else {
+                    $("#ddlCollegeType").append('<option value="">Please select college Type</option>');
+                }
+                $.each(TypeOfCollege, function (i) {
+                    $("#ddlCollegeType").append(`<option value='` + TypeOfCollege[i].collegetypeid + `'>` + TypeOfCollege[i].collegetype+ `</option>`);
+                });
+
+                if (test != 'dhepkl' && test != '') {
+                    $("#ddlCollegeType").val(C_ID);
+                    $("#ddlCollegeType").change();
+                }
+                $("#cover").fadeOut();
+            },
+            error: errorFn
+    });
+}
+
+var url2 = '@Url.Action("getCollegeListAsPerCollegeType", "APIData")';
+var test = '@Session["UserId"]';
+var C_ID = '@Session["collegeId"]';
+
+function getCollegeList() {
+    $("#cover").fadeIn();
+
+    var dataToSend = {};
+    dataToSend.collegeType = $("#ddlCollegeType").val();
+    $.ajax({
+
+        url: url2,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        data: dataToSend,
+        dataType: 'json',
+        success: function (data) {
+            var ListOfColleges = JSON.parse(data);
+            $("#ddlCollege").empty();
+
+            if (C_ID == '0') {
+                $("#ddlCollege").append('<option value="0">Select All</option>');
+            }
+            else {
+                $("#ddlCollege").append('<option value="">Please select college</option>');
+            }
+
+
+            $.each(ListOfColleges, function (i) {
+                $("#ddlCollege").append(`<option value='` + ListOfColleges[i].collegeid + `'>` + ListOfColleges[i].collegename + `</option>`);
+            });
+
+            if (C_ID != '0' && test != '') {
+                $("#ddlCollege").val(C_ID);
+                $("#ddlCollege").change();
+            }
+            $("#cover").fadeOut();
+        },
+        error: errorFn
+    });
+}
+
+
+
+function sendData() {
+    swal({
+        title: "Are you sure?",
+        text: "Send Data to DGT Portal",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: '#DD6B55',
+        confirmButtonText: 'Yes, I am sure!',
+        cancelButtonText: "No, cancel it!",
+        closeOnConfirm: true,
+        closeOnCancel: false
+    },
+    function (isConfirm) {
+
+        if (isConfirm) {
+            startPreloader();
+            //var urltoSend = '@Url.Action("sendDataToDGT", "APIData")';
+            $.ajax({
+
+        type: "POST",
+            url: "@Url.Action("sendDataToDGT", "APIData")",
+            data: '{}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+                    //url: urltoSend,
+                    //type: 'POST',
+                    //contentType: "application/json; charset=utf-8",
+                    //dataType: 'json', //make sure your service is actually returning json here
+                    //success: function (data) {
+                        if (data == "1") {
+                            stopPreloader();
+                            swal('Alert!', 'Please Check API Response by Clicking on View Response Log Button');
+                        }
+                        if (data == "0") {
+                            stopPreloader();
+                            swal('Alert!', 'No Data is Available for Send to DGT Portal');
+                        }
+                    },
+                    error: function (jqXHR, exception) {
+                        var msg = '';
+                        if (jqXHR.status === 0) {
+                            msg = 'Not connect.\n Verify Network.';
+                        } else if (jqXHR.status == 404) {
+                            msg = 'Requested page not found. [404]';
+                        } else if (jqXHR.status == 500) {
+                            msg = 'Internal Server Error [500].';
+                        } else if (exception === 'parsererror') {
+                            msg = 'Requested JSON parse failed.';
+                        } else if (exception === 'timeout') {
+                            msg = 'Time out error.';
+                        } else if (exception === 'abort') {
+                            msg = 'Ajax request aborted.';
+                        } else {
+                            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                        }
+                        swal('Error!', msg, "error");
+                        stopPreloader();
+                        //alert("Error: " + msg);
+                    }
+                });
+            //$("#cover").fadeOut();
+        } else {
+            swal("Cancelled", "No Action Performed", "error");
+        }
+    });
+}
+
+
+</script>

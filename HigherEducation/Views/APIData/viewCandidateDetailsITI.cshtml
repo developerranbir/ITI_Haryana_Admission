@@ -1,0 +1,766 @@
+﻿
+@{
+    ViewBag.Title = "CandiDet";
+    Layout = null;
+}
+
+<head>
+    <link rel="icon" href="~/assets/images/favicon.ico" type="image/x-icon">
+    <!-- Google font-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+    <!-- Required Fremwork -->
+    <link href="~/assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- themify-icons line icon -->
+    <link href="~/assets/icon/themify-icons/themify-icons.css" rel="stylesheet" />
+
+    <link href="~/assets/icon/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- ico font -->
+    <link rel="stylesheet" href="~/assets/icon/icofont/css/icofont.css">
+    <!-- Style.css -->
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <script src="~/assets/dataTable/dataTables/jquery-3.5.1.js"></script>
+    @*<link rel="stylesheet" href="~/assets/css/jquery.mCustomScrollbar.css">*@
+    @*<script type="text/javascript" src="../assets/js/jquery/jquery.min.js"></script>*@
+    <script type="text/javascript" src="../Content/Js/sweetalert.min.js"></script>
+    <script type="text/javascript" src="../assets/js/popperjs/popper.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap/Js/bootstrap.min.js"></script>
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <link href="~/assets/css/styleDec.css" rel="stylesheet" />
+
+    <link href="~/assets/css/all.css" rel="stylesheet" />
+
+    <link href="~/assets/css/stylesearch.css" rel="stylesheet" />
+    <link href="~/assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/assets/dataTable/dataTables/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/assets/dataTable/dataTables/buttons.html5.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/dataTables.buttons.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/jquery.dataTables.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/jszip.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/pdfmake.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/pdfmake.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/vfs_fonts.js"></script>
+    <script src="~/swalJs/sweetalert.min.js"></script>
+    <script src="~/swalJs/swal-forms.js"></script>
+    <style>
+        .datatable td {
+            overflow: hidden; /* this is what fixes the expansion */
+            text-overflow: ellipsis; /* not supported in all browsers, but I accepted the tradeoff */
+            white-space: nowrap;
+        }
+
+        .width-100 {
+            width: 100px;
+        }
+        /* Important part */
+        .modal-dialog {
+            overflow-y: initial !important
+        }
+
+        .modal-body {
+            height: 75vh;
+            overflow-y: auto;
+        }
+
+        #tblPersonalDetail > tbody > tr > td:not([id]) {
+            font-weight: bold;
+        }
+
+
+        .disabledbutton {
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        /*#tblPersonalDetail > tbody > tr > td:not([id]) {
+            font-weight: bold;
+            width: 15%;
+        }
+
+        #tblChoice tbody tr td {
+            white-space: pre-wrap !important;
+            word-break: break-word !important;*/
+        /*word-wrap: break-word !important;*/
+        /*}
+
+        #tblEduQual tbody tr td {
+            white-space: pre-wrap !important;
+            word-break: break-all !important;*/
+        /*word-wrap: break-word !important;*/
+        /*}
+
+        #tblEduQual tbody tr th {
+            white-space: pre-wrap !important;
+            word-break: break-all !important;*/
+        /*word-wrap: break-word !important;*/
+        /*}*/
+
+        .topHead {
+            display: none;
+        }
+
+        @@media print {
+            div#pcoded ~ div {
+                display: none;
+            }
+
+            .topHead {
+                display: block;
+                font-size: x-large;
+            }
+
+            #tblPersonalDetail > tbody > tr > td:not([id]) {
+                font-weight: bold;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+
+            #tblPersonalDetail > tbody > tr > td[id] {
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+
+            #tblPersonalDetail > tbody > tr > td {
+                padding: 2px 2px;
+            }
+
+
+            .btn, .btn-primary, footer, .steps, .main-banner, .cus-topbar, .abhi-no-print {
+                display: none;
+            }
+
+            table,
+            table tr td,
+            table tr th {
+                page-break-inside: avoid;
+                font-size: 10px;
+            }
+
+            #tblEduQual > tbody > tr > td, #tblEduQual > thead > tr > th {
+                font-size: x-small !important;
+                padding: 2px 2px;
+                white-space: pre-wrap;
+                word-break: break-word;
+            }
+
+            .cus-heading, .card-header, h3, .card {
+                margin: 0px 0px;
+                padding: 0px 0px;
+            }
+
+            .card-header {
+                page-break-after: avoid !important;
+            }
+
+            .card-body {
+                page-break-before: avoid !important;
+            }
+
+            .card {
+                page-break-inside: avoid;
+            }
+        }
+
+        .loader,
+        .outer-loader {
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        .outer-loader {
+            background: rgba(0, 0, 0, .3);
+            width: 100%;
+            height: 100%;
+            z-index: 999
+        }
+
+        .loader {
+            width: 69px;
+            height: 89px;
+            border: 1px solid #000;
+            margin: auto
+        }
+
+        .loader-img {
+            border: 15px solid #415bbb;
+            border-radius: 50%;
+            border-top: 15px solid #000;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0)
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg)
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .row_new {
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+        #logo img {
+            height: auto;
+            padding-left: 3px;
+            width: 40px
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+
+        #API_CONTENT tbody tr td, thead tr th {
+            width: 110px !important;
+            word-break: break-word !important;
+            overflow: auto;
+            text-overflow: unset;
+            white-space: nowrap;
+            min-width: 80px;
+            white-space: normal;
+            font-size: 14px;
+        }
+
+        .btn.btn-icon {
+            border-radius: 1px;
+            width: 150px;
+            /*line-height: 30px;
+            height: 40px;
+            padding: 3px;
+            /* text-align: center; */
+        }
+    </style>
+
+</head>
+
+
+<div class="outer-loader" style="display: none;">
+    <div class="loader-img loader" style="display: none;"></div>
+</div>
+<!-- Modal -->
+<div id="maindiv" style="margin-top:20px;" class="container">
+    <h3 class="text-center">Candidate Details</h3>
+    <h5 style="text-align:center;color:#492A7F;font-weight:800;margin-bottom:10px;" class="JSRegistrationId">
+
+        Registraion ID - <span id="RegistrationId"></span>
+
+    </h5>
+    @*<div class="col-md-12 form-group text-center" style="margin-top:20px;">
+            <img id="imgId" height="100">
+            <p id="b64" hidden="hidden"></p>
+        </div>*@
+
+    <button class="btn btn-info" onclick="changeStatus();" id="updateData" style="margin-bottom:20px;width:150px;">Edit Details</button>
+    @*<a href="../DHE/HEMenu.aspx" id="btnBack" class="btn btn-info float-right"><i class="fa fa-arrow-left"></i></a>*@
+    <a href="javascript:window.history.back();" id="btnBack" class="btn btn-info float-right" style="margin-bottom:20px;"><i class="fa fa-arrow-left"></i></a>
+    <div class="container card c-shadow" id="candidateInfo">
+        <div class="card-header cus-heading">
+            <h3>Personal Information</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive" id="API_Content">
+                <table class="table table-bordered" id="tblPersonalDetail">
+
+                    <tbody>
+                        <tr>
+                            <td>State Registration No</td>
+                            <td id="StateRegNumber"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>Student Status</td>
+                            <td id="cStatusLan"><i class="fa fa-spinner fa-spin"></i></td>
+                            <!--<td rowspan="6" id="">
+        <div class="card c-shadow" style="max-height:225px;max-width:175px;margin-left:auto;margin-right:auto;margin-bottom:auto;">
+            <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPgo8c3ZnIHdpZHRoPSI0MHB4IiBoZWlnaHQ9IjQwcHgiIHZpZXdCb3g9IjAgMCA0MCA0MCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWw6c3BhY2U9InByZXNlcnZlIiBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjEuNDE0MjE7IiB4PSIwcHgiIHk9IjBweCI+CiAgICA8ZGVmcz4KICAgICAgICA8c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWwogICAgICAgICAgICBALXdlYmtpdC1rZXlmcmFtZXMgc3BpbiB7CiAgICAgICAgICAgICAgZnJvbSB7CiAgICAgICAgICAgICAgICAtd2Via2l0LXRyYW5zZm9ybTogcm90YXRlKDBkZWcpCiAgICAgICAgICAgICAgfQogICAgICAgICAgICAgIHRvIHsKICAgICAgICAgICAgICAgIC13ZWJraXQtdHJhbnNmb3JtOiByb3RhdGUoLTM1OWRlZykKICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICAgICAgQGtleWZyYW1lcyBzcGluIHsKICAgICAgICAgICAgICBmcm9tIHsKICAgICAgICAgICAgICAgIHRyYW5zZm9ybTogcm90YXRlKDBkZWcpCiAgICAgICAgICAgICAgfQogICAgICAgICAgICAgIHRvIHsKICAgICAgICAgICAgICAgIHRyYW5zZm9ybTogcm90YXRlKC0zNTlkZWcpCiAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgICAgIHN2ZyB7CiAgICAgICAgICAgICAgICAtd2Via2l0LXRyYW5zZm9ybS1vcmlnaW46IDUwJSA1MCU7CiAgICAgICAgICAgICAgICAtd2Via2l0LWFuaW1hdGlvbjogc3BpbiAxLjVzIGxpbmVhciBpbmZpbml0ZTsKICAgICAgICAgICAgICAgIC13ZWJraXQtYmFja2ZhY2UtdmlzaWJpbGl0eTogaGlkZGVuOwogICAgICAgICAgICAgICAgYW5pbWF0aW9uOiBzcGluIDEuNXMgbGluZWFyIGluZmluaXRlOwogICAgICAgICAgICB9CiAgICAgICAgXV0+PC9zdHlsZT4KICAgIDwvZGVmcz4KICAgIDxnIGlkPSJvdXRlciI+CiAgICAgICAgPGc+CiAgICAgICAgICAgIDxwYXRoIGQ9Ik0yMCwwQzIyLjIwNTgsMCAyMy45OTM5LDEuNzg4MTMgMjMuOTkzOSwzLjk5MzlDMjMuOTkzOSw2LjE5OTY4IDIyLjIwNTgsNy45ODc4MSAyMCw3Ljk4NzgxQzE3Ljc5NDIsNy45ODc4MSAxNi4wMDYxLDYuMTk5NjggMTYuMDA2MSwzLjk5MzlDMTYuMDA2MSwxLjc4ODEzIDE3Ljc5NDIsMCAyMCwwWiIgc3R5bGU9ImZpbGw6YmxhY2s7Ii8+CiAgICAgICAgPC9nPgogICAgICAgIDxnPgogICAgICAgICAgICA8cGF0aCBkPSJNNS44NTc4Niw1Ljg1Nzg2QzcuNDE3NTgsNC4yOTgxNSA5Ljk0NjM4LDQuMjk4MTUgMTEuNTA2MSw1Ljg1Nzg2QzEzLjA2NTgsNy40MTc1OCAxMy4wNjU4LDkuOTQ2MzggMTEuNTA2MSwxMS41MDYxQzkuOTQ2MzgsMTMuMDY1OCA3LjQxNzU4LDEzLjA2NTggNS44NTc4NiwxMS41MDYxQzQuMjk4MTUsOS45NDYzOCA0LjI5ODE1LDcuNDE3NTggNS44NTc4Niw1Ljg1Nzg2WiIgc3R5bGU9ImZpbGw6cmdiKDIxMCwyMTAsMjEwKTsiLz4KICAgICAgICA8L2c+CiAgICAgICAgPGc+CiAgICAgICAgICAgIDxwYXRoIGQ9Ik0yMCwzMi4wMTIyQzIyLjIwNTgsMzIuMDEyMiAyMy45OTM5LDMzLjgwMDMgMjMuOTkzOSwzNi4wMDYxQzIzLjk5MzksMzguMjExOSAyMi4yMDU4LDQwIDIwLDQwQzE3Ljc5NDIsNDAgMTYuMDA2MSwzOC4yMTE5IDE2LjAwNjEsMzYuMDA2MUMxNi4wMDYxLDMzLjgwMDMgMTcuNzk0MiwzMi4wMTIyIDIwLDMyLjAxMjJaIiBzdHlsZT0iZmlsbDpyZ2IoMTMwLDEzMCwxMzApOyIvPgogICAgICAgIDwvZz4KICAgICAgICA8Zz4KICAgICAgICAgICAgPHBhdGggZD0iTTI4LjQ5MzksMjguNDkzOUMzMC4wNTM2LDI2LjkzNDIgMzIuNTgyNCwyNi45MzQyIDM0LjE0MjEsMjguNDkzOUMzNS43MDE5LDMwLjA1MzYgMzUuNzAxOSwzMi41ODI0IDM0LjE0MjEsMzQuMTQyMUMzMi41ODI0LDM1LjcwMTkgMzAuMDUzNiwzNS43MDE5IDI4LjQ5MzksMzQuMTQyMUMyNi45MzQyLDMyLjU4MjQgMjYuOTM0MiwzMC4wNTM2IDI4LjQ5MzksMjguNDkzOVoiIHN0eWxlPSJmaWxsOnJnYigxMDEsMTAxLDEwMSk7Ii8+CiAgICAgICAgPC9nPgogICAgICAgIDxnPgogICAgICAgICAgICA8cGF0aCBkPSJNMy45OTM5LDE2LjAwNjFDNi4xOTk2OCwxNi4wMDYxIDcuOTg3ODEsMTcuNzk0MiA3Ljk4NzgxLDIwQzcuOTg3ODEsMjIuMjA1OCA2LjE5OTY4LDIzLjk5MzkgMy45OTM5LDIzLjk5MzlDMS43ODgxMywyMy45OTM5IDAsMjIuMjA1OCAwLDIwQzAsMTcuNzk0MiAxLjc4ODEzLDE2LjAwNjEgMy45OTM5LDE2LjAwNjFaIiBzdHlsZT0iZmlsbDpyZ2IoMTg3LDE4NywxODcpOyIvPgogICAgICAgIDwvZz4KICAgICAgICA8Zz4KICAgICAgICAgICAgPHBhdGggZD0iTTUuODU3ODYsMjguNDkzOUM3LjQxNzU4LDI2LjkzNDIgOS45NDYzOCwyNi45MzQyIDExLjUwNjEsMjguNDkzOUMxMy4wNjU4LDMwLjA1MzYgMTMuMDY1OCwzMi41ODI0IDExLjUwNjEsMzQuMTQyMUM5Ljk0NjM4LDM1LjcwMTkgNy40MTc1OCwzNS43MDE5IDUuODU3ODYsMzQuMTQyMUM0LjI5ODE1LDMyLjU4MjQgNC4yOTgxNSwzMC4wNTM2IDUuODU3ODYsMjguNDkzOVoiIHN0eWxlPSJmaWxsOnJnYigxNjQsMTY0LDE2NCk7Ii8+CiAgICAgICAgPC9nPgogICAgICAgIDxnPgogICAgICAgICAgICA8cGF0aCBkPSJNMzYuMDA2MSwxNi4wMDYxQzM4LjIxMTksMTYuMDA2MSA0MCwxNy43OTQyIDQwLDIwQzQwLDIyLjIwNTggMzguMjExOSwyMy45OTM5IDM2LjAwNjEsMjMuOTkzOUMzMy44MDAzLDIzLjk5MzkgMzIuMDEyMiwyMi4yMDU4IDMyLjAxMjIsMjBDMzIuMDEyMiwxNy43OTQyIDMzLjgwMDMsMTYuMDA2MSAzNi4wMDYxLDE2LjAwNjFaIiBzdHlsZT0iZmlsbDpyZ2IoNzQsNzQsNzQpOyIvPgogICAgICAgIDwvZz4KICAgICAgICA8Zz4KICAgICAgICAgICAgPHBhdGggZD0iTTI4LjQ5MzksNS44NTc4NkMzMC4wNTM2LDQuMjk4MTUgMzIuNTgyNCw0LjI5ODE1IDM0LjE0MjEsNS44NTc4NkMzNS43MDE5LDcuNDE3NTggMzUuNzAxOSw5Ljk0NjM4IDM0LjE0MjEsMTEuNTA2MUMzMi41ODI0LDEzLjA2NTggMzAuMDUzNiwxMy4wNjU4IDI4LjQ5MzksMTEuNTA2MUMyNi45MzQyLDkuOTQ2MzggMjYuOTM0Miw3LjQxNzU4IDI4LjQ5MzksNS44NTc4NloiIHN0eWxlPSJmaWxsOnJnYig1MCw1MCw1MCk7Ii8+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4K" id="UserPhoto" alt="Candidate Photo" style="width:100%;height:100%;" />
+        </div>
+    </td>-->
+                        </tr>
+                        <tr>
+                            <td>Candidate Name</td>
+                            <td id="CandidateName"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>Updated Candidate Name</td>
+                            <td id="updatedTraineeName"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Date of Birth</td>
+                            <td id="BirthDate"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>Gender</td>
+                            <td id="Gender"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Father's / Husband's Name</td>
+                            <td id="FHName"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>Updated Father's / Husband's Name</td>
+                            <td id="updatedFHName"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Mother's Name</td>
+                            <td id="MotherName"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>Updated Mother's Name</td>
+                            <td id="updatedMotherName"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Mobile No.</td>
+                            <td id="MobileNumber"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>Updated Mobile No.</td>
+                            <td id="updatedmobileNoAsperDept"><i class="fa fa-spinner fa-spin"></i></td>
+
+                        </tr>
+                        <tr>
+                            <td>e-mail</td>
+                            <td id="EmailId"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>Updated e-mail</td>
+                            <td id="updatedEmailAsPerDept"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Caste Category</td>
+                            <td id="Category"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>Category to Send</td>
+                            <td id="categoryTosend"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Aadhaar Number</td>
+                            <td colspan="3" id="AadharNo"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+
+                        <tr>
+                            <td>Admission Date</td>
+                            <td id="AdmissionDate"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>Updated Admission Date</td>
+                            <td id="updatedAdmissionDateAsPerDept" colspan="2"><i class="fa fa-spinner fa-spin"></i></td>
+
+                            @*<td rowspan="3">Correspondence Address</td>
+                                <td colspan="2" rowspan="3" id="CAddress"><i class="fa fa-spinner fa-spin"></i></td>*@
+
+                        </tr>
+                        <tr>
+                            <td>MIS ITI Code</td>
+                            <td id="MISITICode"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>College Name</td>
+                            <td id="CollegeName"><i class="fa fa-spinner fa-spin"></i></td>
+
+                        </tr>
+                        <tr>
+                            <td>Course Name</td>
+                            <td id="CourseName"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>Trade Name</td>
+                            <td id="Trade"><i class="fa fa-spinner fa-spin"></i></td>
+
+                        </tr>
+                        <tr>
+                            <td>Highest Qualification</td>
+                            <td colspan="3" id="HighestQualification"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Shift</td>
+                            <td id="Shift"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>Updated Shift</td>
+                            <td id="updatedshiftAsperDept"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Unit</td>
+                            <td id="Unit"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>Updated Unit</td>
+                            <td id="updatedUnitAsperDept"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Trainee Type</td>
+                            <td id="TraineeType"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>Is Trainee Dual Mode</td>
+                            <td id="IsTraineeDualMode"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Person with Disability</td>
+                            <td id="PersonwithDisability"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>PWD Category</td>
+                            <td id="PWDcategory"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Updated PWD Category</td>
+                            <td id="updatedPWDcategoryAsperDept"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>Economic Weaker Section</td>
+                            <td id="EconomicWeakerSection" colspan="3"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Data Uploaded to DGT/NCVT Portal</td>
+                            <td id="APIResponse"><i class="fa fa-spinner fa-spin"></i></td>
+                            <td>PRN Generated</td>
+                            <td id="prnStatus"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Response (only if pending for upload)</td>
+                            <td id="response" colspan="3"><i class="fa fa-spinner fa-spin"></i></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<div class="container" id="updateInfo">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <form class="form-control">
+            <div class="form-group row" style="margin-top: 2%">
+                <label for="Select" class="col-sm-3 col-form-label"><b>Select Fields to Update</b></label>
+                <div class="col-sm-3" id="mobileCheck">
+                    <input type="checkbox" id="f1" onclick="showHideField(this.id)">
+                    <label class="form-check-label" for="f1">
+                        Mobile Number (only if in error)
+                    </label>
+                </div>
+                <div class="col-sm-3" id="emailCheck">
+                    <input type="checkbox" id="f2" onclick="showHideField(this.id)">
+                    <label class="form-check-label" for="f2">
+                        Email (only if in error)
+                    </label>
+                </div>
+                <div class="col-sm-3">
+                    <input type="checkbox" id="f3" onclick="showHideField(this.id)">
+                    <label class="form-check-label" for="f3">
+                        PRN Status
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row f1" style="margin-top: 2%">
+                <div class="col-sm-1">
+                </div>
+                <label for="mbNumber" class="col-sm-2 col-form-label">Update Mobile Number</label>
+                <div class="col-sm-8">
+                    <input type="number" class="form-control" id="mbNumber" placeholder="Mobile Number" maxlength="10">
+                </div>
+                <div class="col-sm-1">
+                </div>
+            </div>
+            <div class="form-group row f2" style="margin-top: 2%">
+                <div class="col-sm-1">
+                </div>
+                <label for="emailUpdated" class="col-sm-2 col-form-label">Update Email</label>
+                <div class="col-sm-8">
+                    <input type="email" class="form-control" id="emailUpdated" placeholder="Email">
+                </div>
+                <div class="col-sm-1">
+                </div>
+            </div>
+            <div class="form-group row f3" style="margin-top: 2%">
+                <div class="col-sm-1">
+                </div>
+                <label for="ddlprnStatus" class="col-sm-2 col-form-label">PRN Status</label>
+                <div class="col-sm-8">
+                    <select class="form-control" id="ddlprnStatus">
+                        <option selected disabled>Select</option>
+                        <option value="Yes">PRN Generated</option>
+                        <option value="No">PRN Not Generated</option>
+                    </select>
+                </div>
+                <div class="col-sm-1">
+                </div>
+            </div>
+            <div class="form-group row f4" style="margin-top: 2%">
+                <div class="col-sm-1">
+                </div>
+                <label for="ddladmStatus" class="col-sm-2 col-form-label">Admission Status</label>
+                <div class="col-sm-8">
+                    <select class="form-control" id="ddladmStatus">
+                        <option selected disabled>Select</option>
+                        <option value="1">Active</option>
+                        <option value="0">Cancel</option>
+                    </select>
+                </div>
+                <div class="col-sm-1">
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 top-section-btn text-center" id="dvSave" style="margin-top: 2%">
+                <a id="btnFinalSave" class="btn btn-icon icon-left btn-success"><i class="fas fa-save"></i>&nbsp;Save Changes</a>
+                <br /><br />
+                @*<a href="#" id="btnCancel" class="btn btn-icon icon-left btn-danger" style="display: none"><i class="fas fa-trash"></i>&nbsp;Cancel</a>*@
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#ddlprnStatus").on('change', function () {
+            var prnS = $("#ddlprnStatus").val();
+            if (prnS == "No") {
+                $(".f4").show(300);
+                $("#ddladmStatus").prop("selectedIndex", 0);
+            }
+            else {
+                $(".f4").hide(300);
+                $("#ddladmStatus").prop("selectedIndex", 0);
+            }
+        });
+    });
+
+
+    function changeStatus() {
+        var txt = $("#updateData").text();
+        if (txt == "Edit Details") {
+            $("#candidateInfo").hide();
+            $("#updateInfo").show(1000);
+            $("#updateData").text('Show Details');
+        }
+        else {
+            $("#updateInfo").hide();
+            $("#candidateInfo").show();
+            $("#updateData").text('Edit Details');
+        }
+
+    }
+
+    function showHideField(id) {
+        //alert(id);
+        for (var i = 1; i <= 9; i++) {
+            if ($('#f'+i).is(":checked"))
+                $(".f"+i).show(300);
+            else
+                $(".f"+i).hide(300);
+        }
+        var nChecked = $(":checkbox:checked").length;
+        if (nChecked > 0) {
+            $("#dvSave").show(200);
+        }
+        else {
+            $("#dvSave").hide(200);
+        }
+    }
+
+    var errorFn = function (jqXHR, exception)
+    {
+        var msg = '';
+
+        if (jqXHR.status === 0)
+        {
+            msg = 'Not connect.\n Verify Network.';
+        } else if (jqXHR.status == 404)
+        {
+            msg = 'Requested page not found. [404]';
+        } else if (jqXHR.status == 500)
+        {
+            msg = 'Internal Server Error [500].';
+        } else if (exception === 'parsererror')
+        {
+            msg = 'Requested JSON parse failed.';
+        } else if (exception === 'timeout')
+        {
+            msg = 'Time out error.';
+        } else if (exception === 'abort')
+        {
+            msg = 'Ajax request aborted.';
+        } else
+        {
+            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+        }
+        alert("Error: " + msg);
+        $("#cover").fadeOut("slow");
+
+    }
+
+
+    $(document).ready(function () {
+
+        $("#updateInfo").hide();
+
+        $("#dvSave").hide();
+        for (var i = 1; i <= 9; i++) {
+            $(".f" + i).hide();
+        }
+
+        $.ajax({
+            type: "get",
+            url: "@Url.Action("d_getCandidateDetails", "APIData")" + "?SRegid=" + '@ViewBag.regID',
+
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+                var response_DataSet = JSON.parse(data);
+                //console.log(response_DataSet);
+                //debugger;
+                $.each(response_DataSet, function (k, v) {
+                    $.each(v, function (key, value) {
+                        $('#' + key).text(value == null || value == '' ? '---' : value);
+                        $('.' + key).text(value == null || value == '' ? '---' : value);
+
+                    });
+                    var updateVal = response_DataSet[k];
+                    if (updateVal["APIResponse"] == null || updateVal["APIResponse"] == "NO") {
+                        $("#APIResponse").css({ 'color': 'red' });
+                        $("#response").css({ 'color': 'red' });
+                        $("#mobileCheck").show();
+                        $("#emailCheck").show();
+                    }
+                    else {
+                        $("#APIResponse").css({ 'color': 'green' });
+                        $("#response").css({ 'color': 'green' });
+                        $("#mobileCheck").hide();
+                        $("#emailCheck").hide();
+                    }
+                    if (updateVal["updatedmobileNoAsperDept"] != null) {
+                        $("#mbNumber").val('' + updateVal["updatedmobileNoAsperDept"] + '');
+                    }
+                    else
+                    {
+                        $("#mbNumber").val(''+updateVal["MobileNumber"]+'');
+                    }
+
+                    if (updateVal["updatedEmailAsPerDept"] != null) {
+                        $("#emailUpdated").val('' + updateVal["updatedEmailAsPerDept"] + '');
+                    }
+                    else {
+                        $("#emailUpdated").val('' + updateVal["EmailId"] + '');
+                    }
+
+                    if (updateVal["prnStatus"] != null) {
+                        $("#ddlprnStatus").val(updateVal["prnStatus"]);
+                    }
+                    if (updateVal["cStaus"] != null) {
+                        $("#ddladmStatus").val(updateVal["cStaus"]);
+                    }
+                    if (updateVal["cStaus"] == "1") {
+                        $("#cStatusLan").css({ 'color': 'green' });
+                    }
+                    else {
+                        $("#cStatusLan").css({ 'color': 'red' });
+                    }
+
+                });
+                /**/
+            }
+
+        });
+
+
+        $('#btnFinalSave').on('click', function () {
+            //alert("Hello");
+            if ($('#mbNumber').val().length != 10) {
+                swal("Cancelled!", "Mobile No. Must be 10 digit", "error");
+                return false;
+            }
+            else if ($('#emailUpdated').val() == "") {
+
+                swal("Cancelled!", "Please Enter Email ID", "error");
+                return false;
+            }
+           
+           
+
+            else
+            {
+                saveData();
+            }
+
+        });
+
+    });
+
+        var datatosend = {};
+        function getData() {
+
+            if ($(":checkbox:checked").length <= 0) {
+                swal("Alert!", "Nothing Found to be Update!", "warning");
+                return false;
+
+            }
+
+            datatosend = {};
+            if ($('#f1').is(":checked")) {
+                datatosend.mobile = $('#mbNumber').val();
+            }
+            else {
+                datatosend.mobile = "";
+            }
+
+            if ($('#f2').is(":checked")) {
+                datatosend.email = $('#emailUpdated').val();
+            }
+            else {
+                datatosend.email = "";
+            }
+            datatosend.admStatus = "";
+            if ($('#f3').is(":checked")) {
+                datatosend.prnStatus = $("#ddlprnStatus").val();
+                var prnS = $("#ddlprnStatus").val();
+                if (prnS == "No") {
+                    datatosend.admStatus = $("#ddladmStatus").val();
+                }
+                else {
+                    datatosend.admStatus = "";
+                }
+            }
+            else {
+                datatosend.prnStatus = "";
+            }
+
+
+            datatosend.reg_ID = $('#RegistrationId').text();
+            return datatosend;
+        }
+
+
+    function saveData() {
+        getData();
+        //console.log(datatosend);
+        //$("#cover").fadeIn();
+        datatosend.DATA = JSON.stringify(datatosend);
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("d_updateDataOfStudent", "APIData")",
+            //contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: datatosend,
+            success: function (data) {
+                //alert(data);
+                console.log(data);
+
+                if (data == 1)
+                {
+                    //$('#btnFinalSave').hide();
+                    swal({
+                            title: "Saved",
+                            text: "Updated Successfully!",
+                            type: "success"
+                        }, function () {
+                            location.reload();
+                        });
+                }
+                else if (data == -1)
+                {
+                    swal("Cancelled!", "Mobile/Email Already Exists!", "error");
+                }
+                else {
+                    swal("Cancelled!", "Session Timeout! Please Login Again!", "error");
+                }
+            },
+            error: errorFn
+        })
+
+        }
+</script>

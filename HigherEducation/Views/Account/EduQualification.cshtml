@@ -1,0 +1,1121 @@
+﻿@model  HigherEducation.Models.EducationViewModel
+@{
+    Session["currentPage"] = 2;
+}
+@{
+    if (Session["MaxPage"] == null)
+    {
+        Session["currentPage"] = 1;
+        Session["MaxPage"] = 1;
+    }
+    else if (Convert.ToInt32(Session["currentPage"]) > Convert.ToInt32(Session["MaxPage"]))
+    {
+        Session["MaxPage"] = Session["currentPage"];
+    }
+}
+
+<head>
+    <!--  jquery script  -->
+    <script src="~/Content/assets/js/libs/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/assets/js/additional-methods.min.js"></script>
+    <link href="~/assets/css/styleedu.css" rel="stylesheet" />
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <script src="~/swalJs/sweetalert.min.js"></script>
+    <script src="~/swalJs/swal-forms.js"></script>
+    <style type="text/css">
+        .disabledbutton {
+            pointer-events: none;
+            cursor: not-allowed;
+            /*opacity: 0.4;*/
+        }
+
+        .error {
+            color: #e74c3c;
+        }
+    </style>
+    <style>
+        .loader,
+        .outer-loader {
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        .outer-loader {
+            background: rgba(0, 0, 0, .3);
+            width: 100%;
+            height: 100%;
+            z-index: 999
+        }
+
+        .loader {
+            width: 69px;
+            height: 89px;
+            border: 1px solid #000;
+            margin: auto
+        }
+
+        .loader-img {
+            border: 15px solid #415bbb;
+            border-radius: 50%;
+            border-top: 15px solid #000;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0)
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg)
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .row_new {
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+        #logo img {
+            height: auto;
+            padding-left: 3px;
+            width: 40px
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        .validation {
+            color: red;
+        }
+
+        .disabledbutton {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        alert(@ViewBag.ErrorMessage);
+    </script>
+}
+@if (Convert.ToString(TempData["validationmsgequ"]) != "")
+{
+    var validationsummar = TempData["validationmsgequ"].ToString();
+    <h4 class="card container text-danger" style="margin-top:40px">
+        <i class="fa fa-exclamation-circle"></i>
+        Kindly Check following Errors: <br /> @validationsummar
+    </h4>
+}
+@if (Convert.ToInt32(TempData["CandidateInsertData"]) == 1)
+{
+    <script>
+        swal("Success!", "Personal details successfully updated!", "success");
+    </script>
+}
+@if (Convert.ToInt32(TempData["EduqualificationSave"]) == 99)
+{
+    <script>
+        alert("Something went wrong. Plz try again later.!");
+    </script>
+}
+<form class="form form-validate" id="saveEduDataId" autocomplete="off" action="@Url.Action("EduQualification", "Account")" onsubmit="startPreloader()" accept-charset="utf-8" method="post" enctype="multipart/form-data">
+    <div class="col-lg-12 col-md-12 cus-heading">
+        <h3>Educational Qualification </h3>
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(o => o.OldSelectedStream, new { @class = "form-control input-shadow" })
+    </div>
+    <div class="card c-shadow">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-3">
+                    <label for="Stream" style="font-size:16px;color: #34495E;"><span class="english">Stream<span style="color:red;"><strong>*</strong></span></span></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    @Html.DropDownListFor(m => m.SelectedStream, Model.Stream, "--Please Select--", new { id = "streamid", @class = "form-control input-shadow", @required = "required" })
+                    @Html.HiddenFor(o => o.IsAPI, new { @class = "form-control input-shadow" })
+                    <span id="stream_error" style="color:red"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                </div>
+                @if (Session["IsApiData"].ToString() == "Y" || Model.IsFromApi_12th == "Y" || Model.IsFromApi_10th == "Y")
+                {
+                    <div class="col-md-3 form-group">
+                        <input type="button" id="btnEditReappear" onclick="javascript: return SetApiStatusNo();" class="btn btn-info" value="Edit Marks" />
+                    </div>
+                }
+            </div>
+            @if (Session["IsApiData"].ToString() == "Y" || Model.IsFromApi_12th == "Y" || Model.IsFromApi_10th == "Y")
+            {
+                <div class="row">
+                    <div class="col-md-12 form-group  text-center">
+                        <span style="color:red; font-size:16px; font-weight:bold">  (Edit your marks if not matched correctly.)</span>
+                    </div>
+                </div>
+            }
+            <div class="table-responsive">
+                <table id="#print-content" class="table no-margin table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+
+                            </th>
+                            <th hidden="hidden">
+                                ID
+                            </th>
+                            <th>
+                                Exam Passed
+                            </th>
+                            <th>
+                                University/Board
+                            <th>
+                                School/College
+                            </th>
+                            <th>
+                                Roll no
+                            </th>
+                            <th>
+                                Result Status
+                            </th>
+                            <th>
+                                Passing Year
+                            </th>
+                            <th>
+                                CGPA
+                            </th>
+                            <th>
+                                Max. Marks/CGPA
+                            </th>
+                            <th>
+                                Marks/CGPA obtained
+                            </th>
+                            <th>
+                                Percentage
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody class="tbody1">
+                        @if (Model.QualificationCode == "12")
+                        {
+                            <tr>
+                                <td>
+                                    <button class="btn btn-primary c-shadow-1" id="btnfetch10" type="button"><i class="fa fa-save"></i>&nbsp;Fill 10th Marks</button>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(m => m.ExamPassed_10th, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.Uniboard_10th, Model.BoardList, "--Please Select--", new { @class = "form-control input-shadow 10th isapi10", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.Uniboard_10th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.School_10th, new { @class = "form-control 10th", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.School_10th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Rollno_10th, new { @class = "form-control 10th", @MaxLength = 5, @required = "required", type = "number" })
+                                    @Html.ValidationMessageFor(m => m.Rollno_10th, "", new { @class = "text-danger" })
+                                </td>
+
+                                <td>
+                                    @Html.DropDownListFor(m => m.Result_10th, new List<SelectListItem>{
+
+                            new SelectListItem{ Text="Pass", Value="Pass"},
+                            new SelectListItem{ Text="Reappear", Value="COMP"},
+                                new SelectListItem{ Text="QUALIFIED", Value="QUALIFIED"}}, new { @class = "form-control 10th isapi10", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.Result_10th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.PassingYear_10th, new { @class = "form-control 10th", @required = "required", type = "number" })
+                                    @Html.ValidationMessageFor(m => m.PassingYear_10th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.CheckBoxFor(m => m.CGPA_10th, new { @class = "form-control 10th isapi10 tttt" })
+                                    @Html.ValidationMessageFor(m => m.CGPA_10th, "", new { @class = "text-danger 10th" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.MaxMarks_10th, new { @class = "form-control 10th", @required = "required", type = "number", @max = "1500" })
+                                    @Html.ValidationMessageFor(m => m.MaxMarks_10th, "", new { @class = "text-danger 10th" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.MarksObtain_10th, new { @class = "form-control 10th", @required = "required", type = "number", step = ".01", oninvalid = "setCustomValidity('Marks Obtained cannot be more than Max. Marks')", oninput = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(m => m.MarksObtain_10th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Percentage_10th, new { @class = "form-control 10th", @required = "required", step = "any", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.Percentage_10th, "", new { @class = "text-danger" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(m => m.ExamPassed_12th, new { @class = "form-control 12th" })
+                                    @Html.ValidationMessageFor(m => m.ExamPassed_12th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.Uniboard_12th, Model.BoardList, "--Please Select--", new { @class = "form-control input-shadow 12th isapi12", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.Uniboard_12th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.School_12th, new { @class = "form-control 12th", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.School_12th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Rollno_12th, new { @class = "form-control 12th", @MaxLength = 5, @required = "required", type = "number" })
+                                    @Html.ValidationMessageFor(m => m.Rollno_12th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.Result_12th, new List<SelectListItem>{
+
+                            new SelectListItem{ Text="Pass", Value="Pass"},
+                            new SelectListItem{ Text="Reappear", Value="COMP"},
+                                new SelectListItem{ Text="QUALIFIED", Value="QUALIFIED"}}, new { @class = "form-control 12th isapi12", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.Result_12th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.PassingYear_12th, new { @class = "form-control 12th", @required = "required", type = "number" })
+                                    @Html.ValidationMessageFor(m => m.PassingYear_12th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.CheckBoxFor(m => m.CGPA_12th, new { @class = "form-control 12th isapi12 tttt" })
+                                    @Html.ValidationMessageFor(m => m.CGPA_12th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.MaxMarks_12th, new { @class = "form-control 12th", @required = "required", type = "number", @max = "1500" })
+                                    @Html.ValidationMessageFor(m => m.MaxMarks_12th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.MarksObtain_12th, new { @class = "form-control 12th", @required = "required", type = "number", oninvalid = "setCustomValidity('Marks Obtained cannot be more than Max. Marks')", oninput = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(m => m.MarksObtain_12th, "", new { @class = "text-danger" })
+
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Percentage_12th, new { @class = "form-control 12th", @required = "required", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.Percentage_12th, "", new { @class = "text-danger" })
+                                </td>
+                            </tr>
+                            <tr id="hidediploma">
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(m => m.ExamPassed_Diploma, new { @class = "form-control" })
+                                    <span>(If any)</span>
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.Uniboard_Diploma, Model.UniversityList, "--Please Select--", new { @class = "form-control input-shadow diploma" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.School_Diploma, new { @class = "form-control diploma" })
+                                    @Html.ValidationMessageFor(m => m.School_Diploma, "", new { @class = "text-danger" })
+
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Rollno_Diploma, new { @class = "form-control diploma", type = "number" })
+                                    @Html.ValidationMessageFor(m => m.Rollno_Diploma, "", new { @class = "text-danger" })
+
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.Result_Diploma, new List<SelectListItem>{
+                        new SelectListItem{ Text="Pass", Value="Pass"},
+                        new SelectListItem{ Text="Reappear", Value="COMP"}}, new { @class = "form-control diploma" })
+                                    @Html.ValidationMessageFor(m => m.Result_Diploma, "", new { @class = "text-danger" })
+
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.PassingYear_Diploma, new { @class = "form-control diploma", type = "number" })
+                                    @Html.ValidationMessageFor(m => m.PassingYear_Diploma, "", new { @class = "text-danger" })
+
+                                </td>
+                                <td>@Html.CheckBoxFor(m => m.CGPA_Diploma, new { @class = "form-control diploma tttt" })</td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.MaxMarks_Diploma, new { @class = "form-control diploma", step = ".01", type = "number", @max = "9000" })
+                                    @Html.ValidationMessageFor(m => m.MaxMarks_Diploma, "", new { @class = "text-danger" })
+
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.MarksObtain_Diploma, new { @class = "form-control diploma", step = "any", type = "number", oninvalid = "setCustomValidity('Marks Obtained cannot be more than Max. Marks')", oninput = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(m => m.MarksObtain_Diploma, "", new { @class = "text-danger" })
+
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Percentage_Diploma, new { @class = "form-control diploma", step = ".01", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.Percentage_Diploma, "", new { @class = "text-danger" })
+
+                                </td>
+                            </tr>
+                        }
+                        else if (Model.QualificationCode == "10")
+                        {
+                            <tr>
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(m => m.ExamPassed_10th, new { @class = "form-control 10th" })
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.Uniboard_10th, Model.BoardList, "--Please Select--", new { @class = "form-control input-shadow isapi10", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.Uniboard_10th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.School_10th, new { @class = "form-control 10th", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.School_10th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Rollno_10th, new { @class = "form-control 10th", @MaxLength = 5, @required = "required", type = "number" })
+                                    @Html.ValidationMessageFor(m => m.Rollno_10th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.Result_10th, new List<SelectListItem>{
+
+        new SelectListItem{ Text="Pass", Value="Pass"},
+        new SelectListItem{ Text="Reappear", Value="COMP"},
+        new SelectListItem{ Text="QUALIFIED", Value="QUALIFIED"}}, new { @class = "form-control isapi10", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.Result_10th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.PassingYear_10th, new { @class = "form-control 10th", @required = "required", type = "number" })
+                                    @Html.ValidationMessageFor(m => m.PassingYear_10th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.CheckBoxFor(m => m.CGPA_10th, new { @class = "form-control 10th isapi10 tttt" })
+                                    @Html.ValidationMessageFor(m => m.CGPA_10th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.MaxMarks_10th, new { @class = "form-control 10th", @required = "required", type = "number", @max = "1500" })
+                                    @Html.ValidationMessageFor(m => m.MaxMarks_10th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.MarksObtain_10th, new { @class = "form-control 10th", @required = "required", type = "number", step = ".01", oninvalid = "setCustomValidity('Marks Obtained cannot be more than Max. Marks')", oninput = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(m => m.MarksObtain_10th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Percentage_10th, new { @class = "form-control 10th", @required = "required", step = "any", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.Percentage_10th, "", new { @class = "text-danger" })
+                                </td>
+                            </tr>
+                        }
+                        else if (Model.QualificationCode == "08")
+                        {
+                            <tr>
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(m => m.ExamPassed_8th, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.Uniboard_8th, Model.BoardList, "--Please Select--", new { @class = "form-control input-shadow" })
+                                    @Html.ValidationMessageFor(m => m.Uniboard_8th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.School_8th, new { @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.School_8th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Rollno_8th, new { @class = "form-control", @MaxLength = 5, @required = "required", type = "number" })
+                                    @Html.ValidationMessageFor(m => m.Rollno_8th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.Result_8th, new List<SelectListItem>{
+
+        new SelectListItem{ Text="Pass", Value="Pass"},
+        new SelectListItem{ Text="Reappear", Value="COMP"},
+        new SelectListItem{ Text="QUALIFIED", Value="QUALIFIED"}}, new { @class = "form-control 8th", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.Result_8th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.PassingYear_8th, new { @class = "form-control", @required = "required", type = "number" })
+                                    @Html.ValidationMessageFor(m => m.PassingYear_8th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.CheckBoxFor(m => m.CGPA_8th, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.CGPA_8th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.MaxMarks_8th, new { @class = "form-control", @required = "required", type = "number", @max = "1500" })
+                                    @Html.ValidationMessageFor(m => m.MaxMarks_8th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.MarksObtain_8th, new { @class = "form-control", @required = "required", type = "number", step = ".01", oninvalid = "setCustomValidity('Marks Obtained cannot be more than Max. Marks')", oninput = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(m => m.MarksObtain_8th, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Percentage_8th, new { @class = "form-control", @required = "required", step = "any", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.Percentage_8th, "", new { @class = "text-danger" })
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    @if (Model.QualificationCode != "08")
+    {
+        <div class="col-lg-12 col-md-12 cus-heading1" id="dv_subjectMarks" style="padding:0;">
+            <div class="col-lg-12 col-md-12 cus-heading1" style="padding:0;">
+                <h3>
+                    10th Marks Detail &nbsp;&nbsp;&nbsp;
+                    <span style="color:#000000 ; font-weight:600;font-size:16px">
+                        <strong style="color:red">Please enter 10th class subject marks.</strong>
+                    </span>
+                </h3>
+            </div>
+            <span style="color: #fff;
+        text-align: center;
+        font-size: 18px;
+        color: #492A7F;
+        font-weight: 700;
+        margin-bottom: 4px;">     </span>
+            <div class="card c-shadow">
+                <div class="card-body">
+
+                    <div class="table-responsive">
+
+                        <table id="print-content" class="table no-margin table-bordered table-hover table-hover">
+                            <tr>
+                                <th style="visibility:hidden">
+                                    ID
+                                </th>
+                                <th title="Kindly enter all subject names separated by comma(,)">
+                                    Subject
+                                </th>
+                                <th>
+                                    Maximum Marks
+                                <th>
+                                    Marks Obtained
+
+                                </th>
+                            </tr>
+
+                            <tbody class="tbody2">
+                                @{
+                                    //To make unique Id
+                                    //int i = 0;
+                                    //foreach (var item in Model.subjectDetails.ToList())
+                                    for (int i = 0; i < 3; i++)  // i want to bind only 3 subjects
+                                    {
+
+                                        var englishSubjects = Model.subjectDetails[0].SubjectList.Where(s => s.Text.ToUpper() == "ENGLISH").ToList();
+                                        var mathSubjects = Model.subjectDetails[1].SubjectList.Where(s => s.Text.ToUpper() == "MATHEMATICS").ToList();
+                                        var scienceSubjects = Model.subjectDetails[2].SubjectList.Where(s => s.Text.ToUpper() == "SCIENCE").ToList();
+
+                                        <tr>
+                                            <td>
+                                                @Html.HiddenFor(o => o.subjectDetails[i].P_id, new { @class = "form-control input-shadow" })
+                                            </td>
+                                            <td class="subject">
+                                                @if (i == 0)
+                                                {
+                                                    @Html.DropDownListFor(o => o.subjectDetails[i].SelectedSubjectId, new SelectList(englishSubjects, "Value", "Text"), new { @class = "form-control input-shadow isapid subject-dropdown", @onchange = "CheckDuplicateSub(this);" })
+                                                }
+                                                else if (i == 1)
+                                                {
+                                                    @Html.DropDownListFor(o => o.subjectDetails[i].SelectedSubjectId, new SelectList(mathSubjects, "Value", "Text"), new { @class = "form-control input-shadow isapid subject-dropdown", @onchange = "CheckDuplicateSub(this);" })
+                                                }
+                                                else if (i == 2)
+                                                {
+                                                    @Html.DropDownListFor(o => o.subjectDetails[i].SelectedSubjectId, new SelectList(scienceSubjects, "Value", "Text"), new { @class = "form-control input-shadow isapid subject-dropdown", @onchange = "CheckDuplicateSub(this);" })
+                                                }
+                                                @Html.ValidationMessageFor(o => o.subjectDetails[i].SelectedSubjectId, "", new { @class = "text-danger" })
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(o => o.subjectDetails[i].MaxMarks, new { @class = "form-control input-shadow isapi", @onchange = "CheckMarks(this);", type = "number" })
+                                                @Html.ValidationMessageFor(o => o.subjectDetails[i].MaxMarks, "", new { @class = "text-danger" })
+
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(o => o.subjectDetails[i].MarksObtain, new { @class = "form-control input-shadow isapi", @onchange = "CheckMarks(this);", type = "number", step = "any" })
+                                                @Html.ValidationMessageFor(o => o.subjectDetails[i].MarksObtain, "", new { @class = "text-danger" })
+
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Session["Verificationstatus"].ToString() == "" || Session["Verificationstatus"].ToString() == "R")
+    {
+        <div class="col-md-12 text-right cus-registerbtn" style="margin-top: 1%; margin-bottom: 5%;">
+            <button class="btn btn-primary c-shadow-1" id="btnNext" value="Next" type="submit"><i class="fa fa-save"></i>&nbsp;Save & Next</button>
+        </div>
+    }
+    <div class="outer-loader" style="display: none;">
+        <div class="loader-img loader" style="display: none;"></div>
+    </div>
+</form>
+
+<script language="javascript" type="text/javascript">
+    $(function () {
+        $("#MaxMarks_10th, #MarksObtain_10th").change(function () {
+            if ($('#CGPA_10th').is(":checked")) {
+
+                var cgpamarks = $('#MarksObtain_10th').val();
+               var  cgpamarksper = parseFloat(cgpamarks) * 9.5;
+                $('#Percentage_10th').val(cgpamarksper.toFixed(2) || ''); //shows value in "#rate"
+            }
+            else {
+                if (parseInt($("#MaxMarks_10th").val()) >= parseInt($("#MarksObtain_10th").val()))
+                {
+                    var result = parseFloat((parseInt($("#MarksObtain_10th").val()) / parseInt($("#MaxMarks_10th").val())) * 100);
+                    $('#Percentage_10th').val(result.toFixed(2) || ''); //shows value in "#rate"
+                }
+            }
+        })
+    });
+    //12th per cal
+    $(function () {
+        $("#MaxMarks_12th, #MarksObtain_12th").change(function () {
+            if (parseInt($("#MaxMarks_12th").val()) >= parseInt($("#MarksObtain_12th").val())) {
+                var result = parseFloat((parseInt($("#MarksObtain_12th").val()) / parseInt($("#MaxMarks_12th").val())) * 100);
+                $('#Percentage_12th').val(result.toFixed(2) || ''); //shows value in "#rate"
+            }
+
+        })
+    });
+
+    //Diploma per cal
+    $(function () {
+
+        $("#MaxMarks_Diploma, #MarksObtain_Diploma").change(function () {
+            if (parseInt($("#MaxMarks_Diploma").val()) >= parseInt($("#MarksObtain_Diploma").val())) {
+            var result = parseFloat((parseInt($("#MarksObtain_Diploma").val()) / parseInt($("#MaxMarks_Diploma").val())) * 100);
+                $('#Percentage_Diploma').val(result.toFixed(2) || ''); //shows value in "#rate"
+            }
+
+        })
+    });
+
+    $(function () {
+        $("#MaxMarks_8th, #MarksObtain_8th").change(function () {
+            if ($('#CGPA_8th').is(":checked")) {
+            }
+            else {
+                if (parseInt($("#MaxMarks_8th").val()) >= parseInt($("#MarksObtain_8th").val())) {
+                    var result = parseFloat((parseInt($("#MarksObtain_8th").val()) / parseInt($("#MaxMarks_8th").val())) * 100);
+                    $('#Percentage_8th').val(result.toFixed(2) || ''); //shows value in "#rate"
+                }
+            }
+        })
+    });
+
+    $(document).ready(function () {
+
+        // prevent form submit from console window
+        //$("#saveEduDataId").submit(function (e) {
+        //    alert('submit intercepted');
+        //    stopPreloader();
+        //    e.preventDefault(e);
+        //});
+
+
+        if ('@Model.QualificationCode'=="10") {
+            $('#Uniboard_10th').addClass('disabledbutton');
+            $('#PassingYear_10th').addClass('disabledbutton');
+            $('#Rollno_10th').addClass('disabledbutton');
+        }
+
+        if (@Model.SelectedBoard== "119") {
+            $('.tttt').hide();
+        }
+        else {
+            $('.tttt').show();
+        }
+
+        $('#btnfetch10').click(function () {
+            Fetchmarks("10");
+        });
+        $('#btnfetch12').click(function () {
+            Fetchmarks("12");
+        });
+        // progress bar
+        var MaxPages = '@Session["MaxPage"]';
+        var currentPage = '@Session["currentPage"]';
+
+        for (var i = 0; i < parseInt(MaxPages); i++) {
+            if ((i + 1) != currentPage) $("#tablist > li:eq(" + i + ")").addClass('done');
+            else $("#tablist > li:eq(" + i + ")").addClass('current');
+        }
+        for (i = 8; i > MaxPages; i--) {
+            $("#tablist > li:eq(" + (i - 1) + ")>a").attr("href", "#");
+        }
+        // check isAPI
+
+
+        if ('@Model.IsFromApi_10th' == "Y") {
+            $('.isapi').attr('readonly', 'readonly');
+            $('.isapid').addClass('disabledbutton');
+            $('.isapi10').addClass('disabledbutton');
+            $('.10th').attr('readonly', 'readonly');
+            $('.isapi').addClass('disabledbutton');
+          //  $('#btnfetch10').prop('disabled', true);
+            $('#btnfetch10').hide();
+            if ('@Model.School_10th' == '') {
+                $('#School_10th').removeAttr('readonly');
+            }
+        }
+        if ('@Model.IsFromApi_12th' == "Y") {
+            $('.isapi12').attr('readonly', 'readonly');
+            $('.isapi12').addClass('disabledbutton');
+            $('.isapid12').addClass('disabledbutton');
+            $('.12th').attr('readonly', 'readonly');
+            $('.12th').attr('readonly', 'readonly');
+            //$('#btnfetch12').prop('disabled', true);
+            $('#btnfetch12').hide();
+            if ('@Model.School_12th' == '') {
+                $('#School_12th').removeAttr('readonly');
+            }
+        }
+
+
+        // max marks and marks obtain validation
+        // 10th
+        if ($('[name="MaxMarks_10th"]').val() !== '') { $('[name="MarksObtain_10th"]').attr('max', $('[name="MaxMarks_10th"]').val()); }
+        $('[name="MaxMarks_10th"]').on('change', function () { $('[name="MarksObtain_10th"]').attr('max', $('[name="MaxMarks_10th"]').val()); });
+
+        $('[name="MarksObtain_10th"]').on('change', function () {
+            if (!document.getElementsByName('MarksObtain_10th')[0].checkValidity()) {
+                document.getElementsByName('MarksObtain_10th')[0].reportValidity();
+                document.getElementsByName('MarksObtain_10th')[0].value = '';
+            }
+        });
+        $('[name="MaxMarks_10th"]').on('change', function () {
+            if (!document.getElementsByName('MarksObtain_10th')[0].checkValidity()) {
+                document.getElementsByName('MarksObtain_10th')[0].reportValidity();
+                document.getElementsByName('MarksObtain_10th')[0].value = '';
+            }
+        });
+
+        // 12th
+        if ($('[name="MaxMarks_12th"]').val() !== '') { $('[name="MarksObtain_12th"]').attr('max', $('[name="MaxMarks_12th"]').val()); }
+        $('[name="MaxMarks_12th"]').on('change', function () { $('[name="MarksObtain_12th"]').attr('max', $('[name="MaxMarks_12th"]').val()); });
+
+        $('[name="MarksObtain_12th"]').on('change', function () {
+            if (!document.getElementsByName('MarksObtain_12th')[0].checkValidity()) {
+                document.getElementsByName('MarksObtain_12th')[0].reportValidity();
+                document.getElementsByName('MarksObtain_12th')[0].value = '';
+            }
+        });
+        $('[name="MaxMarks_12th"]').on('change', function () {
+            if (!document.getElementsByName('MarksObtain_12th')[0].checkValidity()) {
+                document.getElementsByName('MarksObtain_12th')[0].reportValidity();
+                document.getElementsByName('MarksObtain_12th')[0].value = '';
+            }
+        });
+
+        // Diploma
+        if ($('[name="MaxMarks_Diploma"]').val() !== '') { $('[name="MarksObtain_Diploma"]').attr('max', $('[name="MaxMarks_Diploma"]').val()); }
+        $('[name="MaxMarks_Diploma"]').on('change', function () { $('[name="MarksObtain_Diploma"]').attr('max', $('[name="MaxMarks_Diploma"]').val()); });
+
+        $('[name="MarksObtain_Diploma"]').on('change', function () {
+            if (!document.getElementsByName('MarksObtain_Diploma')[0].checkValidity()) {
+                document.getElementsByName('MarksObtain_Diploma')[0].reportValidity();
+                document.getElementsByName('MarksObtain_Diploma')[0].value = '';
+            }
+        });
+        $('[name="MaxMarks_Diploma"]').on('change', function () {
+            if (!document.getElementsByName('MarksObtain_Diploma')[0].checkValidity()) {
+                document.getElementsByName('MarksObtain_Diploma')[0].reportValidity();
+                document.getElementsByName('MarksObtain_Diploma')[0].value = '';
+            }
+        });
+
+        //8th
+        if ($('[name="MaxMarks_8th"]').val() !== '') { $('[name="MarksObtain_8th"]').attr('max', $('[name="MaxMarks_8th"]').val()); }
+        $('[name="MaxMarks_8th"]').on('change', function () { $('[name="MarksObtain_8th"]').attr('max', $('[name="MaxMarks_8th"]').val()); });
+
+        $('[name="MarksObtain_8th"]').on('change', function () {
+            if (!document.getElementsByName('MarksObtain_8th')[0].checkValidity()) {
+                document.getElementsByName('MarksObtain_8th')[0].reportValidity();
+                document.getElementsByName('MarksObtain_8th')[0].value = '';
+            }
+        });
+        $('[name="MaxMarks_8th"]').on('change', function () {
+            if (!document.getElementsByName('MarksObtain_8th')[0].checkValidity()) {
+                document.getElementsByName('MarksObtain_8th')[0].reportValidity();
+                document.getElementsByName('MarksObtain_8th')[0].value = '';
+            }
+        });
+
+        // 10th CGPA
+        //if ($('#CGPA_10th').is(":checked")) {
+        //    $("#Percentage_10th").removeAttr("readonly");
+        //};
+        $('#CGPA_10th').change(function () {
+            if ($('#CGPA_10th').is(":checked")) {
+                $("#MaxMarks_10th").val(10);
+                $("#MarksObtain_10th").attr("max", "10");
+                $("#MarksObtain_10th").val('');
+                $('#Percentage_10th').val('');
+               // $("#Percentage_10th").removeAttr("readonly");
+            }
+            else {
+
+                $("#MarksObtain_10th").val('');
+                $("#MaxMarks_10th").val('');
+                $('#Percentage_10th').val('');
+                //$("#Percentage_10th").attr("readonly", "readonly");
+            }
+        });
+
+        // 8th CGPA
+        if ($('#CGPA_8th').is(":checked")) {
+            $("#Percentage_8th").removeAttr("readonly");
+        };
+        $('#CGPA_8th').change(function () {
+            if ($('#CGPA_8th').is(":checked")) {
+                $("#MaxMarks_8th").val(10);
+                $("#MarksObtain_8th").attr("max", "10");
+                $("#MarksObtain_8th").val('');
+                $('#Percentage_8th').val('');
+                $("#Percentage_8th").removeAttr("readonly");
+            }
+            else {
+
+                $("#MarksObtain_8th").val('');
+                $("#MaxMarks_8th").val('');
+                $('#Percentage_8th').val('');
+                $("#Percentage_8th").attr("readonly", "readonly");
+            }
+        });
+
+        // stream on change required diploma,12th
+        //if ($('#streamid').val() !== '') { $('#hidediploma').hide(); $(".12th").attr("required", "required"); }
+        //if ($('#streamid').val() == '9') { $('#dv_subjectMarks').hide(); $('#hidediploma').show(); $(".12th").removeAttr("required", "required"); }
+        @*$('#streamid').change(function () {
+            if ($(this).val() == "9") {
+
+                $(".12th").removeAttr("required", "required");
+                $('#dv_subjectMarks').hide();   // hide subject marks in case of diploma
+                $('#hidediploma').show();
+                //$('#Uniboard_Diploma').val($('#Uniboard_12th').val());
+                $('#Uniboard_12th').val('');
+                $('#Uniboard_12th').removeClass('disabledbutton');
+                $('#Uniboard_12th').removeAttr('readonly');
+                $('#Rollno_12th').val('');
+                $('#PassingYear_12th').val('');
+                $('#MaxMarks_12th').val('');
+                $('#MarksObtain_12th').val('');
+                $('#Percentage_12th').val('');
+            }
+            else {
+               // $('#Uniboard_12th').val($('#Uniboard_Diploma').val());
+              //  $('#Uniboard_Diploma').val('');
+                $(".12th").attr("required", "required");
+                $('#dv_subjectMarks').show();
+                $('#hidediploma').hide();
+
+            }
+
+            if ($(this).val()!='@Model.SelectedStream' && '@Model.SelectedStream'!='') {
+
+                swal('Alert!','Your choice of cources will deleted if you will change your stream','warning');
+            }
+        });
+
+
+        @*if ('@Model.Uniboard_12th' == '335') {               /// if board is haryana state technical education clear 12th
+                $('#Uniboard_12th').val('');
+                $('#Uniboard_12th').removeClass('disabledbutton');
+                $('#Uniboard_12th').removeAttr('readonly');
+                $('#Rollno_12th').val('');
+                $('#PassingYear_12th').val('');
+                $('#MaxMarks_12th').val('');
+                $('#MarksObtain_12th').val('');
+                $('#Percentage_12th').val('');
+            }
+        // diploma on change required diploma
+
+        //if ($('#Uniboard_Diploma').val() == "") { $('.diploma').removeAttr("required", "required"); }
+        //$('#Uniboard_Diploma').change(function () {
+        //    if ($(this).val() == "" && ('#streamid').val()!="9") {
+        //        $(".diploma").removeAttr("required", "required");
+        //    }
+        //    else {
+        //        $(".diploma").attr("required", "required");
+        //    }
+        //});
+
+        // Passing year check*@
+
+        $('#PassingYear_10th,#PassingYear_12th,#PassingYear_8th').change(function () {
+
+                    var DOB = @Model.DOB_Year;
+                       var year1oth = $('#PassingYear_10th').val();
+                       var year12th = $('#PassingYear_12th').val();
+                       var year8th = $('#PassingYear_8th').val();
+                       var totaldiff = parseInt(year12th) - parseInt(year1oth);
+
+                    if (parseInt(DOB + 10) > parseInt(year8th)) {
+                        swal("Alert", "Your DOB year is " + DOB + ", so 8th passing year can not be " + year1oth + "", "warning");
+                        $(this).val('');
+                    }
+                    if (parseInt(DOB+10)> parseInt(year1oth))
+                    {
+                        swal("Alert", "Your DOB year is " + DOB + ", so 10th passing year can not be " + year1oth+"", "warning");
+                        $(this).val('');
+                    }
+                    if (parseInt(DOB+10)> parseInt(year12th))
+                    {
+                        swal("Alert", "Your DOY is " + DOB + ", so 12th passing year can not be " + year12th + "", "warning");
+                        $(this).val('');
+                    }
+                    if ( totaldiff<1)
+                    {
+                        swal("Alert", "10th passing year should be less than 12th passing year", "warning");
+                        $(this).val('');
+                    }
+        });
+
+        // disable enter as submit button
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        //$('#Uniboard_10th').on('change', function () {
+        //    var boardcode = $(this).val();
+        //    fetchAndPopulateSubjects(boardcode);
+        //});
+    });
+
+
+     // Function to fetch and populate subjects
+    function fetchAndPopulateSubjects(boardcode) {
+
+        $.ajax({
+            url: '@Url.Action("GetSubjects", "Account")', // Adjust the URL to match your controller and action
+            type: 'GET',
+            data: { boardcode: boardcode },
+            dataType: 'json',
+            success: function (data) {
+                if (data && data.length) {
+                    $('.subject-dropdown').each(function () {
+                        var $dropdown = $(this);
+                        $dropdown.empty();
+                        $dropdown.append('<option value="">--Please Select--</option>');
+                        $.each(data, function (index, item) {
+                            $dropdown.append('<option value="' + item.Value + '">' + item.Text + '</option>');
+                        });
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching subjects: ", error);
+            }
+        });
+    }
+
+    function startPreloader() {
+        $(".loader").css("display", "block");
+        $(".outer-loader").css("display", "block");
+
+    }
+    function stopPreloader() {
+
+        $(".loader").css("display", "none");
+        $(".outer-loader").css("display", "none");
+    }
+
+    function CheckDuplicateSub(el) {
+        var subjects = [];
+        //$('#print-content tr:not(:first):not(:last)').each(function () {
+
+        //    var aa = $(this).find('td:eq(1)').find('select').val();
+        //    console.log(aa);
+        //});
+        $('#print-content tr:not(:first) td[class="subjct"]').each(function () {
+
+            var subjectId = $(this).find('select :selected').val();
+            var subjectname = $(this).find('select :selected').text();
+            if (subjectname == "MATHEMATICS" || subjectname == "MATHEMATICS BASIC")
+            {
+                 subjectId = "1";
+            }
+            if (subjectId != '') {
+                var Isexists = subjects.includes(subjectId);
+                if (Isexists) {
+                    swal("Subject already selected, kindly select different subject");
+                    $(el).val('');
+                }
+                else {
+                    subjects.push(subjectId);
+                }
+            }
+        });
+        //var Isexists = subjects.includes($(el).val());
+        //if (Isexists) {
+        //    swal("Subject already selected, kindly select different subject");
+        //    $(el).val('');
+        //}
+        //else {
+        //    subjects.push($(el).val());
+        //}
+    }
+    function SetApiStatusNo() {
+           startPreloader();
+          $.ajax({
+               type: "POST",
+               url: '@Url.Action("SetApiStatusNo", "Account")',
+               data: {},
+               contentType: "application/json; charset=utf-8",
+               dataType: "json",
+               success: function (data) {
+                   stopPreloader();
+                   if (data == "1") {
+
+                       alert("You can edit your marks now. Please upload relevant DMCs/Marks-sheets in document upload section.");
+                       window.location.href = '@Url.Action("EduQualification", "Account")';
+
+                   }
+                   else if (data == "00") {
+                       alert("Session has been expired");
+                       window.location.href = '@Url.Action("LogOut", "Account")';
+                   }
+                   else
+                   {
+                       swal("Error!", "Something went wrong. Plz try again later", "error");
+                   }
+               },
+              failure: function (data) {
+                   stopPreloader();
+                   swal('Error', 'Something went wrong', 'error');
+               }
+           });
+
+        }
+    //function CheckMarks(el) {
+    //    alert(el);
+    //}
+
+    function Fetchmarks(qual) {
+
+        startPreloader();
+        if (qual == "10") {
+            var year = $('#PassingYear_10th').val();
+            var rollno = $('#Rollno_10th').val();
+            var board = $('#Uniboard_10th').val();
+        }
+        else {
+            var year = $('#PassingYear_12th').val();
+            var rollno = $('#Rollno_12th').val();
+            var board = $('#Uniboard_12th').val();
+        }
+            if (board == "" || board == null || board == "0") {
+                alert('Please select  board.');
+                stopPreloader();
+                return;
+            }
+            if (rollno == "" || rollno == null || rollno == "0") {
+                alert('Please enter Roll Number.');
+                stopPreloader();
+                return;
+            }
+            if (year == "" || year == null || year == "0") {
+                alert('Please enter pass year.');
+                stopPreloader();
+                return;
+            }
+
+
+            var d = {
+                'RollNo': rollno,
+                'Year': year,
+                'QualificationCode': qual,
+                'Board': board
+            };
+
+          $.ajax({
+               type: "POST",
+              url: '@Url.Action("FetchMarks", "Account")',
+              data: JSON.stringify(d),
+               contentType: "application/json; charset=utf-8",
+               dataType: "json",
+              success: function (data) {
+                  window.location.href = '@Url.Action("EduQualification", "Account")';
+               },
+              failure: function (data) {
+                 window.location.href = '@Url.Action("EduQualification", "Account")';
+               }
+           });
+
+    }
+
+     function SetApiStatusNo() {
+           startPreloader();
+          $.ajax({
+               type: "POST",
+               url: '@Url.Action("SetApiStatusNo", "Account")',
+               data: {},
+               contentType: "application/json; charset=utf-8",
+               dataType: "json",
+               success: function (data) {
+                   stopPreloader();
+                   if (data == "1") {
+
+                       alert("You can edit your marks now. Please upload relevant DMCs/Marks-sheets in document upload section.");
+                       window.location.href = '@Url.Action("EduQualification", "Account")';
+
+                   }
+                   else if (data == "00") {
+                       alert("Session has been expired");
+                       window.location.href = '@Url.Action("LogOut", "Account")';
+                   }
+                   else
+                   {
+                       swal("Error!", "Something went wrong. Plz try again later", "error");
+                   }
+               },
+              failure: function (data) {
+                   stopPreloader();
+                   swal('Error', 'Something went wrong', 'error');
+               }
+           });
+
+        }
+</script>
+
+
+@if (Session["Verificationstatus"].ToString() == "F")
+{
+    <script>
+        $('#saveEduDataId').removeClass('active');
+        $('#saveEduDataId').addClass('disabledbutton');
+    </script>
+}

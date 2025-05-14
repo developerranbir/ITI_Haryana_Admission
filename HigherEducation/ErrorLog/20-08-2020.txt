@@ -1,0 +1,17 @@
+
+Log Entry : 10.58.53 AM 20 August 2020
+  :
+  :Method Name -    at CallSite.Target(Closure , CallSite , Object , String )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 185
+Target Website - System.Object CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, System.Object, System.String)
+ Error - Cannot perform runtime binding on a null reference
+-------------------------------
+
+Log Entry : 10.59.49 AM 20 August 2020
+  :
+  :Method Name -    at CallSite.Target(Closure , CallSite , Object , String )
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 185
+Target Website - System.Object CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, System.Object, System.String)
+ Error - Cannot perform runtime binding on a null reference
+-------------------------------

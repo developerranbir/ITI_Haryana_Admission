@@ -1,0 +1,1291 @@
+﻿@model HigherEducation.Models.RegistrationViewModel
+@{
+    Layout = null;
+}
+<style>
+    .ui-datepicker select.ui-datepicker-month, .ui-datepicker select.ui-datepicker-year {
+        color: black;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .tab-pane .tools .btn.btn-flat {
+        /* padding: 4.5px 7px; */
+        margin-bottom: 5px;
+        margin-top: -30px;
+        margin-right: 10px;
+    }
+
+    .txtSize {
+        font-size: 16px;
+    }
+
+    .ctrlPosition {
+        text-align: center;
+        margin-top: 40px;
+        color: #34495E;
+        font-weight: bold;
+    }
+
+        .ctrlPosition:hover {
+            color: blue;
+        }
+
+    .pdfFile {
+        margin-left: 50px;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+        .pdfFile:hover {
+            text-decoration: underline;
+        }
+
+    .btnAdd {
+        color: white;
+        outline: 0;
+        padding: 10px 16px;
+        font-size: 16px;
+        line-height: 1.33;
+        border-radius: 6px;
+    }
+
+    .my-input {
+        width: 100%;
+    }
+
+    .my-icon {
+        position: absolute;
+        right: 20px;
+        color: red;
+        top: 7px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .redBorder {
+        border: 1px solid red !important;
+    }
+
+    .greenBorder {
+        border: 1px solid green !important;
+    }
+
+    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+        background: linear-gradient(to right, #004ef9, #79a3ff) !important;
+        color: #fff;
+        border-color: #79a3ff !important;
+    }
+
+    .disabledbutton {
+        pointer-events: none;
+        opacity: 0.4;
+    }
+</style>
+
+<style>
+    .loader,
+    .outer-loader {
+        display: inline-block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0
+    }
+
+    .outer-loader {
+        background: rgba(0, 0, 0, .3);
+        width: 100%;
+        height: 100%;
+        z-index: 10000
+    }
+
+    .loader {
+        width: 69px;
+        height: 89px;
+        border: 1px solid #000;
+        margin: auto
+    }
+
+    .loader-img {
+        border: 15px solid #415bbb;
+        border-radius: 50%;
+        border-top: 15px solid #000;
+        width: 80px;
+        height: 80px;
+        -webkit-animation: spin 1s linear infinite;
+        animation: spin 1s linear infinite
+    }
+
+    @@-webkit-keyframes spin {
+        0% {
+            -webkit-transform: rotate(0)
+        }
+
+        100% {
+            -webkit-transform: rotate(360deg)
+        }
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0)
+        }
+
+        100% {
+            transform: rotate(360deg)
+        }
+    }
+
+    .row_new {
+        margin-left: 10px;
+        margin-right: 10px
+    }
+
+    #logo img {
+        height: auto;
+        padding-left: 3px;
+        width: 40px
+    }
+
+    body:not(.menu-on-top).desktop-detected {
+        min-height: 907px !important
+    }
+
+    .validation {
+        color: red;
+    }
+</style>
+
+<head>
+    @*css*@
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/assets/css/jquery-ui.css" rel="stylesheet" />
+    <link href="~/assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/assets/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/assets/css/styleregister.css" rel="stylesheet" />
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <link href="~/assets/css/all.css" rel="stylesheet" />
+
+
+    <script type="text/javascript" src="~/assets/js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/assets/js/popperjs/popper.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/swalJs/sweetalert.min.js"></script>
+    <script src="~/swalJs/swal-forms.js"></script>
+    <script src="~/assets/js/Duplicate.js"></script>
+</head>
+<script>
+    $(document).ready(function () {
+        swal("महत्वपूर्ण सूचना:", "माननीय पंजाब एवं हरियाणा उच्च न्यायालय के आदेशानुसार सत्र 2024-25 के दाखिले हेतु पंजीकरण केवल फतेहाबाद प्राइवेट आईटीआई, फतेहाबाद के लिए दिनांक 4 अक्टूबर 2024 तक खुला है। केवल इसी संस्थान में दाखिले के इच्छुक अपना नया पंजीकरण करवाएं , किसी अन्य संस्थान के दाखिले के लिए नया पंजीकरण मान्य नहीं है। \n\nAs per the order of Honourable Punjab and Haryana High Court, new registration for session 2024 - 25 admission is open only for Fatehabad Private ITI, Fatehabad till 4th October 2024. Candidate interested in admission to this institute only should register.New registration is not valid for admission to any other institute.", "warning");
+    });
+</script>
+@if (Convert.ToInt32(TempData["ErrorLog"]) == 1)
+{
+    <script>
+        alert("Something went wrong! Please try again later.");
+    </script>
+}
+<div class="outer-loader" style="display: none;">
+    <div class="loader-img loader" style="display: none;">
+    </div>
+</div>
+<body class="homepage">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 cus-maintop-banner d-none d-sm-block">
+        <div id="exchanger" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right selectbox" style="">
+
+
+            <a href="#topbar" class="skip-content scroll" title="skip to main content">Skip to Main Content</a>
+            <a href="#!" class="button-toggle-remove" title="Standard">A</a>
+            <a href="#!" class="button-toggle-highcontrast" title="Black/Yellow">A</a>
+            <a href="#" id="incfont" class="increase" title="Increased Text">A+</a>
+            <a href="#" id="decfont" class="decrease" title="Decreased text">A-</a>
+            <a href="#" id="decfont" class="resetMe" title="Reset Text">A</a>
+
+        </div>
+
+    </div>
+    <section class="cus-background">
+        <input id="hdnlang" type="hidden" value="e" />
+        <div class="container-fluid">
+            <div class="row main-banner">
+                <img src="../assets/images/banner.jpg" alt="Online Admission Portal" />
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="section-body contain-lg">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="Case Details-tab">
+
+                            <form class="form form-validate" id="formvalidate" autocomplete="off" action="@Url.Action("RegistrationValidation", "Account")" onsubmit="startPreloader();" accept-charset="utf-8" method="post" enctype="multipart/form-data">
+                                @Html.ValidationSummary(true)
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 cus-topbar">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-6 cus-topbar-label text-left">
+                                                <!--  <a  class="btn btn-info" id="btnHome" href="~/index.html"><i class="fa fa-home"></i>&nbsp;<span class="english" style="display:none;">Home</span><span class="hindi">होम</span></a> -->
+                                                <a class="btn btn-info" id="btnHome" href="https://admissions.itiharyana.gov.in/"><i class="fa fa-home"></i>&nbsp;<span class="english" style="display:none;">Home</span><span class="hindi">होम</span></a>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-6 cus-topbar-label text-right">
+                                                <a class="btn btn-info" id="btnLogins" href="@Url.Action("Login", "Account")"><i class="fa fa-lock"></i>&nbsp;<span class="english" style="display:none;">Login</span><span class="hindi">लॉगिन</span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2"></div>
+                                    <div class="col-lg-8 col-md-8 cus-heading" id="topbar">
+                                        <h4><p class="english" style="display:none;">Candidate Details</p><p class="hindi">उम्मीदवार का विवरण</p></h4>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 text-right">
+                                        <ul class="list">
+                                            <li class="active"><a id="Eenglish">हिन्दी</a></li>
+                                            <li><a id="Hhindi">English</a></li>
+                                        </ul>
+                                        <ul></ul>
+                                    </div>
+                                </div>
+                                <div class="card c-shadow">
+                                    <div class="card-body">
+                                        <div class="top-section">
+                                            <div id="disabledRowData">
+                                                <div class="row">
+                                                    <div class="col-md-3 form-group">
+                                                        <label for="BoardCode" style="font-size:16px;color: #34495E;"><span class="hindi">आपकी उच्चतम योग्यता क्या है</span><span class="english" style="display:none;">What is the highest qualification</span> <span style="color:red;"><strong>*</strong></span></label>
+
+                                                        @Html.DropDownListFor(model => model.QualificationCode, new SelectList(ViewBag.Classes as System.Collections.IEnumerable, "Value", "Text"),
+                                        "--Please Select  Qualification--", new { id = "QualificationCode", @class = "form-control input-shadow classchange", required = "required" })
+                                                        <span id="board_error" style="color:red"></span>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label for="BoardCode" style="font-size:16px;color: #34495E;"><span class="hindi"> बोर्ड/समतुल्य डिप्लोमा</span><span class="english" style="display:none;">Board/Equivalent Diploma</span> <span style="color:red;"><strong>*</strong></span></label>
+
+                                                        @Html.DropDownListFor(model => model.BoardCode, new SelectList(ViewBag.BoardCode as System.Collections.IEnumerable, "Value", "Text"),
+                                        "--Please Select Board--", new { id = "BoardCode", @class = "form-control input-shadow", required = "required" })
+                                                        <span id="board_error" style="color:red"></span>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label for="CandidateName" style="font-size:16px;color: #34495E;"><span class="hindi">छात्र का पूरा नाम</span><span class="english" style="display:none;">Full Name</span> <span style="color:red;"><strong>*</strong></span></label>
+
+                                                        @Html.TextBoxFor(model => model.CandidateName, new { @class = "form-control input-shadow", @id = "CandidateName", @required = "required", @maxlength = "100" })
+                                                        <span id="candidate_error" style="color:red"></span>
+                                                        @Html.ValidationMessageFor(model => model.CandidateName, "", new { @class = "validation" })
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label for="TwelveRollNo" style="font-size:16px;color: #34495E;"><span class="hindi">बोर्ड/समतुल्य डिप्लोमा रोल नंबर</span><span class="english" style="display:none;">10+2 Board/Equivalent Diploma Roll No</span> <span style="color:red;"><strong>*</strong></span></label>
+                                                        @Html.TextBoxFor(model => model.TwelveRollNo, new { @class = "form-control input-shadow", @id = "TwelveRollNo", @required = "required", @maxlength = "20", @Value = ViewBag.TwelveRollNo })
+                                                        <span id="rollno_error" style="color:red"></span>
+                                                        @Html.ValidationMessageFor(model => model.TwelveRollNo, "", new { @class = "validation" })
+
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label for="Year" style="font-size:16px;color: #34495E;"><span class="hindi">उत्तीर्ण होने का वर्ष</span><span class="english" style="display:none;">Year of Passing</span><span style="color:red;"><strong>*</strong></span></label>
+                                                        @Html.DropDownListFor(model => model.PassingOfYear, new SelectList(ViewBag.Year as System.Collections.IEnumerable, "Value", "Text"), new { id = "PassingOfYear", @class = "form-control input-shadow", required = "required" })
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 form-group cus-getbtn" style="text-align:center;">
+                                                        <button type="submit" class="btn btn-info" id="btnGetData"><i class="fa fa-binoculars"></i>&nbsp;<span class="english" style="display:none;">Get Data</span><span class="hindi">डेटा प्राप्त करें</span></button>
+                                                        <button type="button" class="btn btn-info" id="btnResetGetData" style="display:none;"><i class="fa fa-refresh"></i>&nbsp;<span class="english" style="display:none;">Reset Data</span><span class="hindi">डेटा रीसेट करें</span></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <form class="form form-validate" id="formLogin" autocomplete="off" action="@Url.Action("Registration", "Account")" accept-charset="utf-8" method="post" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+
+                                <div class="card c-shadow">
+                                    <div class="card-body">
+                                        <div id="divMiddle" class="middle-section">
+                                            <div id="disabledRow">
+                                                <div class="row">
+                                                    <div class="col-md-3 form-group">
+                                                        <label for="Sex" style="font-size:16px;color: #34495E;"><span class="hindi">लिंग</span><span class="english" style="display:none;">Gender</span><span style="color:red;"><strong>*</strong></span></label>
+                                                        @Html.DropDownListFor(model => model.Sex, new SelectList(ViewBag.Sex as System.Collections.IEnumerable, "Value", "Text"),
+                                        "-- Please Select Gender--", new { id = "Sex", @class = "form-control input-shadow" })
+                                                        <span id="gender_error" style="color:red"></span>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label for="FatherHusbandName" style="font-size:16px;color: #34495E;"><span class="hindi">पिता का नाम</span><span class="english" style="display:none;">Father's Name</span><span style="color:red;"><strong>*</strong></span></label>
+                                                        @Html.TextBoxFor(model => model.FatherHusbandName, new { @class = "form-control input-shadow", @id = "FatherHusbandName", @Value = ViewBag.FatherHusbandName })
+                                                        <span id="father_error" style="color:red"></span>
+                                                        @Html.ValidationMessageFor(model => model.FatherHusbandName, "", new { @class = "validation" })
+
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label for="MotherName" style="font-size:16px;color: #34495E;"><span class="hindi">माता का नाम</span><span class="english" style="display:none;">Mother's Name</span><span style="color:red;"><strong>*</strong></span></label>
+                                                        @Html.TextBoxFor(model => model.MotherName, new { @class = "form-control input-shadow", @id = "MotherName", @Value = ViewBag.MotherName })
+                                                        <span id="mother_error" style="color:red"></span>
+                                                        @Html.ValidationMessageFor(model => model.MotherName, "", new { @class = "validation" })
+
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label for="MobileNo" style="font-size:16px;color: #34495E;"><span class="hindi">मोबाइल नंबर</span><span class="english" style="display:none;">Mobile Number</span><span style="color:red;"><strong>*</strong></span></label>
+                                                        @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control input-shadow", @id = "MobileNo", @maxlength = "10", @Value = ViewBag.mobileno })
+                                                        <span style="color:green;">OTP will be sent to this number.</span>
+                                                        <span id="lblerrorMobile" style="color:red"></span>
+                                                        @Html.ValidationMessageFor(model => model.MobileNo, "", new { @class = "validation" })
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col-md-3 form-group">
+                                                    <label for="Email" style="font-size:16px;color: #34495E;"><span class="hindi">ईमेल आई डी</span><span class="english" style="display:none;">Email id</span><span style="color:red;"><strong>*</strong></span></label>
+                                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-shadow", @id = "Email" })
+                                                    <span id="lblErroremail" style="color:red"></span>
+                                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "validation" })
+
+                                                </div>
+                                                <div class="col-md-3 form-group">
+                                                    <label for="DOB" style="font-size:16px;color: #34495E;"><span class="hindi">जन्म की तिथि</span><span class="english" style="display:none;">Date of Birth</span> <span style="color:red;"><strong>*</strong></span></label>
+                                                    <input placeholder="Enter Date..." type="text" autocomplete="off" class="form-control input-shadow" onkeydown="return false" id="DOB" name="DOB" required>
+                                                    <span class="help-block badge badge-success"> (For Ex. DD/MM/YYYY)</span><span id="DOB_error" style="color:red"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 form-group">
+                                                    <input type="checkbox" id="chkRegistrationInformation" />&nbsp; &nbsp;<span style="font-weight:bold;"><span class="hindi">मैं इस बात की घोषणा करता/करती हूं कि ऊपर दी गई सभी जानकारी मेरे ज्ञान और विश्वास के अनुसार सही है।</span><span class="english" style="display:none;">I do hereby declare that all the information given above is true to the best of my knowledge and belief.</span></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 text-center cus-registerbtn">
+                                                <button class="btn btn-primary" id="btnSubmit" @*onclick="javascript:return SendOtp();"*@ value="submit" type="button"><i class="fa fa-save"></i>&nbsp;<span class="english" style="display:none;">Get OTP</span><span class="hindi">ओटीपी पाएं</span></button>
+                                                <button class="btn btn-primary" id="btnFinalSubmit" style="display:none;" value="submit" type="submit"><i class="fa fa-save"></i>&nbsp;<span class="english" style="display:none;">Final Submit</span><span class="hindi">फाइनल सबमिट करें</span></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal cus-modal" tabindex="-1" id="myModal1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <!-- Modal Header -->
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">OTP</h4>
+                                                <div style="color: #F6822F;font-family:Montserrat, sans-serif;font-size:16px;" id="timerdv">Resend in <span id="timer"></span></div>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <!-- Modal body -->
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-12 form-group">
+                                                        <input type="text" id="txtOtp" maxlength="4" onkeyup="javascript: return checknumbereonly(this);" placeholder="Please Enter OTP" class="form-control" />
+                                                        <span id="errormsg" class="badge badge-danger" style="display:inline-block;margin-top:4px;font-size:12px;"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="cus-modal-button text-right">
+                                                    <div class="row">
+
+                                                        <div class="col-md-2 form-group">
+                                                            <input type="button" id="btnSubmitOtp" onclick="javascript:return CheckOtp();" class="btn btn-primary btn-sm" value="Submit" />
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <input type="button" id="btnResendOtp" onclick="javascript:return SendOTP();" style="display:none" class="btn btn-success btn-sm" value="Resend" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12 text-center">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 text-left" style="margin-top: 10px;">
+                            <div class="credits">
+                                <a>Site is technically designed, hosted and maintained by National Informatics Centre, Haryana</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <img src="../assets/images/nic-logo.png" style="width: 100px;">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </footer>
+    <!-- End Footer -->
+</body>
+<!-- Developer - Bhupinder -->
+<!-- Department - NIC Haryana -->
+<script language="javascript" type="text/javascript">
+    function noBack() { window.history.forward() }
+    noBack();
+    window.onload = noBack;
+    window.onpageshow = function (evt) { if (evt.persisted) noBack() }
+    window.onunload = function () { void (0) }
+</script>
+<script type="text/javascript" language="Javascript">
+    history.go(1);
+</script>
+
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+
+                if (window.IsDuplicate()) {
+         swal({
+            title: "Oops!!",
+            text: "This is duplicate window\n\n Kindly close this window...!",
+            showCancelButton: false,
+            confirmButtonClass: "btn-info",
+            confirmButtonText: "Ok",
+            closeOnConfirm: false,
+            showconfirmButton: false,
+
+                    },
+              function (isConfirm) {
+                if (isConfirm) {
+
+                   // window.location.href = "@Url.Action("Logout","Account")";
+                }
+                else {
+
+                }
+            });
+            window.close();
+        }
+
+
+        $('#Hhindi').click(function () {
+            if ($('#hdnlang').val() == 'e') {
+                $('.english').toggle();
+                $('.hindi').toggle();
+                $('#hdnlang').val('h');
+                changelanguage();
+            }
+        });
+
+        $('#Eenglish').click(function () {
+            if ($('#hdnlang').val() == 'h') {
+                $('.english').toggle();
+                $('.hindi').toggle();
+                $('#hdnlang').val('e');
+
+                changelanguage();
+            }
+        });
+
+
+        $('.classchange').change(function () {
+            var val = $('.classchange').val();
+            if (val == "08") {
+                $('#BoardCode').val("1585");
+            }
+            else {
+                $('#BoardCode').val("");
+            }
+        });
+
+
+        $('#disabledRowData').find('select, input').removeAttr('disabled');
+        var addharname = '@ViewBag.v_aadharno';
+        var fatherhusbandname = '@ViewBag.FatherHusbandName';
+        var mothername = '@ViewBag.MotherName';
+        var dobbb = '@ViewBag.v_dob';
+        var addharmask = '@ViewBag.v_aadharnoMask';
+        var C_resulStatus = '@ViewBag.C_ResultStatus';
+
+        if (C_resulStatus != 'PASS' && C_resulStatus != 'COMP' && C_resulStatus != 'COMPARTMENT' && C_resulStatus != 'QUALIFIED' && C_resulStatus != 'IMPROVED' && C_resulStatus != 'QUAL') {
+            if (C_resulStatus == '')
+            {
+            }
+            else
+            {
+                 swal({
+            title: "SORRY!!",
+            text: "You are not eligible as per your result status.!",
+            imageUrl: "../assets/images/sad.png",
+            showCancelButton: false,
+            confirmButtonClass: "btn-info",
+            confirmButtonText: "Ok",
+            closeOnConfirm: false
+                    },
+              function (isConfirm) {
+                if (isConfirm) {
+
+                    window.location.href = "@Url.Action("Registration","Account")";
+                }
+                else {
+
+                }
+            });
+            }
+
+        }
+
+        if (fatherhusbandname != null && fatherhusbandname != "") {
+            $("#FatherHusbandName").attr("readonly", "readonly");
+        }
+        if (mothername != null && mothername != "") {
+            $("#MotherName").attr("readonly", "readonly");
+        }
+        if (dobbb != null && dobbb != "") {
+            $("#DOB").attr("readonly", "readonly");
+            $("#DOB").css("cursor", "not-allowed");
+            $("#DOB").addClass("disabledbutton");
+        }
+
+        var apinoData = '@TempData["Isapi"]';
+        if (apinoData == 'N')
+        {
+            swal("Alert","Pl re-check your Board, Name, Roll No. and Year of passing carefully. If still data is not found then enter your details manually","info");
+            $("#divMiddle").removeClass("disabledbutton");
+        }
+        else if (apinoData == 'Y') {
+            $('#disabledRowData').find('select, input').attr('disabled', 'disabled');
+            $("#btnGetData").css("display","none");
+            $("#btnResetGetData").removeAttr("style");
+
+        }
+        else if (apinoData == 'B') {
+            $('#disabledRowData').find('select, input').attr('disabled', 'disabled');
+            $("#btnGetData").css("display", "none");
+            $("#btnResetGetData").removeAttr("style");
+        }
+        else {
+            $('#disabledRowData').find('select, input').removeAttr('disabled');
+        }
+         $("#BoardCode").val('@ViewBag.Value');
+        $("#Sex").val('@ViewBag.Sexid');
+        $("#PassingOfYear").val(@ViewBag.PassingOfYearid);
+        $("#CandidateName").val('@ViewBag.CandidateName');
+        $("#QualificationCode").val('@ViewBag.QualificationCode');
+
+         var doAboutTab = '@ViewBag.Value';
+         var REGID = '@ViewBag.REGid';
+
+        if (REGID === '') {
+            $('#btnSubmit').removeAttr("disabled");
+        }
+        else {
+            alert("You are already registered. Please Login With Your Registration Number :" + REGID)
+            $('#btnSubmit').attr("disabled", "disabled");
+            return true;
+        }
+       var Dobget = '@ViewBag.v_dob';
+        if (Dobget === '')
+        {
+        }
+        else {
+
+            //var DobD = Dobget.substring(0, 2);
+            //var DobM = Dobget.substring(3, 5);
+            //var DobY = Dobget.substring(6, 10);
+            var dateOfBirthinRequiredFormat = Dobget.split('/');
+            var finalda = dateOfBirthinRequiredFormat[0]; //+ '/' + dateOfBirthinRequiredFormat[1] + '/' + dateOfBirthinRequiredFormat[2];
+            $("#DOB").val(finalda);
+        }
+        $("#DOB").val(Dobget);
+        var doAboutTab =  '@ViewBag.Value';
+
+        if (doAboutTab === '' || doAboutTab === null || doAboutTab === undefined) {
+            //$('#disabledRow').find('input, select').attr('disabled', 'disabled');
+        }
+        //$('#disabledRow').find('input, select').attr('disabled', 'disabled');
+       // $('#btnSubmit').attr("disabled", "disabled");
+        $('input[id="TwelveRollNo"]').keyup(function (e) {
+            if (/\D/g.test(this.value)) {
+                // Filter non-digits from input value.
+                this.value = this.value.replace(/\D/g, '');
+                swal("Warning!", "Please enter only numeric value", "warning")
+            }
+        });
+        $('input[name="CandidateName"]').keyup(function (e) {
+            if (/[^a-zA-Z\s]/g.test(this.value)) {
+                this.value = this.value.replace(/[^a-z]/g, '');
+                swal("Warning!", "Please enter only alphabets", "warning")
+            }
+        });
+        $('input[name="FatherHusbandName"]').keyup(function (e) {
+            if (/[^a-zA-Z\s]/g.test(this.value)) {
+                this.value = this.value.replace(/[^a-z]/g, '');
+                swal("Warning!", "Please enter only alphabets", "warning")
+            }
+        });
+        $('input[name="MotherName"]').keyup(function (e) {
+            if (/[^a-zA-Z\s]/g.test(this.value)) {
+                this.value = this.value.replace(/[^a-z]/g, '');
+                swal("Warning!", "Please enter only alphabets", "warning")
+            }
+        });
+
+        $(function () {
+            $("#DOB").datepicker({
+                changeMonth: true,
+               // yearRange: "-100:+0"
+                yearRange: '1950:2010',
+                minDate: '01/01/1950',
+                maxDate: '02/09/2010',
+                changeYear: true,
+                dateFormat: 'dd/mm/yy',
+                controlType: 'select',
+                //timeFormat: 'HH:mm:ss',
+                showOn: 'focus',
+                showButtonPanel: true,
+                closeText: 'Clear', // Text to show for "close" button
+                onSelect: function (dateString, txtDate) {
+                    var t = ValidateDOB(dateString);
+                    if (t == false) {
+                        $(this).val('');
+                    }
+                },
+                onClose: function () {
+                    var event = arguments.callee.caller.caller.arguments[0];
+                    // If "Clear" gets clicked, then really clear it
+                    if ($(event.delegateTarget).hasClass('ui-datepicker-close')) {
+                        $(this).val('');
+                    }
+                  }
+            });
+        });
+
+         $('#Password').keyup(function () {
+            $('#resultPassword').html(passwordStrength($('#Password').val(), ""))
+            resultPassword = $('#resultPassword').html();
+            if (resultPassword == "Too short") {
+                $('#resultPassword').attr({ 'style': 'color:Red;' });
+            }
+            if (resultPassword == "Bad") {
+                $('#resultPassword').attr({ 'style': 'color:Olive;' });
+            }
+            if (resultPassword == "Good") {
+                $('#resultPassword').attr({ 'style': 'color:Lime;' });
+            }
+            if (resultPassword == "Strong") {
+                $('#resultPassword').attr({ 'style': 'color:Green;' });
+            }
+
+        })
+
+         $('.list').on('click', 'li', function () {
+             $('.list li.active').removeClass('active');
+             $(this).addClass('active');
+         });
+         if ($("#TwelveRollNo").val() == "")
+             $("#divMiddle").addClass("disabledbutton");
+         else
+            $("#divMiddle").removeClass("disabledbutton");
+
+
+        var haryanaboard=document.getElementById("BoardCode");
+        if (haryanaboard.value == "119") {
+            $('input:radio[name=TwelveHarana][id=rbTwel1]').prop('checked', true);
+            $('input:radio[name=TwelveHarana]:not(:checked)').prop('disabled', true);
+        }
+        else {
+            $('input:radio[name=TwelveHarana][id=rbTwel1]').prop('checked', false);
+            $('input:radio[name=TwelveHarana]:not(:checked)').prop('disabled', false);
+        }
+
+
+
+    });
+    function ValidateForm() {
+        if (resultPassword == "Good" || resultPassword == "Strong") {
+            return true;
+        }
+        else {
+            swal("Alert!", "Password not strong.Atleast add one special characters", "warning");
+            return false;
+        }
+
+    }
+
+    function ValidateDOB(dateString) {
+        var parts = dateString.split("/");
+        var dtDOB = new Date(parts[1] + "/" + parts[0] + "/" + parts[2]);
+        var dtCurrent = new Date("25/09/2024");
+        if (dtCurrent.getFullYear() - dtDOB.getFullYear() < 14) {
+            alert("Eligibility minimum age limit is 14 years.");
+            return false;
+        }
+
+        if (dtCurrent.getFullYear() - dtDOB.getFullYear() == 14) {
+            if (dtCurrent.getMonth() < dtDOB.getMonth()) {
+                alert("Eligibility minimum age limit is 14 years.");
+                return false;
+            }
+            if (dtCurrent.getMonth() == dtDOB.getMonth()) {
+                if (dtCurrent.getDate() < dtDOB.getDate()) {
+                    alert("Eligibility minimum age limit is 14 years.");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    $(document).on("change", "#BoardCode", function () {
+        $("#board_error").html("");
+    });
+    $(document).on("change", "#QualificationCode", function () {
+        $("#board_error").html("");
+    });
+    $(document).on("blur", "#CandidateName", function () {
+        $("#candidate_error").html("");
+    });
+    $(document).on("blur", "#TwelveRollNo", function () {
+        $("#rollno_error").html("");
+    });
+    $(document).on("change", "#Sex", function () {
+        $("#gender_error").html("");
+    });
+    $(document).on("blur", "#FatherHusbandName", function () {
+        $("#father_error").html("");
+    });
+    $(document).on("blur", "#MotherName", function () {
+        $("#mother_error").html("");
+    });
+    $(document).on("blur", "#MobileNo", function () {
+        $("#lblerrorMobile").html("");
+    });
+    $(document).on("blur", "#Email", function () {
+        $("#lblErroremail").html("");
+    });
+    $(document).on("blur", "#DOB", function () {
+        $("#DOB_error").html("");
+    });
+
+    $(document).on("change", "#BoardCode", function () {
+        $('#TwelveRollNo').removeAttr("disabled");
+    });
+
+    $(document).on("change", "#Email", function () {
+
+        var email = document.getElementById("Email").value;
+        var lblError = document.getElementById("lblErroremail");
+        lblError.innerHTML = "";
+        var expr = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        if (!expr.test(email)) {
+            swal("Alert!", "Invalid email address.", "warning");
+            lblError.innerHTML = "Invalid email address.";
+            $('#Email').val('');
+        }
+    });
+    $(document).on("change", "#MobileNo", function () {
+
+        var userinput = $("#MobileNo").val();
+        var pattern = /^[0-9]{10}$/i
+
+        if (!pattern.test(userinput)) {
+            swal('warning!', 'Invaild Mobile Number', 'warning');
+            $("#MobileNo").val('');
+            return false;
+        }
+        else {
+            return true;
+        }
+        //var InvalideMobileList = ['0000000000', '1111111111', '2222222222', '3333333333', '4444444444', '5555555555', '6666666666', '7777777777', '8888888888', '9999999999', '1234567890', '9876543210']
+        //var phoneno = /^\d{10}$/;
+        //var MobileNo = $("#MobileNo").val();
+        //var lblError = document.getElementById("lblerrorMobile");
+        //lblError.innerHTML = "";
+
+        //if (MobileNo.length!=10) {
+        //    lblError.innerHTML = "Enter valid 10 digit mobile number";
+        //    swal("Alert!", "Enter valid 10 digit mobile number", "warning");
+        //}
+        //if (InvalideMobileList.indexOf(MobileNo) > -1) {
+        //    swal("Alert!", "Mobile Number is not valid", "warning");
+        //    lblError.innerHTML = "Invalid Mobile number";
+        //    $('#MobileNo').val('');
+        //}
+        //else
+        //{
+        //    return true;
+        //}
+    });
+
+
+    $(document).on("click", "#btnResetGetData", function () {
+
+        window.location.href = '@Url.Action("Registration", "Account")';
+
+    });
+    $(document).on("click", "#btnGetData", function () {
+
+        if
+        (document.getElementById("BoardCode").reportValidity() &&
+            document.getElementById("CandidateName").reportValidity() &&
+            document.getElementById("TwelveRollNo").reportValidity() &&
+            document.getElementById("PassingOfYear").reportValidity()
+        )
+        {
+            $("#resultLoading").show();
+        }
+
+
+        return true;
+
+    });
+    function checkPass() {
+        var pass1 = document.getElementById('Password');
+        var pass2 = document.getElementById('ConfrimPassword');
+        var message = document.getElementById('error-nwl');
+        var goodColor = "#66cc66";
+        var badColor = "#ff6666";
+
+        if (pass1.value.length > 7) {
+            $("message").css("display", "none");
+        }
+        else {
+            pass1.style.borderColor = badColor;
+            message.style.color = badColor;
+            message.innerHTML = " you have to enter at least 8 digit!"
+            return;
+        }
+    }
+    $(document).on("click", "#btnSubmit", function () {
+
+        var BoardCode = $('#BoardCode').val();
+        var QualificationCode = $('#QualificationCode').val();
+        var CandidateName = $('#CandidateName').val();
+        var TwelveRollNo = $('#TwelveRollNo').val();
+        var Sex = $('#Sex').val();
+        var FatherHusbandName = $('#FatherHusbandName').val();
+        var MotherName = $('#MotherName').val();
+        var MobileNo = $('#MobileNo').val();
+        var Email = $('#Email').val();
+        var DOB = $('#DOB').val();
+
+
+        if (BoardCode == '' || BoardCode == null && QualificationCode != "08") {
+            $("#BoardCode").focus();
+            swal("Alert!","Please choose your Board.","warning")
+            $('#board_error').html("* required");
+        }
+        else if (CandidateName == '' || CandidateName == null) {
+            $("#CandidateName").focus();
+            swal("Alert!", "Please enter your name.", "warning")
+            $('#candidate_error').html("* required");
+        }
+        else if (TwelveRollNo == '' || TwelveRollNo == null) {
+            $("#TwelveRollNo").focus();
+            swal("Alert!", "Please enter your rollno.", "warning")
+            $('#rollno_error').html("* required");
+        }
+        else if (Sex == '' || Sex == null) {
+            $("#Sex").focus();
+            swal("Alert!", "Please select your gender.", "warning")
+            $('#gender_error').html("* required");
+        }
+        else if (FatherHusbandName == '' || FatherHusbandName == null) {
+            $("#Sex").focus();
+            swal("Alert!", "Please enter your father name.", "warning")
+            $('#father_error').html("* required");
+        }
+        else if (MotherName == '' || MotherName == null) {
+            $("#MotherName").focus();
+            swal("Alert!", "Please enter your mother name.", "warning")
+            $('#mother_error').html("* required");
+        }
+        else if (MobileNo == '' || MobileNo == null) {
+            $("#MobileNo").focus();
+            swal("Alert!", "Please enter your mobile number.", "warning")
+            $('#lblerrorMobile').html("* required");
+        }
+        else if (Email == '' || Email == null) {
+            $("#Email").focus();
+            swal("Alert!", "Please enter your Email.", "warning")
+            $('#lblErroremail').html("* required");
+        }
+        else if (DOB == '' || DOB == null) {
+            $("#DOB").focus();
+            swal("Alert!", "Please enter your DOB.", "warning")
+            $('#DOB_error').html("* required");
+        }
+       else  if ($('#chkRegistrationInformation').is(":checked") == false) {
+
+            swal("Alert!", "Please agree to condition", "info");
+        }
+        else
+        {
+
+            var Mobile = $('#MobileNo').val();
+            var Email = $('#Email').val();
+            $('#errormsg').fadeIn();
+            $('#errormsg').text('');
+            startPreloader();
+            var d = {
+                "Mobileno": Mobile,
+                "Email": Email
+            };
+            console.log(d);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SendOTP", "Account")',
+                data: JSON.stringify(d),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data == "MobileExist") {
+                        swal("Alert!", "Your Mobile Number is already registered! Please enter the new mobile number.", "warning");
+                    }
+                    else if (data == "EmailExist") {
+                        swal("Alert!", "Your Email id is already registered! Please enter the new Email id.", "warning");
+                    }
+                    else if (data == "RegExist") {
+                        swal("Alert!", "You are already registered! Please Login With Your Registration Number/Mobile Number.", "warning");
+                   }
+                    else {
+                        $('#errormsg').text('An OTP has been sent to XXXXXXX' + $('#MobileNo').val().substring(7, 10));
+                        timer(60);
+                        $("#myModal1").modal();
+                        $('#myModal1').modal({ backdrop: 'static', keyboard: false });
+                    }
+                    stopPreloader();
+                },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                    stopPreloader();
+
+                }
+
+            });
+
+        }
+    });
+
+    function SendOTP() {
+        var Mobile = $('#MobileNo').val();
+        var Email = $('#Email').val();
+        $('#btnResendOtp').hide();
+        startPreloader();
+       $('#errormsg').fadeIn();
+        $('#errormsg').text('');
+        var d = {
+            "Mobileno": Mobile,
+            "Email": Email
+        };
+        console.log(d);
+           $.ajax({
+               type: "POST",
+               url: '@Url.Action("SendOTP", "Account")',
+               data: JSON.stringify(d),
+               contentType: "application/json; charset=utf-8",
+               dataType: "json",
+               success: function (data) {
+
+
+                  if (data == "MobileExist") {
+                       swal("Warning", "Your Mobile Number is already registered! Please enter the new mobile number.", "warning")
+                   }
+                   else if (data == "RegExist") {
+                       alert("You are already registered. Please Login With Your Registration Number/Roll Number/Mobile Number");
+                  }
+                  else if (data == "EmailExist") {
+                      swal("Alert!", "Your Email id is already registered! Please enter the new Email id.", "warning");
+                  }
+                   else {
+                       timer(60);
+                      $('#errormsg').text('An OTP has been sent to XXXXXXX' + $('#MobileNo').val().substring(7, 10));
+                       $("#myModal1").modal();
+                      $('#myModal1').modal({ backdrop: 'static', keyboard: false });
+                      stopPreloader();
+
+                   }
+               },
+               failure: function (data) {
+                   swal('Error', 'Something went wrong', 'error');
+                   stopPreloader();
+
+               }
+
+           });
+
+   };
+
+    function CheckOtp() {
+
+         var Mobile = $('#MobileNo').val();
+         var MobileOtp = $('#txtOtp').val();
+         $('#errormsg').fadeIn();
+
+        if (MobileOtp == "") {
+              $('#errormsg').text('Please enter OTP..!');
+               $('#errormsg').delay(2000).fadeOut();
+            return;
+        }
+
+        startPreloader();
+
+            $.ajax({
+                  type: "POST",
+                  url: '@Url.Action("CheckOTP", "Account")',
+                data: "{Mobileno:'" + Mobile + "',OTP:'" + MobileOtp + "'}",
+                  contentType: "application/json; charset=utf-8",
+                  dataType: "json",
+                  success: function (data) {
+
+                      if (data == "0") {
+
+                          $('#errormsg').text('Invalid OTP..!');
+                          $('#errormsg').delay(2000).fadeOut();
+                           stopPreloader();
+                          return;
+                      }
+                      else {
+                        $('#txtOtp').val('');
+                        $("#myModal1").modal('hide');
+                        $("#btnFinalSubmit").trigger('click');
+                        $("#btnSubmit").hide();
+
+                      }
+                  },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+
+                }
+
+            });
+    }
+
+    let timerOn = true;
+
+    function timer(remaining) {
+        $('#timerdv').show();
+
+        var m = Math.floor(remaining / 60);
+        var s = remaining % 60;
+
+        m = m < 10 ? '0' + m : m;
+        s = s < 10 ? '0' + s : s;
+        //document.getElementById('timer').innerHTML = m + ':' + s;
+        document.getElementById('timer').innerHTML = parseInt(m) * 60 + parseInt(s) + ' sec';
+        remaining -= 1;
+
+        if (remaining >= 0 && timerOn) {
+            setTimeout(function () {
+                timer(remaining);
+            }, 1000);
+            return;
+        }
+
+        if (!timerOn) {
+            // Do validate stuff here
+            return;
+        }
+        $('#btnResendOtp').show();
+        $('#timerdv').hide();
+
+        // Do timeout stuff here
+       // alert('Timeout for otp');
+    }
+       function checknumbereonly(elem) {
+            var userinput = $(elem).val();
+            var pattern = /^[0-9]*$/i
+
+            if (!pattern.test(userinput)) {
+                swal('warning!', 'Only Numbers Allowed.', 'warning');
+                $(elem).val('');
+                return false;
+            }
+            else {
+                return true;
+            }
+    }
+      function clicktoMove() {
+        window.location.href = '@Url.Action("Login", "Account")';
+    }
+        function startPreloader() {
+        $(".loader").css("display", "block");
+        $(".outer-loader").css("display", "block");
+
+    }
+    function stopPreloader() {
+
+        $(".loader").css("display", "none");
+        $(".outer-loader").css("display", "none");
+    }
+</script>
+<script src="~/assets/js/jquery.cookie.js"></script>
+<script>
+    //Text Increase and Decrease jquery start
+    jQuery(document).ready(function () {
+        var all_tags = { "h1": '50', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '20', "span": '14' };
+        jQuery.each(all_tags, function (i, val) {
+            jQuery(i).css('font-size', val + 'px');
+        });
+        checkBesicSize();
+        jQuery(".resetMe").click(function () {
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+
+            });
+
+        });
+        jQuery(".increase").click(function () {
+            jQuery.each(all_tags, function (i) {
+                changeFontSize(i, 1);
+            });
+            return false;
+        });
+        jQuery(".decrease").click(function () {
+            jQuery.each(all_tags, function (i) {
+                changeFontSize(i, -1);
+            });
+            return false;
+        });
+
+        function changeFontSize(tag, size) {
+            var currentSize = jQuery(tag).css('font-size');
+            var currentSize = parseFloat(currentSize) + parseFloat(size);
+            jQuery(tag).css('font-size', currentSize);
+        }
+
+    });
+    jQuery(window).resize(function () {
+        checkBesicSize();
+    });
+    function checkBesicSize() {
+        var width = jQuery(window).width();
+        if (width > 1290) {
+            var all_tags = { "h1": '50', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '20', "label": '14' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1290) {
+            var all_tags = { "h1": '50', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '20', "span": '14px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1100) {
+            var all_tags = { "h1": '40', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '20', "span": '14px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1024) {
+            var all_tags = { "h1": '40', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '20', "span": '14px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 980) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '24', "h6": '10', "p": '20', "span": '14px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 800) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '20', "h6": '10', "p": '12', "span": '14px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 768) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '20', "h6": '10', "p": '12', "span": '14px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 640) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12', "span": '14px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 480) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12', "span": '14px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 400) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12', "span": '14px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 360) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12', "span": '14px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+    }
+    //Text Increase and Decrease jquery end
+    //Css Color Change jquery start
+    // color-changing-script
+    // Check (onLoad) if the cookie is there and set the class if it is
+    if (jQuery.cookie('highcontrast') == "yes") {
+        jQuery("body").addClass("highcontrast");
+    }
+    // When the element is clicked
+    jQuery("a.button-toggle-highcontrast").click(function () {
+        if (jQuery.cookie('highcontrast') == "undefined" || jQuery.cookie('highcontrast') == "no") {
+            jQuery.cookie('highcontrast', 'yes', {
+                expires: 7,
+                path: '/'
+            });
+            jQuery("body").addClass("highcontrast");
+        } else {
+            jQuery.cookie('highcontrast', 'yes', {
+                expires: 7,
+                path: '/'
+            });
+            jQuery("body").addClass("highcontrast");
+        }
+    });
+    jQuery("a.button-toggle-remove").click(function () {
+        jQuery('body').removeClass('highcontrast');
+        if (jQuery.cookie('highcontrast') == "yes") {
+            jQuery.cookie("highcontrast", null, {
+                path: '/'
+            });
+        }
+    });
+    $(document).ready(function () {
+        let scroll_link = $('.scroll');
+
+        //smooth scrolling -----------------------
+        scroll_link.click(function (e) {
+            e.preventDefault();
+            let url = $('body').find($(this).attr('href')).offset().top;
+            $('html, body').animate({
+                scrollTop: url
+            }, 1000);
+            $(this).parent().addClass('active');
+            $(this).parent().siblings().removeClass('active');
+            return false;
+        });
+    });
+
+
+</script>
+
+
+

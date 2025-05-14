@@ -1,0 +1,252 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Search</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/sweetalert.css" rel="stylesheet" />
+    <link href="../assets/css/stylesearch.css" rel="stylesheet" />
+    <link href="../assets/css/stylehome.css" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/jquery-3.5.1.js"></script>
+    <script src="../assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../assets/js/jquery-3.4.1.js"></script>
+    <script src="../assets/js/popperjs/popper.min.js"></script>
+    <script src="../assets/js/moment-with-locales.min.js"></script>
+    <script src="../assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../scripts/sweetalert.min.js"></script>
+    <link href="../assets/dataTable/dataTables/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/jquery.dataTables.min.js"></script>
+    <link href="~/assets/css/all.css" rel="stylesheet" />
+
+    <style type="text/css">
+        #cover {
+            /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+            background-color: rgba(178, 0, 255, 0.81);
+            position: fixed;
+            top: 0px;
+            bottom: 0px;
+            height: 100%;
+            width: 100%;
+            z-index: 100000;
+        }
+
+            #cover i {
+                /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+                margin-left: 50%;
+                margin-top: 50vh;
+            }
+
+        .btn:disabled {
+            opacity: 0.2 !important;
+        }
+        .modalBackground {
+            background-color: rgb(192,234,255);
+            filter: alpha(opacity=70);
+            opacity: 0.7;
+            z-index: 100 !important;
+        }
+
+        .modalPopup {
+            background-color: #ffffff;
+            border-width: 3px;
+            border-style: solid;
+            border-color: Gray;
+            padding: 3px;
+            /*width: 250px;*/
+            z-index: 100;
+        }
+
+        .btnPop {
+            background-color: #033280;
+            color: White;
+            font-size: 12px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+    </style>
+    <script>
+        $(document).ready(
+            function () {
+                getCollegeList();
+
+            });
+
+        function getData() {
+            $("#cover").fadeIn();
+              var dataToSend = {};
+                dataToSend.collegeId = $("#ddlCollege").val();
+
+            $.ajax({
+            //url: "/higher/Account/getdata",
+            url: '@Url.Action("getObjectionsReport", "Reports")',
+            type: 'get',
+            //type: 'POST',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: dataToSend,
+            success: function (data)
+            {
+                $("#tblListOfObjections").DataTable({
+                    data: JSON.parse(data),
+                    dom: 't',
+                    paging: false,
+                    destroy:true,
+                    "order": [[0, "asc"]],
+                    columns: [
+                                {data:"p_id",title:"Objection No."},
+                                {data:"Candidate_FullName",title:"Candidate Full Name"},
+                                {data:"MobileNo",title:"Mobile No"},
+                                {data:"Reg_id",title:"Reg id"},
+                        { data:"collegeId",title:"College Name"},
+                                {data:"VerificationDateTime",title:"Verification Date Time" },
+                                {data:"verifierRemarks",title:"verifier Remarks"},
+                                {data:"Xii_Rollno",title:"XII/Diploma Rollno"},
+                            ]
+                });
+                $("#cover").fadeOut();
+            }
+        })
+        }
+
+
+        function getCollegeList() {
+            $("#cover").fadeIn();
+              var dataToSend = {};
+                dataToSend.collegeId = $("#ddlCollege").val();
+
+            $.ajax({
+            //url: "/higher/Account/getdata",
+            url: '@Url.Action("GetCollegeList", "Reports")',
+            type: 'get',
+            //type: 'POST',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: dataToSend,
+            success: function (data)
+            {
+                var ListOfColleges = JSON.parse(data);
+                $("#ddlCollege").empty();
+
+                $("#ddlCollege").append(`<option value='0'>All Colleges</option>`);
+                $.each(ListOfColleges, function (i) {
+                    $("#ddlCollege").append(`<option value='` + ListOfColleges[i].collegeid + `'>` + ListOfColleges[i].collegename+`</option>`);
+                })
+                $("#cover").fadeOut();
+            }
+        })
+        }
+    </script>
+
+</head>
+<body>
+
+    <div id="cover">
+        <i class="fa fa-spinner fa-spin" style="font-size:xx-large"></i>
+    </div>
+    <div class="container-fluid">
+        <div class="row main-banner">
+            <img src="../assets/images/banner.jpg" style="width: 100%" alt="online admission portal" />
+        </div>
+        <div class="row header">
+            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
+                <nav class="nav-menu d-none d-lg-block">
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li class="active"><a href='@Url.Action("CollegeCourseWiseAppRec","Reports")'>College Course Wise Application Received</a></li>
+                      
+                    </ul>
+                </nav>
+                <!-- .nav-menu -->
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 top-heading">
+            <h4 class="heading">Objections Report</h4>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top: 20px;margin-bottom: 20px;">
+            <div class="cus-top-section">
+                <label class="col-lg-3 col-md-3 col-sm-4 col-12 text-right" for="ddlCollege" style="margin-top:5px;">Select College</label>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-12">
+                    <select id="ddlCollege" class="form-control custom-select">
+                        <option value="107">All Colleges</option>
+                    </select>
+                </div>
+                @*<div class="col-lg-3 col-md-3 col-sm-4 col-12">
+
+            <label for="ddlCourse">Select Course</label>
+            <select id="ddlCourse" class="form-control custom-select">
+                <option value="0">All Courses</option>
+            </select>
+        </div>*@
+                <div class="col-lg-2 col-md-2 col-sm-4 col-12 cus-getbtn">
+                    <button class="btn btn-primary" onclick="getData();">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 cus-grid-table">
+            <div class="table-responsive-lg table-responsive-md table-responsive-sm">
+                <table class="table table-striped table-bordered" id="tblListOfObjections">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal cus-modal cus-inner-modal" id="myModal2" role="dialog">
+            <div class="modal-dialog  modal-lg" style="margin-top: 1%;">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-body" id="mydatamodel2" style="display: block;">
+                        <div class="table-responsive cus-grid-table-three">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group input-group-sm mb-3">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+        <div class="container">
+            <div class="credits">
+                Designed by <a href="#">National Informatics Center, Haryana</a>
+            </div>
+        </div>
+    </footer>
+    <!-- End Footer -->
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

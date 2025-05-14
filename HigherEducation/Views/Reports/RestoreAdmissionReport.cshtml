@@ -1,0 +1,353 @@
+﻿@{
+
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Admission Restore Report</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/sweetalert.css" rel="stylesheet" />
+    <link href="../assets/css/stylesearch.css" rel="stylesheet" />
+    <link href="../assets/css/stylehome.css" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/jquery-3.5.1.js"></script>
+    <script src="../assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../assets/dataTable/dataTables/jquery.dataTables.min.js"></script>
+    <script src="../assets/js/popperjs/popper.min.js"></script>
+    <script src="../assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../scripts/sweetalert.min.js"></script>
+    <link href="../assets/css/all.css" rel="stylesheet" />
+    <link href="../assets/css/stylereport.css" rel="stylesheet" />
+    <link href="../assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="../assets/dataTable/dataTables/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="../assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/dataTables.buttons.min.js"></script>
+    <script src="../assets/dataTable/dataTables/buttons.html5.min.js"></script>
+    <script src="../assets/dataTable/dataTables/jszip.min.js"></script>
+    <script src="../assets/dataTable/dataTables/pdfmake.min.js"></script>
+    <script src="../assets/dataTable/dataTables/vfs_fonts.js"></script>
+    <script src="../assets/dataTable/dataTables/buttons.print.min.js"></script>
+    <script src="../assets/js/TableCreate.js"></script>
+    @*<link rel="stylesheet" href="~/assets/css/stylepayment.css">*@
+
+    <style>
+        .loader,
+        .outer-loader {
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        .outer-loader {
+            background: rgba(0, 0, 0, .3);
+            width: 100%;
+            height: 100%;
+            z-index: 10000
+        }
+
+        .loader {
+            width: 69px;
+            height: 89px;
+            border: 1px solid #000;
+            margin: auto
+        }
+
+        .loader-img {
+            border: 15px solid #415bbb;
+            border-radius: 50%;
+            border-top: 15px solid #000;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0)
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg)
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .row_new {
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+        #logo img {
+            height: auto;
+            padding-left: 3px;
+            width: 40px
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        .validation {
+            color: red;
+        }
+    </style>
+
+    <style type="text/css">
+       
+
+        @@media print {
+            body > div {
+                display: none;
+            }
+
+            body > footer {
+                display: none;
+            }
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        .cus-grid-table {
+            height: 100%;
+            overflow: auto;
+            box-shadow: 0px 0px 5px 0px #ccc;
+            padding: 1rem;
+            margin-bottom: 5%;
+        }
+
+        .btn:disabled {
+            opacity: 0.2 !important;
+        }
+
+
+        button.dt-button, div.dt-button, a.dt-button {
+            padding: 0.01em 0.5em !important;
+            font-size: x-large;
+        }
+
+        table {
+            width: 100% !important;
+            font-size: small;
+        }
+    </style>
+    <script>
+        function startPreloader() {
+            $(".loader").css("display", "block");
+            $(".outer-loader").css("display", "block");
+
+        }
+        function stopPreloader() {
+
+            $(".loader").css("display", "none");
+            $(".outer-loader").css("display", "none");
+        }
+      var errorFn = function (jqXHR, exception)
+        {
+            var msg = '';
+            if (jqXHR.status === 0) {
+                msg = 'Not connect.\n Verify Network.';
+            } else if (jqXHR.status == 404) {
+                msg = 'Requested page not found. [404]';
+            } else if (jqXHR.status == 500) {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'parsererror') {
+                msg = 'Requested JSON parse failed.';
+            } else if (exception === 'timeout') {
+                msg = 'Time out error.';
+            } else if (exception === 'abort') {
+                msg = 'Ajax request aborted.';
+            } else {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            alert("Error: " + msg);
+            stopPreloader();
+        }
+
+        $(document).ready(function ()
+        {
+            getData();
+        });
+
+        var url1 = '@Url.Action("GetRestoredAdmissionReport", "Reports")';
+        var urlError = '@Url.Action("Error", "Account")';
+
+        function getData() {
+            startPreloader();
+            $.ajax({
+                url: url1,
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                //data: JSON.stringify(dataToSend),
+                success: function (data) {
+                    if (data == "1") {
+                        window.location.replace(urlError);
+                        return false;
+                    }
+                    CompleteDataSet = JSON.parse(data);
+                    //console.log(CompleteDataSet);
+                    var buttonsArray = [{ text: '<i class="fa fa-file-pdf" style="color:RED;"></i>', extend: 'pdfHtml5', footer: true, title: 'Admission Restore Report', messageTop: '', messageBottom: '', pageSize: 'A4', orientation: 'landscape', exportOptions: { columns: ':visible' } }, { title: 'Admission Restore Report', messageTop: '', text: '<i class="fa fa-file-excel" style="color:GREEN;"></i>', extend: 'excelHtml5', exportOptions: { columns: ':visible' } }, { text: '<i class="fa fa-file-csv" style="color:BLUE;"></i>', extend: 'csvHtml5', exportOptions: { columns: ':visible' } }, { text: '<i class="fa fa-print" style="color:Black;"></i>', extend: 'print', exportOptions: { columns: ':visible' } }];
+                    //debugger;
+                    var columnsArray = [
+                        { data: null, title: '#', render: function (data, type, row, meta) { return meta.row + meta.settings._iDisplayStart + 1; } }
+                        , { data: "Reg_Id", title: "Registration ID", visible: true }
+                        , { data: "StudentName", title: "Student Name", visible: true }
+                        , { data: "MobileNo", title: "Mobile No.", visible: true }
+                        , { data: "EmailId", title: "Email Id", visible: true }
+                        , { data: "restorBy", title: "Restore By", visible: true }
+                        , { data: "restorDate", title: "Restored On", visible: true }
+                        , { data: "Remarks", title: "Remarks", visible: true }
+                    ];
+
+                    $("#tblRestoreAdmissionDetails").DataTable({
+                        data: CompleteDataSet.Table,
+                        dom: 'Blfrtip',
+                        buttons: buttonsArray,
+                        paging: true,
+                        pageLength: 10,
+                        lengthMenu: [
+                            [10, 25, 50, 100, -1],
+                            [10, 25, 50, 100, 'All'],
+                        ],
+                        destroy: true,
+                        pageSize: 'A4',
+                        "bFilter": false,
+                        "searching": true,
+                        scrollX: true,
+                        //"order": [[1, "asc"]],
+                        columns:columnsArray,
+                        "footerCallback": function (row, data, start, end, display) {
+
+                        }
+
+                    });
+
+                    stopPreloader();
+                },
+                error: errorFn
+        })
+        }
+    </script>
+
+</head>
+<body>
+    <div class="outer-loader" style="display: none;">
+        <div class="loader-img loader" style="display: none;">
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row main-banner">
+            <img src="../assets/images/banner.jpg" style="width: 100%" alt="online admission portal" />
+        </div>
+        <div class="row header">
+            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
+                <nav class="nav-menu d-none d-lg-block">
+                    <ul>
+                        
+                    </ul>
+                </nav>
+                <!-- .nav-menu -->
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-2"></div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-8 text-center top-heading" style="margin-top: 5px;"><h4 class="heading">Admission Restored Report</h4></div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-2 text-right back-btn" style="margin-top: 5px;">
+                <a href="#" id="btnBack" class="btn btn-icon icon-left btn-primary" onclick="javascript: window.history.back();"><i class="fas fa-arrow-alt-circle-left"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 cus-grid-table-down">
+
+            <div class="bg-white rounded shadow mb-5">
+                <div id="myTab2Content" class="tab-content">
+                    <div id="tab1" role="tabpanel" aria-labelledby="aioc" class="tab-pane fade py-3 show active">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="tblRestoreAdmissionDetails">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12 text-center">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 text-left" style="margin-top:10px;">
+                            <div class="credits">
+                                <a>Site is technically designed, hosted and maintained by National Informatics Centre, Haryana</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <img src="../assets/images/nic-logo.png" style="width:100px;">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+    <!-- End Footer -->
+</body>
+</html>

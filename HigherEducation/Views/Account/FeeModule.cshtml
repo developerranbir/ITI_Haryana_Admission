@@ -1,0 +1,408 @@
+﻿@*@model  IEnumerable<HigherEducation.Models.FeeModule>*@
+@model  HigherEducation.Models.FeeModuleReceipt
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    Session["currentPage"] = 7;
+}
+@{
+    if (Session["MaxPage"] == null)
+    {
+        Session["currentPage"] = 1;
+        Session["MaxPage"] = 1;
+    }
+    else if (Convert.ToInt32(Session["currentPage"]) > Convert.ToInt32(Session["MaxPage"]))
+    {
+        Session["MaxPage"] = Session["currentPage"];
+    }
+
+}
+
+@{
+    Response.Cache.SetCacheability(HttpCacheability.NoCache);
+    Response.Cache.SetExpires(DateTime.Now);
+    Response.Buffer = true;
+
+    Response.Expires = -1;
+    Response.CacheControl = "no-cache";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Pay</title>
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/stylepayment.css">
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <link href="~/assets/css/all.css" rel="stylesheet" />
+    <link href="~/assets/css/jquery-ui.css" rel="stylesheet" />
+    <script src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <style>
+
+        .loader,
+        .outer-loader {
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        .outer-loader {
+            background: rgba(0, 0, 0, .3);
+            width: 100%;
+            height: 100%;
+            z-index: 999
+        }
+
+        .loader {
+            width: 69px;
+            height: 89px;
+            border: 1px solid #000;
+            margin: auto
+        }
+
+        .loader-img {
+            border: 15px solid #415bbb;
+            border-radius: 50%;
+            border-top: 15px solid #000;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0)
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg)
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .row_new {
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+        #logo img {
+            height: auto;
+            padding-left: 3px;
+            width: 40px
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        .table td {
+            padding: 0.35rem;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        .cus-modal .modal-dialog {
+            max-width: 800px !important;
+        }
+
+        .modal-content .close {
+            position: absolute;
+            right: -15px;
+            background: #E91E63;
+            width: 40px;
+            height: 40px;
+            z-index: 999;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 30px;
+            top: -25px;
+            cursor: pointer;
+        }
+
+        .cus-background .card {
+            box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            -moz-box-shadow: none !important;
+        }
+
+        .cus-inner-data label {
+            font-weight: 700 !important;
+        }
+    </style>
+</head>
+
+<body>
+    @if (Model.candidateAdmissionStatuses.Count > 0)
+    {
+
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <div class="row" style="margin-top:40px;">
+                    <div class="col-md-12 form-group text-center">
+                        <span style="font-size:16px;font-weight:bold;color:red"><b>ADMISSION STATUS </b></span>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover" id="tblfeedetail" style="box-shadow: 0px 0px 10px 0px #ccc;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>College Name</th>
+                                <th>Course/Section</th>
+                                <th>Combination</th>
+                                <th>Status</th>
+                                <th>Fee Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.candidateAdmissionStatuses)
+                            {
+                                <tr>
+                                    <td> @Html.HiddenFor(m => item.C_RegistrationId, new { @Value = item.C_RegistrationId })</td>
+                                    <td> @Html.HiddenFor(m => item.C_PaymentTransactionId, new { @Value = item.C_PaymentTransactionId })</td>
+                                    <td> @Html.HiddenFor(m => item.C_PaymentMode, new { @Value = item.C_PaymentMode })</td>
+                                    <td> @Html.DisplayFor(m => item.C_CollegeName, new { @class = "form-control" })</td>
+                                    <td> @Html.DisplayFor(m => item.C_SectionName, new { @class = "form-control" })</td>
+                                    <td> @Html.DisplayFor(m => item.C_CombinationName, new { @class = "form-control" })</td>
+                                    <td> @Html.DisplayFor(m => item.C_AdmissionStatus, new { @class = "form-control" })</td>
+                                    <td><input type='button' value='Fee Receipt' class='btn btn-danger btn-sm btnFeeReceipt'></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    }
+
+
+    @if (Model.candidateAdmissionStatuses.Count > 0 && Model.CandidateAllocatedCollege.Count > 0)
+    {
+        <div class="row" style="margin-top:37px;">
+            <div class="col-md-12 form-group text-center">
+                <span style="font-size:16px;font-weight:bold;color:red"><b>Seat booked by me earlier stands cancelled and I wish to book my fresh seat through open counselling/merit list </b></span>
+            </div>
+        </div>
+    }
+    @{
+        if (Model.CandidateAllocatedCollege.Count > 0)
+        {
+            <div class="row">
+
+                <div class="col-md-12 form-group">
+                    <div class="row" style="margin-top:37px;">
+                        <div class="col-md-12 form-group text-left">
+                            <span style="font-size:14px;font-weight:bold;color:red">1. You can also make the payment in cash mode (today only) at college counter to book your seat. In order to avoid from any issue, contact immediately with the college without any delay for cash payment/ fee concession. Otherwise, you can also make the payment online from this window today up till midnight.</span><br />
+                            <span style="font-size:14px;font-weight:bold;color:red">2. Offered seats are valid till today (Midnight).</span>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="tblfeedetail" style="box-shadow: 0px 0px 10px 0px #ccc;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>College Name</th>
+                                    <th>Course/Section</th>
+                                    <th>Combination</th>
+                                    <th>Choose & Pay</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.CandidateAllocatedCollege)
+                                {
+                                    <tr>
+                                        <td> @Html.HiddenFor(m => item.A_Collegeid, new { @Value = item.A_Collegeid })</td>
+                                        <td> @Html.HiddenFor(m => item.A_RegistrationId, new { @Value = item.A_RegistrationId })</td>
+                                        <td> @Html.HiddenFor(m => item.A_CombinationId, new { @Value = item.A_CombinationId })</td>
+                                        <td> @Html.DisplayFor(m => item.A_CollegeName, new { @class = "form-control" })</td>
+                                        <td> @Html.DisplayFor(m => item.A_Section, new { @class = "form-control" })</td>
+                                        <td> @Html.DisplayFor(m => item.A_Combination, new { @class = "form-control" })</td>
+                                        <td><input type='button' value='Choose & Pay' id='btngetdetail' class='btn btn-danger btn-sm detail'></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+
+
+    <div class="modal cus-modal" tabindex="-1" id="FeeReceipt" data-keyboard="false" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div id="user_content">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="Fee_content">
+    </div>
+
+    <div class="outer-loader" style="display: none;">
+        <div class="loader-img loader" style="display: none;"></div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            if ('@ViewBag.isshowtable' == 'N' || '@ViewBag.isshowtable' == 'C') {
+            $('#user_content').load('@Url.Action("PartialFeeViewAfterpayment")');
+
+            }
+            $(document).on('click', '.detail', function () {
+                startPreloader();
+                $('#Fee_content').empty();
+                var college_id = $(this).closest("tr").find("td").eq(0).find("input").val();
+                var registrationid = $(this).closest("tr").find("td").eq(1).find("input").val();
+                var combinationid = $(this).closest("tr").find("td").eq(2).find("input").val();
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Account/PartialFeeView",
+				    data: { collegeid: college_id,registrationid: registrationid,combinationid:combinationid },
+
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: function (response) {
+                        $('#Fee_content').append(response);
+                        stopPreloader();
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                        stopPreloader();
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                        stopPreloader();
+                    }
+                });
+            });
+
+
+
+            $(document).on('click', '.btnFeeReceipt', function () {
+                startPreloader();
+                $('#user_content').empty();
+               // $('#user_content').load('@Url.Action("PartialFeeViewAfterpayment")');
+                var paymentTransactionId = $(this).closest("tr").find("td").eq(1).find("input").val();
+                var paymentmode = $(this).closest("tr").find("td").eq(2).find("input").val();
+                if (paymentmode == 'O') {
+                             $.ajax({
+                    type: "GET",
+                    url: "/Account/FeeReceiptCollege",
+                    data: { paymentTransactionId: paymentTransactionId },
+
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: function (response) {
+                        $('#user_content').append(response);
+                        $("#FeeReceipt").modal();
+                        $('#FeeReceipt').modal({ backdrop: 'static', keyboard: false });
+                        stopPreloader();
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                        stopPreloader();
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                        stopPreloader();
+                    }
+                });
+                }
+                else {
+                             $.ajax({
+                    type: "GET",
+                    url: "/Account/PartialFeeViewAfterpayment",
+                    data: { paymentTransactionId: paymentTransactionId },
+
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: function (response) {
+                        $('#user_content').append(response);
+                        $("#FeeReceipt").modal();
+                        $('#FeeReceipt').modal({ backdrop: 'static', keyboard: false });
+                        stopPreloader();
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                        stopPreloader();
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                        stopPreloader();
+                    }
+                });
+                }
+       
+
+            });
+
+
+        var MaxPages = '@Session["MaxPage"]';
+        var currentPage = '@Session["currentPage"]';
+        for (var i = 0; i < parseInt(MaxPages) ; i++) {
+            if ((i+1) != currentPage) $("#tablist > li:eq(" + i + ")").addClass('done');
+            else $("#tablist > li:eq(" + i + ")").addClass('current');
+        }
+        for (i = 7; i > MaxPages; i--) {
+            $("#tablist > li:eq(" + (i - 1) + ")>a").attr("href", "#");
+        }
+
+        });
+
+    </script>
+    <script>
+        function startPreloader() {
+            $(".loader").css("display", "block");
+            $(".outer-loader").css("display", "block");
+
+        }
+        function stopPreloader() {
+
+            $(".loader").css("display", "none");
+            $(".outer-loader").css("display", "none");
+        }
+    </script>
+    <script type="text/javascript" language="Javascript">
+        history.go(1); // disable the browser's back button
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,468 @@
+﻿@model HigherEducation.Models.FeeViewModel
+
+@using CaptchaMvc.HtmlHelpers
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login Old Session</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Favicon icon -->
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <!-- Google font-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600" rel="stylesheet">
+    <!-- Required Fremwork -->
+    <link rel="stylesheet" type="text/css" href="~/assets/css/bootstrap/css/bootstrap.min.css">
+    <!-- themify-icons line icon -->
+    <link rel="stylesheet" type="text/css" href="~/assets/icon/themify-icons/themify-icons.css">
+    <!-- ico font -->
+    <link rel="stylesheet" type="text/css" href="~/assets/icon/icofont/css/icofont.css">
+    <!-- Style.css -->
+    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
+    <link href="~/assets/css/all.css" rel="stylesheet" />
+    <script src="~/assets/js/jquery/jquery.min.js"></script>
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <script src="~/swalJs/sweetalert.min.js"></script>
+    <script src="~/swalJs/swal-forms.js"></script>
+    <link href="~/assets/css/theme.css" rel="stylesheet" />
+    <script src="~/scripts/md5.js"></script>
+    <style type="text/css">
+        .account {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .candidateLogin {
+            margin: auto;
+            width: 60%;
+            padding: 10px;
+        }
+        @@media screen and (max-width: 480px) {
+            #footer {
+                display:none;
+            }
+        }
+    </style>
+    @if (ViewBag.Message != null)
+    {
+        <script>
+            alert('@ViewBag.Message');
+        </script>
+    }
+    @if (ViewBag.Error != null)
+    {
+        <script>
+            alert('@ViewBag.Error');
+        </script>
+    }
+    @if (Convert.ToInt32(TempData["isvalid"]) == 1)
+    {
+        <script>
+            alert("You are trying to invalid access.!!!");
+        </script>
+    }
+
+    @{
+        <script>
+            $('#btnlogin').attr("onclick", "javascript:md5auth(" + @Session["rno"] + ")");
+            $('#btnlogin').attr("ss", "ss");
+        </script>
+    }
+
+</head>
+
+<body class="fix-menu homepage" style="background:#fff;">
+    <!-- Pre-loader start -->
+    <div class="theme-loader">
+        <div class="loader-track">
+            <div class="loader-bar"></div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 cus-maintop-banner d-none d-sm-block">
+        <div id="exchanger" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right selectbox" style="">
+            <ul>
+
+                <a href="#topbar" class="skip-content scroll" title="skip to main content">Skip to Main Content</a>
+                <a href="#!" class="button-toggle-remove" title="Standard">A</a>
+                <a href="#!" class="button-toggle-highcontrast" title="Black/Yellow">A</a>
+                <a href="#" id="incfont" class="increase" title="Increased Text">A+</a>
+                <a href="#" id="decfont" class="decrease" title="Decreased text">A-</a>
+                <a href="#" id="decfont" class="resetMe" title="Reset Text">A</a>
+
+            </ul>
+        </div>
+
+    </div>
+    <!-- Pre-loader end -->
+    <div class="container-fluid">
+        <div class="row main-banner">
+            <a href='https://admissions.itiharyana.gov.in/' style="width:100%;">
+                <img src="~/assets/images/banner.jpg" class="w-100" alt="online admission portal" />
+            </a>
+
+        </div>
+    </div>
+    <div class="container-fluid login-form">
+        <div class="row">
+
+            <div class="col-lg-6 col-md-10 col-sm-12 col-12 candidateLogin">
+
+                <!-- Authentication card start -->
+                <h3 style="text-align:center;padding:10px;border:1px solid black;">Login to Pay Quarterly Fee</h3>
+                @*<form class="md-float-material">*@
+                @using (Html.BeginForm("Login", "OldSessionQuarterFee", new { enctype = "multipart/form-data", id = "Captcha" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    @*<form class="form form-validate" id="formLogin" autocomplete="off" action="@Url.Action("Login", "Account")" accept-charset="utf-8" method="post" enctype="multipart/form-data">*@
+                    @*<div class="text-center">
+                            <span class="account">Login to your account</span>
+                        </div>*@
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="reg_Id" class="col-sm-4 col-form-label">Enter Registraion ID</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" value="" name="reg_Id" id="reg_Id">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="password" class="col-sm-4 col-form-label">Enter Password</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" value="" name="password" id="password">
+                                </div>
+                            </div>
+                            @{
+                                if (Model.candidateAdmissionSession.Count > 0)
+                                {
+                                    <div class="form-group row">
+
+                                        <label for="password" class="col-sm-4 col-form-label">Select Admission Session</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" name="aSession" id="aSession" required>
+                                                <option value="" selected>Select</option>
+                                                @{
+                                                    foreach (var item in Model.candidateAdmissionSession)
+                                                    {
+                                                        <option value="@Html.DisplayFor(m => item.SessionID)">@Html.DisplayFor(m => item.Year)</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            <div class="row cus-captcha text-center">
+                                <div class="col-lg-12 col-md-12">
+                                    @Html.Captcha(5)
+                                </div>
+                            </div>
+                            <div class="row m-t-10">
+                            </div>
+                            <div class="row m-t-5">
+                                <div class="col-sm-6 col-12">
+                                    @*<div class="checkbox-fade fade-in-primary">
+                                        <label>
+                                            <input type="checkbox" value="">
+                                            <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                                            <span class="text-inverse">Remember me</span>
+                                        </label>
+                                    </div>*@
+                                    @*<a href="~/DHE/frmStudentDetail.aspx" class="text-right f-w-600 text-inverse" style="font-size:12px;"> Forgot Your Registration Id?</a>*@
+                                </div>
+                                <div class="col-sm-6 col-xs-12 forgot-phone text-right" style="margin-bottom:5px;">
+                                    @*<a href="auth-reset-password.html" class="text-right f-w-600 text-inverse"> Forgot Your Password?</a>*@
+                                    <a href="~/DHE/ForgetPasswordQtr.aspx" class="text-right f-w-600 text-inverse" style="font-size:12px;"> Forgot Your Password?</a>
+                                </div>
+                            </div>
+
+                            <div class="row cus-loginbtn">
+                                <div class="col-md-12">
+                                    <input type="submit" id="btnlogin" onclick="javascript:return md5auth(@Session["rno"])" class="btn btn-primary btn-md btn-block waves-effect text-center " value="Sign in">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    @*</form>*@
+                }
+
+
+
+
+                <!-- end of form -->
+                <!-- Authentication card end -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12 text-center">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 text-left">
+                            <div class="credits">
+                                <a>Site is technically designed, hosted and maintained by National Informatics Centre, Haryana</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <img src="../assets/images/nic-logo.png" style="width: 100px;">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </footer>
+    <!-- End Footer -->
+
+    <script type="text/javascript" src="~/assets/js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/popperjs/popper.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <!-- jquery slimscroll js -->
+    <script type="text/javascript" src="~/assets/js/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <!-- modernizr js -->
+    <script type="text/javascript" src="~/assets/js/modernizr/modernizr.js"></script>
+    <script type="text/javascript" src="~/assets/js/modernizr/css-scrollbars.js"></script>
+    <script type="text/javascript" src="~/assets/js/common-pages.js"></script>
+    <script src="~/assets/js/jquery.cookie.js"></script>
+    <script src="~/assets/js/Duplicate.js"></script>
+
+</body>
+
+</html>
+<script>
+    //Text Increase and Decrease jquery start
+    jQuery(document).ready(function () {
+        var all_tags = { "h1": '50', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14', "li": '18px' };
+        jQuery.each(all_tags, function (i, val) {
+            jQuery(i).css('font-size', val + 'px');
+        });
+        checkBesicSize();
+        jQuery(".resetMe").click(function () {
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+
+            });
+
+        });
+        jQuery(".increase").click(function () {
+            jQuery.each(all_tags, function (i) {
+                changeFontSize(i, 2);
+            });
+            return false;
+        });
+        jQuery(".decrease").click(function () {
+            jQuery.each(all_tags, function (i) {
+                changeFontSize(i, -2);
+            });
+            return false;
+        });
+
+        function changeFontSize(tag, size) {
+            var currentSize = jQuery(tag).css('font-size');
+            var currentSize = parseFloat(currentSize) + parseFloat(size);
+            jQuery(tag).css('font-size', currentSize);
+        }
+
+    });
+    jQuery(window).resize(function () {
+        checkBesicSize();
+    });
+    function checkBesicSize() {
+        var width = jQuery(window).width();
+        if (width > 1290) {
+            var all_tags = { "h1": '50', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14', "li": '20px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1290) {
+            var all_tags = { "h1": '50', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14', "li": '20px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1100) {
+            var all_tags = { "h1": '40', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14', "li": '20px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1024) {
+            var all_tags = { "h1": '40', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14', "li": '20px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 980) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '24', "h6": '10', "p": '12', "li": '20px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 800) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '20', "h6": '10', "p": '12', "li": '18px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 768) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '20', "h6": '10', "p": '12', "li": '18px' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 640) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 480) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 400) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 360) {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val) {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+    }
+    //Text Increase and Decrease jquery end
+    //Css Color Change jquery start
+    // color-changing-script
+    // Check (onLoad) if the cookie is there and set the class if it is
+    if (jQuery.cookie('highcontrast') == "yes") {
+        jQuery("body").addClass("highcontrast");
+    }
+    // When the element is clicked
+    jQuery("a.button-toggle-highcontrast").click(function () {
+        if (jQuery.cookie('highcontrast') == "undefined" || jQuery.cookie('highcontrast') == "no") {
+            jQuery.cookie('highcontrast', 'yes', {
+                expires: 7,
+                path: '/'
+            });
+            jQuery("body").addClass("highcontrast");
+        } else {
+            jQuery.cookie('highcontrast', 'yes', {
+                expires: 7,
+                path: '/'
+            });
+            jQuery("body").addClass("highcontrast");
+        }
+    });
+    jQuery("a.button-toggle-remove").click(function () {
+        jQuery('body').removeClass('highcontrast');
+        if (jQuery.cookie('highcontrast') == "yes") {
+            jQuery.cookie("highcontrast", null, {
+                path: '/'
+            });
+        }
+    });
+    $(document).ready(function () {
+                if (window.IsDuplicate()) {
+         swal({
+            title: "Oops!!",
+             text: "This is duplicate window\n\n Kindly close this window...!",
+            showCancelButton: false,
+            confirmButtonClass: "btn-info",
+            confirmButtonText: "Ok",
+            closeOnConfirm: false,
+             showconfirmButton: false,
+                    },
+              function (isConfirm) {
+                if (isConfirm) {
+
+                    //window.location.href = "@Url.Action("Logout", "SecondYearLogin")";
+                }
+                else {
+
+                }
+            });
+            window.close();
+        }
+        let scroll_link = $('.scroll');
+
+        //smooth scrolling -----------------------
+        scroll_link.click(function (e) {
+            e.preventDefault();
+            let url = $('body').find($(this).attr('href')).offset().top;
+            $('html, body').animate({
+                scrollTop: url
+            }, 1000);
+            $(this).parent().addClass('active');
+            $(this).parent().siblings().removeClass('active');
+            return false;
+        });
+
+        $('#reg_Id').on('change', function () {
+
+            $('#reg_Id').val($('#reg_Id').val().trim());
+        });
+    });
+    function md5auth(seed) {
+
+
+        //onclick="javascript:return md5auth(@Session["rno"])"
+        if ((document.getElementById('reg_Id').value == '') || (document.getElementById('password').value == '')) {
+        	alert("Please enter UserId and Password");
+        	return -1;
+        }
+        var password = document.getElementById('password').value;
+
+        //if (password.length = 0 || password.length < 6 || password.length > 15) {
+        //	document.getElementById('txtpassword').focus();
+        //	return -1;
+        //}
+
+        //var rexp1 = /^(?=[\w$#@@]{6,15})[\w$#@@]{6,15}$/;
+
+        //if (password.search(rexp1) == -1) {
+        //	alert("Please enter valid UserId or password");
+        //	//document.forms[0].txtpassword.focus();
+        //	return -1;
+        //}
+        //alert(seed);
+        var hash = hex_md5(seed + hex_md5(password));
+        //var hash = hex_md5((password));
+        document.getElementById('password').value = hash;
+        var username = document.getElementById('reg_Id').value;
+
+        //var rexp = /^\w+$/;
+        var rexp = "^[a-zA-Z0-9@@.]+$";
+        if (username.length < 5 || username.length > 50) {
+            alert("Please enter valid UserId or password");
+            document.getElementById('txtUserId').focus();
+            return -1;
+        }
+
+        if (username.search(rexp) == -1) {
+            alert("Please enter valid UserId or password");
+            //document.getElementById('txtUserId').focus();
+            return -1;
+        }
+        return true;
+    }
+</script>

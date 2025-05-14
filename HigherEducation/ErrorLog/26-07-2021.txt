@@ -1,0 +1,29 @@
+
+Log Entry : 15:27:13 26 July 2021
+  :
+  :Method Name -    at System.Web.HttpResponse.BeforeCookieCollectionChange()
+   at System.Web.HttpCookieCollection.Add(HttpCookie cookie)
+   at HigherEducation.BusinessLayer.clsSecurity.AntiFixationInit() in F:\1Prashant\Running Application\HigherEducation\HigherEducation\BusinessLayer\clsSecurity.cs:line 22
+   at HigherEducation.BusinessLayer.clsSecurity.SetCookie() in F:\1Prashant\Running Application\HigherEducation\HigherEducation\BusinessLayer\clsSecurity.cs:line 36
+   at Higher_Education.Controllers.FileUploadController.FileUpload() in F:\1Prashant\Running Application\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 74
+Target Website - Void BeforeCookieCollectionChange()
+ Error - Server cannot modify cookies after HTTP headers have been sent.
+-------------------------------
+
+Log Entry : 17:07:47 26 July 2021
+  :
+  :Method Name -    at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in F:\1Prashant\Running Application\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 94
+Target Website - System.Web.Mvc.JsonResult GetDocumentStatus(Higher_Education.Controllers.DocumentStatus)
+ Error - Object reference not set to an instance of an object.
+-------------------------------
+
+Log Entry : 17:49:20 26 July 2021
+  :
+  :Method Name -    at System.Web.HttpResponse.BeforeCookieCollectionChange()
+   at System.Web.HttpCookieCollection.Add(HttpCookie cookie)
+   at HigherEducation.BusinessLayer.clsSecurity.AntiFixationInit() in F:\1Prashant\Running Application\HigherEducation\HigherEducation\BusinessLayer\clsSecurity.cs:line 22
+   at HigherEducation.BusinessLayer.clsSecurity.SetCookie() in F:\1Prashant\Running Application\HigherEducation\HigherEducation\BusinessLayer\clsSecurity.cs:line 36
+   at Higher_Education.Controllers.FileUploadController.FileUpload() in F:\1Prashant\Running Application\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 102
+Target Website - Void BeforeCookieCollectionChange()
+ Error - Server cannot modify cookies after HTTP headers have been sent.
+-------------------------------

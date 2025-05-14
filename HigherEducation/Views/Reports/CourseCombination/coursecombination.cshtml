@@ -1,0 +1,1602 @@
+﻿@{
+    Layout = null;
+}
+@{
+    ViewBag.Title = "Subject Combination";
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Subject Combination</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Google font-->
+    @*<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600" rel="stylesheet" />*@
+    <link href="../assets/css/all.css" rel="stylesheet" />
+    <link href="../assets/css/sumoselect.min.css" rel="stylesheet" />
+    <link href="../Content/Js/sweetalert.css" rel="stylesheet" />
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/stylesubject.css" rel="stylesheet" />
+    <script src="../assets/js/jquery-3.4.1.js"></script>
+    <script src="../assets/js/jquery.sumoselect.min.js"></script>
+    <link href="../Content/DataTables11020/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="../Content/DataTables11020/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="../Content/Js/sweetalert.min.js"></script>
+    <script type="text/javascript" src="../assets/js/popperjs/popper.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap/Js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../Content/DataTables11020/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="../Content/DataTables11020/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+    <form id="form1">
+        <div class="container-fluid">
+            <div class="row main-banner">
+                <img src="../assets/images/banner.jpg" alt="Online Admission Portal" />
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center top-heading">
+                <div class="row">
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-1"></div>
+                    <div class="col-lg-10 col-md-10 col-sm-10 col-10">
+                        <h4>Subject Combination</h4>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-1 text-right back-btn" style="margin-top: 10px;">
+                        <a href="~/DHE/HEMenu.aspx" id="btnBack" class="btn btn-icon icon-left btn-primary"><i class="fas fa-arrow-alt-circle-left"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid ">
+            <div class="col-lg-12 col-md-12 cus-bg-div">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="text-align:center">
+                    <label style="font-weight:bold;font-size:16px;"> College : </label>
+                    @Session["CollegeName"]
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 cus-input-div">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 cus-labels">
+                                <label class="cus-labels-name" id="lblsession">Session<span style="color:red;"><strong>*</strong></span></label><br />
+                                @Html.DropDownList("ddlSession", (IEnumerable<SelectListItem>)ViewBag.Sessionobj, "Please Select", new { id = "ddlSession", @class = "form-control", required = "required" })
+                            </div>
+
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="display:none">
+                            <label class="cus-label" id="lblcoursetype">Course Type<span style="color:red;"><strong>*</strong></span></label><br />
+                            <select id="ddlCourseType" class="form-control"></select>
+
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 cus-input-div">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 cus-labels">
+                                <label class="cus-labels-name" id="lblcourse">Course Name<span style="color:red;"><strong>*</strong></span></label><br />
+                                <select id="ddlCourse" class="form-control"></select>
+                                <input type="hidden" id="hdniscomb" name="hdniscomb" value="" />
+                            </div>
+
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 cus-input-div">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 cus-labels">
+                                <label class="cus-labels-name" id="lblsection">Section<span style="color:red;"><strong>*</strong></span></label><br />
+                                <select id="ddlSection" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 cus-input-div" style="display:none">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 cus-labels">
+                                <label class="cus-labels-name" id="lblcombination">Combination Group</label><br />
+                                <select id="ddlcombination" class="form-control">
+                                    <option value="0">Select Group</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center cus-gobtn">
+                    <input type="button" id="btnGo" class="btn btn-primary" value="Go" title="Click and Go" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-right cus-add-btn">
+            <a href="#" id="btnAddcourseComb" class="btn btn-icon icon-left btn-warning" runat="server"><i class="fas fa-plus"></i>&nbsp;Add Subject Combination</a>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top: 10px; text-align: center;display:none;">
+                <label id="TotalOriginalCourseseat" style="color:red"></label><br />
+                <label id="TotalCourseseat" style="color:red"></label>
+
+            </div>
+        </div>
+        <div class="row" id="dv_10per" style="display:none">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top: 10px; text-align: left">
+
+                <div class="card c-shadow" tyle="margin:1rem;padding:1rem;">
+                    @*<span style="color: #223f73; font-weight: bold; text-align: left; margin-bottom: 0px; margin-top: 7px;">
+                        <b>Note:-</b>Aided and Self Finance colleges may increase 10% additional seats subject to the norms/approval of affiliating University/State Government for the session 2020-21.
+                    </span>*@
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top: 10px; text-align: left">
+
+                <div class="card c-shadow" style="margin:1rem;padding:1rem;">
+                    <span style="color: #223f73; font-weight: bold; text-align: left; margin-bottom: 0px; margin-top: 7px;">
+                        <b>Note:-</b> The colleges must ensure that total of subject combination seats must be equal to total seats in the course.
+                    </span>
+                    @*<span style="color: #223f73; font-weight: bold; text-align: left; margin-bottom: 0px; margin-top: 7px;">
+                        <b>Note:-</b> The Colleges must ensure to update the seats of Subject combinations/courses, if required. Click on the Freeze button only after final updations. Only one time freeze is allowed. So be careful while clicking the freeze button.
+                    </span>*@
+                   
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top: 10px; text-align: center">
+
+                <div class="card c-shadow" style="margin:1rem;padding:1rem;">
+                    <span style="color: #223f73; font-weight: bold; text-align: center; margin-bottom: 0px; margin-top: 7px;">
+                        <b>Note:-</b>Only Subject Combination <mark>Fee</mark> is shown on this screen. The Course <mark>Fee</mark> excluding Subject Combination Fee can
+                        be checked under <strong> Course Management &rarr; Add/Update UG Course And Course Seats</strong>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="rowid" />
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex text-right dvTable">
+            @*<table class="table table-bordered table-hover table-striped" id="rowstbl">
+                </table>*@
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+            <input type="button" value="Save" id="btnsave" style="display:none" class="btn btn-success" />
+        </div>
+
+        <input type="hidden" id="hdntotalCourseSeat" />
+        <input type="hidden" id="totalseatcombinaion_wise" />
+        <input type="hidden" id="Show10per_msg" />
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 table-responsive">
+            <table class="table table-striped table-bordered table-hover" id="tblCourseDetail" style="width: 100%; display:none; border-collapse: collapse; font-size: small; padding: 1px 1px;">
+                <thead>
+                    <tr>
+                        <th>Sr</th>
+                        <th>Course Name</th>
+                        <th>Section</th>
+                        <th>Subject Combinations</th>
+                        <th>Subject Combination id</th>
+                        <th>Subject Combination Fees</th>
+                        <th >No of Seats</th> @*class="sum"*@
+                        <th >Filled Seats</th>
+                        <th>Update/Deactivate</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>@*Total*@
+                        <th></th>
+                        <th ></th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+            @*<div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center m-b-10" id="dvfreeze" style="display: none ;margin-bottom:5%">
+                <input type="checkbox" id="chkfreeze" class="custom-checkbox" />
+                <span style="color: #223f73; font-weight: bold; text-align: center; margin-bottom: 0px; margin-top: 7px;">
+                    I certify that subject combinations given/submitted/entered/provided by me in respect of my institution, are in order, checked and verified by me.
+                </span>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center" style="margin-top:1%;">
+
+                    <input type="button" value="Freeze" class="btn btn-success" id="btnfreeze" style="cursor:pointer;" />
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center m-t-4">
+                <input type="button" value="Save" id="btnsaveFee" style="display:none ;" class="btn btn-success" />
+            </div>*@
+        </div>
+
+
+
+        <div class="outer-loader" style="display: none;">
+            <div class="loader-img loader" style="display: none;"></div>
+        </div>
+    </form>
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12 text-center">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 text-left" style="margin-top: 10px;">
+                            <div class="credits">
+                                <a>Site is technically designed, hosted and maintained by National Informatics Centre, Haryana</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <img src="/assets/images/nic-logo.png" style="width: 100px;">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </footer>
+    <!-- End Footer -->
+    @*<script type="text/javascript" src="../assets/js/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="../Content/Js/sweetalert.min.js"></script>
+        <script type="text/javascript" src="../assets/js/popperjs/popper.min.js"></script>
+        <script type="text/javascript" src="../assets/js/bootstrap/Js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="../Content/DataTables11020/js/dataTables.bootstrap.min.js"></script>
+            <script type="text/javascript" src="../Content/DataTables11020/js/jquery.dataTables.min.js"></script>*@
+
+    <script type="text/javascript">
+            var table;
+
+			var Saveddata;
+            $(document).ready(function () {
+
+
+                $('#myModal').on('hide.bs.modal', function () {
+                  $('#ddlSub')[0].sumo.unSelectAll();
+                $('#ddlSub')[0].sumo.reload();
+                $("#lblsubjectcombval").text("");
+                $("#lblsubjectcomb").text("");
+                $('#txtTotalseat').val('');
+                $('#txtfee').val('');
+                });
+                $('input[id="txtTotalseat"],input[id="txtfee"]').keyup(function (e) {
+                    if (/\D/g.test(this.value)) {
+                        this.value = this.value.replace(/\D/g, '');
+                        swal("Alert!", "Please enter only numeric value", "warning");
+                    }
+                });
+
+                GetSubjects();
+
+                $('#ddlSub').on('change', function (){
+                    var val = $(this).val();
+                    //alert(val);
+                    $("#lblsubjectcombval").text(val);
+                    $("#lblsubjectcomb").text("Course Combination: ");
+                    //var $sel = $(this).find(':selected');
+                    //if ($sel.length <= 3)
+                    //{
+                    //    $sel.addClass('selected');
+                    //    $(this).find(':not(:selected)').removeClass('selected');
+                    //    //$(this).attr("disabled", false);
+                    //} else
+                    //{
+                    //    //$(this).attr("disabled", true);
+                    //    $(this).find(':selected:not(.selected)').prop('selected', false);
+                    //}
+                });
+
+					$(document).on("change", ".checkvalidseat", function () {
+
+				if (parseInt($(this).val()) < 0) {
+
+					$(this).val('');
+					swal("Alert!", "Invalid seat value", "warning")
+					$(this).focus();
+				}
+				else {
+					var maxLength = 4;
+					var textlen = maxLength - $(this).val().length;
+					if (parseInt(textlen) < 0) {
+						$(this).val('');
+						swal("Alert!", "Maximum 4 digit allowed", "warning")
+						$(this).focus();
+
+					}
+				}
+
+			});
+
+			$(document).on("change", ".checkvalidfee", function () {
+				if (parseInt($(this).val()) < 0) {
+
+					$(this).val('');
+					swal("Alert!", "Invalid fee value", "warning")
+					$(this).focus();
+				}
+				else {
+
+					var maxLength = 6;
+					var textlen = maxLength - $(this).val().length;
+					if (parseInt(textlen) < 0) {
+						$(this).val('');
+						swal("Alert!", "Maximum 6 digit allowed", "warning")
+						$(this).focus();
+
+					}
+				}
+
+			});
+
+			//GetCourseType();
+
+
+
+
+
+			$('#ddlSession').on('change', function () {
+					GetCourse();
+			});
+
+			//$('#ddlCourseType').on('change', function () {
+			//	if ($('#ddlSession :selected').val() == "") {
+
+			//		swal('Alert', 'Please select session first to get course name', 'warning');
+			//		  $('#ddlCourseType').val('0');
+			//		return;
+			//	}
+			//	GetCourse();
+			//});
+
+
+			$(document).on("change", ".abc", function () {
+
+				var rowid = $(this).parent().parent().attr('id');
+				var selectedvalue =$(this).val();
+				var selectedclass = $(this).find('option:selected').attr("class");
+				var selectedname = $(this).attr("name");
+				var eqvalue = $(this).find('option:selected').attr("eq");
+
+				$("#"+rowid+"> td > .abc option").each(function () {
+
+					$(this).show();
+					if ($(this).parent().attr('name') != selectedname) {
+						if ($(this).parent().val() == selectedvalue) {
+
+							$(this).parent().val('0');
+						}
+						if ($(this).attr("class") == selectedclass) {
+
+							$(this).remove();
+						}
+						if ($(this).val() == eqvalue) {
+							$(this).remove();
+						}
+					}
+
+				});
+
+			});
+
+            $('#ddlCourse').on('change', function () {
+                GetIsCombination();
+				GetSection();
+			  });
+
+
+			  $('#ddlSection').on('change', function () {
+				  $("#rowstbl tr").remove();
+				  $('#btnsave').hide();
+			  });
+
+
+
+			   $('#btnGo').on('click', function () {
+				//Combinationofsubjects();
+				   //validation
+				   var course = $('#ddlCourse :selected').val();
+				   var section = $('#ddlSection :selected').val();
+				   if ($('#ddlSession :selected').val() == "") {
+
+					   swal('Alert', 'Session required', 'warning');
+					   return;
+				   }
+				   if (course == "0" || course == undefined) {
+
+					   swal('Alert', 'Course required', 'warning');
+					   return;
+				   }
+				   if (section == "0" || section == undefined) {
+
+					   swal('Alert', 'Section required', 'warning');
+					return;
+				}
+				   //CombinationGroup();
+				   GetCourseCombination();
+			   });
+
+               $('#tblCourseDetail').on('click', 'a.editor_remove_Active', function () {
+                   // e.preventDefault();
+
+                   var data_row = table.row($(this).closest('tr')).data();
+                   var row_SubjectCombinationID = data_row.SubjectCombinationID;
+                   var subjcombinationid = row_SubjectCombinationID;
+
+
+                   $.ajax({
+                       type: "POST",
+                       url: '@Url.Action("ActivateCourse", "CourseCombination")',
+                       data: { coursecombinationid: subjcombinationid },
+                       success: function (data) {
+                                    if (data == 500) {
+                               swal('Alert', 'Something went wrong!! Please try again later.', 'error');
+                           }
+                           else if (data == 401) {
+                               swal('Alert', 'Your Session for Current Login Destroyed. Please refresh this windows and login again', 'warning');
+                           }
+                           else if (data == 404) {
+                               swal('Alert', 'Data not found.', 'warning');
+                           }
+                           else
+                           {
+                               if (data[0].success == 1) {
+							    GetCourseCombination();
+                                swal("Alert!", "Subject Combination cannot be Activated as Sum of Subject Combination Seats(Activated) of a course exceeds Total Course Seats", "warning");
+
+                               }
+
+                               else if (data[0].success == 3) {
+                                   GetCourseCombination();
+                                   swal("Activated", "Activated Successfully!", 'success');
+                               }
+
+                           }
+                       },
+                       error: function () {
+                           swal('Something went wrong..!!');
+                       }
+                   });
+
+               });
+
+
+
+               // Delete record
+               $('#tblCourseDetail').on('click', 'a.editor_remove', function () {
+                   // e.preventDefault();
+                   var data_row = table.row($(this).closest('tr')).data();
+                   var row_SubjectCombinationID = data_row.SubjectCombinationID;
+                   var subjcombinationid = row_SubjectCombinationID;
+
+                   $.ajax({
+                       type: "POST",
+                       url: '@Url.Action("DeactivateCourse", "CourseCombination")',
+                       data: { coursecombinationid: subjcombinationid  },
+                       success: function (data) {
+                           if (data) {
+                               GetCourseCombination();
+                               swal("Deactivated", data[0].success, 'success');
+
+                           }
+                       },
+                       error: function () {
+                           swal('Something went wrong..!!');
+                       }
+                   });
+
+               });
+
+
+		   // add row
+			@*$(document).on("click", "#btnaddrow", function () {
+
+				var rowcount = $('#rowid').val();
+				var table = $('#rowstbl');
+
+				$.ajax({
+					type: "GET",
+					url: "/api/v1/Course/GetCombinationGroup",
+				   // url: "@Url.Action("GetCombinationGroup", "Course")",
+
+					data: { Courseid: $('#ddlCourse').val(), Sectionid: $('#ddlSection').val(), Sessionid:$('#ddlSession').val() },
+					dataType: "json",
+					contentType: "application/json;charset=utf-8",
+					success: function (data) {
+
+						DataSet = data;
+
+
+						//Add the data rows.
+						// for (var i = 1; i <= 2; i++) {
+						row = $(table[0].insertRow(-1));
+						rowcount = parseInt(rowcount) + 1;
+						row.attr('id', rowcount);
+
+						$('#rowid').val(rowcount);
+
+						for (var j = 0; j < DataSet.Table.length; j++) {
+							var ddlsubject = $("<select class='form-control abc'   name=subject_"+ DataSet.Table[j].SubjectNo + " />");
+							ddlsubject.empty();
+							ddlsubject.append($("<option></option>").val(0).html('Select Subject'));
+							var cell = $("<td width='100px' class='" + DataSet.Table[j].SubjectNo + "'/>");
+							cell.append(ddlsubject);
+							$.each(data.Table1, function (key, value) {
+								if (value.SubjectNo == cell.attr('class')) {   // check subject no with td id
+									ddlsubject.append($("<option class='" + value.GroupNo + "' eq='"+value.Equivalent_SubjectId+"'></option>").val(value.subjectid).html(value.subjectname));
+								}
+							});
+							row.append(cell);
+						}
+						var cell = $("<td width='100px'/>");
+						cell.append("<input type='button' value='Add new Row' id='btnaddrow' class='btn btn-info'> <input type='button' value='Deactivate' id='btndeleterow' class='btn btn-danger btndelete'>");
+						row.append(cell)
+						// }
+						var dvTable = $(".dvTable");
+						dvTable.html("");
+						dvTable.append(table);
+					}
+
+					,
+					error: function (x, e) {
+						swal("Error");
+					}
+				});
+
+			});*@
+
+
+
+			//delete row
+			@*$(document).on('click', '#btndeleterow', function () {
+
+				var rowcount = $('#rowid').val();
+				var ele = $(this).closest("tr").attr('id');
+				var rowindx = $(this).closest("tr").index();
+
+
+				var rowcount = parseInt(rowcount) - 1;
+				$('#rowid').val(rowcount);
+
+
+				var coursecombinationid = ele;
+				if ($(this).attr('del') == 'del') {
+					$.ajax({
+						type: "POST",
+						url: '@Url.Action("DeactivateCourse", "CourseCombination")',
+
+						data: "{coursecombinationid:" + coursecombinationid + "}",
+						contentType: "application/json; charset=utf-8",
+						dataType: "json",
+						success: function (data) {
+							if (data == 500) {
+								swal('Alert', 'Something went wrong!! Please try again later.', 'error');
+							}
+							else if (data == 401) {
+								swal('Alert', 'Your Session for Current Login Destroyed. Please refresh this windows and login again', 'warning');
+							}
+							else if (data == 404) {
+								swal('Alert', 'Data not found.', 'warning');
+							}
+							else {
+								swal('Alert', data[0].success, 'success');
+								CombinationGroup();
+								GetCourseCombination();
+							}
+
+						},
+						error: function () {
+							alert('Failed');
+						}
+					})
+				}
+
+				else {
+					if (parseInt(rowindx) == 1) {
+						swal('Alert!', 'Atleast one row is required', 'warning');
+						return;
+					}
+					$('table#rowstbl tr#' + ele).remove();
+
+				}
+
+			});*@
+
+			$(document).on("click", "#btnsave", function () {
+
+				//validation
+				var course = $('#ddlCourse :selected').val();
+				var section = $('#ddlSection :selected').val();
+				//var coursetype = $('#ddlCourseType :selected').val();
+
+				if ($('#ddlSession :selected').val() == "0") {
+
+					swal('Alert', 'Session required', 'warning');
+					return;
+				}
+				if (course == "0" || course == undefined) {
+
+					swal('Alert', 'Course required', 'warning');
+					return;
+				}
+				if (section == "0" || section == undefined) {
+
+					swal('Alert', 'Section required', 'warning');
+					return;
+				}
+				//if (coursetype == "0" || coursetype == undefined) {
+
+				//	swal('Alert', 'Course type required', 'warning');
+				//	return;
+				//}
+				//startPreloader();
+				var Subjectlist = [];
+				var Item = {};
+				var isDuplicate = '';
+				var flag = '';
+				var flagcount = 0;
+				var rowindex = 0;
+
+				 //get cell values, instead of the header text.
+				$("#rowstbl tr:not(:first)").each(function () {
+
+					rowindex = $(this).index();
+					totaldropdowns = $(this).find('td').length - 1;
+					var subjects = '';
+					var subjectsid = '';
+					for (var i = 1; i <= totaldropdowns; i++) {
+
+						subjects = subjects + ',' + $(this).find(':nth-child(' + i + ')').find('select :selected').text();
+
+						if ($(this).find(':nth-child(' + i + ')').find('select :selected').val() == "0") {
+
+							flag = flag + 'Please select subject in row no ' + rowindex + ' and column no ' + i + '\n';
+							flagcount = flagcount+1;
+							return false;
+						}
+						 subjectsid =subjectsid +','+ $(this).find(':nth-child('+i+')').find('select :selected').val();
+					}
+
+					 // if ((subjectsid.match(/0/g) || []).length)
+
+						Item = {
+						Subject:subjects.replace(/^,/, ''),
+						SubjectId:subjectsid.replace(/^,/, ''),
+						Sessionid: $('#ddlSession').val(),
+						Courseid: $('#ddlCourse').val(),
+						Sectionid: $('#ddlSection').val(),
+						Combinationid:$(this).attr('id'),
+						CourseType:$('#ddlCourseType').val(),
+						};
+					   Subjectlist.push(Item);
+					var valueArr = Subjectlist.map(function (item) { return item.Subject });
+					 isDuplicate = valueArr.some(function (item, idx) {
+						return valueArr.indexOf(item) != idx
+					});
+
+				});
+				if (Subjectlist.length === 0) {
+					swal('alert', 'Please choose combination', 'warning');
+				}
+				else {
+					if (parseInt(flagcount) > 0) {
+					swal('alert', flag, 'warning');
+					return;
+					}
+					if (!isDuplicate) {
+					 startPreloader();
+					SaveData(Subjectlist);
+					}
+
+				else {
+					swal('alert', 'Duplicate combination not allowed..!!', 'warning');
+					return;
+					}
+
+				}
+
+            });
+
+            $(document).on("click", "#btnAddcourseComb", function () {
+                var course = $('#ddlCourse :selected').val();
+                var section = $('#ddlSection :selected').val();
+                //var coursetype = $('#ddlCourseType :selected').val();
+                if ($('#ddlSession :selected').val() == "0") {
+
+                    swal('Alert', 'Session required', 'warning');
+                    return;
+                }
+                else if (course == "0" || course == undefined) {
+
+                    swal('Alert', 'Course required', 'warning');
+                    return;
+                }
+                else if (section == "0" || section == undefined) {
+
+                    swal('Alert', 'Section required', 'warning');
+                    return;
+                }
+                else
+                {
+                   
+                    $('#myModal').modal('show');
+                }
+            });
+
+
+            //$('#myModal').on('hidden.bs.modal', function () {
+
+
+            //});
+
+            $(document).on("click", "#btnAddsubjcomb", function () {
+                //validation
+                var course = $('#ddlCourse :selected').val();
+                var section = $('#ddlSection :selected').val();
+                //var coursetype = $('#ddlCourseType :selected').val();
+
+                if ($('#ddlSession :selected').val() == "0") {
+
+                    swal('Alert', 'Session required', 'warning');
+                    return;
+                }
+                if (course == "0" || course == undefined) {
+
+                    swal('Alert', 'Course required', 'warning');
+                    return;
+                }
+                if (section == "0" || section == undefined) {
+
+                    swal('Alert', 'Section required', 'warning');
+                    return;
+                }
+
+                if ($('#txtTotalseat').val() == "" || $('#txtTotalseat').val() == "0" ) {
+
+                    swal('Alert', 'Seats Required and seats must be greater than 0', 'warning');
+                    return;
+                }
+                if ($('#txtfee').val() == "") {
+
+                    swal('Alert', 'Fees required', 'warning');
+                    return;
+                }
+                var Subjectlist = [];
+                var Item = {};
+                var ItemLength = $("#ddlSub :selected").length;
+                if (ItemLength !== 4)
+                {
+                    swal("Alert", "Please Select 4 Subjects", "warning");
+                    return;
+                }
+                else
+                {
+                    Item = {
+                        Subject: $('#ddlSub').val(),
+                        Sessionid: $('#ddlSession').val(),
+                        Courseid: $('#ddlCourse').val(),
+                        Sectionid: $('#ddlSection').val(),
+                        CourseType: 0,
+                        noofseats: $('#txtTotalseat').val(),
+                        fees: $('#txtfee').val()
+                    };
+                    Subjectlist.push(Item);
+                    if (Subjectlist.length === 0) {
+                        swal('Alert', 'Please choose combination', 'warning');
+                    }
+                    else {
+                        startPreloader();
+                        SaveDataUG(Subjectlist);
+                    }
+                }
+
+            });
+
+	//		$(document).on("click", "#btnsaveFee", function () {
+
+	//			//validation
+	//			var CombinationFeelist = [];
+	//			var Item = {};
+	//			var isDuplicate = '';
+	//			var flag = '';
+	//			var flagcount = 0;
+	//			var rowindex = 0;
+
+	//			var coll = [];
+	//			var collX = [];
+	//			Saveddata.forEach(function (X) {
+	//				var obj = {};
+	//				obj.SubjectCombinationID = X.SubjectCombinationID;
+	//				coll.push(obj);
+	//			});
+
+	//			coll.forEach(function (X) {
+	//				var obj = {};
+	//				obj.SubjectCombinationID = X.SubjectCombinationID;
+	//				obj.value = $("[name=" + X.SubjectCombinationID + "]").val();
+	//				collX.push(obj)
+	//			})
+
+	//			 SaveDataFee(collX);
+	//			 //get cell values, instead of the header text.
+	//			//$("#tblCourseDetail tr:not(:first)").each(function () {
+	//			//
+	//			//	rowindex = $(this).index();
+
+	////                   Item = {
+
+	////                        SubjectCombinationId: $(this).find(':nth-child(1)').find('input').val(),
+	////                        Fees: $(this).find(':nth-child(5)').find('input').val()
+	////                    };
+	//			//});
+
+
+	//		});
+
+			$('#tblCourseDetail').on('click', 'a.editor_edit', function () {
+				var Items = {};
+				var data_row = table.row($(this).closest('tr')).data();
+                var fieldSeat = data_row.fieldseat;
+
+				$(this).closest('tr').each(function () {
+
+				  Items = {
+
+					'SubjectCombinationId': data_row.SubjectCombinationID,
+					'TotalFees': $(this).find(':nth-child(5)').find('input').val(),
+					'NoofSeats': $(this).find(':nth-child(6)').find('input').val(),
+				};
+
+
+
+                });
+
+                if (parseInt(Items.NoofSeats) < parseInt(fieldSeat))
+                {
+                    swal('Alert!', 'No of seats can not be less than filled seats', 'warning');
+                    return;
+                }
+				//var Items = {
+
+				//    'SubjectCombinationId': data_row.SubjectCombinationID,
+				//    'TotalFees': data_row.fees,
+				//    'NoofSeats': data_row.noofseats,
+
+				//};
+							 $.ajax({
+									type: "POST",
+									url: "@Url.Action("UpdateSubjectCombinationfees", "CourseCombination")",
+									data: JSON.stringify(Items),
+									contentType: "application/json; charset=utf-8",
+									dataType: "json",
+                                 success: function (data) {
+
+
+										if (data[0].success == 1) {
+										 GetCourseCombination();
+                                            swal("Saved!", "Subject Combination Seats updated successfully", "success");
+
+
+                                        }
+                                        else if (data[0].success == 2) {
+                                            if ($('#Show10per_msg') == "Y") {
+											   GetCourseCombination();
+                                                swal("Alert!", "Total course seats (current) can not exceed 10% of total course seats (original)", "warning");
+
+                                            }
+                                            else {
+											   GetCourseCombination();
+                                               swal("Alert!", "Sum of Subject Combination Seats(Activated) of a course can not be greater than Total Course Seats", "warning");
+                                            }
+                                        }
+										else {
+										   GetCourseCombination();
+											swal("Alert!", data[0].success, "warning");
+
+										}
+
+
+									}
+								});
+
+			});
+
+                $(document).on("click", "#btnfreeze", function () {
+
+                    if ($("#chkfreeze").prop('checked') == false) {
+                         swal('Alert!', 'Please agree to consent', 'warning');
+                        return;
+                    }
+
+                    //else if (parseInt($('#hdntotalCourseSeat').val()) > parseInt($('#totalseatcombinaion_wise').val())) {
+
+                    //    swal('Alert!', 'Total Course Seats(Current) can not be less than Total Course Seats(Original)', 'warning');
+                    //    return;
+                    //}
+                    else {
+						 FreezeMsg();
+                    }
+				});
+
+		});
+
+     function FreezeMsg() {
+                    swal({
+            title: "Alert!!",
+            text: "Are you sure to Freeze? No updation shall be allowed after freeze.",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "OK",
+            closeOnConfirm: false
+                    },
+              function (isConfirm) {
+                if (isConfirm) {
+                   			if ($('#chkfreeze').prop('checked')) {
+						//var SessionId = $('#ddlSession').val();
+						//var CourseId = $('#ddlCourse').val();
+						//var SectionId = $('#ddlSection').val();
+						 var Freezedata = { 'SessionId': $('#ddlSession').val(), 'CourseId': $('#ddlCourse').val(), 'SectionId': $('#ddlSection').val() };
+						$.ajax({
+							type: "POST",
+							url: "@Url.Action("FreezeCombination", "CourseCombination")",
+						   //data: "{SessionId:" + SessionId + ",CourseId:" + CourseId + ",SectionId:" + SectionId + "}",
+							data: JSON.stringify(Freezedata),
+							contentType: "application/json; charset=utf-8",
+							dataType: "json",
+							success: function (data) {
+								if (data) {
+									swal('Freezed', data[0].success, 'success');
+									GetCourseCombination();
+								}
+							},
+							error: function () {
+								swal('Something went wrong..!!');
+							}
+						});
+					}
+					else {
+						swal("Alert!", "Please check the consent", "warning");
+						return;
+					}
+
+                }
+                else {
+
+                }
+            });
+
+        }
+
+		function GetCourse() {
+			$('#ddlCourse').empty();
+			$('#ddlCourse').append($("<option></option>").val(0).html('Select Course'));
+
+			$.ajax({
+				type: "GET",
+				url: '@Url.Action("GetCourseName", "CourseCombination")',
+				contentType: "application/json;charset=utf-8",
+				data: { Sessionid: $('#ddlSession').val() },
+				dataType: "json",
+				success: function (data) {
+					if (data == 500) {
+						swal('Alert', 'Something went wrong!! Please try again later.', 'error');
+					}
+					else if (data == 401) {
+						swal('Alert', 'Your Session for Current Login Destroyed. Please refresh this windows and login again.', 'warning');
+					}
+					else if (data == 404) {
+						swal('Alert', 'Data not found.', 'warning');
+					}
+					else {
+						  $.each(data, function (key, value) {
+						$('#ddlCourse').append($("<option></option>").val(value.Value).html(value.Text));
+					});
+					}
+
+				}
+				,
+				error: function (x, e) {
+					swal("Error");
+				}
+			});
+		}
+
+		function GetSection() {
+			$('#ddlSection').empty();
+			$('#ddlSection').append($("<option></option>").val(0).html('Select Section'));
+
+			$.ajax({
+				type: "GET",
+				url: '@Url.Action("GetSection", "CourseCombination")',
+				contentType: "application/json;charset=utf-8",
+				data: { Courseid: $('#ddlCourse').val(), Sessionid: $('#ddlSession').val() },
+				dataType: "json",
+				success: function (data) {
+					if (data == 500) {
+						swal('Alert', 'Something went wrong!! Please try again later.', 'error');
+					}
+					else if (data == 401) {
+						swal('Alert', 'Your Session for Current Login Destroyed. Please refresh this windows and login again', 'warning');
+					}
+					else if (data == 404) {
+						swal('Alert', 'Data not found.', 'warning');
+					}
+					else {
+
+						  $.each(data, function (key, value) {
+						$('#ddlSection').append($("<option></option>").val(value.Value).html(value.Text));
+					});
+					}
+
+				}
+				,
+				error: function (x, e) {
+					swal("Error");
+				}
+			});
+		}
+
+        function GetIsCombination() {
+		
+
+			$.ajax({
+				type: "GET",
+				url: '@Url.Action("GetIsCombination", "CourseCombination")',
+				contentType: "application/json;charset=utf-8",
+				data: { Courseid: $('#ddlCourse').val() },
+				dataType: "json",
+				success: function (data) {
+					if (data == 500) {
+						swal('Alert', 'Something went wrong!! Please try again later.', 'error');
+					}
+					else if (data == 401) {
+						swal('Alert', 'Your Session for Current Login Destroyed. Please refresh this windows and login again', 'warning');
+					}
+					else if (data == 404) {
+						swal('Alert', 'Data not found.', 'warning');
+					}
+					else {
+
+                        if (data[0].iscombination == "N")
+                        {
+                            $('#hdniscomb').val("N");
+                            $('#btnAddcourseComb').hide();
+                        }
+                        else if (data[0].iscombination == "Y")
+                        {
+                            $('#hdniscomb').val("Y");
+                            $('#btnAddcourseComb').show();
+                        }
+					}
+
+				}
+				,
+				error: function (x, e) {
+					swal("Error");
+				}
+			});
+		}
+
+
+		@*function CombinationGroup() {
+
+		   var table = $("<table class='table table-bordered table-hover table-striped' id='rowstbl' />");
+			table[0].border = "2";
+
+			$.ajax({
+				type: "GET",
+				url: "/api/v1/Course/GetCombinationGroup",
+				//url: "@Url.Action("GetCombinationGroup", "Course")",
+				data: { Courseid: $('#ddlCourse').val(), Sectionid: $('#ddlSection').val(),Sessionid:$('#ddlSession').val() },
+				dataType: "json",
+				contentType: "application/json;charset=utf-8",
+				success: function (data) {
+
+					DataSet = data;
+
+					if (DataSet.Table.length == 0 && DataSet.Table.length == 0 && DataSet.Table.length == 0) {
+					//	swal('Alert', 'Subjects for combination not found of selected course', 'warning');
+						$("#rowstbl tr").remove();
+						$('#btnsave').hide();
+
+						return;
+					}
+
+					//Add the header row.
+					var row = $(table[0].insertRow(-1));
+					for (var i = 0; i < DataSet.Table.length; i++) {
+						var headerCell = $("<th />");
+						headerCell.html("Subject " + DataSet.Table[i].SubjectNo);
+						row.append(headerCell);
+					}
+					var headerCell = $("<th />");
+					row.append(headerCell);
+
+
+					if (DataSet.Table2.length == 0) {
+						row = $(table[0].insertRow(-1));
+						row.attr('id', 1);
+						$('#rowid').val(1);
+						for (var j = 0; j < DataSet.Table.length; j++) {
+							var ddlsubject = $("<select class='form-control abc'   name=subject_"+ DataSet.Table[j].SubjectNo + " />");
+							ddlsubject.empty();
+							ddlsubject.append($("<option></option>").val(0).html('Select Subject'));
+							var cell = $("<td width='100px' class='" + DataSet.Table[j].SubjectNo + "'/>");
+							cell.append(ddlsubject);
+							$.each(data.Table1, function (key, value) {
+								if (value.SubjectNo == cell.attr('class')) {   // check subject no with td id
+									ddlsubject.append($("<option class='" + value.GroupNo + "' eq='"+value.Equivalent_SubjectId+"'></option>").val(value.subjectid).html(value.subjectname));
+								}
+							});
+							row.append(cell);
+
+						}
+						var cell = $("<td width='100px'/>");
+						cell.append("<input type='button' value='Add new Row' id='btnaddrow' class='btn btn-info'> <input type='button' value='Deactivate' id='btndeleterow' class='btn btn-danger btndelete'>");
+						row.append(cell)
+					}
+
+					//Add the data rows.
+					for (var i = 0; i < DataSet.Table2.length; i++) {
+
+						var a = DataSet.Table2[i].SubjectCombination_ID.split(',')
+
+
+						row = $(table[0].insertRow(-1));
+						row.attr('id', DataSet.Table2[i].SubjectCombinationID);
+						$('#rowid').val(DataSet.Table2[i].SubjectCombinationID);
+
+						for (var j = 0; j < DataSet.Table.length; j++) {
+							var ddlsubject = $("<select class='form-control abc'   name=subject_" + i + "_" + DataSet.Table[j].SubjectNo + " />");
+							ddlsubject.empty();
+							ddlsubject.append($("<option></option>").val(0).html('Select Subject'));
+							var cell = $("<td width='100px' class='" + DataSet.Table[j].SubjectNo + "'/>");
+							cell.append(ddlsubject);
+							$.each(data.Table1, function (key, value) {
+								if (value.SubjectNo == cell.attr('class')) {   // check subject no with td id
+									ddlsubject.append($("<option class='" + value.GroupNo + "' eq='"+value.Equivalent_SubjectId+"'></option>").val(value.subjectid).html(value.subjectname));
+								}
+							});
+							row.append(cell);
+							ddlsubject.val(a[j]);
+
+						}
+						var cell = $("<td width='100px'/>");
+						cell.append("<input type='button' value='Add new Row' id='btnaddrow' class='btn btn-info'> <input type='button' value='Deactivate' del='del' id='btndeleterow' class='btn btn-danger'>");
+						row.append(cell)
+					}
+					var dvTable = $(".dvTable");
+					dvTable.html("");
+					dvTable.append(table);
+					$('#btnsave').show();
+
+				}
+
+				,
+				error: function (x, e) {
+					swal("Error");
+				}
+			});
+		}*@
+
+		@*function SaveData(jdata) {
+				$.ajax({
+					type: "POST",
+					url: '@Url.Action("SaveSubjectCombination", "CourseCombination")',
+
+					data: "{jdata:" + JSON.stringify(jdata) + "}",
+						contentType: "application/json; charset=utf-8",
+						dataType: "json",
+						success: function (data) {
+					if (data == 500) {
+						swal('Alert', 'Something went wrong!! Please try again later.', 'error');
+					}
+					else if (data == 401) {
+						swal('Alert', 'Your Session for Current Login Destroyed. Please refresh this windows and login again', 'warning');
+					}
+					else if (data == 404) {
+						swal('Alert', 'Data not found.', 'warning');
+					}
+					else {
+						swal('Alert',data[0].success,'success');
+						CombinationGroup();
+						GetCourseCombination();
+							}
+
+							},
+						error: function () {
+							alert('Failed');
+						}
+					})
+				stopPreloader();
+
+		}*@
+
+            function SaveDataUG(jdata) {
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("SaveSubjectCombinationUG", "CourseCombination")',
+
+                    data: "{jdata:" + JSON.stringify(jdata) + "}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data == 500) {
+                            swal('Alert', 'Something went wrong!! Please try again later.', 'error');
+                            return;
+                        }
+                        else if (data == 401) {
+                            swal('Alert', 'Your Session for Current Login Destroyed. Please refresh this windows and login again', 'warning');
+                            return;
+                        }
+                        else if (data == 404) {
+                            swal('Alert', 'Data not found.', 'warning');
+                            return;
+                        }
+                        else {
+                            if (data[0].success == 0) {
+                                swal("Alert!", "Subject Combination Already Exists", "warning");
+                                return;
+
+
+                            }
+                            else if (data[0].success == 1) {
+                                swal("Alert!", "Sum of Subject Combination Seats(Activated) of a course can not be greater than Total Course Seats", "warning");
+                                return;
+
+                            }
+
+                            else if (data[0].success == 3) {
+                                //swal('Alert',data[0].success,'success');
+                                GetCourseCombination();
+                                //$('#ddlSub')[0].sumo.unload();
+                                $('#ddlSub')[0].sumo.unSelectAll();
+                                $('#ddlSub')[0].sumo.reload();
+                                $("#lblsubjectcombval").text("");
+                                $("#lblsubjectcomb").text("");
+                                $('#txtTotalseat').val('');
+                                $('#txtfee').val('');
+                                $('#myModal').modal('hide');
+                                swal("Save!", "Subject Combination Saved Successfully...", "success");
+
+                            }
+                        }
+
+                    },
+                    error: function () {
+                        alert('Failed');
+                        return;
+                    }
+                });
+				stopPreloader();
+
+		}
+
+		function Validatecombination(elem) {
+
+			var totaltd = $(elem).parent().parent().find('td:not(:last)').length;  // get total dropdown on selected td
+			var currenttd = parseInt($(elem).parent().index() + 1);    // get index of selected dropdown td
+
+			//  get group no of selected subject of current td
+			//var groupno =$('[value^="2"]').hide()
+			var groupno =$(elem).parent().parent().find(':nth-child('+currenttd+')').find('select').val().substring($(elem).parent().parent().find(':nth-child('+currenttd+')').find('select').val().indexOf("1"), 1);
+
+			// loop to all dropdowns
+			for (var i = 1; i <= totaltd; i++) {
+				if (currenttd == i) { }
+				else {
+					// hide find group value
+				var subjectno =$(elem).parent().parent().find(':nth-child('+i+')').find('select').val().substring($(elem).parent().parent().find(':nth-child('+i+')').find('select').val().indexOf("$$$$$")+5);
+				$(elem).parent().parent().find(':nth-child('+i+')').find('select').children('option').show();
+				$(elem).parent().parent().find(':nth-child('+i+')').find('select').children('option[value="' + groupno + '$$$$$4' + '"]').hide();
+
+				}
+			}
+
+			//var groupno = jQuery('#subject_4').val().substring(jQuery('#subject_4').val().indexOf("1"), 1);
+			//$(elem).parent().parent().find('td:not(:last)').each(function () {
+			//	$(elem).parent().parent().find(':nth-child(1)').find('select').children('option[value="' + groupno + '$$$$$4' + '"]').remove();
+			//	 //jQuery('#actionPart2').children('option[value="' + ($(this).attr("ActionCode")) + '$$$$$RH' + '"]').remove();
+			//});
+		}
+			 function GetCourseCombination() {
+			// get datatable
+
+			$.ajax({
+				  type: "GET",
+				  url: '@Url.Action("GetCombinationReport", "CourseCombination")',
+				 data: { Sessionid: $('#ddlSession').val(),Sectionid: $('#ddlSection').val(),CourseId:$('#ddlCourse').val() },
+				  dataType: "json",
+				   contentType: "application/json;charset=utf-8",
+				success: function (data) {
+				  if (data.length > 0) {
+
+
+				                 $('#TotalOriginalCourseseat').text("Total Course Seats(Original): "+ data[0].totalOriginalseat);
+                    $('#TotalCourseseat').text("Total Course Seats(Current): " + data[0].totalCourseSeat);
+
+                    $('#hdntotalCourseSeat').val(data[0].totalOriginalseat);
+                    $('#totalseatcombinaion_wise').val(data[0].totalseatcombinaion_wise);
+                    $('#Show10per_msg').val(data[0].Show10per_msg);
+
+                    if (data[0].Show10per_msg == "Y") {
+                        $('#dv_10per').css("display","block");
+                    }
+
+					if (data[0].IsFreezed == "Y") {
+						$('#btnfreeze').attr("disabled", "disabled");
+						$('#btnfreeze').addClass("btn btn-danger");
+						$('#chkfreeze').prop('checked', true);
+						$('#btnfreeze').val('Freezed');
+						$('#chkfreeze').attr("disabled", "disabled");
+					 $('#dvfreeze').hide();
+                     $('#btnAddcourseComb').hide();
+					}
+                    else {
+                        if ($('#hdniscomb').val() == "N")
+                        {
+                            $('#btnfreeze').removeAttr("disabled", "disabled");
+                            $('#btnfreeze').removeClass("btn btn-danger");
+                            $('#btnfreeze').addClass("btn btn-success");
+                            $('#chkfreeze').prop('checked', false);
+                            $('#btnfreeze').val('Freeze');
+                            $('#chkfreeze').removeAttr("disabled", "disabled");
+                            $('#dvfreeze').hide();
+                            $('#btnAddcourseComb').hide();
+                        }
+                        else if ($('#hdniscomb').val() == "Y")
+                        {
+                            $('#btnfreeze').removeAttr("disabled", "disabled");
+                            $('#btnfreeze').removeClass("btn btn-danger");
+                            $('#btnfreeze').addClass("btn btn-success");
+                            $('#chkfreeze').prop('checked', false);
+                            $('#btnfreeze').val('Freeze');
+                            $('#chkfreeze').removeAttr("disabled", "disabled");
+                            //$('#dvfreeze').show();
+                            $('#btnAddcourseComb').show();
+                        }
+
+
+
+					}
+
+					 Saveddata = data;
+					$('#tblCourseDetail').show();
+					table = $('#tblCourseDetail').DataTable({
+						dom: 'Bfrtip',
+
+						buttons: [
+
+							{
+								extend: 'print',
+								text: 'Print',
+								autoPrint: true,
+								customize: function (win) {
+									$(win.document.body)
+										.css('font-size', '4pt')
+										.prepend(
+
+											'<img src="images/Hdate.png" style="position:absolute; top:0; left:0;" />'
+										);
+
+									$(win.document.body).find('#tblCourseDetail')
+										.addClass('compact')
+										.css('font-size', 'inherit');
+								}
+							}
+						],
+						orderCellsTop: true,
+						destroy: true,
+						"orderable": false,
+						"searching": true,
+						 "paging": false,
+						"order": [[ 1, 'asc' ]],
+						data: data,
+
+						columns: [
+							{ data: null },
+							{ data: 'name' },
+							{ data: 'sectionname' },
+							{ data: 'SubjectCombination' },
+
+							{
+								data: 'SubjectCombinationID',visible:false, render: function (d,t,r,m) {
+								return '<input  type="hidden"  value="'+r["SubjectCombinationID"]+'" />'
+								}
+							},
+							{
+								data: null, render: function (d, t, r, m) {
+									if (r.isSubCombination == "Y") {
+
+                                        return '<input  type="number"  class="checkvalidfee form-control" name="' + r["SubjectCombinationID"] + '" value="' + r["fees"] + '" maxlength="6" />'
+										}
+										else {
+                                        return '<input  type="text" class="checkvalidfee form-control" name="' + r["SubjectCombinationID"] + '" value="NA" maxlength="6" title="Fee of combination not available" required disabled  />'
+									}
+								}
+							},
+
+							{
+								data: 'noofseats', render: function (d,t,r,m) {
+                                    return '<input  type="number" class="form-control"   name="'+r["SubjectCombinationID"]+'" value="'+r["noofseats"]+'"   maxlength="6" required  />'
+								}
+                            },
+							{ data: 'fieldseat' },
+
+							{
+								data: null, className:"center", render: function (d, t, r, m) {
+									//if (r.isSubCombination == "Y" && r.IsFreezed!="Y") {
+									//if (r.IsFreezed != "Y") {
+									//return '<a href="#" title="Click to update Fee/Seats" class="btn btn-success editor_edit">Update</a>'
+									//}
+
+
+                                    if (r.IsFreezed == "Y") {
+                                        return '';
+                                    }
+                                    else {
+                                        if (r.isSubCombination == "Y") {
+                                              if (r.subjectcombination_status == 'ACTIVE') {
+                                                       //btn btn-info btn-sm editor_edit
+                                                       //btn btn-success editor_remove
+                                                       //editor_remove_Active
+                                                       return '<a href="#" class="editor_edit btn btn-primary btn-sm">Update</a> <a href="#" class="editor_remove btn btn-info btn-sm">Click to Deactivate</a>';
+                                                   }
+                                                   else {
+                                                       return '<a href="#" class="editor_remove_Active btn btn-warning btn-sm">Click to Activate</a>';
+                                                   }
+                                        }
+                                        else {
+                                            return '';
+                                        }
+
+                                    }
+                                }
+                            }
+
+                        ]
+						 ,
+                        "rowCallback": function (row, data, type) {
+                            if (data.subjectcombination_status == 'ACTIVE') {
+                                $(row).css('color', 'black');
+                            } else {
+                                $(row).css('color', 'red');
+                            }
+                        }
+                        //"footerCallback": function (row, data, start, end, display) {
+
+                        //    this.api().columns('.sum').every(function () {
+                        //        var column = this;
+
+                        //        var sum = column
+                        //            .data()
+                        //            .reduce(function (a, b) {
+                        //                a = parseInt(a, 10);
+                        //                if (isNaN(a) ) { a = 0; }
+
+                        //                b = parseInt(b, 10);
+                        //                if (isNaN(b)) { b = 0; }
+
+                        //                return a + b;
+                        //            },0);
+
+                        //        $(column.footer()).html(sum);
+                        //    })
+                        //}
+
+					});
+
+					table.on('order.dt search.dt', function () {
+						table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+							cell.innerHTML = i + 1;
+						});
+					}).draw();
+
+				  }
+                    else
+                       {
+                           $('#tblCourseDetail').hide();
+                       }
+
+
+				},
+				error: function (x, e) {
+					swal("Error");
+				}
+			});
+		}
+		function GetCourseType() {
+			$('#ddlCourseType').empty();
+			$('#ddlCourseType').append($("<option></option>").val(0).html('-Please Select-'));
+
+			$.ajax({
+				type: "GET",
+				url: '@Url.Action("GetCourseType", "CourseCombination")',
+				data: { },
+				dataType: "json",
+				contentType: "application/json;charset=utf-8",
+				success: function (data) {
+
+					$.each(data, function (key, value) {
+						$('#ddlCourseType').append($("<option></option>").val(value.Value).html(value.Text));
+					});
+				},
+				error: function (x, e) {
+					swal("Error");
+				}
+			});
+             }
+            function GetSubjects() {
+                $('#ddlSub').empty();
+			$.ajax({
+				type: "GET",
+				url: '@Url.Action("GetSubjects", "CourseCombination")',
+				data: { },
+				dataType: "json",
+				contentType: "application/json;charset=utf-8",
+				success: function (data) {
+					$.each(data, function (key, value) {
+                        $('#ddlSub').append($("<option></option>").val(value.Value).html(value.Text));
+                    });
+                    $("#ddlSub").SumoSelect({ max: 4});
+				},
+				error: function (x, e) {
+					swal("Error");
+				}
+			});
+		}
+		function startPreloader() {
+			$(".loader").css("display", "block");
+			$(".outer-loader").css("display", "block");
+
+		}
+		function stopPreloader() {
+
+			$(".loader").css("display", "none");
+			$(".outer-loader").css("display", "none");
+		}
+    </script>
+
+
+    <!-- Modal -->
+    <div class="modal fade cus-add-modal" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Subject Combination</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="cus-label" id="lblsubject">Subject<span style="color:red;"><strong>*</strong></span></label>&nbsp;<br />
+                            <select id="ddlSub" multiple="multiple" class="form-control"></select>
+                        </div>
+                        <div class="col-lg-12">
+                            <label class="cus-label" id="lblsubjectcomb"></label>&nbsp;
+                            <label class="cus-label" id="lblsubjectcombval" style="color:orange;"></label>&nbsp;
+                        </div>
+                        <div class="col-lg-12 m-b-10">
+                            <label class="cus-label" id="lbltotalseat">Total Seats<span style="color:red;"><strong>*</strong></span></label>&nbsp;
+                            <input type="text" id="txtTotalseat" maxlength="4" class="form-control" />
+                        </div>
+                        <div class="col-lg-12 m-b-10">
+                            <label class="cus-label" id="lblfees">Fees<span style="color:red;"><strong>*</strong></span></label>&nbsp;
+                            <input type="text" id="txtfee" maxlength="4" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-lg-12 cus-gobtn text-right">
+                        <a href="#" id="btnAddsubjcomb" class="btn btn-icon icon-left btn-primary btn-sm" runat="server"><i class="fas"></i>&nbsp;Save</a>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

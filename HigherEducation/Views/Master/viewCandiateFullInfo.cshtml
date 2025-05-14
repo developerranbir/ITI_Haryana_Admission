@@ -1,0 +1,1299 @@
+﻿@{
+
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Candidate Full Info</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/sweetalert.css" rel="stylesheet" />
+    <link href="../assets/css/stylesearch.css" rel="stylesheet" />
+    <link href="../assets/css/stylehome.css" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/jquery-3.5.1.js"></script>
+    <script src="../assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../assets/dataTable/dataTables/jquery.dataTables.min.js"></script>
+    <script src="../assets/js/popperjs/popper.min.js"></script>
+    <script src="../assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../scripts/sweetalert.min.js"></script>
+    <link href="../assets/css/all.css" rel="stylesheet" />
+    <link href="../assets/css/stylereport.css" rel="stylesheet" />
+    <link href="~/assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/assets/dataTable/dataTables/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/assets/dataTable/dataTables/buttons.html5.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/dataTables.buttons.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/jquery.dataTables.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/jszip.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/pdfmake.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/pdfmake.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/vfs_fonts.js"></script>
+    <script src="~/swalJs/sweetalert.min.js"></script>
+    <script src="~/swalJs/swal-forms.js"></script>
+    <style>
+        #maindiv {
+            display: none;
+        }
+
+        #tblPersonalDetail > tbody > tr > td:not([id]),
+        #tblRegistraionDetail > tbody > tr > td:not([id]) {
+            font-weight: bold;
+            width: 15%;
+        }
+
+
+        #tblEduQual tbody tr td, #tblSubjectDetails tbody tr td, #tblWeightage tbody tr td,
+        #tblChoice tbody tr td, #tblAllotDetails tbody tr td, #tblfeedetail tbody tr td {
+            white-space: pre-wrap !important;
+            word-break: break-word !important;
+            /*word-wrap: break-word !important;*/
+        }
+
+        .datatable td {
+            overflow: hidden; /* this is what fixes the expansion */
+            text-overflow: ellipsis; /* not supported in all browsers, but I accepted the tradeoff */
+            white-space: nowrap;
+        }
+
+        .width-100 {
+            width: 100px;
+        }
+        /* Important part */
+        .modal-dialog {
+            overflow-y: initial !important
+        }
+
+        .modal-body {
+            height: 75vh;
+            overflow-y: auto;
+        }
+
+        #tblPersonalDetail > tbody > tr > td:not([id]) {
+            font-weight: bold;
+        }
+
+        #tblChoice tbody tr td {
+            white-space: pre-wrap !important;
+            word-break: break-word !important;
+            /*word-wrap: break-word !important;*/
+        }
+
+        #tblEduQual tbody tr td {
+            white-space: pre-wrap !important;
+            word-break: break-all !important;
+            /*word-wrap: break-word !important;*/
+        }
+
+        #tblEduQual tbody tr th {
+            white-space: pre-wrap !important;
+            word-break: break-all !important;
+            /*word-wrap: break-word !important;*/
+        }
+
+        .disabledbutton {
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        .cus-label-li ul li {
+            display: inline-block;
+            padding-right: 10px;
+        }
+
+        input#rboBenefitYes, input#rboBenefitNo {
+            margin: 6px;
+        }
+        /*#tblPersonalDetail > tbody > tr > td:not([id]) {
+            font-weight: bold;
+            width: 15%;
+        }
+
+        #tblChoice tbody tr td {
+            white-space: pre-wrap !important;
+            word-break: break-word !important;*/
+        /*word-wrap: break-word !important;*/
+        /*}
+
+        #tblEduQual tbody tr td {
+            white-space: pre-wrap !important;
+            word-break: break-all !important;*/
+        /*word-wrap: break-word !important;*/
+        /*}
+
+        #tblEduQual tbody tr th {
+            white-space: pre-wrap !important;
+            word-break: break-all !important;*/
+        /*word-wrap: break-word !important;*/
+        /*}*/
+        .topHead {
+            display: none;
+        }
+
+        @@media print {
+            div#pcoded ~ div {
+                display: none;
+            }
+
+            .topHead {
+                display: block;
+                font-size: x-large;
+            }
+
+            #tblPersonalDetail > tbody > tr > td:not([id]) {
+                font-weight: bold;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+
+            #tblPersonalDetail > tbody > tr > td[id] {
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+
+            #tblPersonalDetail > tbody > tr > td {
+                padding: 2px 2px;
+            }
+
+            .btn, .btn-primary, footer, .steps, .main-banner, .cus-topbar, .abhi-no-print {
+                display: none;
+            }
+
+            table,
+            table tr td,
+            table tr th {
+                page-break-inside: avoid;
+                font-size: 10px;
+            }
+
+            #tblEduQual > tbody > tr > td, #tblEduQual > thead > tr > th {
+                font-size: x-small !important;
+                padding: 2px 2px;
+                white-space: pre-wrap;
+                word-break: break-word;
+            }
+
+            .cus-heading, .card-header, h3, .card {
+                margin: 0px 0px;
+                padding: 0px 0px;
+            }
+
+            .card-header {
+                page-break-after: avoid !important;
+            }
+
+            .card-body {
+                page-break-before: avoid !important;
+            }
+
+            .card {
+                page-break-inside: avoid;
+            }
+        }
+
+        .loader,
+        .outer-loader {
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        .outer-loader {
+            background: rgba(0, 0, 0, .3);
+            width: 100%;
+            height: 100%;
+            z-index: 999
+        }
+
+        .loader {
+            width: 69px;
+            height: 89px;
+            border: 1px solid #000;
+            margin: auto
+        }
+
+        .loader-img {
+            border: 15px solid #415bbb;
+            border-radius: 50%;
+            border-top: 15px solid #000;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0)
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg)
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .row_new {
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+        #logo img {
+            height: auto;
+            padding-left: 3px;
+            width: 40px
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        div#tblSeatAllocated_wrapper table#tblSeatAllocated tbody tr td, div#tblSeatAllocated_wrapper table#tblSeatAllocated thead tr th {
+            width: 110px !important;
+            word-break: break-word !important;
+            overflow: auto;
+            text-overflow: unset;
+            white-space: nowrap;
+            min-width: 80px;
+            white-space: normal;
+            font-size: 14px;
+        }
+
+        #API_CONTENT tbody tr td, div#tblSeatAllocated_wrapper table#tblSeatAllocated thead tr th {
+            width: 110px !important;
+            word-break: break-word !important;
+            overflow: auto;
+            text-overflow: unset;
+            white-space: nowrap;
+            min-width: 80px;
+            white-space: normal;
+            font-size: 14px;
+        }
+    </style>
+
+
+    <script type="text/javascript">
+        var aa;
+        var errorFn = function (jqXHR, exception) {
+            var msg = '';
+
+            if (jqXHR.status === 0) {
+                msg = 'Not connect.\n Verify Network.';
+            } else if (jqXHR.status == 404) {
+                msg = 'Requested page not found. [404]';
+            } else if (jqXHR.status == 500) {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'parsererror') {
+                msg = 'Requested JSON parse failed.';
+            } else if (exception === 'timeout') {
+                msg = 'Time out error.';
+            } else if (exception === 'abort') {
+                msg = 'Ajax request aborted.';
+            } else {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            alert("Error: " + msg);
+            $("#cover").fadeOut("slow");
+        }
+
+
+        $(document).ready(function () {
+            // disable enter as submit button
+            $(window).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+
+
+        function getData() {
+            if ($("#txtRegId").val() == "") {
+                swal('Error!', 'Please Enter Registration ID !!!', 'error');
+                return false;
+            }
+
+            var urlForData = "@Url.Action("getCandidateMaterData", "Master")";
+
+            var dataToSend = {};
+            dataToSend.regID = $("#txtRegId").val();
+            startPreloader();
+            $.ajax({
+                type: "POST",
+                url: urlForData,
+                data: JSON.stringify(dataToSend),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    var response_DataSet = JSON.parse(data);
+
+                    //if (data == "[]" || data == "{}")
+                    if (response_DataSet.Table.length == 0) {
+                        swal('Error!', 'Data Not found for this Registration ID !!!', 'error');
+                        $("#maindiv").hide();
+                        stopPreloader();
+                        return;
+                    }
+                    swal('Successfull!', 'Record Found', 'info');
+                    var issueList = '';
+                    var issueNumber = 0;
+
+
+                    $('#submitdate').text("Form Submitted on: " + response_DataSet.Table[0].DecSubmitDate);
+                    $.each(response_DataSet.Table, function (k, v) {
+                        $.each(v, function (key, value) {
+                            if (key == 'AadhaarNo' && value !== null && value !== '') {
+                                $('#' + key).text('XXXXXXXX' + value.substr(8, 12));
+                            }
+                            else if (key == 'BirthDate') {
+                                var d = new Date(value);
+                                //var d = value;
+                                var BDate = d.getDate() < 10 ? ('0' + d.getDate()) : d.getDate();
+                                Tmonth = d.getMonth() + 1;
+                                var BMonth = Tmonth < 10 ? ('0' + Tmonth) : Tmonth;
+                                $('#' + key).text(BDate + '/' + BMonth + '/' + d.getFullYear());
+                            }
+                            else if (key == "Caste" || key == "CasteCasteCateogry" || key == "CandidateName" || key == "BirthDate") {
+                                if (value == null || value == '') {
+                                    //    swal('error', "Please check your Caste, Caste Category, Candidate Name, Date of Birth, Application will not be submitted", "error");
+                                    issueList += (++issueNumber) + '. Value not found in ' + key;
+
+                                }
+                                $('#' + key).text(value == null || value == '' ? '---' : value);
+                            }
+                            else {
+                                $('#' + key).text(value == null || value == '' ? '---' : value);
+                            }
+
+                        });
+                    })
+
+
+                    $("#Gap_Year").text(response_DataSet.Table2.Gap_Year);// This will Set Gap_year of the student
+
+                    ////ABCD
+                    $("#tblSubjectDetails").DataTable({
+                        dom: 't',
+                        paging: false,
+                        sorting: false,
+                        destroy: true,
+                        searching: false,
+                        data: (response_DataSet.Table1),
+                        columns: [
+                            { data: 'SubjectName' },
+                            { data: 'MarksObt' },
+                            { data: 'MaxMarks' },
+                        ]
+                    });
+
+                    $("#tblfeedetail").DataTable({
+                        dom: 't',
+                        paging: false,
+                        sorting: false,
+                        destroy: true,
+                        searching: false,
+                        order: [[0, 'asc']],
+                        data: (response_DataSet.Table8),
+                        columns: [
+                            {
+                                data: null, render: function (data, type, row, meta) {
+                                    return meta.row + meta.settings._iDisplayStart + 1;
+                                }
+                            },
+                            { data: 'FeeType' },
+                            { data: 'tracking_id' },
+                            { data: 'bank_ref_no' },
+                            { data: 'Amount' },
+                            { data: 'order_status' },
+                            //{ data: 'status_messsage' },
+                            { data: 'payment_mode' },
+                            //{ data: 'CreateDate' },
+                            { data: 'trans_date' },
+                            //{ data: 'Payment_transactionId' },
+                        ]
+                    });
+
+                    $("#tblFormFillfeedetail").DataTable({
+                        dom: 't',
+                        paging: false,
+                        sorting: false,
+                        destroy: true,
+                        searching: false,
+                        order: [[0, 'asc']],
+                        data: (response_DataSet.Table5),
+                        columns: [
+                            {
+                                data: null, render: function (data, type, row, meta) {
+                                    return meta.row + meta.settings._iDisplayStart + 1;
+                                }
+                            },
+                            { data: 'FeeType' },
+                            { data: 'tracking_id' },
+                            { data: 'bank_ref_no' },
+                            { data: 'Amount' },
+                            { data: 'order_status' },
+                            //{ data: 'status_messsage' },
+                            { data: 'payment_mode' },
+                            //{ data: 'CreateDate' },
+                            { data: 'trans_date' },
+                            //{ data: 'Payment_transactionId' },
+                        ]
+                    });
+
+                    $("#tblEduQual").DataTable({
+                        dom: 't',
+                        paging: false,
+                        sorting: false,
+                        destroy: true,
+                        searching: false,
+                        order: [[0, 'asc']],
+                        data: (response_DataSet.Table2),
+                        columns: [
+                            { data: 'ExamPassed' },
+                            { data: 'Board' },
+                            { data: 'SchoolCollege' },
+                            { data: 'RegistrationRollno' },
+                            { data: 'ResultStatus' },
+                            { data: 'PassingYear' },
+                            { data: 'MarksObt' },
+                            { data: 'MaxMarks' },
+                            { data: 'Subject', visible: false },
+                            { data: 'Percentage' },
+                        ]
+                    });
+
+                    $("#tblAllotDetails").DataTable({
+                        dom: 't',
+                        paging: false,
+                        sorting: false,
+                        destroy: true,
+                        searching: false,
+                        order: [[0, 'asc']],
+                        data: (response_DataSet.Table6),
+                        columns: [
+                            {
+                                data: null, render: function (data, type, row, meta) {
+                                    return meta.row + meta.settings._iDisplayStart + 1;
+                                }
+                            },
+                            { data: 'collegename' },
+                            { data: 'courseName' },
+                            { data: 'SectionName' },
+                            { data: 'course_preference' },
+                            { data: 'marks' },
+                            { data: 'SeatAllocationCategory' },
+                            { data: 'counselling' },
+                            { data: 'is_verified' },
+                            { data: 'Ispaid' },
+                            { data: 'AdmissionStatus' },
+                            { data: 'IsPaneltyPaid' },
+                        ]
+                    });
+
+
+                    $("#tblChoice").DataTable({
+                        dom: 't',
+                        paging: false,
+                        sorting: false,
+                        destroy: true,
+                        searching: false,
+                        order: [[0, 'asc']],
+                        data: (response_DataSet.Table7),
+                        columns: [
+                            {
+                                data: null, render: function (data, type, row, meta) {
+                                    return meta.row + meta.settings._iDisplayStart + 1;
+                                }
+                            },
+                            { data: 'collegename' },
+                            { data: 'coursename' },
+                            { data: 'sectionname' },
+                            { data: 'pref_no' },
+                        ]
+                    });
+
+
+                    $.each(response_DataSet.Table3, function (k, v) {
+                        $.each(v, function (key, value) {
+                            $('#' + key).text(value == null || value == '' ? '---' : value);
+
+                        });
+                    });
+
+
+                    //$("#tblDocs").DataTable({
+                    //    dom: 't',
+                    //    paging: false,
+                    //    sorting: false,
+                    //    destroy: true,
+                    //    searching: false,
+                    //    order: [[0, 'asc']],
+                    //    data: (response_DataSet.Table4),
+                    //    columns: [
+                    //        {
+                    //            data: null, render: function (data, type, row, meta) {
+                    //                return meta.row + meta.settings._iDisplayStart + 1;
+                    //            }
+                    //        },
+                    //        { data: 'docname' },
+                    //        { data: 'documentno' },
+                    //        {
+                    //            "data": "Docs",
+                    //            "render": function (data, type, row, meta) {
+                    //                data = '<a onclick="PreviewDoc(' + row['DocId'] +');" data-toggle="modal" data-target="#document_Modal" style="cursor:pointer"><span class="badge badge-danger hh"><i class="fa fa-eye"></i>&nbsp;View</span></a>';
+                    //                //data = '<img src="data:image/jpeg;base64/"'+row['Docs'] +'" height="100px">';
+                    //                return data;
+                    //            }
+                    //        },
+                    //        //{ data: 'IsDocVerify' },
+                    //    ]
+                    //});
+                    
+                    $('#tblDocs tbody').empty();
+                    var docsCount = 0;
+                    for (var i = 0, j = 0; i < response_DataSet.Table4.length; i++) {
+                        if (response_DataSet.Table4[i].DocId != 8 && response_DataSet.Table4[i].DocId != 9)//Matric
+                        {
+                            $("#tblDocs > tbody").append('<tr><td>' + (++j).toString() + '</td><td>' + 
+                            response_DataSet.Table4[i].docname + '</td><td>' + 
+                            (response_DataSet.Table4[i].documentno == null ? '---' : response_DataSet.Table4[i].documentno) + 
+                            '<td>' + (response_DataSet.Table4[i].DocId == null ? '---' : 
+                            '<button class="btn btn-sm btn-primary" onclick="getDocument(\'' + response_DataSet.Table4[i].DocId + '\',\'document_Modal\');">View</button>') + '</td></tr>');
+                            docsCount++;
+                        }
+                        else if (response_DataSet.Table4[i].DocId == 8)//UserPhoto
+                        {
+                            addImageToControl("UserPhoto", response_DataSet.Table4[i].Docs);
+                        }
+                        else if (response_DataSet.Table4[i].DocId == 9)//SignId
+                        {
+                            addImageToControl("SignId", response_DataSet.Table4[i].Docs);
+                        }
+                    }
+                    if (docsCount == 0) {
+                        $("#tblDocs > tbody").append('<tr><td colspan="4" class="text-center">No Documents found!</td></tr>');
+                    }
+
+                    
+                    if (!($('#CasteCategory').text() == 'Scheduled Caste' && (
+                        $('#parental_income').text() == 'Less than or equal to Rs 50,000'
+                        || $('#parental_income').text() == 'More than Rs 50,000 and less than or equal to Rs 1,00,000'
+                        || $('#parental_income').text() == 'More than Rs 1,00,000 and less than or equal to Rs 1,50,000'
+                        || $('#parental_income').text() == 'More than Rs 1,50,000 and less than or equal to Rs 2,00,000'
+                        || $('#parental_income').text() == 'More than Rs 2,00,000 and less than or equal to Rs 2,50,000'
+                    )))
+                        $('#dec_sc_post_matric_scholarship').hide();//this is to be shown when caste is SC and Family income is lessthan 2.5 lakhs#Caste,#Parental_Income
+                    
+                    if (issueNumber > 0) {
+                        swal("Error!", "Application Cannot be Submitted\nKindly Cross Check for following:\n" + issueList, "error");
+                        return false;
+                    }
+                    var checkS = $("#frmStatus").text();
+
+                    if (checkS.includes("not")) {
+                        $("#frmStatus").addClass("warningMsg");
+                    }
+                    else {
+                        $("#frmStatus").removeClass("warningMsg");
+                    }
+                    $("#maindiv").show(500);
+                    stopPreloader();
+                }
+
+            });
+
+        }
+
+        function addImageToControl(imgId, base64) {
+            var switch_on = base64.toString().substr(0, 5);
+            $("#" + imgId).show();
+            $("#" + imgId + '_PDF').hide();
+            switch (switch_on) {
+                case 'iVBOR':
+                    $("#" + imgId).attr("src", "data:image/png;base64," + base64);
+                    break;
+                case '/9j/4':
+                    $("#" + imgId).attr("src", "data:image/jpeg;base64," + base64);
+                    break;
+                case 'R0lGO':
+                    $("#" + imgId).attr("src", "data:image/gif;base64," + base64);
+                    break;
+                case 'JVBER':
+                    var newUrl = "data:application/pdf;base64," + base64;
+                    var divEl = document.getElementById(imgId + '_CONTAINER');
+                    var objEl = document.getElementById(imgId + '_PDF');
+                    objEl.data = newUrl;
+                    // Refresh the content
+                    divEl.innerHTML = divEl.innerHTML;
+                    $("#" + imgId).hide();
+                    $("#" + imgId + '_PDF').show();
+                    /*$("#" + imgId + '_PDF').children().remove();*/
+                    $("#" + imgId + '_PDF > p > a').attr("href", ("data:application/pdf;base64," + base64));
+                    break;
+                default:
+                    $("#" + imgId).attr("src", "../assets/images/no-img.png" + base64);
+
+
+            }
+        }
+
+        $('#cmd').click(function () {
+            window.print();
+        });
+
+        function startPreloader() {
+            $(".loader").css("display", "block");
+            $(".outer-loader").css("display", "block");
+        }
+        function stopPreloader() {
+            $(".loader").css("display", "none");
+            $(".outer-loader").css("display", "none");
+        }
+
+        function getDocument(docid, controlId)
+        {
+            $("#"+controlId).attr("src","../assets/images/Download.gif")
+            var DataToPost = {};
+            DataToPost.DocId = docid;
+            DataToPost.regid = $("#RegistrationId").text();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("v_GetDocument", "Verification")',
+                data: JSON.stringify(DataToPost),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data)
+                {
+
+                    if (data == "[]" || data == "{}")
+                    {
+                        swal("Information", "No Data Found!", "info");
+                        $("#" + controlId).attr("src", "../assets/images/no-img.png")
+                    }
+                    else if (data == "[{\"Docs\":null}]")
+                    {
+                        swal("Information", "No Document Found! ", "info");
+                        $("#" + controlId).attr("src", "../assets/images/no-img.png")
+                    }
+                    else if (data == "1")
+                    {
+
+                        swal("error", "Session has Expired, Kindly Login again", "error");
+                        window.location = '/';
+                        return;
+                    }
+                    else
+                    {
+                        addImageToControl(controlId, JSON.parse(data)[0].Docs);
+                        //$("#" + controlId).parent().children('.btn.btn-sm.btn-success').remove();
+                        $('#documentModal').modal('show');
+                    }
+
+                },
+                error:errorFn
+            });
+        }
+
+    </script>
+
+</head>
+<body>
+
+    <div class="outer-loader" style="display: none;">
+        <div class="loader-img loader" style="display: none;"></div>
+    </div>
+    <div class="container-fluid">
+        <div class="row main-banner">
+            <img src="../assets/images/banner.jpg" style="width: 100%" alt="online admission portal" />
+        </div>
+
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-2"></div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-8 text-center top-heading" style="margin-top: 5px;"><h4 class="heading hedderstle">View Candidate Information</h4></div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-1 text-right back-btn" style="margin-top: 10px;">
+                <a href="~/DHE/HEMenu.aspx" id="btnBack" class="btn btn-icon icon-left btn-primary"><i class="fas fa-arrow-alt-circle-left"></i></a>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-12">
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-12">
+                <label class="cus-label">Enter Registration Id:<span style="color: red">*</span></label>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-12">
+                <input type="text" id="txtRegId" class="form-control">
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-12">
+                <button class="btn btn-primary" onclick="getData(); return false;">Get Details</button>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-12">
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="documentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="documentModalLabel">View Document</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <a href="#" class="pop"><img src="../assets/images/no-img.png" class="img-fluid img-thumbnail" style="width:100%;" id="document_Modal" /></a>
+                        @*<i class="fa fa-spinner fa-pulse" style="font-size:xx-large"></i>*@
+
+                        @*<embed src="" style="width:100%;height:100vh;" id="Xth_DMC_PDF" />*@
+                        <div class="Object-Container" id="document_Modal_CONTAINER">
+                            <object data="about:blank" type="application/pdf" style="width:100%;height:100vh;" id="document_Modal_PDF">
+                                <p>
+                                    Your web browser doesn't have a PDF plugin.
+                                    Instead you can <a href="#">
+                                        click here to
+                                        download the PDF file.
+                                    </a>
+                                </p>
+                            </object>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="maindiv" class="container-fluid" style="margin-top:50px;margin-bottom:100px;">
+        <hr>
+
+        <div class="card c-shadow">
+            <div class="card-header cus-heading">
+                <h3>Registration Information</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive" id="API_Content">
+                    <table class="table table-bordered" id="tblRegistraionDetail">
+
+                        <tbody>
+                            <tr>
+                                <td>Registration Number</td>
+                                <td id="RegistrationId"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>Registration Date</td>
+                                <td id="CreateDate"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Declaration Submit Date</td>
+                                <td id="DecSubmitDate"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>Is Form Final Submit</td>
+                                <td id="frmStatus"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card c-shadow">
+            <div class="card-header cus-heading">
+                <h3>Personal Information</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive" id="API_Content">
+                    <table class="table table-bordered table-hover" id="tblPersonalDetail">
+
+                        <tbody>
+                            <tr>
+                                <td>Candidate Name</td>
+                                <td id="CandidateName" style="width:10% !important;"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>Date of Birth</td>
+                                <td id="BirthDate"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td rowspan="4" id="">
+                                    <div class="card c-shadow" style="max-height:225px;max-width:175px;margin-left:auto;margin-right:auto;margin-bottom:auto;">
+                                        <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPgo8c3ZnIHdpZHRoPSI0MHB4IiBoZWlnaHQ9IjQwcHgiIHZpZXdCb3g9IjAgMCA0MCA0MCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWw6c3BhY2U9InByZXNlcnZlIiBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjEuNDE0MjE7IiB4PSIwcHgiIHk9IjBweCI+CiAgICA8ZGVmcz4KICAgICAgICA8c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWwogICAgICAgICAgICBALXdlYmtpdC1rZXlmcmFtZXMgc3BpbiB7CiAgICAgICAgICAgICAgZnJvbSB7CiAgICAgICAgICAgICAgICAtd2Via2l0LXRyYW5zZm9ybTogcm90YXRlKDBkZWcpCiAgICAgICAgICAgICAgfQogICAgICAgICAgICAgIHRvIHsKICAgICAgICAgICAgICAgIC13ZWJraXQtdHJhbnNmb3JtOiByb3RhdGUoLTM1OWRlZykKICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICAgICAgQGtleWZyYW1lcyBzcGluIHsKICAgICAgICAgICAgICBmcm9tIHsKICAgICAgICAgICAgICAgIHRyYW5zZm9ybTogcm90YXRlKDBkZWcpCiAgICAgICAgICAgICAgfQogICAgICAgICAgICAgIHRvIHsKICAgICAgICAgICAgICAgIHRyYW5zZm9ybTogcm90YXRlKC0zNTlkZWcpCiAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgICAgIHN2ZyB7CiAgICAgICAgICAgICAgICAtd2Via2l0LXRyYW5zZm9ybS1vcmlnaW46IDUwJSA1MCU7CiAgICAgICAgICAgICAgICAtd2Via2l0LWFuaW1hdGlvbjogc3BpbiAxLjVzIGxpbmVhciBpbmZpbml0ZTsKICAgICAgICAgICAgICAgIC13ZWJraXQtYmFja2ZhY2UtdmlzaWJpbGl0eTogaGlkZGVuOwogICAgICAgICAgICAgICAgYW5pbWF0aW9uOiBzcGluIDEuNXMgbGluZWFyIGluZmluaXRlOwogICAgICAgICAgICB9CiAgICAgICAgXV0+PC9zdHlsZT4KICAgIDwvZGVmcz4KICAgIDxnIGlkPSJvdXRlciI+CiAgICAgICAgPGc+CiAgICAgICAgICAgIDxwYXRoIGQ9Ik0yMCwwQzIyLjIwNTgsMCAyMy45OTM5LDEuNzg4MTMgMjMuOTkzOSwzLjk5MzlDMjMuOTkzOSw2LjE5OTY4IDIyLjIwNTgsNy45ODc4MSAyMCw3Ljk4NzgxQzE3Ljc5NDIsNy45ODc4MSAxNi4wMDYxLDYuMTk5NjggMTYuMDA2MSwzLjk5MzlDMTYuMDA2MSwxLjc4ODEzIDE3Ljc5NDIsMCAyMCwwWiIgc3R5bGU9ImZpbGw6YmxhY2s7Ii8+CiAgICAgICAgPC9nPgogICAgICAgIDxnPgogICAgICAgICAgICA8cGF0aCBkPSJNNS44NTc4Niw1Ljg1Nzg2QzcuNDE3NTgsNC4yOTgxNSA5Ljk0NjM4LDQuMjk4MTUgMTEuNTA2MSw1Ljg1Nzg2QzEzLjA2NTgsNy40MTc1OCAxMy4wNjU4LDkuOTQ2MzggMTEuNTA2MSwxMS41MDYxQzkuOTQ2MzgsMTMuMDY1OCA3LjQxNzU4LDEzLjA2NTggNS44NTc4NiwxMS41MDYxQzQuMjk4MTUsOS45NDYzOCA0LjI5ODE1LDcuNDE3NTggNS44NTc4Niw1Ljg1Nzg2WiIgc3R5bGU9ImZpbGw6cmdiKDIxMCwyMTAsMjEwKTsiLz4KICAgICAgICA8L2c+CiAgICAgICAgPGc+CiAgICAgICAgICAgIDxwYXRoIGQ9Ik0yMCwzMi4wMTIyQzIyLjIwNTgsMzIuMDEyMiAyMy45OTM5LDMzLjgwMDMgMjMuOTkzOSwzNi4wMDYxQzIzLjk5MzksMzguMjExOSAyMi4yMDU4LDQwIDIwLDQwQzE3Ljc5NDIsNDAgMTYuMDA2MSwzOC4yMTE5IDE2LjAwNjEsMzYuMDA2MUMxNi4wMDYxLDMzLjgwMDMgMTcuNzk0MiwzMi4wMTIyIDIwLDMyLjAxMjJaIiBzdHlsZT0iZmlsbDpyZ2IoMTMwLDEzMCwxMzApOyIvPgogICAgICAgIDwvZz4KICAgICAgICA8Zz4KICAgICAgICAgICAgPHBhdGggZD0iTTI4LjQ5MzksMjguNDkzOUMzMC4wNTM2LDI2LjkzNDIgMzIuNTgyNCwyNi45MzQyIDM0LjE0MjEsMjguNDkzOUMzNS43MDE5LDMwLjA1MzYgMzUuNzAxOSwzMi41ODI0IDM0LjE0MjEsMzQuMTQyMUMzMi41ODI0LDM1LjcwMTkgMzAuMDUzNiwzNS43MDE5IDI4LjQ5MzksMzQuMTQyMUMyNi45MzQyLDMyLjU4MjQgMjYuOTM0MiwzMC4wNTM2IDI4LjQ5MzksMjguNDkzOVoiIHN0eWxlPSJmaWxsOnJnYigxMDEsMTAxLDEwMSk7Ii8+CiAgICAgICAgPC9nPgogICAgICAgIDxnPgogICAgICAgICAgICA8cGF0aCBkPSJNMy45OTM5LDE2LjAwNjFDNi4xOTk2OCwxNi4wMDYxIDcuOTg3ODEsMTcuNzk0MiA3Ljk4NzgxLDIwQzcuOTg3ODEsMjIuMjA1OCA2LjE5OTY4LDIzLjk5MzkgMy45OTM5LDIzLjk5MzlDMS43ODgxMywyMy45OTM5IDAsMjIuMjA1OCAwLDIwQzAsMTcuNzk0MiAxLjc4ODEzLDE2LjAwNjEgMy45OTM5LDE2LjAwNjFaIiBzdHlsZT0iZmlsbDpyZ2IoMTg3LDE4NywxODcpOyIvPgogICAgICAgIDwvZz4KICAgICAgICA8Zz4KICAgICAgICAgICAgPHBhdGggZD0iTTUuODU3ODYsMjguNDkzOUM3LjQxNzU4LDI2LjkzNDIgOS45NDYzOCwyNi45MzQyIDExLjUwNjEsMjguNDkzOUMxMy4wNjU4LDMwLjA1MzYgMTMuMDY1OCwzMi41ODI0IDExLjUwNjEsMzQuMTQyMUM5Ljk0NjM4LDM1LjcwMTkgNy40MTc1OCwzNS43MDE5IDUuODU3ODYsMzQuMTQyMUM0LjI5ODE1LDMyLjU4MjQgNC4yOTgxNSwzMC4wNTM2IDUuODU3ODYsMjguNDkzOVoiIHN0eWxlPSJmaWxsOnJnYigxNjQsMTY0LDE2NCk7Ii8+CiAgICAgICAgPC9nPgogICAgICAgIDxnPgogICAgICAgICAgICA8cGF0aCBkPSJNMzYuMDA2MSwxNi4wMDYxQzM4LjIxMTksMTYuMDA2MSA0MCwxNy43OTQyIDQwLDIwQzQwLDIyLjIwNTggMzguMjExOSwyMy45OTM5IDM2LjAwNjEsMjMuOTkzOUMzMy44MDAzLDIzLjk5MzkgMzIuMDEyMiwyMi4yMDU4IDMyLjAxMjIsMjBDMzIuMDEyMiwxNy43OTQyIDMzLjgwMDMsMTYuMDA2MSAzNi4wMDYxLDE2LjAwNjFaIiBzdHlsZT0iZmlsbDpyZ2IoNzQsNzQsNzQpOyIvPgogICAgICAgIDwvZz4KICAgICAgICA8Zz4KICAgICAgICAgICAgPHBhdGggZD0iTTI4LjQ5MzksNS44NTc4NkMzMC4wNTM2LDQuMjk4MTUgMzIuNTgyNCw0LjI5ODE1IDM0LjE0MjEsNS44NTc4NkMzNS43MDE5LDcuNDE3NTggMzUuNzAxOSw5Ljk0NjM4IDM0LjE0MjEsMTEuNTA2MUMzMi41ODI0LDEzLjA2NTggMzAuMDUzNiwxMy4wNjU4IDI4LjQ5MzksMTEuNTA2MUMyNi45MzQyLDkuOTQ2MzggMjYuOTM0Miw3LjQxNzU4IDI4LjQ5MzksNS44NTc4NloiIHN0eWxlPSJmaWxsOnJnYig1MCw1MCw1MCk7Ii8+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4K" id="UserPhoto" alt="Candidate Photo" style="width:100%;height:100%;" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Family Id</td>
+                                <td id="familyidfromppp"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>Member Id</td>
+                                <td id="memberidfromppp"><i class="fa fa-spinner fa-spin"></i></td>
+
+                            </tr>
+                            <tr>
+                                <td>Gender</td>
+                                <td id="Sex"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>Blood Group</td>
+                                <td id="blood_group_name"><i class="fa fa-spinner fa-spin"></i></td>
+
+
+
+                            </tr>
+                            <tr>
+                                <td>Marital Status</td>
+                                <td id="Marital_Status"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>Aadhaar No.</td>
+                                <td id="AadhaarNo"><i class="fa fa-spinner fa-spin"></i></td>
+
+                            </tr>
+                            <tr>
+                                <td>e-mail</td>
+                                <td id="Email"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>Mobile No.</td>
+                                <td id="MobileNo" colspan="2"><i class="fa fa-spinner fa-spin"></i></td>
+
+                            </tr>
+                            <tr>
+                                <td>Mother's Name</td>
+                                <td id="MotherName"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>Father's / Husband's Name</td>
+                                <td id="FHName" colspan="2"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+                            <tr>
+
+
+                                <td>Mother Occupation</td>
+                                <td id="Mother_Occupation"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>Father Occupation</td>
+                                <td id="Father_Occupation" colspan="2"><i class="fa fa-spinner fa-spin"></i></td>
+                                @*
+                                    <td rowspan="3">Permanent Address</td>
+                                    <td colspan="2" rowspan="3" id="PAddress"><i class="fa fa-spinner fa-spin"></i></td>*@
+
+                            </tr>
+                            <tr></tr>
+                            <tr>
+
+                                <td>Permanent Address</td>
+                                <td colspan="4" id="PAddress"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Correspondence Address</td>
+                                <td colspan="4" id="CAddress"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Telephone No.</td>
+                                <td id="TelephoneNo"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>BPL Card No.</td>
+                                <td colspan="2" id="BPL_Card_No"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+
+                            <tr>
+
+                                <td>Religion</td>
+                                <td id="religion_name"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>Nationality</td>
+                                <td id="Nationality" colspan="2"><i class="fa fa-spinner fa-spin"></i></td>
+
+                                @*
+                                    <td rowspan="3">Correspondence Address</td>
+                                    <td colspan="2" rowspan="3" id="CAddress"><i class="fa fa-spinner fa-spin"></i></td>*@
+
+                            </tr>
+
+                            <tr>
+                                <td>Country</td>
+                                <td id="country_name"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>State</td>
+                                <td id="CStateName" colspan="2"><i class="fa fa-spinner fa-spin"></i></td>
+
+                            </tr>
+                            <tr>
+                                <td>District</td>
+                                <td id="CDistrictName"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>Block / Municipality</td>
+                                <td id="CMunicipalBlockName" colspan="2"><i class="fa fa-spinner fa-spin"></i></td>
+
+                            </tr>
+
+
+                            <tr>
+                                <td>Guardian Name</td>
+                                <td id="Guardian_Name"><i class="fa fa-spinner fa-spin"></i></td>
+
+                                <td>Guardian Mobile No.:<span id="Guardian_Mobile_No" style="float:right;"><i class="fa fa-spinner fa-spin"></i></span></td>
+
+                                <td colspan="2">Guardian e-mail:<span id="Guardian_EmailID" style="float:right;"><i class="fa fa-spinner fa-spin"></i></span></td>
+
+                            </tr>
+                            <!--<tr>
+
+                                <td>Street_Address_1</td>
+                                <td id="Street_Address_1"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>Street_Address_2</td>
+                                <td id="Street_Address_2"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>Pin_Code</td>
+                                <td id="Pin_Code"><i class="fa fa-spinner fa-spin"></i></td>
+
+                            </tr> -->
+                            <tr>
+                                <td style="word-break:break-word;white-space:pre-wrap;">Are you a Resident of Haryana or Domicile Holder of Haryana?</td>
+                                <td id="Has_Domicile1"><i class="fa fa-spinner fa-spin"></i></td>
+                                <td>Parental Income from all Sources</td>
+                                <td colspan="2" id="parental_income"><i class="fa fa-spinner fa-spin"></i></td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card c-shadow">
+            <div class="card-header cus-heading"><h3>Education Qualification</h3></div>
+            <div class="card-body">
+                <div class="row" style="margin:5px;">
+                    <div class="col-md-6 badge badge-info text-left" style="font-size:1rem;border-radius:6px;"><span>Stream</span> :   <span id="StreamName"></span></div>
+                    <div class="col-md-6"></div>
+                </div>
+
+                <div class="table-responsive">
+
+                    <table id="tblEduQual" class="table no-margin table-bordered table-striped table-hover" style="width:95%">
+                        <thead>
+                            <tr>
+                                <th>Exam Passed	    </th>
+                                <th>Univ /Board	    </th>
+                                <th>School /College	</th>
+                                <th>Roll no	        </th>
+                                <th>Result Status	</th>
+                                <th>Passing Year	</th>
+                                <th>Marks obta/CGPA	</th>
+                                <th>Max. Marks</th>
+                                <th>Subjects</th>
+                                <th>%tage</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card c-shadow">
+            <div class="card-header cus-heading">
+                <h3>Subject Wise Marks Detail of 10th</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="tblSubjectDetails" class="table no-margin table-bordered table-striped table-hover" style="width:95%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Subject Name
+                                </th>
+                                <th>
+                                    Marks Obtained
+                                </th>
+                                <th>
+                                    Maximum Marks
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card c-shadow">
+            <div class="card-header cus-heading">
+                <h3>Reservation Detail</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="#tblReservation1" class="table no-margin table-bordered table-striped table-hover" style="width:95%;margin-left:auto;margin-right:auto;">
+                        <tbody>
+                            <tr>
+
+                                <td style="font-weight:700;">Reservation Category</td>
+                                <td id="reservationname"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:700;">Caste Category</td>
+                                <td id="CasteCategory"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:700;">Caste</td>
+                                <td id="Caste"><i class="fa fa-spinner fa-spin"></i></td>
+
+                            </tr>
+                            <tr>
+                                <td style="font-weight:700;">Divyang Category</td>
+                                <td id="DisableCategory"><i class="fa fa-spinner fa-spin"></i></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table id="#tblReservation2" class="table no-margin table-bordered table-striped table-hover" style="width:95%;margin-left:auto;margin-right:auto;">
+                        <tbody>
+
+                            <tr>
+                                <td>1.</td>
+                                <td colspan="4" style="font-weight:700;">Are you a Resident of Haryana <br />OR <br />Do you have Completed 10th class from a school situated in Haryana?</td>
+                                <td id="Has_Domicile"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+                            <tr>
+                                <td>2.</td>
+                                <td colspan="4" style="font-weight:700;">Are you from Minority Community?</td>
+                                <td id="IsMinority"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card c-shadow">
+            <div class="card-header cus-heading">
+                <h3>Weightage Detail</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="tblWeightage" class="table no-margin table-bordered table-striped table-hover" style="width:95%;margin-left:auto;margin-right:auto;">
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td colspan="4" style="font-weight:700;"> Are you a widow or ward of widow?</td>
+                                <td id="Widow_Ward"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td colspan="4" style="font-weight:700;"> Are you Orphan?</td>
+                                <td id="Orphan"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td colspan="4" style="font-weight:700;"> Are you Applying for Gram Panchayat Weightage?</td>
+                                <td id="Panch_Weightage"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td colspan="4" style="font-weight:700;">Gram Panchayat </td>
+                                <td id="Panch_Weightage_Village"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td colspan="4" style="font-weight:700;">Gram Panchayat District</td>
+                                <td id="Panch_Weightage_District"><i class="fa fa-spinner fa-spin"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card c-shadow">
+            <div class="card-header cus-heading">
+                <h3>Documents Attached</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="tblDocs" class="table no-margin table-bordered table-striped table-hover" style="width:95%;margin-left:auto;margin-right:auto;">
+                        <thead>
+                            <tr>
+                                <th>
+                                    S.No
+                                </th>
+
+                                <th>
+                                    Document Name
+                                </th>
+                                <th>
+                                    Document ID
+                                </th>
+                                <th>
+                                    View Document
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card c-shadow">
+            <div class="card-header cus-heading">
+                <h3>Choice of Trade Preferences</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="tblChoice" class="table no-margin table-bordered table-striped table-hover" style="width: 95%; margin-left: auto; margin-right: auto;">
+                        <thead>
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>ITI Name</th>
+                                <th>Course Name</th>
+                                <th>Section Name</th>
+                                <th>Course Preference</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card c-shadow">
+            <div class="card-header cus-heading">
+                <h3>Registration Fees Details</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="tblFormFillfeedetail" class="table no-margin table-bordered table-striped table-hover" style="width:95%;">
+                        <thead>
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>Fee Type</th>
+                                <th>Tracking Id</th>
+                                <th>Bank Ref. No.</th>
+                                <th>Amount</th>
+                                <th>Payment Status</th>
+                                <!--    <th>Status Message</th>-->
+                                <th>Payment Mode</th>
+                                <!--      <th>Create Date</th>-->
+                                <th>Payment Date</th>
+                                <!-- <th>Transaction Id</th>  -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card c-shadow">
+            <div class="card-header cus-heading">
+                <h3>Seat Allotment Details</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="tblAllotDetails" class="table no-margin table-bordered table-striped table-hover" style="width:95%;">
+                        <thead>
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>ITI Name</th>
+                                <th>Course Name</th>
+                                <th>Section Name</th>
+                                <th>Course Preference</th>
+                                <th>Percentage of Marks</th>
+                                <th>Seat Allocation Category</th>
+                                <th>Counselling</th>
+                                <th>Is Verified</th>
+                                <th>Paid Seat</th>
+                                <th>Admission Status</th>
+                                <th>Panelty Paid</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="card c-shadow">
+            <div class="card-header cus-heading">
+                <h3>Adminssion Fees Details</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="tblfeedetail" class="table no-margin table-bordered table-striped table-hover" style="width:95%;">
+                        <thead>
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>Fee Type</th>
+                                <th>Tracking Id</th>
+                                <th>Bank Ref. No.</th>
+                                <th>Amount</th>
+                                <th>Payment Status</th>
+                                <!--    <th>Status Message</th>-->
+                                <th>Payment Mode</th>
+                                <!--      <th>Create Date</th>-->
+                                <th>Payment Date</th>
+                                <!-- <th>Transaction Id</th>  -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 form-group text-right">
+                <img id="SignId" height="100">
+                <p id="b64" hidden="hidden"></p>
+            </div>
+            <div class="col-md-12 text-right" style="margin-bottom: 120px;">
+                <u>Student Signtaure</u>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" style="position: fixed;bottom: 0;width: 100%;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12 text-center">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 text-left" style="margin-top: 10px;">
+                            <div class="credits">
+                                <a>Site is technically designed, hosted and maintained by National Informatics Centre, Haryana</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <img src="../assets/images/nic-logo.png" style="width: 100px;">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </footer>
+    <!-- End Footer -->
+</body>
+</html>

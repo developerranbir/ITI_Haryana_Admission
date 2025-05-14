@@ -1,0 +1,243 @@
+﻿<style>
+    .main-banner img {
+        width: 100vw;
+        border-bottom: 4px solid #f0f0f0;
+    }
+    .Logo_Edit {
+        color: #fff;
+        text-shadow: 1px 1px #283612, 2px 2px #283612, 3px 3px #283612;
+        -webkit-transition: all 0.12s ease-out;
+        -moz-transition: all 0.12s ease-out;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+        .Logo_Edit:hover {
+            color: #fff;
+            text-shadow: 1px 1px #283612, 2px 2px #283612, 3px 3px #283612, 4px 4px #283612, 5px 5px #283612, 6px 6px #283612;
+        }
+
+    .header_Effect {
+        background-color: #ffffff;
+        border-bottom: 1px solid #eee;
+    }
+
+    .div_google {
+        display: block;
+        position: absolute;
+        margin: 11px 8px;
+    }
+
+    .goog-logo-link {
+        display: none;
+    }
+
+    .goog-te-gadget {
+        font-family: arial;
+        font-size: 11px;
+        color: #ffffff;
+        white-space: nowrap;
+    }
+
+    .progress-bar.progress-bar-success {
+        background: linear-gradient(60deg, #66bb6a, #43a047);
+    }
+
+    .progress-bar.progress-bar-danger {
+        background: linear-gradient(60deg, #f36a59, #d05453);
+    }
+
+    .progress-bar.progress-bar-info {
+        background: linear-gradient(45deg, #4099ff, #73b4ff);
+    }
+
+    .progress .skill {
+        font: normal 12px "Open Sans Web";
+        line-height: 35px;
+        padding: 0;
+        margin: 0 0 0 20px;
+        text-transform: uppercase;
+    }
+
+        .progress .skill .val {
+            float: right;
+            font-style: normal;
+            margin: 0 20px 0 0;
+        }
+
+    .progress-bar {
+        text-align: left;
+        transition-duration: 3s;
+    }
+</style>
+<script type="text/javascript" src="~/assets/js/jquery/jquery.min.js"></script>
+<!-- Pre-loader start -->
+<div class="theme-loader">
+    <div class="loader-track">
+        <div class="loader-bar"></div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row main-banner">
+        <img src="../assets/images/banner.jpg" alt="Online Admission Portal" />
+    </div>
+</div>
+<!-- Pre-loader end -->
+<!-- <div id="pcoded" class="pcoded">
+    <div class="pcoded-overlay-box"></div>
+    <div class="pcoded-container navbar-wrapper">
+        <nav class="navbar header-navbar pcoded-header header_Effect">
+            <div class="navbar-wrapper">
+                <div class="navbar-logo">
+                    <a class="mobile-menu" id="mobile-collapse" href="#!">
+                        <i class="ti-menu" style="margin-right: 40px;"></i>
+                    </a>
+                    <div class="mobile-search">
+                        <div class="header-search">
+                            <div class="main-search morphsearch-search">
+                                <div class="input-group">
+                                    <span class="input-group-addon search-close"><i class="ti-close"></i></span>
+                                    <input type="text" class="form-control" placeholder="Enter Keyword">
+                                    <span class="input-group-addon search-btn"><i class="ti-search"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="Logo_Edit">Higher Education</span>
+                    <a class="mobile-options">
+                        <i class="ti-more"></i>
+                    </a>
+                </div>
+
+                <div class="navbar-container container-fluid">
+                    <ul class="nav-left">
+                        <li>
+                            <div class="sidebar_toggle"><a href="javascript:void(0)"><i class="ti-menu"></i></a></div>
+                        </li>
+                        @*<li class="header-search">
+                            <div class="main-search morphsearch-search">
+                                <div class="input-group">
+                                    <span class="input-group-addon search-close"><i class="ti-close"></i></span>
+                                    <input type="text" class="form-control">
+                                    <span class="input-group-addon search-btn"><i class="ti-search"></i></span>
+                                </div>
+                            </div>
+                        </li>*@
+                        <li>
+                            <a href="#!" onclick="javascript:toggleFullScreen()">
+                                <i class="ti-fullscreen"></i>
+                            </a>
+                        </li>
+                        <li>
+                            @*<div class="div_google" id="google_translate_element">
+                            </div>*@
+                        </li>
+                    </ul>
+                    <ul class="nav-right">
+                        <li class="header-notification">
+                            <a href="#!">
+                                <i class="ti-bell"></i>
+                                <span class="badge bg-c-pink"></span>
+                            </a>
+                            <ul class="show-notification">
+                                <li>
+                                    <h6>Notifications</h6>
+                                    <label class="label label-danger">New</label>
+                                </li>
+                                <li class="dropdown-progress">
+                                    <a href="@Url.Action("ViewCases", "Court", new { Area = "CourtCase" })" , title="{Click to view list}">
+                                        <div class="dropdown-label">
+                                            <span>Registered Cases</span>
+                                            <strong class="pull-right">@Session["Registered"]</strong>
+                                        </div>
+                                        <div class="progress"><div class="progress-bar progress-bar-info" aria-valuenow="@Session["Registered"]" aria-valuemin="0" aria-valuemax="100"></div></div>
+                                        @*<div class="progress">
+                                                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="@Session["Registered"]" aria-valuemin="0" aria-valuemax="100">
+                                                    <span><i class="val">@Session["Registered"]</i></span>
+                                                </div>
+                                            </div>*@
+                                    </a>
+                                </li>
+                                <li class="dropdown-progress">
+                                    <a href="@Url.Action("CompleteCases", "Court", new { Area = "CourtCase" })" , title="{Click to view list}">
+                                        <div class="dropdown-label">
+                                            <span>Completed Cases</span>
+                                            <strong class="pull-right">@Session["Completed"]</strong>
+                                        </div>
+                                        <div class="progress"><div class="progress-bar progress-bar-success" aria-valuenow="@Session["Completed"]" aria-valuemin="0" aria-valuemax="100"></div></div>
+                                        @*<div class="progress">
+                                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@Session["Completed"]" aria-valuemin="0" aria-valuemax="100">
+                                                    <span><i class="val">@Session["Completed"]</i></span>
+                                                </div>
+                                            </div>*@
+                                    </a>
+                                </li>
+                                <li class="dropdown-progress">
+                                    <a href="@Url.Action("ViewCases", "Court", new { Area = "CourtCase" })" , title="{Click to view list}">
+                                        <div class="dropdown-label">
+                                            <span>Pending Cases</span>
+                                            <strong class="pull-right">@Session["Pending"]</strong>
+                                        </div>
+                                        <div class="progress"><div class="progress-bar progress-bar-danger" aria-valuenow="@Session["Pending"]" aria-valuemin="0" aria-valuemax="100"></div></div>
+                                        @*<div class="progress">
+                                                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="@Session["Pending"]" aria-valuemin="0" aria-valuemax="100">
+                                                    <span><i class="val">@Session["Pending"]</i> %</span>
+                                                </div>
+                                            </div>*@
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="user-profile header-notification">
+                            <a href="#!">
+                                @*<img src="assets/images/avatar-4.jpg" class="img-radius" alt="User-Profile-Image">*@
+                                <span class="profile-info">
+                                    <small style="font-weight:bold;" class="text-bold">@Session["CandidateName"]</small>
+                                </span>
+                                <i class="ti-angle-down"></i>
+                            </a>
+                            <ul class="show-notification profile-notification">
+                                @if (Convert.ToInt32(Session["RoleId"]) != 4)
+                                {
+                                    @*<li>
+                                        <a href="#">
+                                            <i class="ti-settings"></i> Settings
+                                        </a>
+                                    </li>*@
+                                    <li>
+                                        <a href="#">
+                                            <i class="ti-user"></i> Profile
+                                        </a>
+                                    </li>
+                                }
+                                <li>
+                                    <a id="btnLogout" href="@Url.Action("LogOut", "Account")"><i class="fa fa-fw fa-power-off text-danger"></i>Logout</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="#">Last Login:- @Session["LastLogin"]</a>
+                                </li>
+                                @*<li>
+                                        <a href="auth-normal-sign-in.html">
+                                            <i class="ti-layout-sidebar-left"></i> Logout
+                                        </a>
+                                    </li>*@
+                            </ul>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+        </div>
+    </div>-->
+<script>
+    $(document).ready(function () {
+        $('.progress .progress-bar').css("width",
+            function () {
+                return $(this).attr("aria-valuenow") + "%";
+            }
+        )
+    });
+</script>

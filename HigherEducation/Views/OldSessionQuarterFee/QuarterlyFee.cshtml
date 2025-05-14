@@ -1,0 +1,525 @@
+﻿@model HigherEducation.Models.FeeViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutOldSession.cshtml";
+}
+
+@{
+    Response.Cache.SetCacheability(HttpCacheability.NoCache);
+    Response.Cache.SetExpires(DateTime.Now);
+    Response.Buffer = true;
+
+    Response.Expires = -1;
+    Response.CacheControl = "no-cache";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Quarterly Fee 2nd Year</title>
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/stylepayment.css">
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <script src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+
+    <script src="~/Content/assets/js/libs/jquery/jspdf.js"></script>
+    <script src="~/scripts/html2canvas.js"></script>
+    <style>
+        #footer {
+            bottom: auto;
+        }
+
+        .loader,
+        .outer-loader {
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        .outer-loader {
+            background: rgba(0, 0, 0, .3);
+            width: 100%;
+            height: 100%;
+            z-index: 999
+        }
+
+        .loader {
+            width: 69px;
+            height: 89px;
+            border: 1px solid #000;
+            margin: auto
+        }
+
+        .loader-img {
+            border: 15px solid #415bbb;
+            border-radius: 50%;
+            border-top: 15px solid #000;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0)
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg)
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .row_new {
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+        #logo img {
+            height: auto;
+            padding-left: 3px;
+            width: 40px
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        .table td {
+            padding: 0.35rem;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        .cus-modal .modal-dialog {
+            max-width: 800px !important;
+        }
+
+        .modal-content .close {
+            position: absolute;
+            right: -15px;
+            background: #E91E63;
+            width: 40px;
+            height: 40px;
+            z-index: 999;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 30px;
+            top: -25px;
+            cursor: pointer;
+        }
+
+        .cus-background .card {
+            box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            -moz-box-shadow: none !important;
+        }
+
+        .cus-inner-data label {
+            font-weight: 700 !important;
+        }
+    </style>
+</head>
+<body>
+    @{
+        if (Model.candidatePasswordStatus.Count > 0)
+        {
+            foreach (var item in Model.candidatePasswordStatus)
+            {
+                if (item.Updated == "NO")
+                {
+                    <script>
+                        swal({
+                        title: "Alert!!",
+                            text: "Kindly update your Password.",
+                        // text: "You can differ your seat to participiate in next counselling round.",
+                        type: "info",
+                        showCancelButton: false,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Ok",
+                        closeOnConfirm: false
+                                },
+                            function (isConfirm) {
+                            if (isConfirm) {
+
+                                window.location = "@Url.Action("changePassword", "OldSessionQuarterFee")"
+                            }
+                            else {
+
+                            }
+                        });
+                    </script>
+                }
+            }
+        }
+    }
+    <div id="candidate_content">
+    </div>
+
+    @if (Model.candidateSeatAllocated.Count > 999)
+    {
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <div class="row" style="margin-top:40px;">
+                    <div class="col-md-12 form-group text-center">
+                        <span style="font-size:16px;font-weight:bold;color:red" id="spnAllo"><b>Seat Allocated</b></span>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover" id="tblfeedetail" style="box-shadow: 0px 0px 10px 0px #ccc;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>Institute Name</th>
+                                <th>Trade</th>
+                                <th>Counselling Round</th>
+                                <th>Verification Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.candidateSeatAllocated)
+                            {
+                                <tr>
+                                    <td> @Html.HiddenFor(m => item.A1_meritid, new { @Value = item.A1_meritid })</td>
+                                    <td> @Html.HiddenFor(m => item.Al_RegistrationId, new { @Value = item.Al_RegistrationId })</td>
+                                    <td> @Html.DisplayFor(m => item.Al_CollegeName, new { @class = "form-control" })</td>
+                                    <td> @Html.DisplayFor(m => item.Al_Section, new { @class = "form-control" })</td>
+                                    <td> @Html.DisplayFor(m => item.Al_Counselling, new { @class = "form-control" })</td>
+                                    <td> @Html.DisplayFor(m => item.Al_VerificationStatus, new { @class = "form-control" })</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.candidateAdmissionStatuses.Count > 0)
+    {
+
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <div class="row" style="margin-top:40px;">
+                    <div class="col-md-12 form-group text-center">
+                        <span style="font-size:16px;font-weight:bold;color:red" id="spnadmi"><b>Paid FEE</b></span>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover" id="tblfeedetail" style="box-shadow: 0px 0px 10px 0px #ccc;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>ITI Name</th>
+                                <th>Trade</th>
+                                <th>Fee Status</th>
+                                <th>Fee Type</th>
+                                <th>Fee Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.candidateAdmissionStatuses)
+                            {
+                                <tr>
+                                    <td> @Html.HiddenFor(m => item.C_RegistrationId, new { @Value = item.C_RegistrationId })</td>
+                                    <td> @Html.HiddenFor(m => item.C_PaymentTransactionId, new { @Value = item.C_PaymentTransactionId })</td>
+                                    <td> @Html.DisplayFor(m => item.C_CollegeName, new { @class = "form-control" })</td>
+                                    <td> @Html.DisplayFor(m => item.C_SectionName, new { @class = "form-control" })</td>
+                                    <td> @Html.DisplayFor(m => item.C_AdmissionStatus, new { @class = "form-control" })</td>
+                                    @if (item.C_QtrNo == "Admission Fee")
+                                    {
+                                        <td>
+                                            @Html.DisplayFor(m => item.C_QtrNo, new { @class = "form-control" })
+                                        </td>
+                                    }
+                                    else if (item.C_QtrNo == "2")
+                                    {
+                                        <td>
+                                            @Html.DisplayFor(m => item.C_QtrNo, new { @class = "form-control" })nd Quarter
+                                        </td>
+                                    }
+                                    else if (item.C_QtrNo == "3")
+                                    {
+                                        <td>
+                                            @Html.DisplayFor(m => item.C_QtrNo, new { @class = "form-control" })rd Quarter
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @Html.DisplayFor(m => item.C_QtrNo, new { @class = "form-control" })th Quarter
+                                        </td>
+                                    }
+                                    @if (item.C_AdmissionStatus.ToUpper() == "SUCCESS" && item.C_PaymentTransactionId != "99")
+                                    {
+                                        <td><input type='button' value='Fee Receipt' class='btn btn-danger btn-sm btnFeeReceipt'></td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+    @{
+        if (Model.CandidateAllocatedCollege.Count > 0)
+        {
+            <div class="row" style="margin-top:5px;margin-bottom:10px;" id="feeDetailsNoPrint">
+                <div class="col-md-12 form-group">
+                    <div class="row" style="margin-top:37px;">
+                        <div class="col-md-12 form-group text-center">
+                            <span style="font-size:16px;font-weight:bold;color:red">If you have already paid fee and payment receipt is not generated, wait for 24 hours.<br>यदि आपने पहले ही शुल्क का भुगतान कर दिया है और भुगतान रसीद उत्पन्न नहीं हुई है, तो 24 घंटे तक प्रतीक्षा करें।</span><br />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-md-12 form-group text-center">
+                            <span style="font-size:16px;font-weight:bold;color:red" id="spnadmi"><b>Fee to be Pay</b></span>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="tblfeedetail" style="box-shadow: 0px 0px 10px 0px #ccc;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Sr.</th>
+                                    <th>ITI Name</th>
+                                    <th>Trade/Section</th>
+                                    <th>Quarter Number</th>
+                                    <th>View</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int i = 1;
+                                    foreach (var item in Model.CandidateAllocatedCollege)
+                                    {
+                                        <tr>
+                                            <td> @Html.HiddenFor(m => item.A_Collegeid, new { @Value = item.A_Collegeid })</td>
+                                            <td> @Html.HiddenFor(m => item.A_RegistrationId, new { @Value = item.A_RegistrationId })</td>
+                                            <td> @Html.HiddenFor(m => item.A_QtrNo, new { @Value = item.A_QtrNo })</td>
+                                            <td><span>@i</span></td>
+                                            <td> @Html.DisplayFor(m => item.A_CollegeName, new { @class = "form-control" })</td>
+                                            <td> @Html.DisplayFor(m => item.A_Section, new { @class = "form-control" })</td>
+                                            @if (item.A_QtrNo == "2")
+                                            {
+                                                <td>
+                                                    @Html.DisplayFor(m => item.A_QtrNo, new { @class = "form-control" })nd Quarter
+                                                </td>
+                                            }
+                                            else if (item.A_QtrNo == "3")
+                                            {
+                                                <td>
+                                                    @Html.DisplayFor(m => item.A_QtrNo, new { @class = "form-control" })rd Quarter
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    @Html.DisplayFor(m => item.A_QtrNo, new { @class = "form-control" })th Quarter
+                                                </td>
+                                            }
+                                            <td><input type='button' value='View' id='btngetdetail' class='btn btn-danger btn-sm detail'></td>
+                                        </tr>
+                                        i++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    <div class="modal cus-modal" tabindex="-1" id="FeeReceipt" data-keyboard="false" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="Fee_content">
+    </div>
+
+    <div id="user_content">
+    </div>
+
+    <div id="dv_hide">
+        <div id="seat_letter">
+        </div>
+    </div>
+
+
+    <div class="outer-loader" style="display: none;">
+        <div class="loader-img loader" style="display: none;"></div>
+    </div>
+
+
+
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        startPreloader();
+        $('#candidate_content').empty();
+                
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("PartialCandidateView", "OldSessionQuarterFee")',
+				    //data: { collegeid: college_id},
+
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: function (response) {
+                        $('#candidate_content').append(response);
+                        stopPreloader();
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                        stopPreloader();
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                        stopPreloader();
+                    }
+                });
+    });
+    $(document).ready(function () {
+            $(document).on('click', '.detail', function () {
+                startPreloader();
+                $('#Fee_content').empty();
+                debugger;
+                var college_id = $(this).closest("tr").find("td").eq(0).find("input").val();
+                var Qtr_No = $(this).closest("tr").find("td").eq(2).find("input").val();
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("PartialFeeView", "OldSessionQuarterFee")',
+                    data: { collegeid: college_id, QNo: Qtr_No },
+
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: function (response) {
+                        $('#Fee_content').append(response);
+                        stopPreloader();
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                        stopPreloader();
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                        stopPreloader();
+                    }
+                });
+            });
+
+             $(document).on('click', '.btnFeeReceipt', function () {
+                startPreloader();
+                 $('#user_content').empty();
+
+                var paymentTransactionId = $(this).closest("tr").find("td").eq(1).find("input").val();
+                             $.ajax({
+                    type: "GET",
+                                 url:'@Url.Action("FeeReceipt", "OldSessionQuarterFee")',
+
+                    data: { paymentTransactionId: paymentTransactionId },
+
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: function (response) {
+                        $('#user_content').append(response);
+                        $('.abc').hide();
+                        //$("#FeeReceipt").modal();
+                        //$('#FeeReceipt').modal({ backdrop: 'static', keyboard: false });
+                        stopPreloader();
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                        stopPreloader();
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                        stopPreloader();
+                    }
+                });
+
+
+
+            });
+
+        });
+    function getPDF() {
+
+        var HTML_Width = "100%";
+        var HTML_Height = "100%";
+        var top_left_margin = 15;
+        var PDF_Width = HTML_Width + (top_left_margin * 2);
+        var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+        var canvas_image_width = HTML_Width;
+        var canvas_image_height = HTML_Height;
+
+        var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+
+
+        html2canvas($(".canvas_div_pdf")[0], { allowTaint: true }).then(function (canvas) {
+            canvas.getContext('2d');
+
+            console.log(canvas.height + "  " + canvas.width);
+
+
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+            pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+            //pdf.text(50, 50, 'Hello World');
+            for (var i = 1; i <= totalPDFPages; i++) {
+                pdf.addPage(PDF_Width, PDF_Height);
+                pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);
+            }
+            pdf.save("Provisional Seat Allotment Letter.pdf");
+            $("#seat_letter").hide();
+        });
+    };
+</script>
+<script>
+    function startPreloader() {
+        $(".loader").css("display", "block");
+        $(".outer-loader").css("display", "block");
+
+    }
+    function stopPreloader() {
+
+        $(".loader").css("display", "none");
+        $(".outer-loader").css("display", "none");
+    }
+</script>

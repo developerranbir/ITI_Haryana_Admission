@@ -1,0 +1,89 @@
+
+Log Entry : 10.55.38 AM 17 November 2020
+  :
+  :Method Name -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet)
+   at HigherEducation.BusinessLayer.CourseDB.GetCourseDetailPG(String connection, String SessionId) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\CourseDB.cs:line 376
+Target Website - MySql.Data.MySqlClient.MySqlPacket ReadPacket()
+ Error - Column 'is_active_for_PG' in order clause is ambiguous
+
+-------------------------------
+
+Log Entry : 10.57.01 AM 17 November 2020
+  :
+  :Method Name -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet)
+   at HigherEducation.BusinessLayer.CourseDB.GetCourseDetailPG(String connection, String SessionId) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\CourseDB.cs:line 376
+Target Website - MySql.Data.MySqlClient.MySqlPacket ReadPacket()
+ Error - Column 'is_active_for_PG' in order clause is ambiguous
+
+-------------------------------
+
+Log Entry : 10.59.40 AM 17 November 2020
+  :
+  :Method Name -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataSet dataSet)
+   at HigherEducation.BusinessLayer.CourseDB.GetCourseDetailPG(String connection, String SessionId) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\CourseDB.cs:line 376
+Target Website - MySql.Data.MySqlClient.MySqlPacket ReadPacket()
+ Error - Column 'is_active_for_PG' in order clause is ambiguous
+
+-------------------------------
+
+Log Entry : 2.29.56 PM 17 November 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.GetCombinationReport(String Sessionid, String Sectionid, String CourseId) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\CourseCombinationController.cs:line 130
+Target Website - System.Web.Mvc.JsonResult GetCombinationReport(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 2.29.57 PM 17 November 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.GetCombinationReport(String Sessionid, String Sectionid, String CourseId) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\CourseCombinationController.cs:line 130
+Target Website - System.Web.Mvc.JsonResult GetCombinationReport(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 2.29.57 PM 17 November 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.GetCombinationReport(String Sessionid, String Sectionid, String CourseId) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\CourseCombinationController.cs:line 130
+Target Website - System.Web.Mvc.JsonResult GetCombinationReport(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------
+
+Log Entry : 2.29.57 PM 17 November 2020
+  :
+  :Method Name -    at HigherEducation.Controllers.CourseCombinationController.GetCombinationReport(String Sessionid, String Sectionid, String CourseId) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\CourseCombinationController.cs:line 130
+Target Website - System.Web.Mvc.JsonResult GetCombinationReport(System.String, System.String, System.String)
+ Error - Object reference not set to an instance of an object.
+
+-------------------------------

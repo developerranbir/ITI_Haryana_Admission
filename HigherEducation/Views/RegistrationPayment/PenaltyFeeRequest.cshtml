@@ -1,0 +1,33 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>FeeRequest</title>
+    <script type="text/javascript" src="~/assets/js/jquery/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#nonseamless").submit();
+        });
+    </script>
+</head>
+<body>
+    <div class="row" style="margin-top:37px;">
+        <div class="col-md-12 form-group text-center">
+            <span style="font-size:16px;font-weight:bold;color:red"><b>Your payment is being processing. Please do not close this window or click the Back button on your browser............. </b></span>
+        </div>
+    </div>
+    @if (ViewBag.PaymentGateway == "H")
+    {
+        <form id="nonseamless" method="post" name="redirect" action="https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction">
+            <input type="hidden" id="encRequest" name="encRequest" value="@ViewBag.strEncRequest" />
+            <input type="hidden" name="access_code" id="Hidden1" value="@ViewBag.strAccessCode" />
+        </form>
+    }
+</body>
+
+</html>

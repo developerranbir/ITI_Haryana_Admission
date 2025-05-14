@@ -1,0 +1,20 @@
+
+Log Entry : 8.56.31 PM 03 November 2020
+  :
+  :Method Name -    at System.Text.RegularExpressions.Regex.Replace(String input, String replacement)
+   at System.Text.RegularExpressions.Regex.Replace(String input, String pattern, String replacement)
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 245
+Target Website - System.String Replace(System.String, System.String)
+ Error - Value cannot be null.
+Parameter name: input
+-------------------------------
+
+Log Entry : 8.56.38 PM 03 November 2020
+  :
+  :Method Name -    at System.Text.RegularExpressions.Regex.Replace(String input, String replacement)
+   at System.Text.RegularExpressions.Regex.Replace(String input, String pattern, String replacement)
+   at Higher_Education.Controllers.FileUploadController.GetDocumentStatus(DocumentStatus item) in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 245
+Target Website - System.String Replace(System.String, System.String)
+ Error - Value cannot be null.
+Parameter name: input
+-------------------------------

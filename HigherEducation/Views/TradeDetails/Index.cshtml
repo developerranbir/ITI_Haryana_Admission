@@ -1,0 +1,1441 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Shift Unit Updation";
+}
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="~/assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/assets/css/sweetalert.css" rel="stylesheet" />
+    <link href="~/assets/css/stylehome.css" rel="stylesheet" />
+    <script src="~/assets/dataTable/dataTables/jquery-3.5.1.js"></script>
+    <script src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/jquery.dataTables.min.js"></script>
+    <script src="~/assets/js/popperjs/popper.min.js"></script>
+    @*<script src="../assets/js/moment-with-locales.min.js"></script>*@
+    <script src="~/assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/scripts/sweetalert.min.js"></script>
+    <link href="~/assets/css/all.css" rel="stylesheet" />
+    <link href="~/assets/css/stylereport.css" rel="stylesheet" />
+    <link href="~/assets/css/stylesearch.css" rel="stylesheet" />
+    <link href="~/assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/assets/dataTable/dataTables/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />
+    <script src="~/assets/dataTable/dataTables/dataTables.buttons.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/buttons.html5.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/jszip.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/pdfmake.min.js"></script>
+    <script src="~/assets/dataTable/dataTables/vfs_fonts.js"></script>
+    <script src="~/assets/dataTable/dataTables/buttons.print.min.js"></script>
+    <style>
+        table {
+            table-layout: fixed;
+        }
+
+        td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+    <style type="text/css">
+
+        .nav-link {
+            display: block;
+            padding: .5rem .6rem;
+        }
+
+        .cus-grid-table {
+            height: 100%;
+            overflow: auto;
+            box-shadow: 0px 0px 5px 0px #ccc;
+            padding: 1rem;
+            margin-bottom: 5%;
+        }
+
+        #cover {
+            /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+            background-color: rgba(33,63,113, 0.6);
+            position: fixed;
+            top: 0px;
+            bottom: 0px;
+            height: 100%;
+            width: 100%;
+            z-index: 100000;
+        }
+
+            #cover i {
+                /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+                margin-left: 50%;
+                margin-top: 50vh;
+            }
+
+        .btn:disabled {
+            opacity: 0.2 !important;
+        }
+
+        .card-counter {
+            box-shadow: 4px 4px 2px -1px rgba(0,0,0,0.4);
+            margin: 5px;
+            padding: 10px 10px;
+            background-color: #fff;
+            height: 75px;
+            border-radius: 5px;
+            transition: .3s linear all;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+            .card-counter:hover {
+                box-shadow: 4px 4px 20px #DADADA;
+                transition: .3s linear all;
+            }
+
+            .card-counter.primary {
+                /*background-color: #007bff;*/
+                background: linear-gradient(to right, #0d47a1, #1976d2 99%) !important;
+                background: -webkit-gradient(linear, left top, right top, from(#0d47a1), color-stop(99%, #1976d2)) !important;
+                color: #FFF;
+            }
+
+            .card-counter.danger {
+                background-color: #ef5350;
+                color: #FFF;
+            }
+
+            .card-counter.success {
+                background-color: #66bb6a;
+                color: #FFF;
+            }
+
+            .card-counter.info {
+                background: linear-gradient(to right, #4527a0, #5e35b1) !important;
+                background: -webkit-gradient(linear, left top, right top, from(#4527a0), to(#5e35b1)) !important;
+                color: #FFF;
+            }
+
+            .card-counter i {
+                font-size: 4em;
+                opacity: 0.5;
+                margin-top: -1px;
+            }
+
+            .card-counter .fa.fa-spinner {
+                font-size: 1.5em !important;
+                opacity: 0.5;
+            }
+
+            .card-counter .count-numbers {
+                position: absolute;
+                right: 30px;
+                top: 10px;
+                font-size: 28px;
+                display: block;
+                /*font-weight:800;*/
+                text-shadow: 10px 10px 0px 0px #333;
+            }
+
+            .card-counter .count-name {
+                position: absolute;
+                right: 30px;
+                top: 55px;
+                font-style: italic;
+                text-transform: capitalize;
+                opacity: 0.8;
+                display: block;
+                font-size: 12px;
+                /*font-weight: 700;*/
+            }
+
+        .cus-top-cards {
+            border: 1px solid #ccc;
+            padding: 0.8rem;
+            box-shadow: inset 0px 1px 8px 2px #a9a9a9;
+        }
+
+        button.dt-button, div.dt-button, a.dt-button {
+            padding: 0.01em 0.5em !important;
+            font-size: large;
+        }
+
+        .modalBackground {
+            background-color: rgb(192,234,255);
+            filter: alpha(opacity=70);
+            opacity: 0.7;
+            z-index: 100 !important;
+        }
+
+        .modalPopup {
+            background-color: #ffffff;
+            border-width: 3px;
+            border-style: solid;
+            border-color: Gray;
+            padding: 3px;
+            /*width: 250px;*/
+            z-index: 100;
+        }
+
+        .btnPop {
+            background-color: #033280;
+            color: White;
+            font-size: 12px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+
+        table {
+            width: 100% !important;
+            font-size: small;
+        }
+    </style>
+
+</head>
+<body>
+
+
+    <div id="cover">
+        <i class="fa fa-spinner fa-spin" style="font-size:xx-large"></i>
+    </div>
+    <div class="container-fluid">
+        <div class="row main-banner">
+            <img src="~/assets/images/banner.jpg" style="width: 100%" alt="online admission portal" />
+        </div>
+        <div class="row header">
+            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
+                <nav class="nav-menu d-none d-lg-block">
+                    <ul>
+                        @*<li><a href="../index.html">Home</a></li>
+                            <li class="active"><a href='@Url.Action("CollegeCourseWiseAppRec","Reports")'>College Course Wise Application Received</a></li>
+
+                            <li><a href="#">Search College</a></li>*@
+                    </ul>
+                </nav>
+                <!-- .nav-menu -->
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-2"></div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-8 text-center top-heading" style="margin-top: 5px;"><h4 class="heading">@ViewBag.Title</h4></div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-2 text-right back-btn" style="margin-top: 5px;">
+                <a href="#" id="btnBack" class="btn btn-icon icon-left btn-primary" onclick="javascript: window.history.back();"><i class="fas fa-arrow-alt-circle-left"></i></a>
+            </div>
+        </div>
+
+    </div>
+    <div class="container">
+        <div class="row">
+            <div id="rowOption" class="col-lg-4 col-md-4 col-sm-4 col-4">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <label class="col-form-label">Select Save/Update Mode:</label>
+                        <select class="form-control" id="ddlOption">
+                            <option value="0">Select</option>
+                            <option value="UI">Insert/Update through Form</option>
+                            <option value="CSV">Bulk Insert (Upload CSV File)</option>
+                        </select>
+                        <label id="lblOption" class="text-danger"></label>
+                    </div>
+                </div>
+            </div>
+            <div id="rowUI" class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-12">
+                        <label class="col-form-label">District</label>
+                        <select class="form-control" id="ddlDistrict">
+                        </select>
+                        <label id="lblDistrict" class="text-danger"></label>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-12">
+                        <label class="col-form-label">ITI</label>
+                        <select class="form-control" id="ddlITI">
+                        </select>
+                        <label id="lblITI" class="text-danger"></label>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-12">
+                        <label class="col-form-label">Trade</label>
+                        <select class="form-control" id="ddlTrade">
+                        </select>
+                        <label id="lblTrade" class="text-danger"></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" style="text-align:right;">
+                        @Html.ActionLink("Download Data",
+                             "UnitShiftDownload", "TradeDetails",
+                             new { })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top: 2rem">
+
+                        <table class="table table-bordered table-hover table-striped table-styling text-center">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Shift</th>
+                                    <th scope="col">Unit</th>
+                                    <th scope="col">Unit Size</th>
+                                    <th scope="col">Scheme</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+
+                                    <td>
+                                        <select class="form-control" id="ddlType">
+                                            <option value="default">Select Type</option>
+                                            <option value="NCVT">NCVT</option>
+                                            <option value="SCVT">SCVT</option>
+                                        </select>
+                                        <label id="lblType" class="text-danger"></label>
+                                    </td>
+
+                                    <td>
+                                        <select class="form-control" id="ddlShift">
+                                        </select>
+                                        <label id="lblShift" class="text-danger"></label>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="ddlUnit">
+                                        </select>
+                                        <label id="lblUnit" class="text-danger"></label>
+                                    </td>
+                                    <td>
+                                        @*style="padding-top:25px;"*@
+                                        <span id="lblUnitSize">&nbsp;</span>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="ddlScheme">
+                                        </select>
+                                        <label id="lblScheme" class="text-danger"></label>
+                                    </td>
+                                    <td>
+                                        <div id="btnAdd" class="btn btn-primary mb-2">ADD</div>
+                                        <div id="btnCancel" class="btn btn-danger mb-2">Clear</div>
+                                    </td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+
+                        <table id="tblTradeDetails" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Section</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Shift</th>
+                                    <th scope="col">Unit</th>
+                                    <th scope="col">No. Of Seats</th>
+                                    <th scope="col">Scheme</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                            </tbody>
+                        </table>
+                        @*<div id="btnFinalSave" class="btn btn-primary mb-2">Final Save</div>*@
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12 top-section-btn text-center" id="dvSave" style="margin-bottom: 4%; margin-top: 2%">
+                            <a href="#" id="btnFinalSave" class="btn btn-icon icon-left btn-success"><i class="fas fa-save"></i>&nbsp;Save Changes</a>
+                            <br /><br />
+                            @*<a href="#" id="btnCancel" class="btn btn-icon icon-left btn-danger" style="display: none"><i class="fas fa-trash"></i>&nbsp;Cancel</a>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="rowCsvSampleDownload" class="col-lg-8 col-md-8 col-sm-8 col-8" style="margin-top: 2rem">
+                <div class="row">
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-right">
+                        <div style="width:100%; display:inherit">
+                            @Html.ActionLink("Download Existing Unit/Shift Data",
+                    "UnitShiftExistingData", "TradeDetails",
+                    new { @class = "btn btn-sm btn-success" })
+                            @Html.ActionLink("Download Sample Format",
+                    "SampleFormatDownload", "TradeDetails",
+                    new { @class = "btn btn-sm btn-success" })
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div id="rowCSV" class="col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top: 2rem">
+                <div class="row" id="rowCsvValidate">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-3 text-right">
+                        <label style="margin-bottom:0px;">Please Upload CSV File Only:</label>
+                        <label class="text-danger" style="font-size: 13px;">Max. File Size: 1 MB </label>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-4">
+                        <input type="file" id="csvFileInput">
+                        <label id="lblCsvFile" class="text-danger"></label>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-3">
+                        <button id="btnCsvValidate" type="button" class="btn btn-sm btn-primary" onclick="validateFile()">Validate</button>
+                        <button id="btnCsvCancel" type="button" class="btn btn-sm btn-danger" onclick="validateFileCancel()">Cancel</button>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-2">
+                    </div>
+                </div>
+                <div class="row mt-5" id="rowCsvUpload">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center">
+                        <h4>
+                            <img alt="tick" id="imgtick" src="~/assets/images/tick.png" style="width: 2%; padding-bottom: 5px;" />Csv file has been validated successfully.
+                        </h4>
+                        <br />
+                        <button id="btnCsvSave" type="button" class="btn btn-success" onclick="uploadFile()">Click to Update Validated Records</button>
+                        <button id="btnCsvUploadCancel" type="button" class="btn btn-danger" onclick="validateFileCancel()">Cancel</button>
+                    </div>
+
+                </div>
+            </div>
+            <div id="rowCsvErrors" style="display:none" class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <table id="tblCsvErrors" class="table table-striped table-bordered table-hover" style="">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">CSV Row No.</th>
+                                <th scope="col">Error Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        #tblCsvErrors th:nth-child(1) {
+            width: 30px !important;
+        }
+
+        #tblCsvErrors td:nth-child(1) {
+            text-align: right;
+        }
+    </style>
+    <script>
+        var baseUrl = '@Url.Content("~/TradeDetails/")';
+
+        function validateFile() {
+            var fileInput = document.getElementById('csvFileInput');
+            var file = fileInput.files[0];
+            $('#csvFileInput').prop('disabled', false);
+            if (!ValidateCsvData()) {
+                return;
+            }
+            var formData = new FormData();
+            formData.append('file', file);
+            $("#cover").fadeIn();
+            $.ajax({
+                url: baseUrl + "ValidateFinalTradeDetailsViaCSV",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    console.log('errorlist', data);
+                    var result = JSON.parse(data);
+                    if (result.status == 1) {
+                        /* $('#btnFinalSave').hide();*/
+                        $('#csvFileInput').prop('disabled', true);
+                        //Please click on the Upload button.
+                       // swal("Validation Successful!", "", 'success');
+
+                        //swal({
+                        //    title: "File Uploaded Successfully!",
+                        //    text: html,
+                        //    html: true,
+                        //    type: "success"
+                        //});
+                        $("#cover").fadeOut();
+                        $('#rowCsvUpload').show();
+                        $('#rowCsvValidate').hide();
+                    }
+                    else if (result.status == 2)//validation failed
+                    {
+                        $('#rowCsvUpload').hide();
+                        $("#cover").fadeOut();
+                        // Show error list
+                        CsvErrorsBind(result.errorlist);
+                    }
+                    else if (result.status == 500) {
+                        $("#cover").fadeOut();
+                        alert(result.ImpactedInfo);
+                    }
+                    else {
+                        swal("Cancelled!", "Session Timeout! Please Login Again!", "error");
+                    }
+                    //var list = JSON.parse(data);
+                    //DropBind('ddlTrade', 'Trade', list);
+
+                },
+                error: errorFn
+            })
+        }
+        function validateFileCancel() {
+            $('#csvFileInput').val('');
+            $('#csvFileInput').prop('disabled', false);
+            $('#rowCsvUpload').hide();
+            $('#rowCsvValidate').show();
+            $('#rowCsvErrors').hide();
+        }
+
+        function uploadFile() {
+            var fileInput = document.getElementById('csvFileInput');
+            var file = fileInput.files[0];
+            if (!ValidateCsvData()) {
+                return;
+            }
+            var formData = new FormData();
+            formData.append('file', file);
+
+            EnableDisableSaveCsv('disable');
+            $.ajax({
+                url: baseUrl + "SaveFinalTradeDetailsViaCSV",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    console.log('csv result', data);
+                    let result = JSON.parse(data);
+                    EnableDisableSaveCsv('enable');
+
+                    if (result.status == 1) {
+                        /* $('#btnFinalSave').hide();*/
+                        let info = result.ImpactedInfo[0];
+                        let existingRecords = parseInt(info.TotalRecords) - parseInt(info.InsertedRecords);
+                        let html = `<table class="table table-bordered" >
+                                    <tr><th>Total Records: </th> <td>  ${info.TotalRecords} </td> </tr>
+                                    <tr><th> Records Inserted: </th> <td> ${info.InsertedRecords} </td> </tr>
+                                    <tr><th> Already Existing Records: </th> <td> ${existingRecords} </td > </tr >
+
+                                    </table>`;
+
+                        swal({
+                            title: "File Uploaded Successfully!",
+                                text:  html,
+                                    html: true,
+                                        type: "success"
+                        });
+                        validateFileCancel(); // original position of the page.
+                        $("#cover").fadeOut();
+                    }
+                    else if (result.status == 500)
+                    {
+                        $("#cover").fadeOut();
+                        alert(result.ImpactedInfo);
+                    }
+                    else {
+                        swal("Cancelled!", "Session Timeout! Please Login Again!", "error");
+                    }
+                    //var list = JSON.parse(data);
+                    //DropBind('ddlTrade', 'Trade', list);
+
+                },
+                error: errorFn
+            })
+        }
+
+        //var TradeDetails = {};
+        //TradeDetails.DistrictID = "1";
+        //TradeDetails.ITIID = "1";
+        //TradeDetails.TradeID = "1";
+        //TradeDetails.TradeList = TradeList;
+
+        //class TradeDetails {
+        //    string DistrictID(Get ; set)
+        //List()
+
+        //}
+            var TradeList = [];
+            var isppp = null;
+            var unitsize = null;
+        var rowNumberToUpdate = null;
+        var errorFn = function (jqXHR, exception)
+        {
+
+            var msg = '';
+            if (jqXHR.status === 0)
+            {
+                msg = 'Not connect.\n Verify Network.';
+            } else if (jqXHR.status == 404)
+            {
+                msg = 'Requested page not found. [404]';
+            } else if (jqXHR.status == 500)
+            {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'parsererror')
+            {
+                msg = 'Requested JSON parse failed.';
+            } else if (exception === 'timeout')
+            {
+                msg = 'Time out error.';
+            } else if (exception === 'abort')
+            {
+                msg = 'Ajax request aborted.';
+            } else
+            {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            alert("Error: " + msg);
+            $("#cover").fadeOut("slow");
+            EnableDisableSaveCsv('enable');
+        }
+        function EnableDisableSaveCsv(key) {
+            if (key == 'disable') {
+                $('#btnCsvSave').text('Processing...');
+                $('#btnCsvSave').removeClass('btn-success');
+                $('#btnCsvSave').addClass('btn-danger');
+                $('#btnCsvSave').prop('disabled', true);
+            }
+            else {
+                $('#btnCsvSave').text('Upload');
+                $('#btnCsvSave').removeClass('btn-danger');
+                $('#btnCsvSave').addClass('btn-success');
+                $('#btnCsvSave').prop('disabled', false);
+            }
+        }
+        function ValidateCsvData() {
+            $('#lblCsvFile').html('');
+            var fileExtension = ['csv'];
+            var isValid = true;
+            if ($('#csvFileInput').val() == '') {
+                $('#lblCsvFile').html('Please Select File');
+                isValid = false;
+            }
+            else if ($.inArray($('#csvFileInput').val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                $('#lblCsvFile').html("Only " + fileExtension.join(', ').toUpperCase() + " format is allowed.");
+                //$('#lblCsvFile').html("Only CSV format is allowed.");
+                isValid = false;
+            }
+            else if ($('#csvFileInput')[0].files[0].size >= 1000000) {
+                $('#lblCsvFile').html('File Size can not exceed 1 MB.');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+        $(document).ready(function () {
+
+
+            $('#rowUI').hide();
+            $('#rowCSV, #rowCsvSampleDownload').hide();
+
+            $('#btnFinalSave').hide();
+            $('#rowCsvErrors').hide();
+            //getCollegeList();
+            //TradeDetailsBind();
+            $("#cover").fadeOut();
+            getDistrictList();
+            //getTypeList();
+            //getShiftList();
+            //getUnitList();
+            getSchemeList();
+
+            $('#ddlOption').on('change', function () {
+                validateFileCancel();// form initial stage.
+                var table = $('#tblCsvErrors').DataTable();
+                table.clear().draw();
+
+                $('#rowCsvErrors').hide();
+
+                $('#csvFileInput').val('');
+                let option = $('#ddlOption').val();
+                if (option == 'UI') {
+                    $('#rowUI').show();
+                    $('#rowCSV, #rowCsvSampleDownload').hide();
+                }
+                else if (option == 'CSV') {
+                    $('#rowCSV, #rowCsvSampleDownload').show();
+                    $('#rowUI').hide();
+                }
+                else {
+
+                    $('#rowCSV, #rowCsvSampleDownload').hide();
+                    $('#rowUI').hide();
+                }
+            });
+
+            $("#csvFileInput").change(function () {
+                ValidateCsvData();
+            });
+            $("#csvFileInput").click(function () {
+                $('#rowCsvErrors').hide();
+            });
+
+
+            $('#btnFinalSave').on('click', function () {
+                $('#btnFinalSave').hide();//just to prevent additional clicks.
+                PostFinalData();
+            });
+
+            $('#ddlType').on('change', function () {
+                //console.log("change event ddltype happened");
+                getShiftList(999);  //999 just represents disable to be done or not for shift dropdown
+                getUnitList(999);  //999 just represents disable to be done or not for unit dropdown
+
+            });
+
+
+            $('#btnAdd').on('click', function () {
+                if ($('#ddlTrade').val() == 'default') {
+                    swal("Alert!", "Please Select Trade!", "warning");
+                    return;
+                }
+                if (rowNumberToUpdate != null) {
+                    if (TradeList[rowNumberToUpdate].db == 1) {
+                        TradeList[rowNumberToUpdate].Scheme = $('#ddlScheme').val();
+                        // here update scheme in db
+                        UpdateTradeDetail(TradeList[rowNumberToUpdate].guid);
+                    } else {
+                    TradeList[rowNumberToUpdate].Type = $('#ddlType').val();
+                    TradeList[rowNumberToUpdate].Shift = $('#ddlShift').val();
+                    TradeList[rowNumberToUpdate].Unit = $('#ddlUnit').val();
+                        TradeList[rowNumberToUpdate].Scheme = ($('#ddlScheme').val() == 'default') ? '' : $('#ddlScheme').val();
+                    }
+                    //console.log("Updated", TradeList);
+
+                    TradeDetailsBind();
+                    ClearTradeData();
+                    rowNumberToUpdate = null;
+                    $('#btnAdd').text("Add");
+
+                    return;
+                }
+
+                if (ValidDateAddData()) {
+                    var tradeData = null;
+                    var guidnew = createGuid();
+
+
+                    if (isppp == 1) {
+
+                        tradeData = getNewTradeData(guidnew, 1, 'nonpaid');
+                        //console.log('tradeData2', tradeData);
+                        TradeList.push(tradeData);
+
+                        tradeData = getNewTradeData(guidnew, 1, 'paid');
+                        //console.log('tradeData1', tradeData);
+                        TradeList.push(tradeData);
+                    }
+                    else {
+                        tradeData = getNewTradeData(guidnew, 0,null);
+                        TradeList.push(tradeData);
+                    }
+
+
+                    //console.log('Tradelist2', TradeList);
+                    TradeDetailsBind();
+                    $('#btnFinalSave').show();
+                    ClearTradeData();
+                }
+
+            });
+            $('#btnCancel').on('click', function () {
+                ClearTradeData();
+            });
+
+            $("#ddlDistrict").on('change', function () {
+                getITIList();
+                TradeList = [];
+                TradeDetailsBind();
+            });
+            $("#ddlITI").on('change', function () {
+                TradeList = [];
+                TradeDetailsBind();
+                getTradeList();
+            });
+
+            $("#ddlTrade").on('change', function () {
+                getUnitSize();
+                getTradeDetails();
+                ClearTradeData();
+            });
+        });
+
+
+            function getTradeDetails() {
+                var datatosend = {};
+                datatosend.districtcode = $("#ddlDistrict").val();
+                datatosend.ITI = $('#ddlITI').val();
+                datatosend.Trade = $('#ddlTrade').val();
+
+                $.ajax({
+                    url: baseUrl + "getTradeDetails",
+                    type: "GET",
+                    contentType: "application/json;charset=utf-8",
+                    //data: { "SessionId": $('#ddlSession').val() },
+                    data: datatosend,
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data);
+                        console.log("Already Existed Data" + data);
+                        TradeList = JSON.parse(data);
+                        TradeDetailsBind();
+                    },
+
+                    error: function (jqXHR, exception) {
+                        alertError(jqXHR, exception);
+                    }
+                });
+            }
+
+        function PostFinalData() {
+
+            console.log(TradeList);
+            if (TradeList.length == 0) {
+                swal("Alert!", "Nothing Found to be Saved!", "warning");
+                return false;
+            }
+            var datatosend = {};
+            datatosend.TL = JSON.stringify(TradeList); //datatosend.TradeList does not work
+
+            $.ajax({
+                url: baseUrl + "SaveFinalTradeDetails",
+                type: 'POST',
+                //contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    //alert(data);
+                    if (data == 1) {
+                        $('#btnFinalSave').hide();
+                        swal("Saved", "Saved Successfully!", 'success');
+                        getTradeDetails();
+                        TradeDetailsBind();
+                        $("#cover").fadeOut();
+                    }
+                    else {
+                        swal("Cancelled!", "Session Timeout! Please Login Again!", "error");
+                    }
+                    //var list = JSON.parse(data);
+                    //DropBind('ddlTrade', 'Trade', list);
+
+                },
+                error: errorFn
+            })
+
+        }
+
+            function createGuid() {
+                return Math.floor(Date.now() / 1000);
+                //function S4() {
+                //    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                //}
+                //return (S4() + S4() + "-" + S4() + "-4" + S4().substr(0, 3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+            }
+
+
+        /*New Code*/
+            function getNewTradeData(newguid, ispppOnOff, seattype) {
+                //console.log("GUID", newguid)
+            var tradeData = {};
+            tradeData.districtcode = $("#ddlDistrict").val();
+            tradeData.districtname = $("#ddlDistrict option:selected").text();
+
+            tradeData.collegeid = $("#ddlITI").val();
+            tradeData.ITI = $("#ddlITI option:selected").text();
+
+            tradeData.courseid = $("#ddlTrade").val();
+            tradeData.Trade = $("#ddlTrade option:selected").text();
+
+            //tradeData.TypeID = $('#ddlType').val();
+            tradeData.Type = $("#ddlType option:selected").text();
+            //tradeData.ShiftID = $('#ddlShift').val();
+            tradeData.Shift = $("#ddlShift option:selected").text();
+            //tradeData.UnitID = $('#ddlUnit').val();
+            tradeData.Unit = $("#ddlUnit option:selected").text();
+            //tradeData.SchemeID = $('#ddlScheme').val();
+                //alert($('#ddlScheme').val());
+                if ($('#ddlScheme').val() != 'default') {
+                    //($('#ddlScheme').val() == 'default') ? '' : $('#ddlScheme').val();
+                    tradeData.Scheme = $("#ddlScheme option:selected").text();
+                }
+                else {
+                    tradeData.Scheme = "";
+                }
+            if (seattype == 'paid') {
+                tradeData.Section = $("#ddlTrade option:selected").text() + " " + $("#ddlType option:selected").text() + "- " + "Paid";
+                tradeData.NoOfSeats = Math.round(unitsize * 20 / 100);
+                tradeData.ispaid = 'Y';
+            }
+            else if(seattype == 'nonpaid')  {
+                tradeData.Section = $("#ddlTrade option:selected").text() + " " + $("#ddlType option:selected").text();
+                tradeData.NoOfSeats = Math.round(unitsize * 80 / 100);
+                tradeData.ispaid = 'N';
+            }
+            else {
+                tradeData.Section = $("#ddlTrade option:selected").text() + " " + $("#ddlType option:selected").text();
+                tradeData.NoOfSeats = unitsize;
+                tradeData.ispaid = 'N';
+            }
+            tradeData.guid = newguid;
+            tradeData.db = 0;
+                tradeData.id = 0;
+                tradeData.coursesectionid = 0;
+
+            return tradeData;
+            }
+        function editData(i) {
+
+            console.log(i);
+
+
+
+                $("#ddlType").prop("disabled", true);
+                $("#ddlShift").prop("disabled", true);
+                $("#ddlUnit").prop("disabled", true);
+                $("#ddlScheme").prop("disabled", true);
+
+                rowNumberToUpdate = i; //rowNumberToUpdate is global variable
+                var editObj = TradeList[i];
+
+                if (TradeList[i].db == 1) {
+                    $("#ddlScheme").prop("disabled", false);
+                    $('#ddlType').val(editObj.Type);
+
+                    getShiftList(editObj.Shift);
+                    getUnitList(editObj.Unit);
+
+
+                    //$('#ddlShift').val(editObj.Shift);
+                    //$('#ddlUnit').val(editObj.Unit);
+                    $('#ddlScheme').val(editObj.Scheme);
+                    $('#btnAdd').text("Update");
+                }
+                else {
+                    $("#ddlType").prop("disabled", false);
+                    $("#ddlShift").prop("disabled", false);
+                    $("#ddlUnit").prop("disabled", false);
+                    $("#ddlScheme").prop("disabled", false);
+
+                    $('#ddlType').val(editObj.Type);
+                    $('#ddlShift').val(editObj.Shift);
+                    $('#ddlUnit').val(editObj.Unit);
+                    $('#ddlScheme').val(editObj.Scheme);
+                    $('#btnAdd').text("Update");
+                }
+            }
+            function UpdateTradeDetail(guid) {
+                //alert('called');
+                var DataToPost = {};
+                DataToPost.guid = guid;
+                //DataToPost.Scheme = $('#ddlScheme').val();
+                DataToPost.Scheme = ($('#ddlScheme').val() == 'default') ? '' : $('#ddlScheme').val();
+
+                $("#cover").fadeIn();
+                $.ajax({
+                    type: "POST",
+                    url: baseUrl + "UpdateTradeDetail",
+                    data: DataToPost,
+                    success: function (data) {
+                        //debugger;
+                        if (data) {
+                            //alert(data);
+                            $("#cover").fadeOut();
+                            if (data == 1) {
+                                var pair = $(TradeList)
+                                    .filter(function (i, n) {
+                                        return n.guid === guid;
+                                    });
+                                $.each(pair, function (i, e) {
+                                    e.Scheme = DataToPost.Scheme;
+                                });
+
+                                swal('Updated Successfully', '', 'success');
+                                TradeDetailsBind();
+                            }
+                            else {
+                                swal("Session Timeout!", "Please Login Again!", "error");
+                            }
+
+
+                        }
+                    },
+                    error: errorFn
+                });
+            }
+
+        function ActivateDeactivateTradeDetail(id, status, Type, coursesectionid) {
+                //alert('called');
+                var DataToPost = {};
+                DataToPost.guid = id;
+                DataToPost.Action = status;
+                DataToPost.collegeid = $('#ddlITI').val();
+                DataToPost.courseid = $('#ddlTrade').val();
+                DataToPost.Type = Type;
+                DataToPost.coursesectionid = coursesectionid;
+
+                $("#cover").fadeIn();
+                $.ajax({
+                    type: "POST",
+                    url: baseUrl + "ActivateDeactivateTradeDetail",
+                    data: DataToPost,
+                    success: function (data) {
+                        //debugger;
+                        if (data) {
+                            //console.log(data);
+                            //alert(data);
+                            $("#cover").fadeOut();
+                            var stringify = JSON.parse(JSON.stringify(data));
+                            if (stringify != "0") {
+
+                                //Server sends json object that needs to be converted to string
+
+                                //console.log(stringify);
+                                var pair = $(TradeList)
+                                    .filter(function (i, n) {
+                                        return n.guid === id;
+                                    });
+                                for (var i = 0; i < stringify.length; i++) {
+                                    if (stringify[i]['Result'] == 'y') {
+                                        //TradeList[rowNumberToUpdate].isactive = 'ACTIVE'; //Updating the Client Model
+                                        //swal('Activated', "Record '" + DataToPost.UserID + "' Activated successfully..!!", 'success');
+                                        $.each(pair, function (i, e) {
+                                            e.isactive = 'ACTIVE';
+                                        });
+                                        swal('Activated', "Record Activated successfully..!!", 'success');
+
+                                    } else if (stringify[i]['Result'] == 'n') {
+                                        //TradeList[rowNumberToUpdate].isactive = 'NOACTIVE';
+                                        $.each(pair, function (i, e) {
+                                            e.isactive = 'INACTIVE';
+                                        });
+                                        swal('Deactivated', "Record deactivated successfully..!!", 'success');
+
+                                    }
+                                }
+
+                            }
+                            else {
+                                swal("Session Timeout!", "Please Login Again!", "error");
+                            }
+                            TradeDetailsBind();
+
+
+                        }
+                    },
+                    error: errorFn
+                });
+            }
+
+        function DropBind(id, name, list) {
+            var drop = $("#" + id);
+            drop.empty();
+            drop.append(`<option value='default'>Select ` + name +`</option>`);
+            $.each(list, function (i) {
+                drop.append(`<option value='` + list[i].value + `'>` + list[i].text + `</option>`);
+            });
+        }
+        function getDistrictList() {
+            $("#cover").fadeIn();
+            var datatosend = {};
+             $.ajax({
+                 url: baseUrl +"GetDistricts",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                 dataType: 'json',
+                data:datatosend,
+                success: function (data)
+                {
+                    var list = JSON.parse(data);
+                    DropBind('ddlDistrict', 'District', list);
+                    $("#cover").fadeOut();
+                },
+                 error: errorFn
+             })
+        }
+
+        function getITIList() {
+            $("#cover").fadeIn();
+            var datatosend = {};
+            datatosend.DistrictID = $('#ddlDistrict').val();
+            $.ajax({
+                url: baseUrl + "GetITIs",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    var list = JSON.parse(data);
+                    DropBind('ddlITI', 'ITI', list);
+                    $("#cover").fadeOut();
+                },
+                error: errorFn
+            })
+            }
+
+
+        function getTradeList() {
+            //getTypeList();
+            $("#cover").fadeIn();
+            var datatosend = {};
+            datatosend.ITI = $('#ddlITI').val();
+            //alert($('#ddlITI').val());
+            $.ajax({
+                url: baseUrl + "GetTrades",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    //console.log(data.Table,data.Table1);
+                    //console.log(data);
+                    var list = JSON.parse(data);
+                    //console.log('list ', list.Table);
+                    DropBind('ddlTrade', 'Trade', list.Table);
+                    isppp = list.Table1[0].isppp;
+                    $("#cover").fadeOut();
+                },
+                error: errorFn
+            })
+        }
+        function getUnitSize() {
+            $("#cover").fadeIn();
+            var datatosend = {};
+            datatosend.Trade = $('#ddlTrade').val();
+            //alert($('#ddlITI').val());
+            $.ajax({
+                url: baseUrl + "GetUnitSize",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    var list = JSON.parse(data);
+                    $.each(list, function (i) {
+                        //drop.append(`<option value='` + list[i].value + `'>` + list[i].text + `</option>`);
+                        $('#lblUnitSize').text(list[0].UnitSize);
+                        unitsize = list[0].UnitSize;
+                    });
+                    //$('#lblUnitSize').text(list[0].UnitSize);
+                    //DropBind('ddlTrade', 'Trade', list);
+                    $("#cover").fadeOut();
+                },
+                error: errorFn
+            })
+        }
+
+        //function getTypeList() {
+            //var datatosend = {};
+            //datatosend.ITI = $('#ddlITI').val();  //get Type from DB call
+            //$("#cover").fadeIn();
+            //$.ajax({
+            //    url: baseUrl + "GetTypes",
+            //    type: 'GET',
+            //    contentType: 'application/json;charset=utf-8',
+            //    dataType: 'json',
+            //    data: datatosend,
+            //    success: function (data) {
+            //        var list = JSON.parse(data);
+            //        DropBind('ddlType', 'Type', list);
+            //        $("#cover").fadeOut();
+            //    },
+            //    error: errorFn
+            //})
+        //}
+        function getShiftList(i) {
+            $("#cover").fadeIn();
+            var datatosend = {}
+            datatosend.Type = $("#ddlType option:selected").text();
+            $.ajax({
+                url: baseUrl + "GetShift",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    var list = JSON.parse(data);
+                    DropBind('ddlShift', 'Shift', list);
+
+                    if ($("#ddlType option:selected").text() == "NCVT") {
+                        $("#ddlShift").prop("disabled", false);
+
+                    }
+                    else if ($("#ddlType option:selected").text() == "SCVT") {
+                        $("#ddlShift option").filter(function () {
+                            return this.text == "0";
+                        }).attr('selected', true);
+                        $("#ddlShift").prop("disabled", true);
+
+                    }
+                    if (i != 999) {
+                        $('#ddlShift').val(i);
+                        $("#ddlShift").prop("disabled", true);
+                    }
+
+                    $("#cover").fadeOut();
+                },
+                error: errorFn
+            })
+        }
+        function getUnitList(i) {
+            $("#cover").fadeIn();
+            var datatosend = {}
+            datatosend.Type = $("#ddlType option:selected").text();
+            $.ajax({
+                url: baseUrl + "GetUnit",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    var list = JSON.parse(data);
+                    DropBind('ddlUnit', 'Unit', list);
+
+                    if ($("#ddlType option:selected").text() == "NCVT") {
+
+                        $("#ddlUnit").prop("disabled", false);
+                    }
+                    else if ($("#ddlType option:selected").text() == "SCVT") {
+                        $("#ddlUnit option").filter(function () {
+                            return this.text == "0";
+                        }).attr('selected', true);
+
+                        $("#ddlUnit").prop("disabled", true);
+                    }
+                    if (i != 999) {
+                        $('#ddlUnit').val(i);
+                        $("#ddlUnit").prop("disabled", true);
+                    }
+                    $("#cover").fadeOut();
+                },
+                error: errorFn
+            })
+        }
+        function getSchemeList() {
+            $("#cover").fadeIn();
+            var datatosend = {}
+            $.ajax({
+                url: baseUrl + "GetScheme",
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: datatosend,
+                success: function (data) {
+                    var list = JSON.parse(data);
+                    DropBind('ddlScheme', 'Scheme', list);
+                    $("#cover").fadeOut();
+                },
+                error: errorFn
+            })
+        }
+        function ClearTradeData() {
+            $('#lblType').html('');
+            $('#lblShift').html('');
+            $('#lblUnit').html('');
+            $('#lblScheme').html('');
+            $('#ddlType').val('default');
+            $('#ddlShift').val('default');
+            $('#ddlUnit').val('default');
+            $('#ddlScheme').val('default');
+            $('#btnAdd').text('Add');
+
+            $("#ddlType").prop("disabled", false);
+            $("#ddlShift").prop("disabled", false);
+            $("#ddlUnit").prop("disabled", false);
+            $("#ddlScheme").prop("disabled", false);
+            rowNumberToUpdate = null; // it will prevent issue when edit is clicked and then trade gets changed.
+        }
+
+        function ValidDateAddData() {
+            $('#lblType').html('');
+            $('#lblShift').html('');
+            $('#lblUnit').html('');
+            $('#lblScheme').html('');
+            var isValid = true;
+            if ($('#ddlType').val() == 'default' || $('#ddlType').val() == '') {
+                $('#lblType').html('Please Select Type');
+                isValid = false;
+            }
+            if ($('#ddlShift').val() == 'default' || $('#ddlShift').val() == '') {
+                $('#lblShift').html('Please Select Shift');
+                isValid = false;
+            }
+            if ($('#ddlUnit').val() == 'default' || $('#ddlUnit').val() == '') {
+                $('#lblUnit').html('Please Select Unit');
+                isValid = false;
+            }
+            //if ($('#ddlScheme').val() == 0 || $('#ddlScheme').val() == '') {
+            //    $('#lblScheme').html('Please Select Scheme');
+            //    isValid = false;
+            //}
+
+            //check type, shift, unit and scheme are unique
+
+            for (i = 0; i < TradeList.length; i++) {
+                var objTradeData = getNewTradeData();
+                //JSON.stringify(objTradeData) current object
+                //JSON.stringify(TradeList[i])   already items
+                var tradedata1 = TradeList[i];
+                if (tradedata1.Type == objTradeData.Type &&
+                    tradedata1.Shift == objTradeData.Shift &&
+                    tradedata1.Unit == objTradeData.Unit && tradedata1.Type!='SCVT') {
+                    //$('#lblScheme').html('Already Existed!');
+                    swal("Alert!", "This Shift-Unit / SCVT-NCVT already Exists!", "warning");
+                    isValid = false;
+                    break;
+                }
+
+                //if (JSON.stringify(TradeList[i]) === JSON.stringify(objTradeData)) {
+                //    $('#lblScheme').html('Already Existed!');
+                //    isValid = false;
+                //    break;
+                //}
+            }
+
+            return isValid;
+        }
+
+
+            function deleteData(i) {
+
+                swal({
+                    title: "Are you sure to remove this Shift Unit?",
+                    text: '',
+                    html: true,
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#5cb85c",
+                    confirmButtonText: "Yes, Remove",
+                    closeOnConfirm: true,
+                    dangerMode: true
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        var localguid = TradeList[i].guid;
+
+                        //console.log("rowindex", i);
+                        //console.log("localguid", localguid);
+                        TradeList.splice(TradeList.findIndex(e => e.guid === localguid), 1);
+
+                        if (isppp == 1) {
+                            TradeList.splice(TradeList.findIndex(e => e.guid === localguid), 1);
+                        }
+                        //console.log('after delete', TradeList);
+
+                        $('#btnFinalSave').hide();
+                        $.each(TradeList, function (i) {
+                            if (TradeList[i].db == 0) {
+                                $('#btnFinalSave').show();
+                                return false; // loop gets break
+                            }
+                        });
+                        TradeDetailsBind();
+                        //return true;
+                    };
+                });
+
+
+            }
+        function TradeDetailsBind() {
+            //alert("refreshing table");
+
+
+            $("#tblTradeDetails").DataTable({
+                data: TradeList,
+                //rowsGroup: [
+                //    'first:name',
+                //    'second:name'
+                //],
+                dom: 'Bfrtip',
+                paging: false,
+                ordering: false,
+                destroy: true,
+                buttons: [],
+                columns: [
+                    { data: 'Section' },
+                    { data: 'Type' },
+                    { data: 'Shift'},
+                    { data: 'Unit'},
+                    { data: 'NoOfSeats' },
+                    { data: 'Scheme'},
+                    {
+                        "targets": -1,
+                        data: 'isactive',
+                        className: "center",
+                        //visible: false,
+                        "mRender": function (isactive, data, full, meta) {
+
+                            /*return '<a href="#" onclick="editData(' + meta.row + ')" class="editor_edit btn btn-primary btn-sm">Edit </a> <a href="#" class="activated_deactivated btn btn-info btn-sm" data-status="n">Deactivate</a>';*/
+
+                            //console.log("data", data,"full",full);
+
+                            if (full.db == '1') {
+                                //coursesectionid
+                                if (isactive == "ACTIVE") {
+                                    /*return '<a href="#" onclick="editData(' + meta.row + ')" class="editor_edit btn btn-primary btn-sm">Edit </a> <a href="#" onclick="ActivateDeactivateTradeDetail(' + full.id + ',\'NOACTIVE\',' + meta.row + ')" class="activated_deactivated btn btn-danger btn-sm">Deactivate</a>';*/
+                                    //Uncaught SyntaxError: Unexpected token ','  ' + full.guid + ' to \'' + full.guid + '\'
+                                    return '<a href="#" onclick="editData(' + meta.row + ')" class="editor_edit btn btn-primary btn-sm">Edit </a>&nbsp;<a href="#" onclick="ActivateDeactivateTradeDetail(\'' + full.guid + '\',\'INACTIVE\',\'' + full.Type + '\',\'' + full.coursesectionid + '\')" class="activated_deactivated btn btn-danger btn-sm">Deactivate</a>';
+                                }
+                                else if (isactive == "INACTIVE") {
+                                    return '<a href="#" onclick="ActivateDeactivateTradeDetail(\'' + full.guid + '\',\'ACTIVE\',\'' + full.Type + '\',\'' + full.coursesectionid + '\')" class="activated_deactivated btn btn-info btn-sm">Activate</a>';
+                                }
+                            }
+                            else if (full.db == '0') {
+                                return '<a href="#" onclick="deleteData(' + meta.row + ')" class="editor_edit btn btn-primary btn-sm">Remove </a>';
+                            }
+                        }
+
+                    }
+
+                ],
+
+                "rowCallback": function (row, data, type) {
+                    if (data.db == '1') {
+                        $(row).css('background-color', '#f9fbe7');
+                    } else {
+                        $(row).css('color', 'black');
+                    }
+                    if (data.isactive == "INACTIVE") {
+                        $(row).css('color', 'red');
+                    }
+                }
+
+            });
+
+
+            //const $guidCells = $("tbody tr td:nth-child(4)");
+
+            //$guidCells.each(function (i, item) {
+            //    const $nextGuidCell = $guidCells.eq(i + 1);
+            //    if (item.textContent === $nextGuidCell.text()) {
+            //        item.rowSpan = 2;
+            //        $nextGuidCell.remove();
+            //    }
+            //});
+           // $('#tblTradeDetails').DataTable().ajax.reload();
+        }
+
+        function CsvErrorsBind(errors) {
+            //alert("refreshing table");
+            $('#rowCsvErrors').show();
+            $("#tblCsvErrors").DataTable({
+                data: errors,
+                dom: 'Bfrtip',
+                paging: false,
+                ordering: true,
+                destroy: true,
+                buttons: [],
+                columns: [
+                    { data: 'id' },
+                    { data: 'Message' },
+                ],
+            });
+        }
+    </script>
+
+</body>
+</html>

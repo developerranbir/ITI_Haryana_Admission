@@ -1,0 +1,116 @@
+﻿@model IEnumerable<HigherEducation.Models.ErrorLogViewModel>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ErrorLog</title>
+    <link href="~/assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/assets/css/styleedu.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/assets/js/bootstrap/js/bootstrap.min.js"></script>
+
+    <style>
+        .cus-error-table{
+            margin-top:1rem;
+        }
+            .cus-error-table table {
+                box-shadow: 0px 0px 5px #ccc;
+                -webkit-box-shadow: 0px 0px 5px #ccc;
+            }
+        .cus-error-table table th {
+            background: #223f73;
+            color: #fff;
+            font-size: 14px;
+            position:sticky;
+            top:0;
+            margin-top:1rem;
+        }
+                .cus-error-table table td {
+                    border: 2px double #e5e5e5;
+                    white-space: normal;
+                    word-wrap: break-word;
+                    display: table-cell;
+                }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+            <div class="table-responsive cus-error-table">
+                @if (ViewBag.Access == "0")
+                {
+                    <div class="col-md-9 form-group">
+                        <span style="color:red; font-weight:bold" class="btn btn-warning">Sorry! You are not authorize to access this page!</span>
+                    </div>
+                }
+                else
+                {
+                    <table id="print-content" class="table table-bordered table-hover table-hover">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Exc_Date)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Exc_Message)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Exc_Location)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Exc_Type)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Exc_Method)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Full_Exc)
+                            </th>
+
+                            @*<th>
+                                    @Html.DisplayNameFor(model => model.Exc_Level)
+                                </th>*@
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Exc_Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Exc_Message)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Exc_Location)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Exc_Type)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Exc_Method)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Full_Exc)
+                                </td>
+
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.Exc_Level)
+                                    </td>*@
+                            </tr>
+                        }
+
+                    </table>
+                }
+
+            </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

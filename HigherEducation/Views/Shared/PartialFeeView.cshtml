@@ -1,0 +1,619 @@
+﻿@*@model  IEnumerable<HigherEducation.Models.FeeModule>*@
+@model  HigherEducation.Models.FeeModule
+
+@{
+    int totalamount = 0;
+
+}
+
+@{
+    Layout = null;
+    //Layout = "~/Views/Shared/_LayoutFee.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Pay</title>
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/stylepayment.css">
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <link href="~/assets/css/all.css" rel="stylesheet" />
+    <link href="~/assets/css/jquery-ui.css" rel="stylesheet" />
+    <script src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <style>
+
+        .loader,
+        .outer-loader {
+            display: inline-block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        .outer-loader {
+            background: rgba(0, 0, 0, .3);
+            width: 100%;
+            height: 100%;
+            z-index: 999
+        }
+
+        .loader {
+            width: 69px;
+            height: 89px;
+            border: 1px solid #000;
+            margin: auto
+        }
+
+        .loader-img {
+            border: 15px solid #415bbb;
+            border-radius: 50%;
+            border-top: 15px solid #000;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0)
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg)
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .row_new {
+            margin-left: 10px;
+            margin-right: 10px
+        }
+
+        #logo img {
+            height: auto;
+            padding-left: 3px;
+            width: 40px
+        }
+
+        body:not(.menu-on-top).desktop-detected {
+            min-height: 907px !important
+        }
+
+        @@media print {
+            /*div{
+                  display:none;
+              }
+
+              #dvPrint,body
+              ,body > form
+              ,body > form > section,
+               body > form > section > div,
+              body > form > section > div > div:nth-child(2),
+              body > form > section > div > div:nth-child(2) > div,
+               body > form > section > div > div:nth-child(2) > div > div,
+               body > form > section > div > div:nth-child(2) > div > div >h5,
+               body > form > section > div > div:nth-child(2) > div > div > div
+              ,body > form > section > div > div:nth-child(2) > div > div * div
+              {
+                  display:block;
+              }*/
+            #dvIsSc, #cmd1 {
+                display: none;
+            }
+
+            .top-heading {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    @using (Html.BeginForm("FeeRequest", "Account", FormMethod.Post, new { @enctype = "multipart/form-data", onsubmit = "startPreloader();" }))
+    {
+        @*<form runat="server" method="post" name="customerData" action="~/DHE/ccavRequestHandler.aspx">*@
+
+
+
+        @Html.HiddenFor(m => m.merchant_param3, new { @Value = Model.merchant_param3 })
+        @Html.HiddenFor(m => m.merchant_param5, new { @Value = Model.merchant_param5 })
+        @Html.HiddenFor(m => m.billing_state, new { @Value = Model.billing_state })
+
+
+        @Html.ValidationSummary(true)
+
+
+
+        <section class="cus-background" style="margin-bottom:4%;">
+            <div class="container-fluid">
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center top-heading" style="margin-top:1px;padding:0;">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12 cus-heading">
+                            <h3>Candidate Detail</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card c-shadow">
+                        <div class="card-body">
+                            <div class="row cus-inner-border">
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="RegistrationId"><span class="english">Registration Id:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.TextBoxFor(model => model.RegistrationId, new { @class = "form-control input-shadow", @id = "RegistrationId", @readonly = true })
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="Rollno"><span class="english">Roll No:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.Rollno, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="CandidateName"><span class="english">Candidate Name:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.CandidateName, new { @class = "form-control" })
+                                </div>
+
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="CollegeName"><span class="english">College:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.CollegeName, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="CourseName"><span class="english">Course:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.CourseName, new { @class = "form-control" })
+                                </div>
+
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="SectionName"><span class="english">Section:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.SectionName, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="CategoryName"><span class="english">Student Category:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.CategoryName, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    <label for="SeatAllocationCategory"><span class="english">Seat Allocation Category:</span></label>
+                                </div>
+                                <div class="col-md-3 form-group b-3">
+                                    @Html.DisplayFor(model => model.SeatAllocationCategory, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <span style="color:#492A7F;"><strong>a. You will be given Provisional Admission in this course, subject to the verification of your eligibility in this course by the College/Affiliating University. In case of any discrepancy, the college is authorized to cancel the Provisional Admission of the student.</strong></span><br />
+                        <span style="color:#492A7F;"><strong>b. The college is authorized to take the short payment, if any discrepancy, from the student at later stage as per Affiliating University/State Government norms.</strong></span><br />
+                    </div>
+                </div>
+
+
+                @if (Model.IsSCcondition == "Y")
+                {
+                    <div class="row">
+                        <div class="col-md-12 form-group text-center">
+                            <input type="checkbox" class="form-check-input" id="decCheck">
+
+                            <span style="font-size:14px;font-weight:bold;color:red">
+                                <b>
+                                    "I do hereby undertake that this e-disha number belongs to my family income certificate (less than 2.5 lakh) only and I am covered under SC Post Matric Scholarship Scheme as per Government Policy. I shall submit this income certificate in the college within 7-days of my provisional admission. If any discrepancy is found at later stage, my provisional admission be cancelled by the authorities".
+                                </b>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 form-group cus-random-label">
+                            <label for="MemberName"> Do you have latest Income Certificate</label>
+                        </div>
+                        <div class="col-md-8 form-group cus-random-radio">
+                            <label class="containernew">
+                                <input type="radio" name="incomeradio" id="btnyes" value="Y" /><span for="btnyes">Yes</span>
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="containernew">
+                                <input type="radio" name="incomeradio" id="btnno" value="N" /><span for="btnyes">No</span><br>
+                                <span class="checkmark"></span>
+                            </label>
+
+                        </div>
+                    </div>
+                    <div class="row" id="dvIncome" style="display:none">
+                        <div class="col-md-4 form-group cus-random-label">
+                            <label for="MemberName"> Verify Income Certificate</label>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            @Html.TextBoxFor(m => m.IncomeCertificate, new { @class = "form-control input-shadow", @placeholder = "15 digit edisha transaction id", @maxlength = "15" })
+                            @Html.ValidationMessageFor(model => model.IncomeCertificate, "", new { @class = "validation" })
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <input type="button" value="Verify" id="btnverify" onclick="VerifyDocument();" class="btn btn-danger" />
+                        </div>
+                    </div>
+                }
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center top-heading" style="padding:0;" id="paymentdetail">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12 cus-heading">
+                            <h3>Payment Detail</h3>
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.IsSCcondition == "N" || Model.IsSCcondition == "Y")
+                {
+                    <div id="dvIsSc">
+
+                        <div class="row">
+                            <div class="card c-shadow">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 form-group table-responsive">
+
+                                            <table class="table table-bordered table-hover table-striped" style="width:100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sub Head</th>
+                                                        <th>Fee</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.CandidateFee)
+                                                    {
+
+                                                        <tr>
+                                                            <td>
+                                                                @Html.DisplayFor(model => item.FeeSubHeadName, new { @class = "form-control" })
+
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(model => item.FeeAmountYearly, new { @class = "form-control" })
+
+                                                                @{
+                                                                    totalamount += Convert.ToInt32(item.FeeAmountYearly);
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+
+                                                <tfoot>
+                                                    <tr>
+                                                        <th style="color: #492A7F;">
+                                                            @Html.Label("Total Fee")
+                                                        </th>
+                                                        <th>
+                                                            @Html.TextBoxFor(m => m.TotalFee, new { @class = "form-control input-shadow alert alert-primary", @id = "totalamount", @readonly = true, @Value = Model.TotalFee })
+                                                        </th>
+                                                    </tr>
+                                                    @*@if (Model.CollegeType != "1")
+                                                        {
+                                                            <tr>
+                                                                <th style="color: #492A7F;">
+                                                                    @Html.Label("Concession")
+                                                                </th>
+                                                                <th>
+                                                                    @Html.TextBoxFor(m => m.Concession, new { @class = "form-control input-shadow alert alert-primary", @id = "Concession", @readonly = true })
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="color: #492A7F;">
+                                                                    @Html.Label("Total Fee after Concession")
+                                                                </th>
+                                                                <th>
+                                                                    @Html.TextBoxFor(m => m.PendingFee, new { @class = "form-control input-shadow alert alert-primary", @id = "PendingFee", @readonly = true })
+                                                                </th>
+                                                            </tr>
+                                                        }*@
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (Model.CollegeType != "1")
+                        {
+
+                            <div class="row">
+                                <div class="col-md-4 form-group cus-random-label">
+                                    @Html.Label("Want to pay Full/Part")
+                                </div>
+                                <div class="col-md-8 form-group cus-random-radio">
+                                    <label class="containernew">
+                                        @Html.RadioButtonFor(m => m.FullPart, "F", new { @required = "required" })<span>Option 1 (Annual)</span>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="containernew">
+                                        @Html.RadioButtonFor(m => m.FullPart, "P", new { @required = "required" })<span>Option 2 (60% as 1st installment)</span>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="containernew">
+                                        @Html.RadioButtonFor(m => m.FullPart, "T", new { @required = "required" })<span>Option 3 (30% as 1st installment)</span>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                        <div class="row">
+                            <div class="col-md-6 form-group cus-random-label">
+                                @Html.Label("Fee to be Paid")
+                            </div>
+                            <div class="col-md-6 form-group ">
+                                @Html.TextBoxFor(m => m.Feetobepay, new { @class = "form-control input-shadow alert alert-primary", @id = "Feetobepay", @readonly = true })
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 form-group cus-random-label">
+                                @Html.Label("Payment Gateway")
+                            </div>
+                            <div class="col-md-6 form-group cus-random-radio">
+                                @*<label class="containernew">
+                                        @Html.RadioButtonFor(m => m.PaymentGateway, "P", new { @required = "required" })<span><img src="~/assets/images/payu_india.gif" style="width:110px;height:30px;" /></span>
+                                        <span class="checkmark"></span>
+                                    </label>*@
+                                <label class="containernew">
+                                    @Html.RadioButtonFor(m => m.PaymentGateway, "H", new { @required = "required", @Checked = "checked" })<span><img src="~/assets/images/hdfc-logo.png" style="width:110px;height:30px;" /></span>
+                                    <span class="checkmark"></span>
+                                </label>
+                                @*<label class="containernew">
+                                        @Html.RadioButtonFor(m => m.PaymentGateway, "I", new { @required = "required" })<span><img src="~/assets/images/indusind-bank-logo.png" style="width:100px;height:20px;" /></span>
+                                        <span class="checkmark"></span>
+                                    </label>*@
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 form-group text-center">
+                                <span style="font-size:14px;font-weight:bold;color:red">
+
+                                    " Please Note: You can choose any Bank debit card/ Credit Card/ Net Banking facility to pay your fee
+                                    After selecting the payemnt gateway, you will get the option to choose any bank payment mode on the next page."
+
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 form-group text-center cus-registerbtn">
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-credit-card"></i>&nbsp;Pay</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                }
+
+            </div>
+        </section>
+        <div class="outer-loader" style="display: none;">
+            <div class="loader-img loader" style="display: none;"></div>
+        </div>
+        @*</form>*@
+    }
+
+    <script type="text/javascript" src="../assets/js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../assets/js/popperjs/popper.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap/Js/bootstrap.min.js"></script>
+    <script src="~/swalJs/sweetalert.min.js"></script>
+    <script src="~/swalJs/swal-forms.js"></script>
+    <script src="~/scripts/printThis.js"></script>
+    <script type="text/javascript">
+        var MaxPages = '@Session["MaxPage"]';
+        var currentPage = '@Session["currentPage"]';
+        $(document).ready(function () {
+            if ('@Model.CollegeType' == '1')
+            {
+             $('#Feetobepay').val(Math.round(@Model.PendingFee));
+            }
+            $(':radio[name=FullPart]').change(function () {
+                // read the value of the selected radio
+                var value = $(this).val();
+                if (value == "P") {
+
+                    var totalfee =@Model.PendingFee;
+                    var totalfee60per = parseInt(totalfee * 60) / 100;
+                    $('#Feetobepay').val( Math.round(totalfee60per));
+                    var instalno = document.getElementById("billing_state").value;
+                    if (instalno == '0') {
+                        document.getElementById("billing_state").value = "1";
+                    }
+                    else {
+                        document.getElementById("billing_state").value = "2";
+                    }
+
+                }
+
+                else if (value == "T") {
+                    var totalfee =@Model.PendingFee;
+                    var totalfee60per = parseInt(totalfee * 30) / 100;
+                    $('#Feetobepay').val(Math.round(totalfee60per));
+                    var instalno = document.getElementById("billing_state").value;
+                    if (instalno == '0') {
+                        document.getElementById("billing_state").value = "1";
+                    }
+                    else {
+                        document.getElementById("billing_state").value = "2";
+                    }
+                }
+                else {
+                    var totalfee = @Model.PendingFee;
+                    $('#Feetobepay').val(Math.round(totalfee));
+                    document.getElementById("billing_state").value = "0";
+                }
+            })
+
+            $('#cmd1').on('click', function () {
+                window.print();
+            })
+
+            $("input[name=incomeradio]").on("change", function () {
+                var selectedval = $(this).val();
+                if (selectedval == "Y") {
+                    $('#dvIncome').show();
+                    $('#dvIsSc').hide();
+                    $('#paymentdetail').hide();
+
+                }
+                else {
+                    $('#dvIncome').hide();
+                    $('#dvIsSc').show();
+                    $('#paymentdetail').show();
+
+                }
+            });
+
+          //  $("input[name=incomeradio]:checked").val()
+
+
+            $('#cmd').click(function () {
+                $("#dvPrint").printThis({
+                    importCSS: false,
+                    //importStyle: false,
+                    //printContainer: true,
+                    loadCSS: "/assets/css/stylepayment.css",
+                    //pageTitle: "Higher Education",
+                    //removeInline: true,
+                    //removeInlineSelector: "*",
+                    //formValues: true,
+                    //removeScripts: false,
+                    header: "<h1>Higher Education</h1>"
+
+                });
+            });
+
+            $(document).on("keyup", "#IncomeCertificate", function () {
+                if (/\D/g.test(this.value)) {
+                    this.value = this.value.replace(/\D/g, '');
+                    swal("Warning!", "Please enter only numeric value", "warning")
+                }
+            });
+
+             //
+             $('input[name="FullPart"]').prop('checked', false);
+             //$('input[name="PaymentGateway"]').prop('checked', false);
+
+        });
+
+     function VerifyDocument(elem) {
+        startPreloader();
+
+         var TransactionId = $('#IncomeCertificate').val();
+         var servicecode = "06";
+        @{
+            var citizenname = "";
+        }
+          @{
+           citizenname= Model.CandidateName +"$"+Model.FatherName + "$" + Model.MotherName;
+         }
+
+
+        // citizenname = $('#txtfathername').val() + "$" + $('#txtmothername').val();
+         if ($('#decCheck').is(':not(:checked )')) {
+             stopPreloader();
+             swal('Alert!', 'Kindly Accept the Declaration to continue', 'warning');
+             return;
+         }
+        if (TransactionId == "" || TransactionId == null) {
+
+            swal('Alert!', 'Certificate Number is required', 'warning');
+             stopPreloader();
+            return;
+         }
+
+
+
+        item = {
+            TransactionID: TransactionId,
+            ServiceCode: servicecode,
+            Name: '@citizenname',
+            RegistrationId: '@Model.RegistrationId',
+            CollegeId :'@Model.merchant_param3',
+            CombinationId :'@Model.merchant_param5'
+        }
+
+          $.ajax({
+                  type: "POST",
+                  url: '@Url.Action("GetDocumentStatus", "FileUpload")',
+                  data: "{item:" + JSON.stringify(item) + "}",
+                  contentType: "application/json; charset=utf-8",
+                  dataType: "json",
+                  success: function (data) {
+                      if (data == "001") {
+                          swal("Alert!", "Document not verified.\n Please check 15 digit edisha id", "warning");
+                      }
+                      if (data == "000") {
+                          $('#btnverify').addClass("btn btn-success");
+                          $('#btnverify').val("Verified");
+                          $('#btnverify').attr("disabled","disabled");
+                          swal("Alert!", "Document has been verified.", "success");
+                          window.location.href = "@Url.Action("FeeReceipt","Account")";
+                      }
+                     stopPreloader();
+
+                  },
+                failure: function (data) {
+                    swal('Error', 'Something went wrong', 'error');
+                     stopPreloader();
+
+                }
+          });
+
+
+        }
+
+    function startPreloader() {
+        $(".loader").css("display", "block");
+        $(".outer-loader").css("display", "block");
+
+    }
+    function stopPreloader() {
+
+        $(".loader").css("display", "none");
+        $(".outer-loader").css("display", "none");
+    }
+    </script>
+    @if (Model.IsSCcondition == "Y")
+    {
+        <script>
+            $('#dvIsSc').hide();
+            $('#paymentdetail').hide();
+        </script>
+    }
+    <script type="text/javascript" language="Javascript">
+        history.go(1); // disable the browser's back button
+    </script>
+</body>
+</html>

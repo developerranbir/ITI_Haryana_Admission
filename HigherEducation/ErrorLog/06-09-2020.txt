@@ -1,0 +1,11 @@
+
+Log Entry : 7.32.11 PM 06 September 2020
+  :
+  :Method Name -    at System.Web.HttpResponse.BeforeCookieCollectionChange()
+   at System.Web.HttpCookieCollection.Add(HttpCookie cookie)
+   at HigherEducation.BusinessLayer.clsSecurity.AntiFixationInit() in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\clsSecurity.cs:line 21
+   at HigherEducation.BusinessLayer.clsSecurity.SetCookie() in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\BusinessLayer\clsSecurity.cs:line 34
+   at Higher_Education.Controllers.FileUploadController.FileUpload() in D:\Running Applications\Final Code Haryana Education\HigherEducation\HigherEducation\Controllers\FileUploadController.cs:line 197
+Target Website - Void BeforeCookieCollectionChange()
+ Error - Server cannot modify cookies after HTTP headers have been sent.
+-------------------------------

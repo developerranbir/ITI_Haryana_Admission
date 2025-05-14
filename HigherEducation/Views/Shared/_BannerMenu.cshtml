@@ -1,0 +1,307 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+
+
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/sweetalert.css" rel="stylesheet" />
+    @*<link href="../assets/css/stylesearch.css" rel="stylesheet" />*@
+    <link href="../assets/css/styleindex.css" rel="stylesheet" />
+
+    <link href="../assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+    <script src="../assets/dataTable/dataTables/jquery-3.5.1.js"></script>
+    <script src="../assets/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../assets/dataTable/dataTables/jquery.dataTables.min.js"></script>
+    <script src="../assets/js/popperjs/popper.min.js"></script>
+    @*<script src="../assets/js/moment-with-locales.min.js"></script>*@
+    <script src="../assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../scripts/sweetalert.min.js"></script>
+    <link href="../assets/css/all.css" rel="stylesheet" />
+    <link href="../assets/css/stylereport.css" rel="stylesheet" />
+    @*<link href="../assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />*@
+    <link href="../assets/dataTable/dataTables/jquery.dataTables.min.css" rel="stylesheet" />
+    @*<link href="../assets/dataTable/dataTables/buttons.dataTables.min.css" rel="stylesheet" />*@
+    @*<script src="../assets/dataTable/dataTables/dataTables.buttons.min.js"></script>*@
+    @*<script src="../assets/dataTable/dataTables/buttons.html5.min.js"></script>*@
+    @*<script src="../assets/dataTable/dataTables/jszip.min.js"></script>
+        <script src="../assets/dataTable/dataTables/pdfmake.min.js"></script>
+        <script src="../assets/dataTable/dataTables/vfs_fonts.js"></script>
+        <script src="../assets/dataTable/dataTables/buttons.print.min.js"></script>*@
+    <script src="../assets/js/jquery.cookie.js"></script>
+    @*<link href="../assets/css/styleverification.css" rel="stylesheet" />*@
+    <script>
+    jQuery(window).resize(function ()
+    {
+        checkBesicSize();
+    });
+    function checkBesicSize()
+    {
+        var width = jQuery(window).width();
+        if (width > 1290)
+        {
+            var all_tags = { "h1": '50', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14' };
+            jQuery.each(all_tags, function (i, val)
+            {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1290)
+        {
+            var all_tags = { "h1": '50', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14' };
+            jQuery.each(all_tags, function (i, val)
+            {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1100)
+        {
+            var all_tags = { "h1": '40', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14' };
+            jQuery.each(all_tags, function (i, val)
+            {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 1024)
+        {
+            var all_tags = { "h1": '40', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14' };
+            jQuery.each(all_tags, function (i, val)
+            {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 980)
+        {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '24', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val)
+            {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 800)
+        {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val)
+            {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 768)
+        {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '18', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val)
+            {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 640)
+        {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val)
+            {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 480)
+        {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val)
+            {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 400)
+        {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val)
+            {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+        if (width < 360)
+        {
+            var all_tags = { "h1": '36', "h2": '14', "h3": '16', "h4": '12', "h5": '20', "h6": '10', "p": '12' };
+            jQuery.each(all_tags, function (i, val)
+            {
+                jQuery(i).css('font-size', val + 'px');
+            });
+        }
+    }
+    //Text Increase and Decrease jquery end
+    //Css Color Change jquery start
+    // color-changing-script
+    // Check (onLoad) if the cookie is there and set the class if it is
+    if (jQuery.cookie('highcontrast') == "yes")
+    {
+        jQuery("body").addClass("highcontrast");
+    }
+    // When the element is clicked
+    jQuery("a.button-toggle-highcontrast").click(function ()
+    {
+        if (jQuery.cookie('highcontrast') == "undefined" || jQuery.cookie('highcontrast') == "no")
+        {
+            jQuery.cookie('highcontrast', 'yes', {
+                expires: 7,
+                path: '/'
+            });
+            jQuery("body").addClass("highcontrast");
+        } else
+        {
+            jQuery.cookie('highcontrast', 'yes', {
+                expires: 7,
+                path: '/'
+            });
+            jQuery("body").addClass("highcontrast");
+        }
+    });
+    jQuery("a.button-toggle-remove").click(function ()
+    {
+        jQuery('body').removeClass('highcontrast');
+        if (jQuery.cookie('highcontrast') == "yes")
+        {
+            jQuery.cookie("highcontrast", null, {
+                path: '/'
+            });
+        }
+    });
+    $(document).ready(function ()
+    {
+        //language change script
+        $('#Hhindi').click(function ()
+        {
+            if ($('#hdnlang').val() == 'e')
+            {
+                $('.english').toggle();
+                $('.hindi').toggle();
+                $('#hdnlang').val('h');
+            }
+        });
+
+        $('#Eenglish').click(function ()
+        {
+            if ($('#hdnlang').val() == 'h')
+            {
+                $('.english').toggle();
+                $('.hindi').toggle();
+                $('#hdnlang').val('e');
+
+            }
+        });
+        //font and css changer script
+        var all_tags = { "h1": '50', "h2": '16', "h3": '20', "h4": '14', "h5": '24', "h6": '12', "p": '14' };
+        jQuery.each(all_tags, function (i, val)
+        {
+            jQuery(i).css('font-size', val + 'px');
+        });
+        checkBesicSize();
+        jQuery(".resetMe").click(function ()
+        {
+            jQuery.each(all_tags, function (i, val)
+            {
+                jQuery(i).css('font-size', val + 'px');
+
+            });
+
+        });
+        jQuery(".increase").click(function ()
+        {
+            jQuery.each(all_tags, function (i)
+            {
+                changeFontSize(i, 2);
+            });
+            return false;
+        });
+        jQuery(".decrease").click(function ()
+        {
+            jQuery.each(all_tags, function (i)
+            {
+                changeFontSize(i, -2);
+            });
+            return false;
+        });
+        function changeFontSize(tag, size)
+        {
+            var currentSize = jQuery(tag).css('font-size');
+            var currentSize = parseFloat(currentSize) + parseFloat(size);
+            jQuery(tag).css('font-size', currentSize);
+        }
+    })
+    </script>
+</head>
+<body class="homepage">
+
+    <!--=========== topbar========== -->
+    <div class="container-fluid cus-maintop-banner">
+        <div class="row">
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12 cus-dashboard">
+                @*<a href="UG/reports/showdash" target="_blank"><span class="english"><img src="../assets/images/dashboard.png">&nbsp;Dashbboard-UG</span><span class="hindi" style="display:none;">डैशबोर्ड</span></a>
+                    <a href="UG/reports/showdashpg" target="_blank"><span class="english"><img src="../assets/images/dashboard.png">&nbsp;Dashbboard-PG</span><span class="hindi" style="display:none;">डैशबोर्ड</span></a>*@
+            </div>
+            <div class="col-xl-6 col-lg-5 col-md-5 col-sm-6 col-12 cus-links d-none d-sm-block d-sm-none d-md-block">
+                <div id="exchanger" class="selectbox">
+                    <ul>
+                        <li>
+                            <a href="#topbar" class="skip-content scroll" title="skip to main content"><span class="english">Skip to Main Content</span><span class="hindi" style="display:none;">मुख्य विषयवस्तु पर जाएं</span></a>
+                            <a href="#!" class="button-toggle-remove" title="Standard">A</a>
+                            <a href="#!" class="button-toggle-highcontrast" title="Black/Yellow">A</a>
+                            <a href="#" id="incfont" class="increase" title="Increased Text">A+</a>
+                            <a href="#" id="decfont" class="decrease" title="Decreased text">A-</a>
+                            <a href="#" id="decfont2" class="resetMe" title="Reset Text">A</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-3 col-md-3 col-sm-3 col-12 cus-language d-none d-sm-block">
+                <ul class="list-item">
+                    <li class="active"><a id="Eenglish">English</a></li>
+                    <li><a id="Hhindi">हिन्दी</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- ======= banner ======= -->
+    <img class="img-fluid w-100" src="../assets/images/main-banner.jpg" style="border-bottom: 4px solid #EBEBEB;">
+    <!--<div id="popup">
+       <img src="~/assets/images/advertisement.jpeg" alt="Admission 2020-2021" class="img-fluid" />
+       <a class="close" id="close" href="#">×</a>
+
+       </div>-->
+    <!-- ======= Header =======-->
+    <div class="container-fluid">
+        <div class="row header">
+            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+                <nav class="nav-menu d-none d-lg-block">
+                    <ul class="list">
+                        
+                        <li><a href="https://itiharyanaadmissions.nic.in/"><span class="english">Home</span><span class="hindi" style="display:none;">होम</span></a></li>
+                        <li class="active"><a href='@Url.Action("SearchCollegeIndex","Reports")'><span class="english">Search College / Course</span><span class="hindi" style="display:none;">कॉलेज या पाठ्यक्रम खोजें</span></a></li>
+                        <li><a href="UG/DHE/frmViewCollegeSeatMatrix.aspx"><span class="english">View Seat Matrix</span><span class="hindi" style="display:none;">सीट मैट्रिक्स</span></a></li>
+
+                        <!--  <li><a href="UG/DHE/frmViewVacantSeatsPG.aspx"><span class="english">View Vacant Seats-PG </span><span class="hindi" style="display:none;">खाली सीट देखें</span></a></li> -->
+                        <!--<li><a href="UG/DHE/frmUpdateFamilyId.aspx"><span class="english">Update FamilyId</span><span class="hindi" style="display:none;">अपडेट परिवार आईडी</span></a></li>-->
+                        <!--   <li><a href="#" onclick="javascript: alert('Integration of Merit Module with Fee Module is in progress. Revised merit list along with fee payment option will be available shortly');"><span class="english">Merit List</span><span class="hindi" style="display:none;">योग्यता क्रम सूची</span></a></li> -->
+                        <!--<li><a href="UG/reports/meritList"><span class="english">Merit List</span><span class="hindi" style="display:none;">योग्यता क्रम सूची</span></a></li>
+                        <li><a href="UG/DHE/frmResultUGAdmissions.aspx"><span class="english">Know Your Result</span><span class="hindi" style="display:none;">अपना परिणाम जानिए</span></a></li>
+                        <li><a href="UG/DHE/frmViewPaymentStatus.aspx"><span class="english">View Payment Status </span><span class="hindi" style="display:none;">भुगतान की स्थिति देखें</span></a></li>-->
+                        <!--  <li><a href="#" onclick="javascript: alert('Integration of Merit Module with Fee Module is in progress. Revised merit list along with fee payment option will be available shortly');"><span class="english">Know Your Result</span><span class="hindi" style="display:none;">अपना परिणाम जानिए</span></a></li> -->
+                        <!-- <li><a href="DHE/CutOffList.aspx"><span class="english">Cut Off List</span><span class="hindi" style="display:none;">कट ऑफ लिस्ट</span></a></li>-->
+                    </ul>
+                </nav>
+                <!-- .nav-menu -->
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 cus-right-button text-right">
+                @*<a href="UG/DHE/frmlogin.aspx" target="_blank"><span class="english"><img src="assets/images/login.png">&nbsp;Official Login</span><span class="hindi" style="display:none;">आधिकारिक लॉगिन</span></a>*@
+            </div>
+        </div>
+    </div>
+    <div>
+
+        @RenderBody()
+    </div>
+</body>
+</html>

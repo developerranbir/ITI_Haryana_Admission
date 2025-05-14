@@ -1,0 +1,115 @@
+﻿*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+body {
+    background-color: #f4f6f9;
+    font-size: 0.875em;
+    overflow-x: hidden;
+    color: #222;
+    font-family: "Poppins", sans-serif;
+
+}
+
+.main-banner img {
+    width: 100%;
+    border-bottom: 4px solid #6D4379;
+}
+.back-btn .btn.btn-primary {
+    background: #492A7F;
+    border: 1px solid #492A7F;
+    box-shadow: 0 2px 6px #492A7F;
+}
+.top-heading h4 {
+    color: #E91E63;
+    font-weight:800;
+    margin-top:5px;
+    margin-bottom:10px;
+}
+.cus-label {
+    color: #492A7F;
+    font-weight:700;
+    font-size:16px;
+}
+
+
+.top-section-btn .btn.btn-success {
+    box-shadow: 0 2px 6px #81d694;
+    background-color: #3bb557;
+    border-color: #3bb557;
+    color: #fff;
+    margin-right: 10px;
+    transition-duration: 0.4s;
+}
+        .top-section-btn .btn.btn-success:hover {
+            background-color: #3bb557;
+        }
+.top-section-btn .btn.btn-outline-danger {
+    border-color: #E91E63;
+    transition-duration: 0.4s;
+}
+    .top-section-btn .btn.btn-outline-danger:hover {
+        background-color: #E91E63;
+        border-color: #E91E63;
+        box-shadow: 0 2px 6px #e589a8;
+    }
+.cus-fee-top-section {
+    box-shadow: 2px 6px 15px 0 rgba(69,65,78,.1);
+    -webkit-box-shadow: 2px 6px 15px 0 rgba(69,65,78,.1);
+    padding: 1rem;
+       
+}
+.cus-fee-table-section {
+    box-shadow: 2px 6px 15px 0 rgba(69,65,78,.1);
+    -webkit-box-shadow: 2px 6px 15px 0 rgba(69,65,78,.1);
+    padding: 1rem;
+    margin-bottom:2%;
+}
+.cus-fee-table-section #showdata{
+    width:100% !important;
+}
+.cus-fee-table-section table th {
+    background: #ede7f6;
+}
+    .cus-fee-table-section table td {
+        width: 100px;
+    }
+.cus-fee-table-section table td input[value=Edit] {
+        font-size: 14px;
+        border-radius: 4px !important;
+        padding: 5px 5px !important;
+        margin-top: 1px;
+        background-color: #394eea;
+        border-color: #394eea;
+        color: #fff;
+        margin-left: 5px;
+        cursor: pointer;
+    }
+    .cus-fee-table-section table td input[value=Deactivate] {
+        font-size: 14px;
+        border-radius: 4px !important;
+        padding: 5px 5px !important;
+        margin-top: 1px;
+        background-color: #E91E63;
+        border-color: #E91E63;
+        color: #fff;
+        margin-left: 5px;
+        cursor: pointer;
+    }
+#footer {
+    background: #071527;
+    padding: 10px 0 10px 0;
+    color: #fff;
+    font-size: 14px;
+    text-align:center;
+
+}
+    #footer a {
+        color: #fff;
+    }
+@media (max-width: 640px){
+    .cus-fee-top-section{
+        text-align:center !important;
+    }
+}

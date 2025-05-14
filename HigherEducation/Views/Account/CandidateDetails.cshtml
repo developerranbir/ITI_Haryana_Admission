@@ -1,0 +1,1710 @@
+﻿@model HigherEducation.Models.CandidateDetail
+@{
+    ViewBag.Title = "CandidateDetails";
+}
+<style>
+    .ui-datepicker select.ui-datepicker-month, .ui-datepicker select.ui-datepicker-year {
+        color: black;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .col-md-6 {
+        font-weight: normal;
+    }
+
+    .hide {
+        visibility: hidden
+    }
+</style>
+<style type="text/css">
+    .tab-pane .tools .btn.btn-flat {
+        /* padding: 4.5px 7px; */
+        margin-bottom: 5px;
+        margin-top: -30px;
+        margin-right: 10px;
+    }
+
+    .completedCourse {
+        background-color: green;
+        color: white;
+    }
+
+    .redBorder {
+        border: 1px solid red !important;
+    }
+
+    .greenBorder {
+        border: 1px solid green !important;
+    }
+
+    .txtSize {
+        font-size: 16px;
+    }
+
+    .ctrlPosition {
+        text-align: center;
+        margin-top: 40px;
+        color: #34495E;
+        font-weight: bold;
+    }
+
+        .ctrlPosition:hover {
+            color: blue;
+        }
+
+    .pdfFile {
+        margin-left: 50px;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+        .pdfFile:hover {
+            text-decoration: underline;
+        }
+
+    .btnAdd {
+        color: white;
+        outline: 0;
+        padding: 10px 16px;
+        font-size: 16px;
+        line-height: 1.33;
+        border-radius: 6px;
+    }
+
+    .my-input {
+        width: 100%;
+    }
+
+    .my-icon {
+        position: absolute;
+        right: 20px;
+        color: red;
+        top: 7px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .redBorder {
+        border: 1px solid red !important;
+    }
+
+    .greenBorder {
+        border: 1px solid green !important;
+    }
+
+    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+        background: linear-gradient(to right, #004ef9, #79a3ff) !important;
+        color: #fff;
+        border-color: #79a3ff !important;
+    }
+</style>
+<head>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+
+    <script type="text/javascript" src="~/assets/js/jquery/jquery.min.js"></script>
+    <link href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <link href="~/swalJs/sweetalert.css" rel="stylesheet" />
+    <link href="~/swalJs/swal-forms.css" rel="stylesheet" />
+    <script src="~/swalJs/sweetalert.min.js"></script>
+    <script src="~/swalJs/swal-forms.js"></script>
+</head>
+<section class="cus-background">
+    <div class="section-body contain-lg">
+        <!-- BEGIN INTRO -->
+        <div class="row">
+            <div class="col-lg-12">
+                <article class="margin-bottom-lg">
+                    <p class="lead">
+                    </p>
+                </article>
+            </div><!--end .col -->
+        </div><!--end .row -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+            <li class="nav-item c-shadow-1">
+                <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+                   aria-selected="true">Personal Details</a>
+            </li>
+            <li class="nav-item c-shadow-1">
+                <a class="nav-link" id="Education-tab" data-toggle="tab" href="#Education" role="tab" aria-controls="Education"
+                   aria-selected="false">Education Qualification</a>
+            </li>
+            <li class="nav-item c-shadow-1">
+                <a class="nav-link" id="Weightage-tab" data-toggle="tab" href="#Weightage" role="tab" aria-controls="Weightage"
+                   aria-selected="false">Weightage</a>
+            </li>
+            <li class="nav-item c-shadow-1">
+                <a class="nav-link" id="ChoiceOfCourse-tab" data-toggle="tab" href="#ChoiceOfCourse" role="tab" aria-controls="ChoiceOfCourse"
+                   aria-selected="false">Choices Of Courses</a>
+            </li>
+            <li class="nav-item c-shadow-1">
+                <a class="nav-link" id="Document-tab" data-toggle="tab" href="#DocumentUpload" role="tab" aria-controls="DocumentUpload"
+                   aria-selected="false">DocumentUpload</a>
+            </li>
+            <li class="nav-item c-shadow-1">
+                <a class="nav-link" id="Decleration-tab" data-toggle="tab" href="#Decleration" role="tab" aria-controls="Decleration"
+                   aria-selected="false">Decleration</a>
+            </li>
+
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="Petitioner-tab">
+                <br />
+                <form class="form form-validate" onsubmit="return checkValidate(this)" id="formLogin1" autocomplete="off" action="@Url.Action("CandidateDetails", "Account")" accept-charset="utf-8" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="hdnRuralUrban" name="hdnRuralUrban" value="" />
+                    <input type="hidden" id="hdnState" name="hdnState" value="" />
+                    <input type="hidden" id="hdnDisRural" name="hdnDisRural" value="" />
+                    <input type="hidden" id="hdnDisUrban" name="hdnDisUrban" value="" />
+                    <input type="hidden" id="hdnMunicipilty" name="hdnMunicipilty" value="" />
+                    <input type="hidden" id="hdnBlock" name="hdnBlock" value="" />
+                    <input type="hidden" id="hdnVillage" name="hdnVillage" value="" />
+                    <input type="hidden" id="hdnStreetAdd1" name="hdnStreetAdd1" value="" />
+                    <input type="hidden" id="hdnStreetAdd2" name="hdnStreetAdd2" value="" />
+                    <input type="hidden" id="hdnPin" name="hdnPin" value="" />
+                    <div class="card c-shadow">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="formLogin1_CandidateName" style="font-size:16px;color: #34495E;">विद्यार्थी का पूरा नाम <br />(Student's Full Name) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.CandidateName, new { @id = "formLogin1_CandidateName", @class = "form-control input-shadow", @Value = ViewBag.CandidateName, @required = "required" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="formLogin1_FatherHusbandName" style="font-size:16px;color: #34495E;">पिता / पति का नाम<br />(Father's Name) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.FatherHusbandName, new { @id = "formLogin1_FatherHusbandName", @class = "form-control input-shadow", @Value = ViewBag.FathreName })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="MotherName" style="font-size:16px;color: #34495E;">माता का नाम <br />(Mother's Name) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.MotherName, new { @class = "form-control input-shadow", @Value = ViewBag.MotherName })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="BirthDate" style="font-size:16px;color: #34495E;">जन्म की तिथि<br />(Date of Birth) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.BirthDate, new { @class = "form-control input-shadow", @Value = ViewBag.DOB })
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-3 form-group">
+                                    <label for="Sex" style="font-size:16px;color: #34495E;">लिंग<br />(Gender) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.Sex, new SelectList(ViewBag.Sex as System.Collections.IEnumerable, "Value", "Text"),
+                                        "Select", new { id = "Sex", @class = "form-control input-shadow", required = "required" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="Email" style="font-size:16px;color: #34495E;">ईमेल आई डी<br />(Email Id) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-shadow", @Value = ViewBag.Email })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="AadharNo" style="font-size:16px;color: #34495E;">आधार कार्ड संख्या <br />(Aadhaar Number) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.AadharNo, new { @class = "form-control input-shadow", @Value = ViewBag.Aadhar })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="MobileNo" style="font-size:16px;color: #34495E;">मोबाइल नंबर<br />(Mobile Number) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control input-shadow", @Value = ViewBag.Mobile })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="MaritalStatus" style="font-size:16px;color: #34495E;">वैवाहिक स्थिति<br />(Marital Status) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.Marital_Status, new List<SelectListItem>{
+                                       new SelectListItem{ Text="Select", Value="0"},
+                                          new SelectListItem{ Text="Married", Value="1"},
+                                          new SelectListItem{ Text="Unmarried", Value="2"}}, new { @class = "form-control input-shadow", id = "MaritalStatus", required = "required" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="FatherOccupation" style="font-size:16px;color: #34495E;">पिता का व्यवसाय<br />(Father's Occupation) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.Father_Occupation, new List<SelectListItem>{
+                                       new SelectListItem{ Text="Select", Value="0"},
+                                          new SelectListItem{ Text="Private", Value="1"},
+                                          new SelectListItem{ Text="Government", Value="2"}}, new { @class = "form-control input-shadow", id = "FatherOccupation", required = "required" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="MotherOccupation" style="font-size:16px;color: #34495E;">मां का व्यवसाय<br />(Mother's Occupation) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.Mother_Occupation, new List<SelectListItem>{
+                                       new SelectListItem{ Text="Select", Value="0"},
+                                       new SelectListItem{ Text="Private", Value="1"},
+                                          new SelectListItem{ Text="Government", Value="2"}}, new { @class = "form-control input-shadow", id = "MotherOccupation", required = "required" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="GuradianName" style="font-size:16px;color: #34495E;">अभिभावक का नाम<br />(Guardian's Name) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.Guardian_Name, new { @class = "form-control input-shadow" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label for="TelephoneNo" style="font-size:16px;color: #34495E;">टेलीफोन नंबर(एसटीडी कोड के साथ)<br />(Telephone No(with STD code)) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.TelephoneNo, new { @class = "form-control input-shadow" })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="GuardianMobileNo" style="font-size:16px;color: #34495E;">अभिभावक मोबाइल नंबर<br />(Parent/ Guardian's Mobile No) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.GuardianMobileNo, new { @class = "form-control input-shadow" })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="GuradianEmail" style="font-size:16px;color: #34495E;">अभिभावक ईमेल आई डी<br />(Parent/ Guardian's Email Id) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.GuradianEmail, new { @class = "form-control input-shadow" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label for="BloodGroup" style="font-size:16px;color: #34495E;">रक्त समूह<br />(Blood Group) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.BloodGroup, new SelectList(ViewBag.BloodGroup as System.Collections.IEnumerable, "Value", "Text"),
+"Select", new { id = "BloodGroup", @class = "form-control input-shadow" })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="Religion" style="font-size:16px;color: #34495E;">धर्म<br />(Religion) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.Religion, new SelectList(ViewBag.Religion as System.Collections.IEnumerable, "Value", "Text"),
+"Select", new { id = "Religion", @class = "form-control input-shadow", required = "required" })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="ParentalIncome" style="font-size:16px;color: #34495E;">सभी स्रोतों से माता पिता का इनकम<br />(Parental Income from all Sources) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.ParentalIncome, new SelectList(ViewBag.ParentalIncome as System.Collections.IEnumerable, "Value", "Text"),
+"Select", new { id = "ParentalIncome", @class = "form-control input-shadow", required = "required" })
+                                </div>
+                            </div>
+                            <fieldset>
+                                <legend>स्थाई पता<br />(Permanent Address)</legend>
+                                <div class="row">
+                                    <div class="col-md-3 form-group">
+                                        <label for="Country" style="font-size:16px;color: #34495E;">ग्रामीण / शहरी क्षेत्र<br />(Rural/Urban Area) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.RuralUrban, new List<SelectListItem>{
+                                          new SelectListItem{ Text="Urban", Value="Urban"},
+                                          new SelectListItem{ Text="Rural", Value="Rural"}}, new { @class = "form-control input-shadow", required = "required" })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="State" style="font-size:16px;color: #34495E;">राज्य<br />(State) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.State_Code, new SelectList(ViewBag.State as System.Collections.IEnumerable, "Value", "Text"), "Select", new { @class = "form-control input-shadow", required = "required" })
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <div id="divdistrictUrban">
+                                            <label for="District_Code_Urban" style="font-size:16px;color: #34495E;">जिला<br />(District) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.DropDownListFor(model => model.District_Code_Urban, Enumerable.Empty<SelectListItem>(), new { @class = "form-control input-shadow", required = "required" })
+                                        </div>
+                                        <div id="divdistrictRural">
+                                            <label for="District_Code_Rural" style="font-size:16px;color: #34495E;">जिला<br />(District) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.DropDownListFor(model => model.District_Code_Rural, Enumerable.Empty<SelectListItem>(), new { @class = "form-control input-shadow", required = "required" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <div id="divMuniciplity">
+                                            <label for="Municiplity" style="font-size:16px;color: #34495E;">नगर पालिका<br />(Municipality) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.DropDownListFor(m => m.Municiplity, Enumerable.Empty<SelectListItem>(), new { @class = "form-control input-shadow", required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div id="divVillageTown" style="width:100%">
+                                        <div class="row">
+                                            <div class="col-md-3 form-group">
+                                                <label for="Block" style="font-size:16px;color: #34495E;">खंड<br />(Block) <span style="color:red;"><strong>*</strong></span></label>
+                                                @Html.DropDownListFor(model => model.Block, Enumerable.Empty<SelectListItem>(), "Select", new { @class = "form-control input-shadow" })
+                                            </div>
+                                            <div class="col-md-3 form-group">
+                                                <label for="CityTownVillage" style="font-size:16px;color: #34495E;">गाँव<br />(Village) <span style="color:red;"><strong>*</strong></span></label>
+                                                @Html.DropDownListFor(model => model.CityTownVillage, Enumerable.Empty<SelectListItem>(), "Select", new { @class = "form-control input-shadow" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label for="StreetAddress1" style="font-size:16px;color: #34495E;">घर का पता-1 <br />(Street Address-1) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.TextBoxFor(model => model.StreetAddress1, new { @class = "form-control input-shadow" })
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="StreetAddress2" style="font-size:16px;color: #34495E;">घर का पता-2<br />(Street Address-2) </label>
+                                        @Html.TextBoxFor(model => model.StreetAddress2, new { @class = "form-control input-shadow" })
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label for="Pincode" style="font-size:16px;color: #34495E;">पिन कोड<br />(Pin Code) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.TextBoxFor(model => model.Pincode, new { @class = "form-control input-shadow" })
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <span>क्या आप का पत्राचार    आवासीय पता<br />(Is Correspondence as per residential address?)</span><span style="color:red;"><strong>*</strong></span>
+                                </div>
+                                @Html.CheckBoxFor(x => x.Is_Correspondence, new { @required = "required" })
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="C_RuralUrban" style="font-size:16px;color: #34495E;">देश<br />(Rural/Urban Area) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.C_RuralUrban, new List<SelectListItem>{
+                                          new SelectListItem{ Text="Urban", Value="C_Urban"},
+                                          new SelectListItem{ Text="Rural", Value="C_Rural"}}, new { @class = "form-control input-shadow", required = "required" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="State" style="font-size:16px;color: #34495E;">राज्य<br />(State) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.C_State_Code, new SelectList(ViewBag.State as System.Collections.IEnumerable, "Value", "Text"), "Select", new { @class = "form-control input-shadow", required = "required" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <div id="divCdistrictUrban">
+                                        <label for="District_Code_Urban" style="font-size:16px;color: #34495E;">जिला<br />(District) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.C_District_Code_Urban, Enumerable.Empty<SelectListItem>(), new { @class = "form-control input-shadow", required = "required" })
+                                    </div>
+                                    <div id="divCdistrictRural">
+                                        <label for="District_Code_Rural" style="font-size:16px;color: #34495E;">जिला<br />(District) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(model => model.C_District_Code_Rural, Enumerable.Empty<SelectListItem>(), new { @class = "form-control input-shadow", required = "required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <div id="divCMuniciplity">
+                                        <label for="Municiplity" style="font-size:16px;color: #34495E;">नगर पालिका<br />(Municipality) <span style="color:red;"><strong>*</strong></span></label>
+                                        @Html.DropDownListFor(m => m.C_Municiplity, Enumerable.Empty<SelectListItem>(), new { @class = "form-control input-shadow", required = "required" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="divCVillageTown" style="width:100%">
+                                    <div class="row">
+                                        <div class="col-md-3 form-group">
+                                            <label for="Block" style="font-size:16px;color: #34495E;">खंड<br />(Block) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.DropDownListFor(model => model.C_Block, Enumerable.Empty<SelectListItem>(), new { @class = "form-control input-shadow", required = "required" })
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label for="CityTownVillage" style="font-size:16px;color: #34495E;">गाँव<br />(Village) <span style="color:red;"><strong>*</strong></span></label>
+                                            @Html.DropDownListFor(model => model.C_CityTownVillage, Enumerable.Empty<SelectListItem>(), new { @class = "form-control input-shadow", required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label for="StreetAddress1" style="font-size:16px;color: #34495E;">घर का पता-1 <br />(Street Address-1) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.C_StreetAddress1, new { @class = "form-control input-shadow" })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="StreetAddress2" style="font-size:16px;color: #34495E;">घर का पता-2<br />(Street Address-2) </label>
+                                    @Html.TextBoxFor(model => model.C_StreetAddress2, new { @class = "form-control input-shadow" })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="Pincode" style="font-size:16px;color: #34495E;">पिन कोड<br />(Pin Code) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.TextBoxFor(model => model.C_Pincode, new { @class = "form-control input-shadow" })
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="Religion" style="font-size:16px;color: #34495E;">गैप ईयर (यदि कोई हो)<br />(Gap Year (if any))</label>
+                                    @Html.TextBoxFor(model => model.Gap_Year, new { @class = "form-control input-shadow" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="ParentalIncome" style="font-size:16px;color: #34495E;">क्या आपको एक छात्रावास की आवश्यकता है?<br />(Do you need a hostel?) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.Hostel, new List<SelectListItem>{
+                                   new SelectListItem{ Text="Select"},
+                                             new SelectListItem{ Text="No", Value="No"},
+                                             new SelectListItem{ Text="Yes", Value="Yes"}}, new { @class = "form-control input-shadow", })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="ParentalIncome" style="font-size:16px;color: #34495E;">परिवहन के साधन<br />(Mode of Transport) <span style="color:red;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.ModeOfTransport, new List<SelectListItem>{
+                                          new SelectListItem{ Text="Select", Value="NA"},
+                                             new SelectListItem{ Text="Public", Value="Public"},
+                                             new SelectListItem{ Text="Private", Value="Private"}}, new { @class = "form-control input-shadow", })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <span> क्या आप गरीबी रेखा के निचे आते हैं ?<br />(Do you belong to BPL Category?)<br /><span style="font-size:11px;">If yes please enter BPL card number.</span></span>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    @Html.RadioButtonFor(model => model.BPLCategory, "Y", new { @id = "checkBPLYes", @required = "required" })  Yes &nbsp;
+                                    @Html.RadioButtonFor(model => model.BPLCategory, "N", new { @id = "checkBPLNo", @required = "required" })  No
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    @Html.TextBoxFor(model => model.BPLCardNo, new { @id = "BPLCardNo", @class = "form-control input-shadow", @placeholder = "Enter BPL Card Numnber...", @style = "display: none;" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <span>क्या आपके पास पासपोर्ट हैं ?<br />(Do you have passport?)<br /><span style="font-size:11px;">If yes please enter passport number.</span></span>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    @Html.RadioButtonFor(model => model.PassportNo, "Y", new { @id = "checkPassportYes", @required = "required" })  Yes &nbsp;
+                                    @Html.RadioButtonFor(model => model.PassportNo, "N", new { @id = "checkPassportNo", @required = "required" })  No
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    @Html.TextBoxFor(model => model.PassportText, new { @class = "form-control input-shadow", @id = "PassportText", @placeholder = "Enter Passport Number", @style = "display: none;" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <span>क्या आपके पास ड्राइविंग लाइसेंस हैं ?<br />(Do you have Driving Licence?)<br /><span style="font-size:11px;">If yes please enter licence number.</span></span>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    @Html.RadioButtonFor(model => model.DrivingLicenceNo, "Y", new { @id = "checkLicenceYes", @required = "required" })  Yes &nbsp;
+                                    @Html.RadioButtonFor(model => model.DrivingLicenceNo, "N", new { @id = "checkLicenceNo", @required = "required" })  No
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    @Html.TextBoxFor(model => model.DrivingLicenceText, new { @class = "form-control input-shadow", @id = "DrivingLicenceText", @placeholder = "Enter Licence Number", @style = "display: none;" })
+                                </div>
+                            </div>
+                            <div class="col-xs-12 text-right">
+                                @*<button class="btn btn-primary c-shadow-1" id="btnNext" value="Next" type="Next">Next</button>*@
+                                <input type="submit" id="btnSaveNext" value="Save" class="btn btn-primary c-shadow-1" />
+                                <input id="btnNextEduTab" value="Next" class="btn btn-primary c-shadow-1" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="Education" role="tabpanel" aria-labelledby="Petitioner-tab">
+                <br />
+                <form class="form form-validate" id="formLogin2" autocomplete="off" action="@Url.Action("SaveEduData", "Account")" accept-charset="utf-8" method="post" enctype="multipart/form-data">
+                        <div class="card c-shadow">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="#print-content" class="table no-margin">
+                                        <thead>
+                                            <tr>
+                                                <th hidden="hidden">
+                                                    ID
+                                                </th>
+                                                <th>
+                                                    Exam Passed
+                                                </th>
+                                                <th>
+                                                    Univ/Board
+                                                <th>
+                                                    School/College
+                                                </th>
+                                                <th>
+                                                    Registration/Roll no
+                                                </th>
+                                                <th>
+                                                    Result Status
+                                                </th>
+                                                <th>
+                                                    Passing Year
+                                                </th>
+                                                <th>
+                                                    CGPA
+                                                </th>
+                                                <th>
+                                                    Marks obta/CGPA
+                                                </th>
+                                                <th>
+                                                    Max. Marks
+                                                </th>
+                                                <th>
+                                                    Subject
+                                                </th>
+                                                <th>
+                                                    Percentage
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="tbody1">
+                                            <tr>
+                                                <td>
+                                                    @Html.DropDownList("exampassed", new List<SelectListItem>{
+                                            new SelectListItem{ Text="Select", Value=""},
+                                            new SelectListItem{ Text="10th", Value="10th"},
+                                            new SelectListItem{ Text="12th", Value="12th"},
+                                            new SelectListItem{ Text="Diploma", Value="Diploma"}}, new { @class = "form-control input-shadow", id = "exampassed", required = "required" })
+                                                </td>
+                                                <td>
+                                                    @Html.DropDownList("univboard", new SelectList(ViewBag.BoardCode as System.Collections.IEnumerable, "Value", "Text"),
+                                                "Select", new { id = "univboard", @class = "form-control input-shadow", required = "required" })
+                                                </td>
+                                                <td><input pattern="[a-zA-Z\s]+" placeholder="School College" type="text" maxlength="40" minlength="1" class="form-control" id="schoolcollege" autocomplete="off" name="schoolcollege" required></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Registration/Rollno" maxlength="12" minlength="1" type="text" class="form-control" id="regroll" autocomplete="off" name="regroll" required></td>
+
+                                                <td>
+                                                    @Html.DropDownList("resultstatus", new List<SelectListItem>{
+                                            new SelectListItem{ Text="Select", Value=""},
+                                            new SelectListItem{ Text="Pass", Value="Pass"},
+                                            new SelectListItem{ Text="Fail", Value="Fail"},
+                                            new SelectListItem{ Text="Compartment", Value="Compartment"}}, null, new { @class = "form-control input-shadow", id = "resultstatus", required = "required" })
+                                                <td><input pattern="[0-9\s]+" placeholder="Passing Year" type="number" max="2020" min="2000" class="form-control" id="passingyear" autocomplete="off" name="passingyear" required></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="CGPA" type="checkbox" class="form-control" id="cgpa" autocomplete="off" name="cgpa"></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" step=".01" max="10000" min="0" type="number" class="form-control" id="marksobt" autocomplete="off" name="marksobt" required></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Max Marks" max="10000" min="0" type="number" class="form-control" id="maxmarks" autocomplete="off" name="maxmarks" required></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Subject" maxlength="60" minlength="1" type="text" class="form-control" id="subject" autocomplete="off" name="subject" required></td>
+                                                <td><input pattern="[0-9\s]+" readonly="readonly" step=".01" max="100" min="0" type="number" placeholder="Percentage" class="form-control" id="percentage" autocomplete="off" name="percentage" required></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @Html.DropDownList("exampassed2", new List<SelectListItem>{
+                                            new SelectListItem{ Text="Select", Value=""},
+                                            new SelectListItem{ Text="10th", Value="10th"},
+                                            new SelectListItem{ Text="12th", Value="12th"},
+                                            new SelectListItem{ Text="Diploma", Value="Diploma"}}, new { @class = "form-control input-shadow", id = "exampassed2", required = "required" })
+                                                </td>
+                                                <td>
+                                                    @Html.DropDownList("univboard2", new SelectList(ViewBag.BoardCode as System.Collections.IEnumerable, "Value", "Text"),
+                                                "Select", new { id = "univboard2", @class = "form-control input-shadow", required = "required" })
+                                                </td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="School College" maxlength="40" minlength="1" type="text" class="form-control" id="schoolcollege2" autocomplete="off" name="schoolcollege2" required></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Registration/Rollno" maxlength="12" minlength="1" type="text" class="form-control" id="regroll2" autocomplete="off" name="regroll2" required></td>
+
+                                                <td>
+                                                    @Html.DropDownList("resultstatus2", new List<SelectListItem>{
+                                            new SelectListItem{ Text="Select", Value=""},
+                                            new SelectListItem{ Text="Pass", Value="Pass"},
+                                            new SelectListItem{ Text="Fail", Value="Fail"},
+                                            new SelectListItem{ Text="Compartment", Value="Compartment"}}, null, new { @class = "form-control input-shadow", id = "resultstatus2", required = "required" })
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Passing Year" type="number" max="2020" min="2000" class="form-control" id="passingyear2" autocomplete="off" name="passingyear2" required></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="CGPA" type="checkbox" class="form-control" id="cgpa2" autocomplete="off" name="cgpa2"></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" step=".01" max="10000" min="0" type="number" class="form-control" id="marksobt2" autocomplete="off" name="marksobt2" required></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Max Marks" max="10000" min="0" type="number" class="form-control" id="maxmarks2" autocomplete="off" name="maxmarks2" required></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Subject" maxlength="60" minlength="1" type="text" class="form-control" id="subject2" autocomplete="off" name="subject2" required></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Percentage" readonly="readonly" step=".01" max="100" min="0" type="number" class="form-control" id="percentage2" autocomplete="off" name="percentage2" required></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @Html.DropDownList("exampassed3", new List<SelectListItem>{
+                                            new SelectListItem{ Text="Select", Value=""},
+                                            new SelectListItem{ Text="10th", Value="10th"},
+                                            new SelectListItem{ Text="12th", Value="12th"},
+                                            new SelectListItem{ Text="Diploma", Value="Diploma"}}, new { @class = "form-control input-shadow", id = "exampassed3" })
+                                                </td>
+                                                <td>
+                                                    @Html.DropDownList("univboard3", new SelectList(ViewBag.BoardCode as System.Collections.IEnumerable, "Value", "Text"),
+                                                "Select", new { id = "univboard3", @class = "form-control input-shadow" })
+                                                </td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="School College" maxlength="40" minlength="1" type="text" class="form-control" id="schoolcollege3" autocomplete="off" name="schoolcollege3"></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Registration/Rollno" maxlength="12" minlength="1" type="text" class="form-control" id="regroll3" autocomplete="off" name="regroll3"></td>
+
+                                                <td>
+                                                    @Html.DropDownList("resultstatus3", new List<SelectListItem>{
+                                            new SelectListItem{ Text="Select", Value=""},
+                                            new SelectListItem{ Text="Pass", Value="Pass"},
+                                            new SelectListItem{ Text="Fail", Value="Fail"},
+                                            new SelectListItem{ Text="Compartment", Value="Compartment"}}, null, new { @class = "form-control input-shadow", id = "resultstatus3" })
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Passing Year" type="number" max="2020" min="2000" class="form-control" id="passingyear3" autocomplete="off" name="passingyear3"></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="CGPA" type="checkbox" class="form-control" id="cgpa3" autocomplete="off" name="cgpa3"></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" step=".01" max="10000" min="0" type="number" class="form-control" id="marksobt3" autocomplete="off" name="marksobt3"></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Max Marks" max="10000" min="0" type="number" class="form-control" id="maxmarks3" autocomplete="off" name="maxmarks3"></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Subject" maxlength="60" minlength="1" type="text" class="form-control" id="subject3" autocomplete="off" name="subject3"></td>
+                                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Percentage" readonly="readonly" step=".01" max="100" min="0" type="number" class="form-control" id="percentage3" autocomplete="off" name="percentage3"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div><!--end .table-responsive -->
+                                <span style="background:#014E8C; color:white;text-align:center; font:20px;border: 1px solid black;">Best of Five Subject Marks: </span>
+                                <div class="card-body">
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <table id="#print-content" class="table no-margin">
+                            <tr>
+                                <th hidden="hidden">
+                                    ID
+                                </th>
+                                <th>
+                                    Subject
+                                </th>
+                                <th>
+                                    Marks Obtained
+                                <th>
+                                    Maximum Marks
+                                </th>
+                            </tr>
+
+                            <tbody class="tbody1"></tbody>
+                            <tr>
+                                <td>
+                                    @Html.DropDownList("b_subjectid", new SelectList(ViewBag.DefaultSubject as System.Collections.IEnumerable, "Value", "Text")
+                                             , new { id = "b_subjectid", @class = "form-control input-shadow", required = "required" })
+                                </td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" max="100" min="0" type="number" class="form-control" id="b_marksobt" autocomplete="off" name="b_marksobt" required></td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Maximum Marks" readonly="readonly" value="100" type="text" class="form-control" id="b_maxmarks" autocomplete="off" name="b_maxmarks" required></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DropDownList("b_subjectid2", new SelectList(ViewBag.AllSubject as System.Collections.IEnumerable, "Value", "Text"),
+                                             "Select", new { id = "b_subjectid2", @class = "form-control input-shadow", required = "required" })
+                                </td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" max="100" min="0" type="number" class="form-control" id="b_marksobt2" autocomplete="off" name="b_marksobt2" required></td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" readonly="readonly" value="100" placeholder="Maximum Marks" type="text" class="form-control" id="b_maxmarks2" autocomplete="off" name="b_maxmarks2" required></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DropDownList("b_subjectid3", new SelectList(ViewBag.AllSubject as System.Collections.IEnumerable, "Value", "Text")
+                                             , "Select", new { id = "b_subjectid3", @class = "form-control input-shadow", required = "required" })
+                                </td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" max="100" min="0" type="number" class="form-control" id="b_marksobt3" autocomplete="off" name="b_marksobt3" required></td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" readonly="readonly" value="100" placeholder="Maximum Marks" type="text" class="form-control" id="b_maxmarks3" autocomplete="off" name="b_maxmarks3" required></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DropDownList("b_subjectid4", new SelectList(ViewBag.AllSubject as System.Collections.IEnumerable, "Value", "Text")
+                                             , "Select", new { id = "b_subjectid4", @class = "form-control input-shadow", required = "required" })
+                                </td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" max="100" min="0" type="number" class="form-control" id="b_marksobt4" autocomplete="off" name="b_marksobt4" required></td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" readonly="readonly" value="100" placeholder="Maximum Marks" type="text" class="form-control" id="b_maxmarks4" autocomplete="off" name="b_maxmarks4" required></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DropDownList("b_subjectid5", new SelectList(ViewBag.AllSubject as System.Collections.IEnumerable, "Value", "Text"),
+                                               "Select", new { id = "b_subjectid5", @class = "form-control input-shadow", required = "required" })
+                                </td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" placeholder="Marks Obt" max="100" min="0" type="number" class="form-control" id="b_marksobt5" autocomplete="off" name="b_marksobt5" required></td>
+                                <td><input pattern="[a-zA-Z0-9\s]+" readonly="readonly" value="100" placeholder="Maximum Marks" type="text" class="form-control" id="b_maxmarks5" autocomplete="off" name="b_maxmarks5" required></td>
+                            </tr>
+
+
+
+                        </table>
+                        <div class="col-xs-12 text-right">
+                            <button class="btn btn-primary c-shadow-1" id="btnNext" value="Next" type="submit">Save & Next</button>
+                        </div>
+                    </form>
+               
+
+            </div>
+            <div class="tab-pane fade" id="Weightage" role="tabpanel" aria-labelledby="Respondent-tab">
+                <br />
+                <form class="form form-validate" id="formLogin3" autocomplete="off" action="@Url.Action("SaveWeightage", "Account")" accept-charset="utf-8" method="post" enctype="multipart/form-data">
+                    <div class="card c-shadow">
+                        <span style="background:#014E8C; color:white;text-align:center; font:40px;border: 1px solid black;">WEIGHTAGE/ महत्व </span>
+                    </div>
+
+                    <br />
+                    <br />
+                    <span style="color:Red;text-align:center; font:20px;border: 1px solid black;">The following questions are very important. Kindly fill carefully.<br /> निम्नलिखित प्रश्न बहुत महत्वपूर्ण हैं। कृपया ध्यान से भरें। </span>
+                    <br />
+                    <br />
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <span>एनसीईआरटी से राष्ट्रीय प्रतिभा पुरस्कार के प्राप्तकर्ता <br /> Recipients of National Talent Award from the NCERT</span><span style="color:red;"><strong>*</strong></span>  <br />
+                            <span style="color:white;background-color:green;font:bold;"><strong>(5 Marks)</strong></span>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            @Html.RadioButtonFor(model => model.IsNationalAward, "Yes")  Yes &nbsp;
+                            @Html.RadioButtonFor(model => model.IsNationalAward, "No")  No
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <span>a) एन.सी.सी कैडेट्स जिनके पास &#39;बी&#39; प्रमाणपत्र है / N.C.C Cadets who possess the &#39;B&#39; Certificate </span>
+                            <br /> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OR<br /> </span>
+                            &nbsp;<span>b) भारत के राष्ट्रपति द्वारा सम्मानित भारत स्काउट्स एंड गाइड्स प्रमाणपत्र के धारक (केवल स्नातक पाठ्यक्रम में प्रवेश के लिए)। / Holders of Bharat Scouts &amp; Guides Certificate awarded by the President of India (for admission to under graduate course only ).</span>
+                            <br /> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OR<br /> </span>
+                            &nbsp;<span>C) यूजी कोर्सेज में प्रवेश के लिए स्पोर्ट्स वेटेज जिसमें कानून 3 साल शामिल हैं। / Sports Weightage for Admission to the UG Courses Including Law 3-year. <span style="font:bold;"></span></span><span style="color:red;"><strong>*</strong></span> <br />
+                            <span style="color:white;background-color:green;font:bold;"><strong>(5 Marks)</strong></span>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            @Html.RadioButtonFor(model => model.IsNccCadet, "Yes")  Yes &nbsp;
+                            @Html.RadioButtonFor(model => model.IsNccCadet, "No")  No
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <span>क्या आपने हरियाणा के एक ग्रामीण क्षेत्र से अपना 10 + 2 पास किया है<br /> Have You Passed your 10+2 from a Rural Area of Haryana</span><span style="color:red;"><strong>*</strong></span>  <br />
+                            <span style="color:white;background-color:green;font:bold;"><strong>(5 Marks)</strong></span>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            @Html.RadioButtonFor(model => model.IsRuralArea, "Yes")  Yes &nbsp;
+                            @Html.RadioButtonFor(model => model.IsRuralArea, "No")  No
+                        </div>
+                    </div>
+                    <div class="col-xs-12 text-right">
+                        <button class="btn btn-primary c-shadow-1" id="btnWeightage" value="Next" type="submit">Save & Next</button>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="ChoiceOfCourse" role="tabpanel" aria-labelledby="ChoiceOfCourse-tab">
+                <br />
+                @*<form class="form form-validate" id="formLoginCourse" autocomplete="off" action="@Url.Action("SaveCourseSection", "Account")" accept-charset="utf-8" method="post" enctype="multipart/form-data">*@
+                <div class="card c-shadow">
+                    <div class="card-header">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="District" style="font-size:16px;color: #34495E;">जिला<br />(State) <span style="color:red; display: inline;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.Course_State, new SelectList(ViewBag.State as System.Collections.IEnumerable, "Value", "Text"), "Select", new { @id = "Course_State", @class = "form-control input-shadow" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="District" style="font-size:16px;color: #34495E;">जिला<br />(District) <span style="color:red; display: inline;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.Course_District, Enumerable.Empty<SelectListItem>(), new { @class = "form-control input-shadow" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="College" style="font-size:16px;color: #34495E;">कॉलेज<br />(College) <span style="color:red;  display: inline;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(m => m.Course_College, Enumerable.Empty<SelectListItem>(), new { @class = "form-control input-shadow" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="District" style="font-size:16px;color: #34495E;">कॉलेज कोर्स<br />(College Course) <span style="color:red; display: inline;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(model => model.Course_Course, Enumerable.Empty<SelectListItem>(), new { @class = "form-control input-shadow" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="CourseSection" style="font-size:16px;color: #34495E;">कोर्स अनुभाग<br />(Course Section) <span style="color: red; display: inline;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(m => m.Course_CourseSection, Enumerable.Empty<SelectListItem>(), new { @class = "form-control input-shadow" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="SubjectCombination" style="font-size:16px;color: #34495E;">विषय संयोजन<br />(Subject Combination) <span style="color: red; display: inline;"><strong>*</strong></span></label>
+                                    @Html.DropDownListFor(m => m.Course_SubjectCombination, Enumerable.Empty<SelectListItem>(), new { @class = "form-control input-shadow" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group" style="text-align:center;">
+                                    <input value="Add to List" id="btnAddList" class="btn btn-primary c-shadow-1" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card c-shadow">
+                    <div class="card-header">
+                        <div class="card-body">
+
+                            <div class="table-responsive">
+                                <table id="tblCourseSection" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>State Name</th>
+                                            <th>District</th>
+                                            <th>College</th>
+                                            <th>Course</th>
+                                            <th>Section</th>
+                                            <th>Subject Combination</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                @*</form>*@
+                <br />
+                <div class="row">
+                    <div class="col-md-12 form-group" style="text-align:right;">
+                        <input value="Save & Next" id="btnChoices" class="btn btn-primary c-shadow-1" />
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="DocumentUpload" role="tabpanel" aria-labelledby="Petitioner-tab">
+                <form class="form form-validate" id="formLogin4" autocomplete="off" action="@Url.Action("SaveDocument", "Account" )" accept-charset="utf-8" method="post" enctype="multipart/form-data">
+                    <div class="card c-shadow">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="MemberName"> 10+2 DMC <span style="color:red;"><strong>*</strong></span></label>                                 
+                                    <input type="file" name="files" id="files_0" dirname="files_0" class="form-control" accept="application/pdf" onchange="validation(this)" required />
+                                    <a onclick="Preview12DMC();" data-toggle="modal" data-target="#myModal1">Preview</a>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="MemberName"> EWS Certificate <span style="color:red;"><strong>*</strong></span></label>                                    
+                                    <input type="file" name="files" id="files_1" class="form-control" accept="application/pdf" onchange="validation(this)" required />
+                                    <a onclick="PreviewEWS();" data-toggle="modal" data-target="#myModal1">Preview</a>
+                                </div>
+                                <div class="col-md-3 form-group"> 
+                                    <label for="MemberName"> EWS Certificate <span style="color:red;"><strong>*</strong></span></label>                                    
+                                    <input type="file" name="files" id="files_2" class="form-control" accept="application/pdf" onchange="validation(this)" required />
+                                    <a onclick="PreviewMatric();" data-toggle="modal" data-target="#myModal1">Preview</a>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="MemberName"> Matric Certificate <span style="color:red;"><strong>*</strong></span></label>                                  
+                                    <input type="file" name="files" id="files_2" class="form-control" accept="application/pdf" onchange="validation(this)" required />
+                                    <a onclick="PreviewMatric();" data-toggle="modal" data-target="#myModal1">Preview</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                @if (ViewBag.HasDomicile == "Y" && ViewBag.HasDomicile != null && ViewBag.HasDomicile != "")
+                                {
+                                    <div class="col-md-4 form-group">
+                                        <label for="MemberName"> Haryana Domicile <span style="color:red;"><strong>*</strong></span></label>
+                                        @*<p class="help-block">Upload Image upto 200 kb</p>*@
+                                        @*<input type="file" name="files_10" id="files_10" class="form-control" onchange="validationForMemberImage(this)" />*@@*<input type="file" name="files_10" id="files_10" class="form-control" onchange="validationForMemberImage(this)" /><input type="file" name="files_10" id="files_10" class="form-control" onchange="validationForMemberImage(this)" />*@
+                                        <input type="file" name="files" id="files_3" class="form-control" accept="application/pdf" onchange="validation(this)" required />
+                                        <a onclick="PreviewHaryanaDomicile();" data-toggle="modal" data-target="#myModal1">Preview</a>
+                                    </div>
+                                }
+                                @if (ViewBag.KashmiriMigrant == "Y" && ViewBag.KashmiriMigrant != null && ViewBag.KashmiriMigrant != "")
+                                {
+                                    <div class="col-md-4 form-group">
+                                        <label for="MemberName"> Kasmiri Migrant Certificate <span style="color:red;"><strong>*</strong></span></label>
+                                        @*<p class="help-block">Upload Image upto 200 kb</p>*@
+                                        @*<input type="file" name="files_10" id="files_10" class="form-control" onchange="validationForMemberImage(this)" />*@@*<input type="file" name="files_10" id="files_10" class="form-control" onchange="validationForMemberImage(this)" /><input type="file" name="files_10" id="files_10" class="form-control" onchange="validationForMemberImage(this)" />*@
+                                        <input type="file" name="files" id="files_4" class="form-control" accept="application/pdf" onchange="validation(this)" required />
+                                        <a onclick="PreviewKashmiri();" data-toggle="modal" data-target="#myModal1">Preview</a>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="col-xs-12 text-right">
+                                <button class="btn btn-primary c-shadow-1" id="btnUpload" value="Upload" type="submit">Save & Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="Decleration" role="tabpanel" aria-labelledby="Petitioner-tab">
+
+
+            </div>
+        </div>
+    </div>
+</section>
+<script language="javascript" type="text/javascript">
+    function noBack() { window.history.forward() }
+    noBack();
+    window.onload = noBack;
+    window.onpageshow = function (evt) { if (evt.persisted) noBack() }
+    window.onunload = function () { void (0) }
+</script>
+<script type="text/javascript" language="Javascript">
+    history.go(1);
+</script>
+
+<script language="javascript" type="text/javascript">
+        function PreviewEWS() {
+            pdffile = document.getElementById("files_1").files[0];
+            pdffile_url = URL.createObjectURL(pdffile);
+            $('#Pviewer').attr('src', pdffile_url);
+        }
+        function Preview12DMC() {
+            pdffile = document.getElementById("files_0").files[0];
+            pdffile_url = URL.createObjectURL(pdffile);
+            $('#Pviewer').attr('src', pdffile_url);
+        }
+        function PreviewMatric() {
+            pdffile = document.getElementById("files_2").files[0];
+            pdffile_url = URL.createObjectURL(pdffile);
+            $('#Pviewer').attr('src', pdffile_url);
+        }
+        function PreviewHaryanaDomicile() {
+            pdffile = document.getElementById("files_3").files[0];
+            pdffile_url = URL.createObjectURL(pdffile);
+            $('#Pviewer').attr('src', pdffile_url);
+        } function PreviewKashmiri() {
+            pdffile = document.getElementById("files_4").files[0];
+            pdffile_url = URL.createObjectURL(pdffile);
+            $('#Pviewer').attr('src', pdffile_url);
+        }
+        function validationFormage(abc) {
+            debugger;
+            var id = abc.id;
+            $formData = new FormData();
+            var selectedFile = document.getElementById(id).files;
+            //Check File is not Empty
+            var a = abc.files[0].size / 1024;
+            if (a <= 150) {
+                if (selectedFile.length > 0) {
+                    var re = /(\.png)$/i;
+                    var re1 = /(\.jpeg)$/i;
+                    var re2 = /(\.jpg)$/i;
+                    var fname = (document.getElementById(id).value).substring(12);
+                    if (re.exec(fname) || re1.exec(fname) || re2.exec(fname)) {
+                        if (abc.files && abc.files[0]) {
+                            var fr = new FileReader();
+                            fr.addEventListener("load", function (e) {
+                                if (window.FormData !== undefined) {
+                                    var fileUpload = $("#files_10").get(0);
+                                    var files = fileUpload.files;
+                                    // Create FormData object
+                                    var fileData = new FormData();
+                                    // Looping over all files and add it to FormData object
+                                    for (var i = 0; i < files.length; i++) {
+                                        fileData.append(files[i].name, files[i]);
+                                    }
+                                    debugger;
+                                    // Adding one more key to FormData object
+                                    $.ajax({
+                                        url: '/Account/ImageSave',
+                                        type: "POST",
+                                        contentType: false, // Not to set any content header
+                                        processData: false, // Not to process data
+                                        data: fileData,
+                                        success: function (base64String) {
+                                            $("#img").attr("src", "data:image/png;base64," + base64String + "");
+                                        },
+                                        error: function (err) {
+                                            alert(err.statusText);
+                                        }
+                                    });
+                                } else {
+                                    alert("FormData is not supported.");
+                                }
+                            });
+                            fr.readAsDataURL(abc.files[0]);
+                        }
+                    }
+                    else {
+                        document.getElementById(id).value = null;
+                        alert("file not supported! kindly select png or jpeg file only");
+                    }
+                }
+            }
+            else {
+                document.getElementById(id).value = null;
+                alert("file size should not exceed 150 kb");
+            }
+        }
+        function validationForSignature(abc) {
+            debugger;
+            var id = abc.id;
+            $formData = new FormData();
+            var selectedFile = document.getElementById(id).files;
+            //Check File is not Empty
+            var a = abc.files[0].size / 1024;
+            if (a <= 150) {
+                if (selectedFile.length > 0) {
+                    var re = /(\.png)$/i;
+                    var re1 = /(\.jpeg)$/i;
+                    var re2 = /(\.jpg)$/i;
+                    var fname = (document.getElementById(id).value).substring(12);
+                    if (re.exec(fname) || re1.exec(fname) || re2.exec(fname)) {
+                        if (abc.files && abc.files[0]) {
+                            var fr = new FileReader();
+                            fr.addEventListener("load", function (e) {
+                                if (window.FormData !== undefined) {
+                                    var fileUpload = $("#files_11").get(0);
+                                    var files = fileUpload.files;
+                                    // Create FormData object
+                                    var fileData = new FormData();
+                                    // Looping over all files and add it to FormData object
+                                    for (var i = 0; i < files.length; i++) {
+                                        fileData.append(files[i].name, files[i]);
+                                    }
+                                    debugger;
+                                    // Adding one more key to FormData object
+                                    $.ajax({
+                                        url: '/Account/SignatureSave',
+                                        type: "POST",
+                                        contentType: false, // Not to set any content header
+                                        processData: false, // Not to process data
+                                        data: fileData,
+                                        success: function (base64String) {
+                                            $("#imgSign").attr("src", "data:image/png;base64," + base64String + "");
+                                        },
+                                        error: function (err) {
+                                            alert(err.statusText);
+                                        }
+                                    });
+                                } else {
+                                    alert("FormData is not supported.");
+                                }
+                            });
+                            fr.readAsDataURL(abc.files[0]);
+                        }
+                    }
+                    else {
+                        document.getElementById(id).value = null;
+                        alert("file not supported! kindly select png or jpeg file only");
+                    }
+                }
+            }
+            else {
+                document.getElementById(id).value = null;
+                alert("file size should not exceed 150 kb");
+            }
+        }
+        $(function () {
+            $("#marksobt, #maxmarks").change(function () {
+                if ($('#cgpa').is(":checked")) {
+                    var markobt = $("#marksobt").val();
+                    var resultval = parseInt(markobt * 9.5);
+                    $('#percentage').val(resultval || ''); //shows value in "#rate"
+                }
+                else {
+                    var result = parseFloat(parseInt($("#marksobt").val(), 10) * 100) / parseInt($("#maxmarks").val(), 10);
+                    $('#percentage').val(result || ''); //shows value in "#rate"
+                }
+            })
+            $('#cgpa').change(function () {
+                if ($('#cgpa').is(":checked")) {
+                    $("#maxmarks").val(10);
+                    $("#maxmarks").attr("readonly", "readonly");
+                    $("#marksobt").val('');
+                    $('#percentage').val('')
+                }
+                else {
+                    $("#maxmarks").removeAttr("readonly", "readonly");
+                    $("#marksobt").val('');
+                    $("#maxmarks").val('');
+                    $('#percentage').val('')
+                }
+            });
+        });
+        $(function () {
+            $("#marksobt2, #maxmarks2").change(function () {
+                debugger;
+                if ($('#cgpa2').is(":checked")) {
+                    var markobt = $("#marksobt2").val();
+                    var resultval = parseInt(markobt * 9.5);
+                    $('#percentage2').val(resultval || ''); //shows value in "#rate"
+                }
+                else {
+                    var result = parseFloat(parseInt($("#marksobt2").val(), 10) * 100) / parseInt($("#maxmarks2").val(), 10);
+                    $('#percentage2').val(result || ''); //shows value in "#rate"
+                }
+            })
+            $('#cgpa2').change(function () {
+                debugger;
+                if ($('#cgpa2').is(":checked")) {
+                    $("#maxmarks2").val(10);
+                    $("#maxmarks2").attr("readonly", "readonly");
+                    $("#marksobt2").val('');
+                    $('#percentage2').val('')
+                }
+                else {
+                    $("#maxmarks2").removeAttr("readonly", "readonly");
+                    $("#marksobt2").val('');
+                    $("#maxmarks2").val('');
+                    $('#percentage2').val('')
+                }
+            });
+        });
+        $(function () {
+            $("#maxmarks3, #marksobt3").change(function () {
+                if ($('#cgpa3').is(":checked")) {
+                    var markobt = $("#marksobt3").val();
+                    var resultval = parseInt(markobt * 9.5);
+                    $('#percentage3').val(resultval || ''); //shows value in "#rate"
+                }
+                else {
+                    var result = parseFloat(parseInt($("#marksobt3").val(), 10) * 100) / parseInt($("#maxmarks3").val(), 10);
+                    $('#percentage3').val(result || ''); //shows value in "#rate"
+                }
+            })
+            $('#cgpa3').change(function () {
+                if ($('#cgpa3').is(":checked")) {
+                    $("#maxmarks3").val(10);
+                    $("#maxmarks3").attr("readonly", "readonly");
+                    $("#marksobt3").val('');
+                    $('#percentage3').val('')
+                }
+                else {
+                    $("#maxmarks3").removeAttr("readonly", "readonly");
+                    $("#marksobt3").val('');
+                    $("#marksobt3").val('');
+                    $('#percentage3').val('')
+                }
+            });
+        });
+        $(document).ready(function () {
+            $('#divVillageTown').hide()
+            $('#divCVillageTown').hide()
+            $('#divdistrictRural').hide();
+            $('#divCdistrictRural').hide();
+                getCourseSectionData();
+                $("#Sex").val('@ViewBag.SexValue');
+                $("#Marital_Status").val('@ViewBag.MaritalStatus');
+                $("#Father_Occupation").val('@ViewBag.FHOccupation');
+                
+            $(function () {
+                $("#DOB").datepicker({
+                        changeMonth: true,
+                    yearRange: "-100:+0",
+                    changeYear: true,
+                    format: 'mm/dd/yy',
+                    controlType: 'select',
+                    //timeFormat: 'HH:mm:ss',
+                    showOn: 'focus',
+                    showButtonPanel: true,
+                    closeText: 'Clear', // Text to show for "close" button
+                    onClose: function () {
+                            var event = arguments.callee.caller.caller.arguments[0];
+                        // If "Clear" gets clicked, then really clear it
+                        if ($(event.delegateTarget).hasClass('ui-datepicker-close')) {
+                            $(this).val('');
+                        }
+    }
+                });
+            });
+            // Restricts input for the set of matched elements to the given inputFilter function.
+            (function ($) {
+                $.fn.inputFilter = function (inputFilter) {
+        return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
+            if (inputFilter(this.value)) {
+                this.oldValue = this.value;
+                this.oldSelectionStart = this.selectionStart;
+                this.oldSelectionEnd = this.selectionEnd;
+            } else if (this.hasOwnProperty("oldValue")) {
+                this.value = this.oldValue;
+                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+            } else {
+                this.value = "";
+            }
+        });
+    };
+            }(jQuery));
+
+
+             if ('@ViewBag.P_Id' != '0') {
+            $("#univboard").val('@ViewBag.UnivBoard');
+            $("#univboard2").val('@ViewBag.UnivBoard2');
+            $("#univboard3").val('@ViewBag.UnivBoard3');
+            $("#marksobt").val('@ViewBag.MarksObt');
+            $("#maxmarks").val('@ViewBag.MaxMarks');
+             $("#percentage").val('@ViewBag.Percentage');
+             $("#marksobt2").val('@ViewBag.MarksObt2');
+             $("#maxmarks2").val('@ViewBag.MaxMarks2');
+             $("#percentage2").val('@ViewBag.Percentage2');
+               $("#marksobt3").val('@ViewBag.MarksObt3');
+             $("#maxmarks3").val('@ViewBag.MaxMarks3');
+             $("#percentage3").val('@ViewBag.Percentage3');
+
+
+        }
+        $("#exampassed").val('@ViewBag.ExamPassed');
+        $("#schoolcollege").val('@ViewBag.SchoolCollege');
+        $("#regroll").val('@ViewBag.RegistrationRollNo');
+        $("#resultstatus").val('@ViewBag.ResultStatus');
+        $("#passingyear").val('@ViewBag.PassingYear');
+
+        if ('@ViewBag.CGPA' == 'True')
+        {
+          $("#cgpa").prop("checked",true);
+        }
+        $("#subject").val('@ViewBag.Subject');
+
+        $("#schoolcollege2").val('@ViewBag.SchoolCollege2');
+        $("#regroll2").val('@ViewBag.RegistrationRollNo2');
+        $("#resultstatus2").val('@ViewBag.ResultStatus2');
+        $("#passingyear2").val('@ViewBag.PassingYear2');
+        if ('@ViewBag.CGPA2' == 'True')
+        {
+          $("#cgpa2").prop("checked",true);
+        }
+        $("#subject2").val('@ViewBag.Subject2');
+
+        $("#exampassed3").val('@ViewBag.ExamPassed3');
+        $("#schoolcollege3").val('@ViewBag.SchoolCollege3');
+        $("#regroll3").val('@ViewBag.RegistrationRollNo3');
+        $("#resultstatus3").val('@ViewBag.ResultStatus3');
+        $("#passingyear3").val('@ViewBag.PassingYear3');
+        if ('@ViewBag.CGPA3' == 'True')
+        {
+          $("#cgpa3").prop("checked",true);
+        }
+        $("#subject3").val('@ViewBag.Subject3');
+
+    debugger;
+        if ('@ViewBag.B_P_Id' != '0') {
+            $("#b_subjectid").val('@ViewBag.B_SubjectId');
+            $("#b_subjectid2").val('@ViewBag.B_SubjectId2');
+            $("#b_subjectid3").val('@ViewBag.B_SubjectId3');
+            $("#b_subjectid4").val('@ViewBag.B_SubjectId4');
+            $("#b_subjectid5").val('@ViewBag.B_SubjectId5');
+        $("#b_marksobt").val('@ViewBag.B_MarksObtained');
+        $("#b_marksobt2").val('@ViewBag.B_MarksObtained2');
+        $("#b_marksobt3").val('@ViewBag.B_MarksObtained3');
+        $("#b_marksobt4").val('@ViewBag.B_MarksObtained4');
+        $("#b_marksobt5").val('@ViewBag.B_MarksObtained5');
+        }
+        @*else
+        {
+        $("#b_marksobt").val('@ViewBag.B_MarksObtained');
+        $("#b_marksobt2").val('@ViewBag.B_MarksObtained2');
+        $("#b_marksobt3").val('@ViewBag.B_MarksObtained3');
+        $("#b_marksobt4").val('@ViewBag.B_MarksObtained4');
+        $("#b_marksobt5").val('@ViewBag.B_MarksObtained5');
+        }*@
+        });
+
+        $('#btnNextEduTab').click(function () {
+            $('#myTab a[href="#Education"]').tab('show');
+        });
+        //$('#btnSaveNext').click(function () {
+        //    $('#myTab a[href="#Education"]').tab('show');
+        //});
+        $("#btnNext").click(function () {
+          //  $('#myTab a[href="#Weightage"]').tab('show');
+        });
+        $("#btnWeightage").click(function () {
+            $('#myTab a[href="#ChoiceOfCourse"]').tab('show');
+        });
+        $("#btnChoices").click(function () {
+            $('#myTab a[href="#ChoiceOfCourse"]').addClass("completedCourse")
+            $('#myTab a[href="#DocumentUpload"]').tab('show');
+
+        });
+        $("#btnUpload").click(function () {
+            $('#myTab a[href="#Decleration"]').tab('show');
+        });
+
+        function validation(abc) {
+            var id = abc.id;
+            var selectedFile = document.getElementById(id).files;
+            var a = abc.files[0].size / 1024;
+            if (a < 10000) {
+                //Check File is not Empty
+                if (selectedFile.length > 0) {
+                    //debugger;
+                    var re = /(\.pdf)$/i;
+                    var fname = (document.getElementById(id).value).substring(12);
+                    var res = fname.split(".");
+                    var count = res.length;
+                    if (count > 2) {
+                        document.getElementById(id).value = null;
+                        alert("File not supported! Kindly select pdf file only");
+                        return false;
+                    }
+                    if (re.exec(fname)) {
+                        var extenstion = (document.getElementById(id).value).substring(12);
+                        // Select the very first file from list
+                        var fileToLoad = selectedFile[0];
+                        // FileReader function for read the file.
+                        var fileReader = new FileReader();
+                        var base64;
+                        var filesubstring;
+                        // Onload of file read the file content
+                        fileReader.onload = function (fileLoadedEvent) {
+                            base64 = fileLoadedEvent.target.result;
+                            substring = "JVBER";
+                            if (base64.includes(substring)) {
+                            }
+                            else {
+                                document.getElementById(id).value = null;
+                                swal("Alert!", "File not supported. Kindly select pdf file only.", "warning");
+                            }
+                            //console.log(base64);
+                        };
+                        // Convert data to base64
+                        fileReader.readAsDataURL(fileToLoad);
+                    }
+                    else {
+                        document.getElementById(id).value = null;
+                        swal("Alert!", "File not supported. Kindly select pdf file only.", "warning");
+                    }
+                }
+            }
+            else {
+                document.getElementById(id).value = null;
+                swal("Warning!", "File size is not exceed 500 kb", "warning");
+            }
+        }
+        $(document).on("change", "#ReservationCategory", function () {
+            var id = $(this).val();
+            $("#CasteCategory").empty();
+            $.get("Caste_Bind", { caste_id: id }, function (data) {
+                var v = "<option>Select</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#CasteCategory").html(v);
+            });
+        });
+        $("#Course_State").change(function () {
+            $("#Course_State").removeClass("redBorder");
+            var id = $(this).val();
+            $("#Course_District").empty();
+            $.get("District_Bind", { state_id: id }, function (data) {
+                var v = "<option>Select</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#Course_District").html(v);
+            });
+        });
+        $("#Course_District").change(function () {
+            $("#Course_District").removeClass("redBorder");
+            var id = $(this).val();
+            $("#Course_College").empty();
+            $.get("College_Bind", { courseDistrictId: id }, function (data) {
+                var v = "<option>Select</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#Course_College").html(v);
+            });
+        });
+        $("#Course_College").change(function () {
+            var id = $(this).val();
+            $("#Course_Course").empty();
+            $.get("Course_Bind", { coursecollegeid: id }, function (data) {
+                var v = "<option>Select</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#Course_Course").html(v);
+            });
+        });
+        $("#Course_Course").change(function () {
+            var id = $(this).val();
+            $("#Course_CourseSection").empty();
+            $.get("CourseSection_Bind", { coursecourseid: id }, function (data) {
+                var v = "<option>Select</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#Course_CourseSection").html(v);
+            });
+        });
+        $("#Course_CourseSection").change(function () {
+            var id = $(this).val();
+            var sectionName = $(this).find("option:selected").text();
+            $("#Course_SubjectCombination").empty();
+            $.get("Subject_Bind", { sectionid: id, }, function (data) {
+                var v = "<option>Select</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#Course_SubjectCombination").html(v);
+            });
+        });
+        $("#State_Code").change(function () {
+            var id = $(this).val();
+            $("#District_Code_Urban").empty();
+            $("#District_Code_Rural").empty();
+            $.get("District_Bind", { state_id: id }, function (data) {
+                var v = "<option>Select</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#District_Code_Urban").html(v);
+                $("#District_Code_Rural").html(v)
+            });
+        });
+        $("#District_Code_Urban").change(function () {
+            var id = $(this).val();
+            $("#Municiplity").empty();
+            $.get("Municiplity_Bind", { district_id: id }, function (data) {
+                var v = "<option>Select</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#Municiplity").html(v);
+            });
+        });
+        $("#District_Code_Rural").change(function () {
+            var id = $(this).val();
+            $("#Block").empty();
+            $.get("Block__Bind", { district_id: id }, function (data) {
+                var v = "<option>Select</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#Block").html(v);
+            });
+        });
+        $("#Block").change(function () {
+            var id = $(this).val();
+            $("#CityTownVillage").empty();
+            $.get("VillageCity_Bind", { block_id: id }, function (data) {
+                var v = "<option>Select</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#CityTownVillage").html(v);
+            });
+        });
+        $("#C_State_Code").change(function () {
+            var id = $(this).val();
+            $("#C_District_Code").empty();
+            $.get("District_Bind", { state_id: id }, function (data) {
+                var v = "<option>Select</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#C_District_Code_Urban").html(v);
+                $("#C_District_Code_Rural").html(v)
+            });
+        });
+        $("#C_District_Code_Urban").change(function () {
+            var id = $(this).val();
+            $("#C_Municiplity").empty();
+            $.get("Municiplity_Bind", { district_id: id }, function (data) {
+                var v = "<option>Select</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#C_Municiplity").html(v);
+            });
+        });
+        $("#C_District_Code_Rural").change(function () {
+            var id = $(this).val();
+            $("#C_Block").empty();
+            $.get("Block__Bind", { district_id: id }, function (data) {
+                var v = "<option>Select</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#C_Block").html(v);
+            });
+        });
+        $("#C_Block").change(function () {
+            var id = $(this).val();
+            $("#C_CityTownVillage").empty();
+            $.get("VillageCity_Bind", { block_id: id }, function (data) {
+                var v = "<option>Select</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#C_CityTownVillage").html(v);
+            });
+        });
+        $("#Is_Correspondence").change(function () {
+            debugger;
+            var IsChecked = $('#Is_Correspondence:checkbox:checked').length;
+
+            if (IsChecked > 0) {
+
+                $('#hdnRuralUrban').val($('#RuralUrban').val());
+                $('#hdnState').val($('#State_Code').val());
+                $('#hdnDisRural').val($('#District_Code_Rural').val());
+                $('#hdnDisUrban').val($('#District_Code_Urban').val());
+                $('#hdnMunicipilty').val($('#Municiplity').val());
+                $('#hdnBlock').val($('#Block').val());
+                $('#hdnVillage').val($('#CityTownVillage').val());
+                $('#hdnStreetAdd1').val($('#StreetAddress1').val());
+                $('#hdnStreetAdd2').val($('#StreetAddress2').val());
+                $('#hdnPin').val($('#Pincode').val());
+
+                $('#C_RuralUrban').append($('#RuralUrban').html());
+                $('#C_RuralUrban').val($('#RuralUrban').val()).attr('disabled', 'disabled');
+                $('#C_Country_Code').val($('#Country_Code').val()).attr('disabled', 'disabled');
+                $('#C_State_Code').append($('#State_Code').html());
+                $('#C_State_Code').val($('#State_Code').val()).attr('disabled', 'disabled');
+                $('#C_District_Code_Rural').append($('#District_Code_Rural').html());
+                $('#C_District_Code_Rural').val($('#District_Code_Rural').val()).attr('disabled', 'disabled');
+                $('#C_District_Code_Urban').append($('#District_Code_Urban').html());
+                $('#C_District_Code_Urban').val($('#District_Code_Urban').val()).attr('disabled', 'disabled');
+                $('#C_Municiplity').append($('#Municiplity').html());
+                $('#C_Municiplity').val($('#Municiplity').val()).attr('disabled', 'disabled');
+                $('#C_Block').append($('#Block').html());
+                $('#C_Block').val($('#Block').val()).attr('disabled', 'disabled');
+                $('#C_CityTownVillage').append($('#CityTownVillage').html());
+                $('#C_CityTownVillage').val($('#CityTownVillage').val()).attr('disabled', 'disabled');
+                $('#C_StreetAddress1').val($('#StreetAddress1').val()).attr('disabled', 'disabled');
+                $('#C_StreetAddress2').val($('#StreetAddress2').val()).attr('disabled', 'disabled');
+                $('#C_Pincode').val($('#Pincode').val()).attr('disabled', 'disabled');
+            }
+            else {
+                $('#C_StreetAddress1').removeAttr("disabled");
+                $('#C_StreetAddress2').removeAttr("disabled");
+                $('#C_Pincode').removeAttr("disabled");
+                $('#C_Country_Code').removeAttr("disabled");
+                $('#C_State_Code').removeAttr("disabled");
+                $('#C_District_Code_Urban').removeAttr("disabled");
+                $('#C_District_Code_Rural').removeAttr("disabled");
+                $('#C_Municiplity').removeAttr("disabled");
+                $('#C_Block').removeAttr("disabled");
+                $('#C_CityTownVillage').removeAttr("disabled");
+                $('#C_RuralUrban').removeAttr("disabled");
+
+            }
+        });
+
+        $(document).on("click", "#btnAddList", function () {
+            debugger;
+            var state = $("#Course_State").val();
+            var district = $("#Course_District").val();
+            var college = $("#Course_College").val();
+            if (state == "") {
+                swal("Alert!", "Please select state!", "warning")
+                $("#Course_State").addClass("redBorder");
+            }
+            else if (district == "Select") {
+                swal("Alert!", "Please select district!", "warning")
+                $("#Course_District").addClass("redBorder");
+            }
+            else if (district == "Select") {
+                swal("Alert!", "Please select district!", "warning")
+                $("#Course_District").addClass("redBorder");
+            }
+            else {
+                var CourseModel = {};
+                CourseModel.Course_State = $("#Course_State").val();
+                CourseModel.Course_District = $("#Course_District").val();
+                CourseModel.Course_College = $("#Course_College").val();
+                CourseModel.Course_CollegeCourse = $("#Course_Course").val();
+                CourseModel.Course_CourseSection = $("#Course_CourseSection").val();
+                CourseModel.Course_SubjectCombination = $("#Course_SubjectCombination").val();
+                $.ajax({
+                    type: "POST",
+                    url: "/Account/SaveCourseSection",
+                    data: '{CourseModel:' + JSON.stringify(CourseModel) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        debugger;
+                        if (data != "Success!") {
+                            alert("Kindly try again, there is some error!!")
+                        }
+                        else {
+                            debugger;
+                            swal("Nice!", "Course Added successfully.", "success")
+                            $("#Course_State").val("");
+                            $("#Course_District").val("");
+                            $("#Course_College").val("");
+                            $("#Course_Course").val("");
+                            $("#Course_CourseSection").val("");
+                            $("#Course_SubjectCombination").val("");
+                            getCourseSectionData();
+                        }
+                    }
+                });
+            }
+        });
+
+        function getCourseSectionData() {
+            $("#tblCourseSection tbody tr").remove();
+            $.ajax({
+                url: "/Account/GetCourseSectionData",
+                type: 'POST',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: {},
+                success: function (data) {
+                    debugger;
+                    if (data.isRedirect) {
+                        window.location.href = data.redirectUrl;
+                    }
+                    else {
+                        $.each(data, function (i, item) {
+                            var rows = "<tr>"
+                                + "<td>" + item.Course_State + "</td>"
+                                + "<td>" + item.Course_District + "</td>"
+                                + "<td>" + item.Course_College + "</td>"
+                                + "<td>" + item.Course_Course + "</td>"
+                                + "<td>" + item.Course_CourseSection + "</td>"
+                                + "<td>" + item.Course_SubjectCombination + "</td>"
+                                + "<td>" + "<a href='#' data-toggle='tooltip' class='btn btn-danger btn-sm c-shadow-1' id='" + item.PId + "' onclick='DeleteCourse(this)' data-original-title='Delete'><i class='ti-delete f-left'></i>Delete</a>" + "</td>"
+                                + "</tr>";
+                            $('#tblCourseSection').append(rows);
+                        });
+                        // $('#tblCourseSection').dataTable();
+                    }
+                },
+                error: function () {
+                    alert('Process Failed! Please try again later.');
+                },
+            });
+        }
+        function DeleteCourse(idd) {
+            var idd = idd.id;
+            var dataDeleteCourse = { 'id': idd };
+            swal({
+                title: "Are you sure?",
+                text: "Do you want to delete this course.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, delete it!",
+                closeOnConfirm: false
+            },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            url: "/Account/DeleteCourseDetails",
+                            data: JSON.stringify(dataDeleteCourse),
+                            dataType: "json",
+                            success: function (data) {
+                                if (data != "Record Deleted Successfully") {
+                                    swal("Kindly try again, there is some error!!");
+                                }
+                                else {
+                                    swal("Deleted!", "This Record is Deleted Successfully.", "success");
+                                    getCourseSectionData();
+                                }
+                            }
+                        });
+
+                    }
+                    else {
+                        swal("Cancelled", "Don't worry, Your record is safe.", "error");
+                    }
+                });
+        }
+        $(document).on("change", "#checkBPLYes", function () {
+            var radioVal = $("#checkBPLYes").val();
+            if (radioVal == "Y")
+                $("#BPLCardNo").removeAttr("style");
+        });
+        $(document).on("change", "#checkBPLNo", function () {
+            var radioVal = $("#checkBPLNo").val();
+            if (radioVal == "N")
+                $("#BPLCardNo").css("display", "none");
+        });
+        $(document).on("change", "#checkPassportYes", function () {
+            var radioVal = $("#checkPassportYes").val();
+            if (radioVal == "Y")
+                $("#PassportText").removeAttr("style");
+        });
+        $(document).on("change", "#checkPassportNo", function () {
+            var radioVal = $("#checkPassportNo").val();
+            if (radioVal == "N")
+                $("#PassportText").css("display", "none");
+        });
+        $(document).on("change", "#checkLicenceYes", function () {
+            var radioVal = $("#checkLicenceYes").val();
+            if (radioVal == "Y")
+                $("#DrivingLicenceText").removeAttr("style");
+        });
+        $(document).on("change", "#checkLicenceNo", function () {
+            var radioVal = $("#checkLicenceNo").val();
+            if (radioVal == "N")
+                $("#DrivingLicenceText").css("display", "none");
+        });
+        $(document).on("change", "#RuralUrban", function () {
+            var DropVal = $("#RuralUrban").val();
+            if (DropVal == "Urban") {
+                $('#divVillageTown').hide();
+                $('#divCVillageTown').hide();
+                $('#divMuniciplity').show();
+                $('#divCMuniciplity').show();
+                $('#divdistrictRural').hide();
+                $('#divCdistrictRural').hide();
+                $('#divdistrictUrban').show();
+                $('#divCdistrictUrban').show();
+            }
+            else if (DropVal == "Rural") {
+                $('#divMuniciplity').hide();
+                $('#divCMuniciplity').hide();
+                $('#divVillageTown').show();
+                $('#divCVillageTown').show();
+                $('#divdistrictRural').show();
+                $('#divdistrictUrban').hide();
+                $('#divCdistrictRural').show();
+                $('#divCdistrictUrban').hide();
+            }
+        });
+        $(document).on("change", "#C_RuralUrban", function () {
+            var DropVal = $("#C_RuralUrban").val();
+            if (DropVal == "C_Urban") {
+                $('#divCVillageTown').hide();
+                $('#divCMuniciplity').show();
+                $('#divCdistrictRural').hide();
+                $('#divCdistrictUrban').show();
+            }
+            else if (DropVal == "C_Rural") {
+                $('#divCMuniciplity').hide();
+                $('#divCVillageTown').show();
+                $('#divCdistrictRural').show();
+                $('#divCdistrictUrban').hide();
+
+            }
+        });
+
+</script>
+<div class="modal cus-modal" tabindex="-1" id="myModal1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Pdf Preview</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <iframe id="Pviewer" frameborder="0" scrolling="no" class="cus-view-frame" width="466" height="500"></iframe>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" style="min-width: 50px; font-weight: bold; font-size: 12px;" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>

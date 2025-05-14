@@ -1,0 +1,221 @@
+﻿
+@{
+    ViewBag.Title = "SchoolList";
+    Layout = null;
+
+}
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>List of School In Rural Area of Haryana</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="../assets/css/custom.css" rel="stylesheet" />
+    <style>
+        #cover {
+            /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+            background-color: rgba(178, 0, 255, 0.81);
+            position: fixed;
+            top: 0px;
+            bottom: 0px;
+            height: 100%;
+            width: 100%;
+            z-index: 100000;
+        }
+
+            #cover i {
+                /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+                margin-left: 50%;
+                margin-top: 50vh;
+            }
+
+        .btn:disabled {
+            opacity: 0.2 !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="cover">
+        <i class="fa fa-spinner fa-spin" style="font-size:xx-large"></i>
+    </div>
+    <div class="container-fluid">
+        <div class="row main-banner">
+            <img src="../assets/images/banner.jpg" alt="Online Admission Portal" />
+        </div>
+    </div>
+
+    <form id="form1" runat="server">
+        <div class="wrapper d-flex align-items-stretch">
+
+            <div id="content" class="p-2 p-md-2 pt-2">
+                <div class="container-fluid">
+                    <div class="row body-bg">
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center top-heading">
+                            <div class="row">
+                                <div class="col-lg-1 col-md-1 col-sm-1 col-1"></div>
+                                <div class="col-lg-10 col-md-10 col-sm-10 col-10 cus-heading">
+                                    <h4>Rural Area School List</h4>
+                                </div>
+                                <div class="col-lg-1 col-md-1 col-sm-1 col-1 text-right back-btn" style="margin-top: 5px;padding:0;">
+                                    <a href="~/dhe/HEMenu.aspx" id="btnBack" class="btn btn-icon icon-left btn-primary"><i class="fas fa-arrow-alt-circle-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12 cus-right-section">
+                            <div class="col-lg-12 col-md-12 col-sm-6 col-12 cus-border">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-sm" id="tblListOfSchools" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>School Name</th>
+                                                <th class="sum">Max Marks</th>
+                                                <th class="sum">Marks Obtained</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Math</td>
+                                                <td>200</td>
+                                                <td>300</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>TOTAL</th>
+                                                <th class="sum"></th>
+                                                <th class="sum"></th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+        <div class="container">
+            Designed by <a href="#">National Informatics Center, Haryana</a>
+        </div>
+    </footer>
+    <!-- End Footer -->
+
+    <script src="../assets/dataTable/dataTables/jquery-3.5.1.js"></script>
+    <link href="../assets/dataTable/dataTables/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="../assets/dataTable/dataTables/jquery.dataTables.min.js"></script>
+    <!-- bootstrap4-css-->
+    <link href="../assets/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- font-awesome-css-->
+    <link href="../assets/css/all.css" rel="stylesheet" />
+    <!-- sweet-alert-css-->
+    <link href="../Content/Js/sweetalert.css" rel="stylesheet" />
+    <!-- custom-css-->
+    <script src="../assets/js/Verification_main.js"></script>
+    <link href="../assets/css/styleverification.css" rel="stylesheet" />
+    <script type="text/javascript" src="../Content/Js/sweetalert.min.js"></script>
+    <script type="text/javascript" src="../assets/js/popperjs/popper.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap/Js/bootstrap.min.js"></script>
+
+
+    <script>
+           function getSchoolList()
+           {
+               //set college in URL from session right now hardcoding the same for demo
+               var dataToSend = {};
+               dataToSend.Reg_Id = '@Session["RegId"]';
+               $("#cover").show();
+              $.ajax({
+                   type: "GET",
+                   //url: "/Account/SaveUserPageDeclaration",
+                   url: "@Url.Action("GetSchoolList", "Verification")",
+                   data: dataToSend,
+                   contentType: "application/json; charset=utf-8",
+                   dataType: "json",
+                   success: function (data)
+                   {
+                       $("#cover").fadeOut("slow");
+                       var response_DataSet = JSON.parse(data);
+                       console.log(response_DataSet);
+                       $("#tblListOfSchools").DataTable({
+
+                               data: response_DataSet.Table,
+                               dom: 'frt',
+                               destroy:true,
+                               paging: false,
+                              
+                               //"order": [[0, "asc"]],
+                               columns: [
+
+                                   //{ data: 'SubjectID', },
+                                   {data: 'SchoolName'},
+                                   { data: 'Rural/Urban', title : 'Area' },
+                                   { data: 'District',title:'District'},
+
+
+                               ],
+                       })
+
+
+                   },
+                   error: function (jqXHR, exception)
+                   {
+                       var msg = '';
+                       if (jqXHR.status === 0)
+                       {
+                           msg = 'Not connect.\n Verify Network.';
+                       } else if (jqXHR.status == 404)
+                       {
+                           msg = 'Requested page not found. [404]';
+                       } else if (jqXHR.status == 500)
+                       {
+                           msg = 'Internal Server Error [500].';
+                       } else if (exception === 'parsererror')
+                       {
+                           msg = 'Requested JSON parse failed.';
+                       } else if (exception === 'timeout')
+                       {
+                           msg = 'Time out error.';
+                       } else if (exception === 'abort')
+                       {
+                           msg = 'Ajax request aborted.';
+                       } else
+                       {
+                           msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                       }
+                       alert("Error: " + msg);
+                       $("#cover").fadeOut("slow");
+                   }
+               });
+        }
+
+        $(document).ready(function ()
+        {
+            getSchoolList();
+          
+
+
+        });
+    </script>
+    <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <img src="" class="imagepreview" style="width: 100%;">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
