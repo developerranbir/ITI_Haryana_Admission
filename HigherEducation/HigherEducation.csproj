@@ -2583,6 +2583,7 @@
     <Compile Include="BusinessLayer\SMS.cs" />
     <Compile Include="BusinessLayer\Verhoeff.cs" />
     <Compile Include="Common\common.cs" />
+    <Compile Include="Controllers\GrantRevokeController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
     <Compile Include="Controllers\OldSessionQuarterFeeController.cs" />
     <Compile Include="Controllers\SecondYearLoginController.cs" />
@@ -2605,6 +2606,7 @@
     <Compile Include="Controllers\SubjectConfigurationController.cs" />
     <Compile Include="Controllers\SummaryRepController.cs" />
     <Compile Include="Controllers\VerificationController.cs" />
+    <Compile Include="DataAccess\GrantRevokeContext.cs" />
     <Compile Include="DataAccess\MasterContext.cs" />
     <Compile Include="DataAccess\SecondYearCandidateContext.cs" />
     <Compile Include="DataAccess\APIDataContext.cs" />
@@ -3579,6 +3581,7 @@
     <Content Include="Views\Verification\Index2.cshtml" />
     <Content Include="Views\APIData\viewCandidateDetailsITI.cshtml" />
     <Content Include="Views\APIData\viewStudentRecordITI.cshtml" />
+    <Content Include="Views\GrantRevoke\GrantRevokeModules.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
