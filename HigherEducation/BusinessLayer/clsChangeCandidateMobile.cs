@@ -35,6 +35,7 @@ namespace HigherEducation.BusinessLayer
         public string DOB { get; set; }
         public string sessionId { get; set; }
 
+        public string EmailID { get; set; }
 
         //Get GetAdmissionDetailInfo
         public DataTable GetAdmissionDetailInfo()
@@ -249,6 +250,8 @@ namespace HigherEducation.BusinessLayer
                 vadap.SelectCommand.Parameters.AddWithValue("@p_Fname", FatherName);
                 vadap.SelectCommand.Parameters.AddWithValue("@p_Mname", MotherName);
                 vadap.SelectCommand.Parameters.AddWithValue("@p_DOB", DOB);
+                vadap.SelectCommand.Parameters.AddWithValue("@p_Mobile", MobileNo);
+                vadap.SelectCommand.Parameters.AddWithValue("@p_Email", EmailID);
           
                 vadap.SelectCommand.CommandTimeout = 600; // 10 minutes
                 vadap.SelectCommand.CommandType = CommandType.StoredProcedure;

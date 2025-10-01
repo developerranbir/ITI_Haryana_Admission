@@ -32,6 +32,8 @@ namespace HigherEducation.DHE
             //Security Check
             if (!Page.IsPostBack) { clear(); }
 
+            if (Session["UserType"].ToString() == "2") { divstate.Visible = false; } else { divstate.Visible = true; }
+
         }
 
         public void disable()
@@ -77,19 +79,25 @@ namespace HigherEducation.DHE
                     lblStuFatherName.Text = dt.Rows[0]["FatherName"].ToString();
                     lblStuMotherName.Text = dt.Rows[0]["MotherName"].ToString();
                     lblGender.Text = dt.Rows[0]["GenderName"].ToString();
-                    lblDOB.Text = (Convert.ToDateTime(dt.Rows[0]["BirthDate"].ToString())).ToString("yyyy-MM-dd");
+                     lblDOB.Text = (Convert.ToDateTime(dt.Rows[0]["BirthDate"].ToString())).ToString("yyyy-MM-dd");
                     lblCollegeName.Text = dt.Rows[0]["collegename"].ToString();
                     lblSectionName.Text = dt.Rows[0]["SectionName"].ToString();
                     lblAdmissionStatus.Text = dt.Rows[0]["Challan_status"].ToString();
                     string mobilno = dt.Rows[0]["MobileNo"].ToString();
                     string MaskedMobileNo = mobilno.Substring(0, 2) + "XXXX" + mobilno.Substring(mobilno.Length - 4);
-                    lblMobileNo.Text = MaskedMobileNo;
+                    //lblMobileNo.Text = MaskedMobileNo;
 
 
                     txtStudentName.Text = dt.Rows[0]["StudentName"].ToString();
                     txtStuFatherName.Text = dt.Rows[0]["FatherName"].ToString();
                     txtStuMotherName.Text = dt.Rows[0]["MotherName"].ToString();
-                    txtDOB.Text = (Convert.ToDateTime(dt.Rows[0]["BirthDate"].ToString())).ToString("yyyy-MM-dd");
+
+                    lblmobileno.Text = dt.Rows[0]["mobileno"].ToString();
+                    lblEmailid.Text = dt.Rows[0]["EmailID"].ToString();
+
+                    txtMobile.Text = dt.Rows[0]["mobileno"].ToString();
+                    txtEmail.Text = dt.Rows[0]["EmailID"].ToString();
+                      txtDOB.Text = (Convert.ToDateTime(dt.Rows[0]["BirthDate"].ToString())).ToString("yyyy-MM-dd");
                     enable();
                 }
                 else
@@ -112,20 +120,31 @@ namespace HigherEducation.DHE
 
         }
 
-        //Offer Seats Save
+       
         protected void btnSave_Click(object sender, EventArgs e)
         {
             try
             {
+                //if (lblEmailid.ToString() != txtEmail.Text) 
+                //{ }
+                //if (lblmobileno.ToString() != txtMobile.Text) 
+                //{ }
+
+
                 if (txtDOB.Text == "" ||
                     txtStudentName.Text == "" ||
                     txtStuFatherName.Text == "" ||
-                    txtStuMotherName.Text == "") 
+                    txtStuMotherName.Text == "" ||
+                    txtEmail.Text == "" ||
+                    txtMobile.Text == "") 
+
+
                 {
                     
                     clsAlert.AlertMsg(this, "Please Enter Required Details.");
                     return;
                 }
+
                 else 
                 {
                     if (Session["UserType"].ToString() != "1") 
@@ -166,6 +185,8 @@ namespace HigherEducation.DHE
                     CSR.StudentName = txtStudentName.Text.Trim();   
                     CSR.FatherName=txtStuFatherName.Text.Trim();
                     CSR.MotherName=txtStuMotherName.Text.Trim();
+                    CSR.MobileNo = txtMobile.Text.Trim();
+                    CSR.EmailID = txtEmail.Text.Trim();
               
                     CSR.DOB = (Convert.ToDateTime(txtDOB.Text.Trim()).ToString("yyyy-MM-dd"));
 
@@ -186,6 +207,18 @@ namespace HigherEducation.DHE
                     else if (result == 0)
                     {
                         clsAlert.AlertMsg(this, "Already Updated Once");
+                        clear();
+                        return;
+                    }
+                    else if (result == 6)
+                    {
+                        clsAlert.AlertMsg(this, "MobileNo Already Exists");
+                        clear();
+                        return;
+                    }
+                    else if (result == 7)
+                    {
+                        clsAlert.AlertMsg(this, "Email ID Already Exists");
                         clear();
                         return;
                     }
@@ -216,7 +249,7 @@ namespace HigherEducation.DHE
             if (DateTime.TryParse(inputDate, out DateTime parsedDate))
             {
                 // Check if the parsed date is within a reasonable range (optional, based on your use case)
-                DateTime maxDate = new DateTime(2009, 9, 25);
+                DateTime maxDate = new DateTime(2011, 9, 01);  // i september 2011
                 if (parsedDate <= maxDate)
                 {
                     return true;
@@ -355,6 +388,36 @@ namespace HigherEducation.DHE
                 lblStuMotherName.Visible = true;
             }
 
+        }
+
+        protected void chkEmail_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkEmail.Checked)
+            {
+                txtEmail.Visible = true;
+                lblEmailid.Visible = false;
+            }
+            else
+            {
+                txtEmail.Visible = false;
+                lblEmailid.Visible = true;
+            }
+
+
+        }
+
+        protected void chkMobile_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkMobile.Checked)
+            {
+                txtMobile.Visible = true;
+                lblmobileno.Visible = false;
+            }
+            else
+            {
+                txtMobile.Visible = false;
+                lblmobileno.Visible = true;
+            }
         }
     }
 }

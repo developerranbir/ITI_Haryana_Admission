@@ -55,38 +55,37 @@ namespace HigherEducation.HigherEducation
             {
                 if (Page.IsValid == true)
                 {
-                    //if (Convert.ToInt32(Session["Attempt"]) >= 1)
-                    //{
-                    //    dvCaptcha.Style.Add("display", "Inline");
-                    //}
-                    //else
-                    //{
-                    //    dvCaptcha.Style.Add("display", "none");
-                    //}
-                    //#region captcha
-                    //if (Convert.ToString(Session["randomStr"]) == "" || Convert.ToString(Session["randomStr"]) == null)
-                    //{
-                    //    ScriptManager.RegisterStartupScript(this, GetType(), "Message3", "alert('Please Try Again!!!');", true);
-                    //    txtturing.Text = String.Empty;
-                    //    return;
-                    //}
-                    //string RNDStr = Session["randomStr"].ToString();
-                    //if (txtturing.Text == "" && Convert.ToInt32(Session["Attempt"]) > 1)
-                    //{
-                    //    ScriptManager.RegisterStartupScript(this, GetType(), "Message2", "alert('Please enter captcha');", true);
-                    //    return;
-                    //}
-                    //else
-                    //{
-                    //    if (txtturing.Text.Trim() != RNDStr.Trim() && Convert.ToInt32(Session["Attempt"]) > 1)
-                    //    {
-                    //        //alert("Please enter your code correctly!!!");
-                    //        ScriptManager.RegisterStartupScript(this, GetType(), "Message1", "alert('Please enter captcha correctly!!!');", true);
-                    //        txtturing.Text = string.Empty;
-                    //        return;
-                    //    }
-                    //}
-                    //#endregion
+                   
+                   
+                    #region captcha
+                    if (Convert.ToString(Session["randomStr"]) == "" || Convert.ToString(Session["randomStr"]) == null)
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "Message3", "alert('Please Try Again!!!');", true);
+                        txtturing.Text = String.Empty;
+                        return;
+                    }
+                    string RNDStr = Session["randomStr"].ToString();
+                    if (txtturing.Text == ""  )
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "Message2", "alert('Please enter captcha');", true);
+                        return;
+                    }
+                    else
+                    {
+                        if (txtturing.Text.Trim() != RNDStr.Trim() )
+                        {
+                            //alert("Please enter your code correctly!!!");
+                            ScriptManager.RegisterStartupScript(this, GetType(), "Message1", "alert('Please enter captcha correctly!!!');", true);
+                            txtturing.Text = string.Empty;
+                            return;
+                        }
+                    }
+                    #endregion
+
+                    if (Convert.ToInt32(Session["Attempt"]) >= 1)
+                    {
+                        dvCaptcha.Style.Add("display", "Inline");
+                    }
                     if (Session["UserId"] == null || Convert.ToString(Session["UserId"]) == "")
                     {
                         Session.Add("Welcome", "n");

@@ -267,14 +267,14 @@
 
 
     @*<div class="modal cus-modal" tabindex="-1" id="myModalPviewerPdf" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-        <div class="modal-dialog" role="document">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <img src="assets/assets/images/election-img.jpg" alt="sakhsham" usemap="#election-map" />
+            <div class="modal-dialog" role="document">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <img src="assets/assets/images/election-img.jpg" alt="sakhsham" usemap="#election-map" />
 
-        </div>
-    </div>*@
+            </div>
+        </div>*@
 
     <!-- <div id="popup" style="display: block;">
               <img src="assets/assets/images/sakhsham.png" alt="sakhsham" class="img-fluid" style="height: 600px;">
@@ -303,8 +303,8 @@
                         <!--<li><a href="DHE/frmUpdateFamilyId.aspx"><span class="english">Trade List</span><span class="hindi" style="display:none;">व्यापार सूची </span></a></li>-->
                         <!--   <li><a href="#" onclick="javascript: alert('Integration of Merit Module with Fee Module is in progress. Revised merit list along with fee payment option will be available shortly');"><span class="english">Merit List</span><span class="hindi" style="display:none;">योग्यता क्रम सूची</span></a></li> -->
                         <!--<li><a href="reports/meritList"><span class="english">Search Institute</span><span class="hindi" style="display:none;">संस्थान खोजें </span></a></li>
-        <li><a href="DHE/frmResultUGAdmissions.aspx"><span class="english">Know Your Result</span><span class="hindi" style="display:none;"> </span></a><666/li>
-      <!--<li><a href="DHE/frmViewPaymentStatus.aspx"><span class="english">Admission Schedules </span><span class="hindi" style="display:none;">भुगतान की स्थिति देखें</span></a></li>-->
+                          <li><a href="DHE/frmResultUGAdmissions.aspx"><span class="english">Know Your Result</span><span class="hindi" style="display:none;"> </span></a><666/li>
+                        <!--<li><a href="DHE/frmViewPaymentStatus.aspx"><span class="english">Admission Schedules </span><span class="hindi" style="display:none;">भुगतान की स्थिति देखें</span></a></li>-->
                         <!--  <li><a href="#" onclick="javascript: alert('Integration of Merit Module with Fee Module is in progress. Revised merit list along with fee payment option will be available shortly');"><span class="english">Know Your Result</span><span class="hindi" style="display:none;">अपना परिणाम जानिए</span></a></li> -->
                         <!-- <li><a href="DHE/CutOffList.aspx"><span class="english">Cut Off List</span><span class="hindi" style="display:none;">कट ऑफ लिस्ट</span></a></li>-->
 
@@ -1107,3 +1107,22 @@
 
     });
 </script> -->
+
+@*<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set the cutoff date (June 27, 2025)
+        const cutoffDate = new Date(2025, 5, 27, 23, 59, 0); // Note: months are 0-indexed (5 = June)
+        const currentDate = new Date();
+
+        if (currentDate > cutoffDate) {
+
+
+
+            const btns = document.getElementsByClassName('cta-btn-link');
+            for (let btn of btns) {
+                btn.remove();
+            }
+
+        }
+    });
+</script>*@

@@ -180,7 +180,7 @@
                 <div class="row top-login">
                     <div class="col-lg-5 col-md-8 col-sm-12 col-12 login-box mb-30">
                         <div class="title-box">
-                            <h2>Login Here :1</h2>
+                            <h2>Login Here :</h2>
                         </div>
                         <div class="row">
                             <asp:TextBox ID="txtUserId" runat="server" placeholder="Enter Username" CssClass="form-control inpt-sm"></asp:TextBox>
@@ -203,7 +203,7 @@
                             <a target="_blank" href="ForgetPassword.aspx">Forgot Password?</a>
                         </div>
 
-                        <div id="dvCaptcha" runat="server" class="col-lg-12 col-md-12 col-sm-12" style="padding: 0; display: none;">
+                        <div id="dvCaptcha" runat="server" class="col-lg-12 col-md-12 col-sm-12" >
                             <div class="row cus-captchalist">
                                 <div class="col-lg-3 col-md-3 col-sm-6 col-12">
                                     <asp:Label ID="lblCaptcha" CssClass="col-form-label" runat="server" Text="Captcha"></asp:Label><span id="spcaptcha" style="color: red">*</span>
@@ -232,7 +232,7 @@
                         <div class="submot-row">
                             <div class="">
                                 
-                                <asp:LinkButton ID="btnlogin1" runat="server" CssClass="btn btn-md btn-success movedown" OnClick="btnlogin_Click"  >
+                                <asp:LinkButton ID="btnlogin1"  ValidationGroup="A"  runat="server" CssClass="btn btn-md btn-success movedown" OnClick="btnlogin_Click"  >
                                     <i class="fas fa-paper-plane"></i> Login
                                 </asp:LinkButton>
                             </div>

@@ -55,6 +55,9 @@
     <Reference Include="CommonFunctions">
       <HintPath>C:\Users\hp\Downloads\Higher Education_Login_Merge\Higher Education_Login_Merge\Reference or Bin\CommonFunctions.dll</HintPath>
     </Reference>
+    <Reference Include="CsvHelper, Version=33.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.33.1.0\lib\netstandard2.0\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="EncryptDecryptPG, Version=2.2.0.0, Culture=neutral, PublicKeyToken=7ce4eddebcfe0fb3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\EncryptDecryptPG.dll</HintPath>
@@ -85,6 +88,12 @@
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationBlocks.Data.2.0.0\lib\net45\Microsoft.ApplicationBlocks.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\netstandard2.0\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.HashCode.1.1.1\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.5\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -2605,6 +2614,7 @@
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SubjectConfigurationController.cs" />
     <Compile Include="Controllers\SummaryRepController.cs" />
+    <Compile Include="Controllers\TradeDetailsController.cs" />
     <Compile Include="Controllers\VerificationController.cs" />
     <Compile Include="DataAccess\GrantRevokeContext.cs" />
     <Compile Include="DataAccess\MasterContext.cs" />
@@ -3046,6 +3056,7 @@
     <Compile Include="Models\RegistrationViewModel.cs" />
     <Compile Include="Models\RSHigherEdu.cs" />
     <Compile Include="Models\ShiftAdmissionTrade.cs" />
+    <Compile Include="Models\TradeDetails.cs" />
     <Compile Include="Models\VerificationModel.cs" />
     <Compile Include="Models\WeightageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

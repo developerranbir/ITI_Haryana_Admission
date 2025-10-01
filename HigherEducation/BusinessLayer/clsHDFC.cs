@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Web;
@@ -10,7 +11,8 @@ namespace HigherEducation.DHE
 {
     public class clsDataAccess
     {
-        string ConnectionString = "server=10.31.43.11;port=3306;database=skill_development;User Id=app1;password=passWord@2020; Pooling=false;SslMode=None;Keepalive=60";
+        string ConnectionString = "server=10.31.139.5;port=3306;database=skill_development;User Id=rohit;password=rohit@123; Pooling=false;SslMode=None;Keepalive=60";
+        //Data Source=10.31.139.5;port=3306;Initial Catalog=skill_development;User Id=rohit;password=rohit@123
         //string ConnectionString = "server=10.88.250.71;port=3306;database=skill_development;User Id=root;password=admin@757";
         //string ConnectionString = "server=127.0.0.1;port=3306;database=skill_development;User Id=root;password=root; Pooling=false;SslMode=None;Keepalive=60;AllowPublicKeyRetrieval=True";
         

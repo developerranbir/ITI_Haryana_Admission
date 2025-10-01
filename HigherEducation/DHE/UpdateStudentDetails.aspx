@@ -180,6 +180,11 @@
                                     <asp:Label ID="lblStuMotherName" Visible="true" runat="server"></asp:Label>
                                     <asp:TextBox ID="txtStuMotherName" Visible="false" runat="server"></asp:TextBox>
                                 </div>
+                               
+
+
+
+
 
                                 <div id="dvGender" runat="server" class="col-lg-4 col-md-4 col-sm-6 col-12">
                                     <label class="cus-select-label">Gender:</label><br />
@@ -197,12 +202,28 @@
                                     <label class="cus-select-label">Admission Status</label><br />
                                     <asp:Label ID="lblAdmissionStatus" runat="server"></asp:Label>
                                 </div>
-                                <div id="dvMobileNo" runat="server" class="col-lg-4 col-md-4 col-sm-6 col-12">
+                                <%--<div id="dvMobileNo" runat="server" class="col-lg-4 col-md-4 col-sm-6 col-12">
                                     <label class="cus-select-label">MobileNo:</label><br />
                                     <asp:Label ID="lblMobileNo" runat="server"></asp:Label>
-                                </div>
+                                </div>--%>
 
+                                 <p id="divstate" runat="server" >
+      <div id="dvEmailID" runat="server" class="col-lg-4 col-md-4 col-sm-6 col-12">
+         <label class="cus-select-label">Email ID:</label>
+         <asp:CheckBox ID="chkEmail" Checked="false" AutoPostBack="true" runat="server" OnCheckedChanged="chkEmail_CheckedChanged" />
+         <br />
+         <asp:Label ID="lblEmailid" Visible="true" runat="server"></asp:Label>
+         <asp:TextBox ID="txtEmail" Visible="false" runat="server"></asp:TextBox>
+     </div>
 
+      <div id="dvMobile" runat="server" class="col-lg-4 col-md-4 col-sm-6 col-12">
+         <label class="cus-select-label">Mobile No:</label>
+         <asp:CheckBox ID="chkMobile" Checked="false" AutoPostBack="true" runat="server" OnCheckedChanged="chkMobile_CheckedChanged" />
+         <br />
+         <asp:Label ID="lblmobileno" Visible="true" runat="server"></asp:Label>
+         <asp:TextBox ID="txtMobile" Visible="false" runat="server"></asp:TextBox>
+      </div>
+ </p>
                             </div>
                         </div>
 
