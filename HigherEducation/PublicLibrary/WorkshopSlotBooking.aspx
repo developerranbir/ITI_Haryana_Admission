@@ -120,14 +120,19 @@
 
             <!-- User Information -->
             <div class="user-info">
+
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <strong>Full Name:</strong> <span class="current-date">
+                            <asp:Literal ID="litCan" runat="server"></asp:Literal></span>
+                    </div>
+                    <div class="col-md-4">
                         <strong>Current Date:</strong>
                         <span class="current-date">
                             <asp:Literal ID="litCurrentDate" runat="server"></asp:Literal>
                         </span>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <strong>Current Time:</strong>
                         <span class="current-time">
                             <asp:Literal ID="litCurrentTime" runat="server"></asp:Literal>
@@ -242,59 +247,6 @@
                 <!-- Booking Form -->
                 <asp:Panel ID="pnlBookingForm" runat="server" Visible="false">
                     <div class="card shadow p-4">
-                        <h5 class="mb-3">Booking Details</h5>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="txtFullName" class="form-label required">Full Name</label>
-                                    <asp:TextBox ID="txtFullName" runat="server" CssClass="form-control"
-                                        placeholder="Enter your full name"></asp:TextBox>
-                                    <asp:RequiredFieldValidator ID="rfvStudentName" runat="server"
-                                        ControlToValidate="txtFullName" ErrorMessage="Name is required"
-                                        CssClass="text-danger small" Display="Dynamic"></asp:RequiredFieldValidator>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="txtEmail" class="form-label required">Email Address</label>
-                                    <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control"
-                                        TextMode="Email" placeholder="Enter your email"></asp:TextBox>
-                                    <asp:RequiredFieldValidator ID="rfvEmail" runat="server"
-                                        ControlToValidate="txtEmail" ErrorMessage="Email is required"
-                                        CssClass="text-danger small" Display="Dynamic"></asp:RequiredFieldValidator>
-                                    <asp:RegularExpressionValidator ID="revEmail" runat="server"
-                                        ControlToValidate="txtEmail" ErrorMessage="Invalid email format"
-                                        ValidationExpression="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$"
-                                        CssClass="text-danger small" Display="Dynamic"></asp:RegularExpressionValidator>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="txtMobileNumber" class="form-label required">Mobile Number</label>
-                                    <asp:TextBox ID="txtMobileNumber" runat="server" CssClass="form-control"
-                                        TextMode="Phone" placeholder="Enter your phone number" MaxLength="10"></asp:TextBox>
-                                    <asp:RequiredFieldValidator ID="rfvPhone" runat="server"
-                                        ControlToValidate="txtMobileNumber" ErrorMessage="Phone number is required"
-                                        CssClass="text-danger small" Display="Dynamic"></asp:RequiredFieldValidator>
-                                    <asp:RegularExpressionValidator ID="revPhone" runat="server"
-                                        ControlToValidate="txtMobileNumber" ErrorMessage="Please enter a valid 10-digit mobile number"
-                                        ValidationExpression="^[6-9]\d{9}$" CssClass="text-danger small" Display="Dynamic"></asp:RegularExpressionValidator>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Seats to Book</label>
-                                    <div class="form-control" style="background-color: #e9ecef;">
-                                        <strong>1 Seat</strong> <small class="text-muted">(Single seat per booking)</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="d-grid gap-2">
                             <asp:Button ID="btnBookSlot" runat="server" Text="Confirm Booking"
                                 CssClass="btn btn-primary btn-lg" OnClick="btnBookSlot_Click" />
