@@ -310,6 +310,24 @@ namespace HigherEducation.PublicLibrary
         }
 
 
+        private void UpdateSubscriptionPaymentStatus( string subscriptionId)
+        {
+          
+  
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString;
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand("CALL sp_UpdateSubscriptionPaymentStatus(@p_SubscriptionId);", conn))
+            {
+                cmd.Parameters.AddWithValue("@p_SubscriptionId", subscriptionId);
+                conn.Open();
+
+               cmd.ExecuteNonQuery();
+            }
+            ShowAlert("Payment Updated", "success");
+        }
+
+
         private void ShowAlert(string message, string type)
         {
             pnlAlert.Visible = true;
@@ -332,26 +350,7 @@ namespace HigherEducation.PublicLibrary
             }
         }
 
-        protected void gvSubscriptions_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-            string commandName = e.CommandName;
-            string subscriptionId = e.CommandArgument.ToString();
-
-            if (commandName == "Pending")
-            {
-                // Handle payment logic for the subscription
-                // Example: Redirect to payment page or show payment modal
-                lblAlertMessage.Text = "Redirecting to payment for Subscription ID: " + subscriptionId;
-                pnlAlert.Visible = true;
-            }
-            else if (commandName == "Completed")
-            {
-                // Handle print pass logic for the subscription
-                // Example: Generate and show printable pass
-                lblAlertMessage.Text = "Generating pass for Subscription ID: " + subscriptionId;
-                pnlAlert.Visible = true;
-            }
-        }
-
+        
+       
     }
 }

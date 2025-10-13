@@ -202,34 +202,48 @@
                     </div>
                 </div>
 
-<asp:GridView ID="gvSubscriptions" runat="server" OnRowCommand="gvSubscriptions_RowCommand" AutoGenerateColumns="False" CssClass="table table-borderless table-striped table-hover shadow-sm rounded mt-4" HeaderStyle-BackColor="#007bff" HeaderStyle-ForeColor="White" HeaderStyle-Font-Bold="True" GridLines="None">
-    <HeaderStyle CssClass="font-weight-bold" />
-    <RowStyle CssClass="align-middle" />
-    <AlternatingRowStyle CssClass="bg-light" />
-    <Columns>
-        <asp:BoundField DataField="UserName" HeaderText="User Name" ItemStyle-CssClass="align-middle" />
-        <asp:BoundField DataField="collegename" HeaderText="ITI Name" ItemStyle-CssClass="align-middle" />
-        <asp:BoundField DataField="SubscriptionType" HeaderText="Subscription Type" ItemStyle-CssClass="align-middle" />
-        <asp:BoundField DataField="PaymentDate" HeaderText="Start Date" DataFormatString="{0:yyyy-MM-dd}" ItemStyle-CssClass="align-middle" />
-        <asp:BoundField DataField="PaymentStatus" HeaderText="Payment Status" ItemStyle-CssClass="align-middle" />
-        <asp:BoundField DataField="Amount" HeaderText="Amount (₹)" DataFormatString="{0:N2}" ItemStyle-CssClass="align-middle text-middle" />
+        <asp:GridView ID="gvSubscriptions" runat="server" AutoGenerateColumns="False" CssClass="table table-borderless table-striped table-hover shadow-sm rounded mt-4" HeaderStyle-BackColor="#007bff" HeaderStyle-ForeColor="White" HeaderStyle-Font-Bold="True" GridLines="None">
+            <HeaderStyle CssClass="font-weight-bold" />
+            <RowStyle CssClass="align-middle" />
+            <AlternatingRowStyle CssClass="bg-light" />
+            <Columns>
+                <asp:BoundField DataField="UserName" HeaderText="User Name" ItemStyle-CssClass="align-middle" />
+                <asp:BoundField DataField="collegename" HeaderText="ITI Name" ItemStyle-CssClass="align-middle" />
+                <asp:BoundField DataField="SubscriptionType" HeaderText="Subscription Type" ItemStyle-CssClass="align-middle" />
+                <asp:BoundField DataField="PaymentDate" HeaderText="Start Date" DataFormatString="{0:yyyy-MM-dd}" ItemStyle-CssClass="align-middle" />
+                <asp:BoundField DataField="PaymentStatus" HeaderText="Payment Status" ItemStyle-CssClass="align-middle" />
+                <asp:BoundField DataField="Amount" HeaderText="Amount (₹)" DataFormatString="{0:N2}" ItemStyle-CssClass="align-middle text-middle" />
 
-     
+     <asp:TemplateField HeaderText="Action">
+    <ItemTemplate>
+        <a 
+            href='<%# Eval("PaymentStatus").ToString() == "Pending" 
+                    ? "libraryPayment.aspx?id=" + Eval("SubscriptionId") 
+                    : "libraryPrintPass.aspx?id=" + Eval("SubscriptionId") %>'
+            class='<%# Eval("PaymentStatus").ToString() == "Completed" 
+                    ? "btn btn-success" 
+                    : "btn btn-primary" %>'>
+            <%# Eval("PaymentStatus").ToString() == "Pending" ? "Pay Fee" : "Print Pass" %>
+        </a>
+    </ItemTemplate>
+</asp:TemplateField>
+
         
-        <asp:TemplateField HeaderText="Action">
-            <ItemTemplate>
-                <asp:Button ID="btnAction" runat="server" 
-                    Text='<%# Eval("PaymentStatus").ToString() == "Pending" ? "Pay Fee" : "Print Pass" %>'
-                    CommandName='<%# Eval("PaymentStatus").ToString()%>'
-                    CommandArgument='<%# Eval("SubscriptionId") %>'
-                    CssClass='<%# Eval("PaymentStatus").ToString() == "Completed" ? " btn btn-success" : " btn btn-primary" %>' />
-            </ItemTemplate>
-        </asp:TemplateField>
+<%--                <asp:TemplateField HeaderText="Action">
+                    <ItemTemplate>
+                        
+                        <asp:Button ID="btnAction" runat="server" 
+                            Text='<%# Eval("PaymentStatus").ToString() == "Pending" ? "Pay Fee" : "Print Pass" %>'
+                            CommandName='<%# Eval("PaymentStatus").ToString()%>'
+                            CommandArgument='<%# Eval("SubscriptionId") %>'
+                            CssClass='<%# Eval("PaymentStatus").ToString() == "Completed" ? " btn btn-success" : " btn btn-primary" %>' />
+                    </ItemTemplate>
+                </asp:TemplateField>--%>
 
 
 
-    </Columns>
-</asp:GridView>
+            </Columns>
+        </asp:GridView>
                 <!-- Features Grid -->
                 <div class=" m-5 text-center">
                     <div class="col-12 ">

@@ -2473,6 +2473,7 @@
     <Content Include="PublicLibrary\Home.aspx" />
     <Content Include="PublicLibrary\Home.html" />
     <Content Include="PublicLibrary\libraryPayment.aspx" />
+    <Content Include="PublicLibrary\libraryPrintPass.aspx" />
     <Content Include="PublicLibrary\Login.aspx" />
     <Content Include="PublicLibrary\SignUp.aspx" />
     <Content Include="PublicLibrary\Subscription.aspx" />
@@ -3092,6 +3093,13 @@
     <Compile Include="PublicLibrary\libraryPayment.aspx.designer.cs">
       <DependentUpon>libraryPayment.aspx</DependentUpon>
     </Compile>
+    <Compile Include="PublicLibrary\libraryPrintPass.aspx.cs">
+      <DependentUpon>libraryPrintPass.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicLibrary\libraryPrintPass.aspx.designer.cs">
+      <DependentUpon>libraryPrintPass.aspx</DependentUpon>
+    </Compile>
     <Compile Include="PublicLibrary\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3671,6 +3679,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\assets\js\core\cache\" />
     <Folder Include="Content\assets\js\libs\gmaps\" />
+    <Folder Include="PublicLibrary\Images\" />
     <Folder Include="Views\Course\" />
     <Folder Include="Views\Fees\" />
     <Folder Include="Views\Reports\backup\" />
