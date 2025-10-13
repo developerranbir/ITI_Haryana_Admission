@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Public Library Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f8f8f8;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #eaf0f6;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+        .price {
+            float: right;
+            font-weight: bold;
+            color: #2980b9;
+        }
+        .form-section {
+            display: none;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f4f8fb;
+            border-radius: 6px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .form-section input[type="text"],
+        .form-section input[type="password"],
+        .form-section input[type="email"] {
+            width: 90%;
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        .form-section button {
+            padding: 8px 18px;
+            background: #2980b9;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .form-section button:hover {
+            background: #1c5d8c;
+        }
+        .form-header {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+    </style>
+    <script>
+        function showForm(formId) {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'none';
+            document.getElementById('forgotForm').style.display = 'none';
+            document.getElementById(formId).style.display = 'block';
+        }
+        window.onload = function() {
+            // Show login form by default
+            showForm('loginForm');
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Public Library</h1>
+        <div style="text-align: right; margin-bottom: 20px;">
+            <button onclick="showForm('loginForm')" style="margin-right:10px;">Login</button>
+            <button onclick="showForm('signupForm')" style="margin-right:10px;">Sign Up</button>
+            <button onclick="showForm('forgotForm')">Forgot Password</button>
+        </div>
+        <div id="loginForm" class="form-section">
+            <div class="form-header">Login</div>
+            <form>
+                <input type="text" placeholder="Username" required /><br />
+                <input type="password" placeholder="Password" required /><br />
+                <button type="submit">Login</button>
+            </form>
+        </div>
+        <div id="signupForm" class="form-section">
+            <div class="form-header">Sign Up</div>
+            <form>
+                <input type="text" placeholder="Username" required /><br />
+                <input type="email" placeholder="Email" required /><br />
+                <input type="password" placeholder="Password" required /><br />
+                <input type="password" placeholder="Confirm Password" required /><br />
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+        <div id="forgotForm" class="form-section">
+            <div class="form-header">Forgot Password</div>
+            <form>
+                <input type="email" placeholder="Enter your email" required /><br />
+                <button type="submit">Reset Password</button>
+            </form>
+        </div>
+        <div class="section">
+            <h2>Library Pass</h2>
+            <ul>
+                <li>
+                    Sitting Only
+                    <span class="price">₹100/month</span>
+                </li>
+                <li>
+                    Sitting with Book
+                    <span class="price">₹500/month</span>
+                </li>
+            </ul>
+        </div>
+        <div class="section">
+            <h2>Workshop Pass</h2>
+            <ul>
+                <li>
+                    Workshop Access
+                    <span class="price">₹300/hour</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

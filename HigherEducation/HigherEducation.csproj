@@ -2469,6 +2469,15 @@
     <Content Include="DHE\Turing.aspx" />
     <Content Include="Home.html" />
     <Content Include="index.html" />
+    <Content Include="PublicLibrary\AddWorkShopSlot.aspx" />
+    <Content Include="PublicLibrary\Home.aspx" />
+    <Content Include="PublicLibrary\Home.html" />
+    <Content Include="PublicLibrary\libraryPayment.aspx" />
+    <Content Include="PublicLibrary\Login.aspx" />
+    <Content Include="PublicLibrary\SignUp.aspx" />
+    <Content Include="PublicLibrary\Subscription.aspx" />
+    <Content Include="PublicLibrary\Workshop.aspx" />
+    <Content Include="PublicLibrary\WorkshopSlotBooking.aspx" />
     <Content Include="scripts\amanimated.js" />
     <Content Include="scripts\amcharts.js" />
     <Content Include="scripts\amcore.js" />
@@ -2589,6 +2598,7 @@
     <Compile Include="BusinessLayer\FeesDB.cs" />
     <Compile Include="BusinessLayer\FeesPGDB.cs" />
     <Compile Include="BusinessLayer\HEBL.cs" />
+    <Compile Include="BusinessLayer\LibraryITI.cs" />
     <Compile Include="BusinessLayer\SMS.cs" />
     <Compile Include="BusinessLayer\Verhoeff.cs" />
     <Compile Include="Common\common.cs" />
@@ -3060,6 +3070,63 @@
     <Compile Include="Models\VerificationModel.cs" />
     <Compile Include="Models\WeightageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublicLibrary\AddWorkShopSlot.aspx.cs">
+      <DependentUpon>AddWorkShopSlot.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicLibrary\AddWorkShopSlot.aspx.designer.cs">
+      <DependentUpon>AddWorkShopSlot.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicLibrary\CCAvenueCrypto.cs" />
+    <Compile Include="PublicLibrary\Home.aspx.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicLibrary\Home.aspx.designer.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicLibrary\libraryPayment.aspx.cs">
+      <DependentUpon>libraryPayment.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicLibrary\libraryPayment.aspx.designer.cs">
+      <DependentUpon>libraryPayment.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicLibrary\Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicLibrary\Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicLibrary\SignUp.aspx.cs">
+      <DependentUpon>SignUp.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicLibrary\SignUp.aspx.designer.cs">
+      <DependentUpon>SignUp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicLibrary\Subscription.aspx.cs">
+      <DependentUpon>Subscription.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicLibrary\Subscription.aspx.designer.cs">
+      <DependentUpon>Subscription.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicLibrary\Workshop.aspx.cs">
+      <DependentUpon>Workshop.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicLibrary\Workshop.aspx.designer.cs">
+      <DependentUpon>Workshop.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PublicLibrary\WorkshopSlotBooking.aspx.cs">
+      <DependentUpon>WorkshopSlotBooking.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PublicLibrary\WorkshopSlotBooking.aspx.designer.cs">
+      <DependentUpon>WorkshopSlotBooking.aspx</DependentUpon>
+    </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="UG.cs" />
   </ItemGroup>

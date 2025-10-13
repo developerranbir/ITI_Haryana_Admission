@@ -64,22 +64,22 @@ namespace HigherEducation.HigherEducation
                         txtturing.Text = String.Empty;
                         return;
                     }
-                    string RNDStr = Session["randomStr"].ToString();
-                    if (txtturing.Text == ""  )
-                    {
-                        ScriptManager.RegisterStartupScript(this, GetType(), "Message2", "alert('Please enter captcha');", true);
-                        return;
-                    }
-                    else
-                    {
-                        if (txtturing.Text.Trim() != RNDStr.Trim() )
-                        {
-                            //alert("Please enter your code correctly!!!");
-                            ScriptManager.RegisterStartupScript(this, GetType(), "Message1", "alert('Please enter captcha correctly!!!');", true);
-                            txtturing.Text = string.Empty;
-                            return;
-                        }
-                    }
+                    //string RNDStr = Session["randomStr"].ToString();
+                    //if (txtturing.Text == ""  )
+                    //{
+                    //    ScriptManager.RegisterStartupScript(this, GetType(), "Message2", "alert('Please enter captcha');", true);
+                    //    return;
+                    //}
+                    //else
+                    //{
+                    //    if (txtturing.Text.Trim() != RNDStr.Trim() )
+                    //    {
+                    //        //alert("Please enter your code correctly!!!");
+                    //        ScriptManager.RegisterStartupScript(this, GetType(), "Message1", "alert('Please enter captcha correctly!!!');", true);
+                    //        txtturing.Text = string.Empty;
+                    //        return;
+                    //    }
+                    //}
                     #endregion
 
                     if (Convert.ToInt32(Session["Attempt"]) >= 1)
