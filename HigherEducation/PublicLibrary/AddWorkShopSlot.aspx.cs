@@ -36,7 +36,7 @@ namespace HigherEducation.PublicLibrary
 
             // Temporary hardcoded values for testing
             ITI_Id = "2";
-            ITI_Name = "Test ITI";
+            ITI_Name = "GITI Ambala City";
             litITIId.Text = ITI_Name;
 
             if (!IsPostBack)

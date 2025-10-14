@@ -5,7 +5,7 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITI Library Management System</title>
+    <title>ITI Library and WorkShop Booking for Public</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -264,8 +264,8 @@
         <div class="main-container">
             <div class="library-card">
                 <div class="library-header">
-                    <h1><i class="fas fa-book-reader me-3"></i>ITI Library Management System</h1>
-                    <div class="subtitle">Access Knowledge Across Multiple ITI Libraries</div>
+                    <h1><i class="fas fa-book-reader me-3"></i>ITI Library and WorkShop Booking for Public</h1>
+                    <%--<div class="subtitle">Access Knowledge Across Multiple ITI Libraries</div>--%>
                 </div>
 
 
@@ -274,9 +274,9 @@
 
                 <!-- Subscription Plans -->
                 <div class="row mt-5">
-                    <div class="col-12 text-center">
+                    <%--<div class="col-12 text-center">
                         <h2 class="section-title ">Library Subscription Plans</h2>
-                    </div>
+                    </div>--%>
 
                     <!-- Reading Plans -->
                     <div class="col-md-6">
@@ -297,7 +297,7 @@
                                 <li><i class="fas fa-check"></i>Priority Support</li>
                             </ul>
 
-                            <asp:Button runat="server" Text="Choose Plan" CssClass="btn btn-primary-custom" PostBackUrl="Subscription.aspx" />
+                            <asp:Button runat="server" Text="View" CssClass="btn btn-primary-custom" PostBackUrl="Subscription.aspx" />
                         </div>
                     </div>
                     <!-- Workshop Section -->
@@ -318,7 +318,7 @@
                                 <li><i class="fas fa-check"></i>Safety Equipment</li>
                                 <li><i class="fas fa-check"></i>Flexible Timing</li>
                             </ul>
-                            <asp:Button runat="server" Text="Choose Plan" CssClass="btn btn-primary-custom" PostBackUrl="~/PublicLibrary/WorkshopSlotBooking.aspx" />
+                            <asp:Button runat="server" Text="View" CssClass="btn btn-primary-custom" PostBackUrl="~/PublicLibrary/WorkshopSlotBooking.aspx" />
                         </div>
                     </div>
                 </div>

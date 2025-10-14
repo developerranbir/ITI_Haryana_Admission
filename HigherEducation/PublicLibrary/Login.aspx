@@ -189,7 +189,7 @@
         <div class="auth-container">
             <div class="auth-card">
                 <div class="auth-header">
-                    <h1><i class="fas fa-book-reader me-2"></i>ITI Library</h1>
+                    <h1><i class="fas fa-book-reader me-2"></i>ITI Library and Workshop System</h1>
                     <div class="subtitle">Login to Continue</div>
                 </div>
                 
