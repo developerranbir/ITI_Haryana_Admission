@@ -361,3 +361,12 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/HigherEducation/PublicLibrary/ViewMyWorkshopBookings.aspx
+/HigherEducation/PublicLibrary/ViewMyWorkshopBookings.aspx.cs
+/HigherEducation/PublicLibrary/ViewMyWorkshopBookings.aspx.designer.cs
+/HigherEducation/PublicLibrary/WorkShopBookingConfirmation.aspx
+/HigherEducation/PublicLibrary/WorkShopBookingConfirmation.aspx.cs
+/HigherEducation/PublicLibrary/WorkShopBookingConfirmation.aspx.designer.cs
+/HigherEducation/PublicLibrary/WorkshopSlotBooking.aspx
+/HigherEducation/PublicLibrary/WorkshopSlotBooking.aspx.cs
+/HigherEducation/PublicLibrary/WorkshopSlotBooking.aspx.designer.cs

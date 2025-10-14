@@ -18,9 +18,20 @@ namespace HigherEducation.PublicLibrary
         private int selectedSlotId = 0;
         private decimal hourlyRate = 300; // ₹300 per hour
         private const int SEATS_PER_BOOKING = 1; // Single seat per booking
+        private string CandidateName = "";
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["UserId"] == null)
+            {
+                Response.Redirect("Login.aspx");
+            }
+            
+            CandidateName = Session["FullName"].ToString();
+            litCan.Text = CandidateName;
+            //Session["UserId"] = user["UserId"];
+            //Session["Mobile"] = user["Mobile"];
+            //Session["Email"] = user["Email"];
             if (!IsPostBack)
             {
                 DateTime currentDateTime = DateTime.Now;
@@ -405,7 +416,7 @@ namespace HigherEducation.PublicLibrary
             {
                 try
                 {
-                    // Check seat availability for single seat
+                    // Check seat availability
                     if (!CheckSeatAvailability(selectedSlotId))
                     {
                         ShowMessage("Sorry, this slot is no longer available. Please select a different slot.", "danger");
@@ -413,23 +424,28 @@ namespace HigherEducation.PublicLibrary
                         return;
                     }
 
-                    // Check if user already booked this slot (prevent duplicate booking)
-                    if (CheckDuplicateBooking(txtMobileNumber.Text.Trim(), selectedSlotId))
+                    // Get slot details for time checking
+                    DataRow slotDetails = GetSlotDetails(selectedSlotId);
+                    if (slotDetails == null)
                     {
-                        ShowMessage("You have already booked this workshop slot. Each user can book only one seat per slot.", "warning");
+                        ShowMessage("Slot details not found. Please try again.", "danger");
                         return;
                     }
 
-                    // Save booking with single seat
+                    TimeSpan workshopTime = TimeSpan.Parse(slotDetails["StartTime"].ToString());
+                    DateTime workshopDate = DateTime.Today;
+
+                    // Check for duplicate booking
+                    if (CheckDuplicateBooking(Session["Mobile"].ToString(), selectedSlotId, workshopDate, workshopTime))
+                    {
+                        ShowMessage("You have already booked a workshop slot at this time. Each user can book only one slot per time period.", "warning");
+                        return;
+                    }
+
+                    // Save booking and redirect to confirmation page
                     if (SaveBooking(selectedSlotId))
                     {
-                        ShowMessage("Workshop slot booked successfully! You have reserved 1 seat.", "success");
-                        ClearForm();
-                        BindAvailableSlots();
-                    }
-                    else
-                    {
-                        ShowMessage("Failed to book workshop slot. Please try again.", "danger");
+                        // Redirect happens in SaveBooking method
                     }
                 }
                 catch (Exception ex)
@@ -474,7 +490,7 @@ namespace HigherEducation.PublicLibrary
             return false;
         }
 
-        private bool CheckDuplicateBooking(string mobileNumber, int slotId)
+        private bool CheckDuplicateBooking(string mobileNumber, int slotId, DateTime workshopDate, TimeSpan workshopTime)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -486,6 +502,8 @@ namespace HigherEducation.PublicLibrary
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("p_MobileNumber", mobileNumber);
                         cmd.Parameters.AddWithValue("p_SlotID", slotId);
+                        cmd.Parameters.AddWithValue("p_WorkshopDate", workshopDate.Date);
+                        cmd.Parameters.AddWithValue("p_WorkshopTime", workshopTime);
 
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -530,9 +548,9 @@ namespace HigherEducation.PublicLibrary
 
                         // Set parameters according to new table structure
                         cmd.Parameters.AddWithValue("p_SlotID", slotId);
-                        cmd.Parameters.AddWithValue("p_FullName", txtFullName.Text.Trim());
-                        cmd.Parameters.AddWithValue("p_Email", txtEmail.Text.Trim());
-                        cmd.Parameters.AddWithValue("p_MobileNumber", txtMobileNumber.Text.Trim());
+                        cmd.Parameters.AddWithValue("p_FullName", CandidateName); // Make sure CandidateName is defined
+                        cmd.Parameters.AddWithValue("p_Email", Session["Email"]?.ToString() ?? ""); // Null check
+                        cmd.Parameters.AddWithValue("p_MobileNumber", Session["Mobile"]?.ToString() ?? ""); // Null check
                         cmd.Parameters.AddWithValue("p_DistrictId", Convert.ToInt32(ddlDistrict.SelectedValue));
                         cmd.Parameters.AddWithValue("p_District", ddlDistrict.SelectedItem.Text);
                         cmd.Parameters.AddWithValue("p_ITI_Id", Convert.ToInt32(ddlITI.SelectedValue));
@@ -541,15 +559,32 @@ namespace HigherEducation.PublicLibrary
                         cmd.Parameters.AddWithValue("p_WorkshopTime", TimeSpan.Parse(slotDetails["StartTime"].ToString()));
                         cmd.Parameters.AddWithValue("p_WorkshopDuration", Convert.ToInt32(duration));
                         cmd.Parameters.AddWithValue("p_BookingAmount", bookingAmount);
+                        cmd.Parameters.AddWithValue("p_UserId", Session["UserId"].ToString());
 
-                        object result = cmd.ExecuteScalar();
-                        return result != null && Convert.ToInt32(result) > 0;
+                        // Execute and get result
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                int bookingId = Convert.ToInt32(reader["BookingID"]);
+
+                                // Store booking ID in session for the confirmation page
+                                Session["LastBookingID"] = bookingId;
+
+                                // Redirect to confirmation page
+                                Response.Redirect("WorkShopBookingConfirmation.aspx", false);
+                                Context.ApplicationInstance.CompleteRequest();
+
+                                return true;
+                            }
+                        }
+                        return false;
                     }
                 }
                 catch (MySqlException ex)
                 {
                     LogError("SaveBooking", ex);
-                    if (ex.Message.Contains("No seats available") || ex.Message.Contains("No seats available"))
+                    if (ex.Message.Contains("No seats available"))
                     {
                         ShowMessage("Sorry, this slot is no longer available. Please select a different slot.", "danger");
                     }
@@ -559,8 +594,14 @@ namespace HigherEducation.PublicLibrary
                     }
                     else
                     {
-                        throw new Exception($"Database error: {ex.Message}");
+                        ShowMessage($"Database error: {ex.Message}", "danger");
                     }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    LogError("SaveBooking", ex);
+                    ShowMessage($"Error saving booking: {ex.Message}", "danger");
                     return false;
                 }
             }
@@ -600,9 +641,6 @@ namespace HigherEducation.PublicLibrary
 
         private void ClearForm()
         {
-            txtFullName.Text = "";
-            txtEmail.Text = "";
-            txtMobileNumber.Text = "";
             pnlAmount.Visible = false;
             pnlBookingForm.Visible = false;
             ClearSlotSelection();
