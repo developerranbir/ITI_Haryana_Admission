@@ -180,10 +180,11 @@ namespace HigherEducation.PublicLibrary
                     subscriptionId = cmd.ExecuteScalar().ToString();
                 }
                 // Redirect to payment page with subscriptionId after entry success
-                Response.Redirect("libraryPayment.aspx?sid=" + subscriptionId);
+                //Response.Redirect("libraryPayment.aspx?sid=" + subscriptionId);
             }
             // Optionally, show confirmation (not needed if redirecting)
-            //ShowAlert("ReadingOnly Subscription Applied! Please Make payment now to print the pass", "success");
+            bindSubs();
+            ShowAlert("ReadingWithIssue Subscription Applied! Please Make payment now to print the pass", "success");
         }
 
         protected void btnBasicPlan_Click(object sender, EventArgs e)
@@ -271,8 +272,9 @@ namespace HigherEducation.PublicLibrary
                     subscriptionId = cmd.ExecuteScalar().ToString();
                 }
                 // Redirect to payment page with subscriptionId after entry success
-                Response.Redirect("libraryPayment.aspx?sid=" + subscriptionId);
-                        //ShowAlert("ReadingOnly Subscription Applied! Please Make payment now to print the pass", "success");
+                //Response.Redirect("libraryPayment.aspx?sid=" + subscriptionId);
+                bindSubs();
+                        ShowAlert("ReadingOnly Subscription Applied! Please Make payment now to print the pass", "success");
             }
         }
 
