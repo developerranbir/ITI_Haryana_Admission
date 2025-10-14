@@ -114,9 +114,15 @@
         </asp:Panel>
 
         <div class="card shadow p-4 mb-4">
+
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4 class="text-center mb-0 flex-grow-1">Book Workshop Slot</h4>
-            </div>
+        <h4 class="mb-0">Book Workshop Slot</h4>
+        <asp:HyperLink ID="hlViewBooking" runat="server" 
+            Text="View My Bookings" 
+            CssClass="btn btn-success" 
+            NavigateUrl="~/PublicLibrary/ViewMyWorkshopBookings.aspx" />
+    </div>
+
 
             <!-- User Information -->
             <div class="user-info">

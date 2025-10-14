@@ -11,7 +11,7 @@ namespace HigherEducation.PublicLibrary
 {
 
 
-    public partial class SignUp
+    public partial class WorkShopBookingConfirmation
     {
 
         /// <summary>
@@ -24,120 +24,102 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// pnlAlert control.
+        /// litBookingId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlAlert;
+        protected global::System.Web.UI.WebControls.Literal litBookingId;
 
         /// <summary>
-        /// lblAlertMessage control.
+        /// litConfName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAlertMessage;
+        protected global::System.Web.UI.WebControls.Literal litConfName;
 
         /// <summary>
-        /// txtFullName control.
+        /// litConfMobile control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFullName;
+        protected global::System.Web.UI.WebControls.Literal litConfMobile;
 
         /// <summary>
-        /// txtMobile control.
+        /// litConfEmail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMobile;
+        protected global::System.Web.UI.WebControls.Literal litConfEmail;
 
         /// <summary>
-        /// btnSendOTP control.
+        /// litConfITI control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSendOTP;
+        protected global::System.Web.UI.WebControls.Literal litConfITI;
 
         /// <summary>
-        /// txtEmail control.
+        /// litConfDistrict control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEmail;
+        protected global::System.Web.UI.WebControls.Literal litConfDistrict;
 
         /// <summary>
-        /// pnlOTP control.
+        /// litConfDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlOTP;
+        protected global::System.Web.UI.WebControls.Literal litConfDate;
 
         /// <summary>
-        /// txtOTP control.
+        /// litConfTime control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtOTP;
+        protected global::System.Web.UI.WebControls.Literal litConfTime;
 
         /// <summary>
-        /// btnVerifyOTP control.
+        /// litConfDuration control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnVerifyOTP;
+        protected global::System.Web.UI.WebControls.Literal litConfDuration;
 
         /// <summary>
-        /// btnResendOTP control.
+        /// litConfAmount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnResendOTP;
+        protected global::System.Web.UI.WebControls.Literal litConfAmount;
 
         /// <summary>
-        /// txtPassword control.
+        /// btnGoHome control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPassword;
-
-        /// <summary>
-        /// txtConfirmPassword control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtConfirmPassword;
-
-        /// <summary>
-        /// btnSignup control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSignup;
+        protected global::System.Web.UI.WebControls.Button btnGoHome;
     }
 }

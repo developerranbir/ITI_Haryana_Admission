@@ -318,7 +318,7 @@
                                 <li><i class="fas fa-check"></i>Safety Equipment</li>
                                 <li><i class="fas fa-check"></i>Flexible Timing</li>
                             </ul>
-                            <asp:Button runat="server" Text="Choose Plan" CssClass="btn btn-primary-custom" PostBackUrl="WorkshopSlotBooking.aspx" />
+                            <asp:Button runat="server" Text="Choose Plan" CssClass="btn btn-primary-custom" PostBackUrl="~/PublicLibrary/WorkshopSlotBooking.aspx" />
                         </div>
                     </div>
                 </div>

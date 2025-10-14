@@ -727,6 +727,12 @@ namespace HigherEducation.PublicLibrary
                 }
             }
         }
+
+
+        protected void btnViewBooking_Click(object sender, EventArgs e)
+        {
+            Response.Redirect($"ViewMyWorkshopBookings.aspx");
+        }
     }
 
 }
