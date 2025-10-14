@@ -130,8 +130,8 @@
 </head>
 <body>
     <form id="form1" runat="server">
-         <asp:Panel runat="server" ID="pnlAlert" CssClass="alert alert-custom" Visible="false">
-     <asp:Label runat="server" ID="lblAlertMessage" />
+         <asp:Panel runat="server" ID="pnlAlert" CssClass="alert alert-custom text-center" style="text-align:center!important" Visible="false">
+     <asp:Label runat="server" CssClass="text-center" ID="lblAlertMessage" />
  </asp:Panel>
 
         <div class="container py-5">

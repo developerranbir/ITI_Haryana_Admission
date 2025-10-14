@@ -79,6 +79,7 @@ namespace HigherEducation.PublicLibrary
             catch (Exception ex)
             {
                 ShowAlert($"Failed to send OTP: {ex.Message}", "danger");
+                afterOTP.Visible = false;
                 return false;
             }
         }
@@ -95,6 +96,7 @@ namespace HigherEducation.PublicLibrary
                 if (string.IsNullOrEmpty(storedOTP) || (DateTime.Now - otpCreatedTime).TotalMinutes > 5)
                 {
                     ShowAlert("OTP has expired. Please request a new one.", "warning");
+                    afterOTP.Visible = false;
                     return false;
                 }
 
@@ -103,16 +105,19 @@ namespace HigherEducation.PublicLibrary
                     Session["OTPVerified"] = true;
                     Session.Remove("OTP");
                     Session.Remove("OTPCreatedTime");
+                    afterOTP.Visible = true;
                     return true;
                 }
                 else
                 {
+                    afterOTP.Visible = false;
                     ShowAlert("Invalid OTP. Please try again.", "danger");
                     return false;
                 }
             }
             catch (Exception ex)
             {
+                afterOTP.Visible = false;
                 ShowAlert($"OTP verification failed: {ex.Message}", "danger");
                 return false;
             }
