@@ -8,6 +8,12 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using System.Threading;
+using HigherEducation.Models;
+using System.Text.RegularExpressions;
+using System.Web.Configuration;
+using CCA.Util;
+using System.Reflection;
 
 namespace HigherEducation.PublicLibrary
 {
@@ -19,6 +25,7 @@ namespace HigherEducation.PublicLibrary
         private decimal hourlyRate = 300; // ₹300 per hour
         private const int SEATS_PER_BOOKING = 1; // Single seat per booking
         private string CandidateName = "";
+        CCACrypto ccaCrypto = new CCACrypto();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -107,7 +114,7 @@ namespace HigherEducation.PublicLibrary
                 try
                 {
                     conn.Open();
-                    using (MySqlCommand cmd = new MySqlCommand("BindITIs", conn))
+                    using (MySqlCommand cmd = new MySqlCommand("BindGovtITIs", conn))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("p_districtcode", Convert.ToInt32(ddlDistrict.SelectedValue));
@@ -129,7 +136,7 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-                    LogError("BindITIsByDistrict", ex);
+                    LogError("BindGovtITIs", ex);
                     ShowMessage("Error loading ITIs. Please try again.", "danger");
                 }
             }
@@ -522,7 +529,6 @@ namespace HigherEducation.PublicLibrary
             }
             return false;
         }
-
         private bool SaveBooking(int slotId)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -530,55 +536,68 @@ namespace HigherEducation.PublicLibrary
                 try
                 {
                     conn.Open();
-                    using (MySqlCommand cmd = new MySqlCommand("sp_SaveBooking", conn))
+
+                    // Start transaction for both booking and payment record
+                    using (MySqlTransaction transaction = conn.BeginTransaction())
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
-
-                        // Get selected slot details
-                        DataRow slotDetails = GetSlotDetails(slotId);
-                        if (slotDetails == null)
+                        try
                         {
-                            ShowMessage("Slot details not found. Please try again.", "danger");
-                            return false;
-                        }
-
-                        // Calculate booking amount
-                        double duration = Convert.ToDouble(slotDetails["Duration"]);
-                        decimal bookingAmount = (decimal)duration * hourlyRate;
-
-                        // Set parameters according to new table structure
-                        cmd.Parameters.AddWithValue("p_SlotID", slotId);
-                        cmd.Parameters.AddWithValue("p_FullName", CandidateName); // Make sure CandidateName is defined
-                        cmd.Parameters.AddWithValue("p_Email", Session["Email"]?.ToString() ?? ""); // Null check
-                        cmd.Parameters.AddWithValue("p_MobileNumber", Session["Mobile"]?.ToString() ?? ""); // Null check
-                        cmd.Parameters.AddWithValue("p_DistrictId", Convert.ToInt32(ddlDistrict.SelectedValue));
-                        cmd.Parameters.AddWithValue("p_District", ddlDistrict.SelectedItem.Text);
-                        cmd.Parameters.AddWithValue("p_ITI_Id", Convert.ToInt32(ddlITI.SelectedValue));
-                        cmd.Parameters.AddWithValue("p_ITI_Name", ddlITI.SelectedItem.Text);
-                        cmd.Parameters.AddWithValue("p_WorkshopDate", DateTime.Today);
-                        cmd.Parameters.AddWithValue("p_WorkshopTime", TimeSpan.Parse(slotDetails["StartTime"].ToString()));
-                        cmd.Parameters.AddWithValue("p_WorkshopDuration", Convert.ToInt32(duration));
-                        cmd.Parameters.AddWithValue("p_BookingAmount", bookingAmount);
-                        cmd.Parameters.AddWithValue("p_UserId", Session["UserId"].ToString());
-
-                        // Execute and get result
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
+                            // Get selected slot details
+                            DataRow slotDetails = GetSlotDetails(slotId);
+                            if (slotDetails == null)
                             {
-                                int bookingId = Convert.ToInt32(reader["BookingID"]);
-
-                                // Store booking ID in session for the confirmation page
-                                Session["LastBookingID"] = bookingId;
-
-                                // Redirect to confirmation page
-                                Response.Redirect("WorkShopBookingConfirmation.aspx", false);
-                                Context.ApplicationInstance.CompleteRequest();
-
-                                return true;
+                                ShowMessage("Slot details not found. Please try again.", "danger");
+                                return false;
                             }
+
+                            // Calculate booking amount
+                            double duration = Convert.ToDouble(slotDetails["Duration"]);
+                            decimal bookingAmount = (decimal)duration * hourlyRate;
+
+                            // Step 1: Save to WorkshopBookings table using stored procedure
+                            int bookingId = SaveWorkshopBooking(conn, transaction, slotId, slotDetails, bookingAmount);
+                            if (bookingId <= 0)
+                            {
+                                transaction.Rollback();
+                                return false;
+                            }
+
+
+                            string paymentReferenceId = "0";
+                            string currentDateTime = DateTime.Now.ToString("ddMMyyyyHHmmssfff");
+                            //Generate Transaction Number
+                            paymentReferenceId = Session["Mobile"].ToString() + currentDateTime;
+                            if (paymentReferenceId.Length > 30)
+                            {
+                                paymentReferenceId = paymentReferenceId.Substring(paymentReferenceId.Length - 30);
+                            }
+
+
+                            int paymentId = SavePaymentRecord(conn, transaction, bookingId, slotId, paymentReferenceId, bookingAmount);
+                            if (paymentId <= 0)
+                            {
+                                transaction.Rollback();
+                                return false;
+                            }
+
+                            // Commit transaction
+                            transaction.Commit();
+
+                            // Store IDs in session for payment gateway
+                            Session["LastBookingID"] = bookingId;
+                            Session["PaymentReferenceID"] = paymentReferenceId;
+                            Session["PaymentAmount"] = bookingAmount;
+
+                            // Step 3: Redirect to payment gateway
+                            RedirectToPaymentGateway(bookingId, paymentReferenceId, bookingAmount);
+
+                            return true;
                         }
-                        return false;
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            throw new Exception($"Transaction failed: {ex.Message}");
+                        }
                     }
                 }
                 catch (MySqlException ex)
@@ -598,6 +617,11 @@ namespace HigherEducation.PublicLibrary
                     }
                     return false;
                 }
+                catch (ThreadAbortException)
+                {
+                    // Expected during redirect
+                    return true;
+                }
                 catch (Exception ex)
                 {
                     LogError("SaveBooking", ex);
@@ -605,6 +629,168 @@ namespace HigherEducation.PublicLibrary
                     return false;
                 }
             }
+        }
+
+        private int SaveWorkshopBooking(MySqlConnection conn, MySqlTransaction transaction, int slotId, DataRow slotDetails, decimal bookingAmount)
+        {
+            using (MySqlCommand cmd = new MySqlCommand("sp_SaveBooking", conn, transaction))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                // Set parameters for workshop booking
+                cmd.Parameters.AddWithValue("p_SlotID", slotId);
+                cmd.Parameters.AddWithValue("p_FullName", CandidateName);
+                cmd.Parameters.AddWithValue("p_Email", Session["Email"]?.ToString() ?? "");
+                cmd.Parameters.AddWithValue("p_MobileNumber", Session["Mobile"]?.ToString() ?? "");
+                cmd.Parameters.AddWithValue("p_DistrictId", Convert.ToInt32(ddlDistrict.SelectedValue));
+                cmd.Parameters.AddWithValue("p_District", ddlDistrict.SelectedItem.Text);
+                cmd.Parameters.AddWithValue("p_ITI_Id", Convert.ToInt32(ddlITI.SelectedValue));
+                cmd.Parameters.AddWithValue("p_ITI_Name", ddlITI.SelectedItem.Text);
+                cmd.Parameters.AddWithValue("p_WorkshopDate", DateTime.Today);
+                cmd.Parameters.AddWithValue("p_WorkshopTime", TimeSpan.Parse(slotDetails["StartTime"].ToString()));
+                cmd.Parameters.AddWithValue("p_WorkshopDuration", Convert.ToInt32(slotDetails["Duration"]));
+                cmd.Parameters.AddWithValue("p_BookingAmount", bookingAmount);
+                cmd.Parameters.AddWithValue("p_UserId", Session["UserId"].ToString());
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return Convert.ToInt32(reader["BookingID"]);
+                    }
+                }
+                return 0;
+            }
+        }
+
+        private int SavePaymentRecord(MySqlConnection conn, MySqlTransaction transaction, int bookingId, int slotId, string paymentReferenceId, decimal bookingAmount)
+        {
+            using (MySqlCommand cmd = new MySqlCommand("sp_SavePaymentRecord", conn, transaction))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("p_FullName", CandidateName);
+                cmd.Parameters.AddWithValue("p_UserId", Session["UserId"].ToString());
+                cmd.Parameters.AddWithValue("p_PaymentReferenceID", paymentReferenceId);
+                cmd.Parameters.AddWithValue("p_College_id", Convert.ToInt32(ddlITI.SelectedValue));
+                cmd.Parameters.AddWithValue("p_SubscriptionId_SlotId", slotId.ToString());
+                cmd.Parameters.AddWithValue("p_PaymentType", "WORKSHOP");
+                cmd.Parameters.AddWithValue("p_Mobile", Session["Mobile"]?.ToString() ?? "");
+                cmd.Parameters.AddWithValue("p_Email", Session["Email"]?.ToString() ?? "");
+                cmd.Parameters.AddWithValue("p_TotalAmount", bookingAmount);
+                cmd.Parameters.AddWithValue("p_Payment_gateway", "YourPaymentGateway"); // Replace with actual gateway name
+                cmd.Parameters.AddWithValue("p_CreateUser", Session["UserId"].ToString());
+                cmd.Parameters.AddWithValue("p_IPAddress", GetClientIPAddress());
+                cmd.Parameters.AddWithValue("p_Remarks", "Workshop slot booking payment");
+
+                // Execute and get the payment ID
+                object result = cmd.ExecuteScalar();
+                return result != null ? Convert.ToInt32(result) : 0;
+            }
+        }
+
+
+
+        private void RedirectToPaymentGateway(int bookingId, string paymentReferenceId, decimal amount)
+        {
+            try
+            {
+                // Create FeeModule object with workshop booking data
+                FeeModule objFeeModule = new FeeModule();
+
+                // Set payment parameters
+                objFeeModule.RegistrationId = Session["UserId"]?.ToString() ?? "";
+                objFeeModule.TotalFee = (int)amount;
+                objFeeModule.TotalFee = 1;
+                objFeeModule.amount = (int)amount;
+                objFeeModule.amount = 1;
+                objFeeModule.PaymentTransactionId = paymentReferenceId;
+
+                // Merchant configuration from Web.config
+                objFeeModule.merchant_id = ConfigurationManager.AppSettings["strMerchantId_ITI"];
+                objFeeModule.order_id = paymentReferenceId;
+                objFeeModule.currency = "INR";
+                objFeeModule.redirect_url = ConfigurationManager.AppSettings["redirect_url_Workshop"];
+                objFeeModule.cancel_url = ConfigurationManager.AppSettings["cancel_url_Workshop"];
+                objFeeModule.language = "EN";
+
+                // Additional parameters for workshop booking
+                objFeeModule.merchant_param1 = bookingId.ToString();  // Booking ID
+                objFeeModule.merchant_param2 = Session["UserId"]?.ToString();  // User ID
+                objFeeModule.merchant_param3 = ddlITI.SelectedValue;  // ITI ID
+                objFeeModule.merchant_param4 = ddlDistrict.SelectedValue;  // District ID
+                objFeeModule.merchant_param5 = "WORKSHOP";  // Payment type
+
+
+                
+                    // Generate encrypted request for payment gateway
+                    string ccaRequest = GenerateCCARequest(objFeeModule);
+                    string workingKey = ConfigurationManager.AppSettings["workingKey_ITI"];
+                    string strAccessCode = ConfigurationManager.AppSettings["strAccessCode_ITI"];
+
+                    // Encrypt the request (you need the ccaCrypto class)
+                    string strEncRequest = ccaCrypto.Encrypt(ccaRequest, workingKey);
+
+                    // Store in session or pass to payment page
+                    Session["strEncRequest"] = strEncRequest;
+                    Session["strAccessCode"] = strAccessCode;
+                    Session["strMerchantId"] = objFeeModule.merchant_id;
+
+                    // Redirect to payment page
+                    Response.Redirect("PaymentGateway.aspx", false);
+                    Context.ApplicationInstance.CompleteRequest();
+                
+            }
+            catch (Exception ex)
+            {
+                LogError("RedirectToPaymentGateway", ex);
+                ShowMessage("Error initializing payment gateway.", "danger");
+            }
+        }
+
+        private string GenerateCCARequest(FeeModule objFeeModule)
+        {
+            string ccaRequest = "";
+
+            // Get all properties and build request string
+            PropertyInfo[] properties = objFeeModule.GetType().GetProperties();
+            foreach (var property in properties)
+            {
+                var propName = property.Name;
+                var propValue = property.GetValue(objFeeModule, null);
+
+                if (propValue != null && !string.IsNullOrEmpty(propValue.ToString()))
+                {
+                    // Skip properties that start with underscore or are internal
+                    if (!propName.StartsWith("_"))
+                    {
+                        ccaRequest = ccaRequest + propName + "=" + HttpUtility.UrlEncode(Convert.ToString(propValue)) + "&";
+                    }
+                }
+            }
+
+            // Remove the last '&' character
+            if (ccaRequest.EndsWith("&"))
+            {
+                ccaRequest = ccaRequest.Substring(0, ccaRequest.Length - 1);
+            }
+
+            return ccaRequest;
+        }
+
+        private string ToQueryString(System.Collections.Specialized.NameValueCollection nvc)
+        {
+            return string.Join("&", nvc.AllKeys.Select(key => $"{Uri.EscapeDataString(key)}={Uri.EscapeDataString(nvc[key])}"));
+        }
+
+        private string GetClientIPAddress()
+        {
+            string ipAddress = Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+            if (string.IsNullOrEmpty(ipAddress))
+            {
+                ipAddress = Request.ServerVariables["REMOTE_ADDR"];
+            }
+            return ipAddress ?? "Unknown";
         }
 
         private DataRow GetSlotDetails(int slotId)
