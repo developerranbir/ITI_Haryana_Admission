@@ -56,7 +56,7 @@ namespace HigherEducation.PublicLibrary
         private string GenerateOTP()
         {
             Random random = new Random();
-            return random.Next(100000, 999999).ToString();
+            return random.Next(10000, 999999).ToString();
         }
 
         // Send OTP to Mobile (Simulated - Integrate with SMS Gateway in production)
@@ -319,14 +319,15 @@ namespace HigherEducation.PublicLibrary
 
                 ExecuteStoredProcedure("sp_UserSignUp", parameters);
 
-                ShowAlert("Registration successful! Please login with your credentials.", "success");
+                // Show success message and redirect to login after 5 seconds
+                ShowAlert("Registration successful! You will be redirect to login page soon.", "success");
 
                 // Clear form
                 ClearSignupForm();
 
-                // Switch to login tab
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "switchToLogin",
-                    "document.getElementById('login-tab').click();", true);
+                // Add delayed redirect to login.aspx (5 seconds)
+                string script = "<script>setTimeout(function(){ window.location.href = 'login.aspx'; }, 5000);</script>";
+                ClientScript.RegisterStartupScript(this.GetType(), "RedirectToLogin", script);
             }
             catch (Exception ex)
             {

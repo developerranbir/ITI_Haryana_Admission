@@ -1,18 +1,14 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ViewMyWorkshopBookings.aspx.cs" Inherits="HigherEducation.PublicLibrary.ViewMyWorkshopBookings" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PublicLibrary/LibraryMaster.Master" AutoEventWireup="true" CodeBehind="ViewMyWorkshopBookings.aspx.cs" Inherits="HigherEducation.PublicLibrary.ViewMyWorkshopBookings" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+    .gridview-container {
+        margin: 20px 0;
+    }
+</style>
+    </asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title>My Workshop Bookings</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <style>
-        .gridview-container {
-            margin: 20px 0;
-        }
-    </style>
-</head>
-<body>
-    <form id="form1" runat="server">
         <div class="container mt-4">
             <div class="card">
                 <div class="card-header bg-primary text-white">
@@ -89,6 +85,4 @@
                 </div>
             </div>
         </div>
-    </form>
-</body>
-</html>
+  </asp:Content>
