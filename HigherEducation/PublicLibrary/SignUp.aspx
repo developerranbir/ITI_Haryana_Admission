@@ -5,7 +5,7 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITI Library - User Authentication</title>
+    <title>ITI Library - User Registration</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -15,8 +15,10 @@
             --success-color: #27ae60;
             --warning-color: #f39c12;
             --danger-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -24,7 +26,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         .auth-container {
             min-height: 100vh;
             display: flex;
@@ -32,7 +34,7 @@
             justify-content: center;
             padding: 20px;
         }
-        
+
         .auth-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -43,55 +45,30 @@
             max-width: 500px;
             width: 100%;
         }
-        
+
         .auth-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             padding: 30px;
             text-align: center;
         }
-        
-        .auth-header h1 {
-            margin: 0;
-            font-size: 2rem;
-            font-weight: 700;
-        }
-        
-        .auth-header .subtitle {
-            font-size: 1rem;
-            opacity: 0.9;
-            margin-top: 10px;
-        }
-        
+
+            .auth-header h1 {
+                margin: 0;
+                font-size: 2rem;
+                font-weight: 700;
+            }
+
+            .auth-header .subtitle {
+                font-size: 1rem;
+                opacity: 0.9;
+                margin-top: 10px;
+            }
+
         .auth-body {
             padding: 40px;
         }
-        
-        .nav-tabs-custom {
-            border-bottom: 3px solid #ecf0f1;
-            margin-bottom: 30px;
-        }
-        
-        .nav-tabs-custom .nav-link {
-            border: none;
-            color: #7f8c8d;
-            font-weight: 600;
-            padding: 15px 25px;
-            border-radius: 10px 10px 0 0;
-            margin-right: 5px;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-tabs-custom .nav-link.active {
-            background: var(--secondary-color);
-            color: white;
-            border: none;
-        }
-        
-        .nav-tabs-custom .nav-link:hover {
-            color: var(--primary-color);
-        }
-        
+
         .form-control {
             border: 2px solid #e9ecef;
             border-radius: 10px;
@@ -99,12 +76,12 @@
             margin-bottom: 20px;
             transition: all 0.3s ease;
         }
-        
-        .form-control:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
-        }
-        
+
+            .form-control:focus {
+                border-color: var(--secondary-color);
+                box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+            }
+
         .btn-primary-custom {
             background: linear-gradient(135deg, var(--secondary-color), #2980b9);
             border: none;
@@ -115,12 +92,12 @@
             transition: all 0.3s ease;
             width: 100%;
         }
-        
-        .btn-primary-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
-        }
-        
+
+            .btn-primary-custom:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+            }
+
         .btn-success-custom {
             background: linear-gradient(135deg, var(--success-color), #229954);
             border: none;
@@ -131,56 +108,104 @@
             transition: all 0.3s ease;
             width: 100%;
         }
-        
+
+        .btn-warning-custom {
+            background: linear-gradient(135deg, var(--warning-color), #e67e22);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
         .otp-section {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
             padding: 20px;
             border-radius: 10px;
             border-left: 4px solid var(--warning-color);
             margin: 20px 0;
         }
-        
+
         .otp-timer {
             color: var(--danger-color);
             font-weight: 600;
             text-align: center;
             margin: 10px 0;
         }
-        
+
+        .password-section {
+            background: linear-gradient(135deg, #d1ecf1, #a2d9ce);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary-color);
+            margin: 20px 0;
+            display: none; /* Hidden by default */
+        }
+
         .alert-custom {
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
             border: none;
         }
-        
+
         .progress {
             height: 5px;
             margin-bottom: 20px;
         }
-        
+
         .password-strength {
             font-size: 0.9rem;
             margin-top: -15px;
             margin-bottom: 15px;
         }
-        
-        .strength-weak { color: var(--danger-color); }
-        .strength-medium { color: var(--warning-color); }
-        .strength-strong { color: var(--success-color); }
-        
+
+        .strength-weak {
+            color: var(--danger-color);
+        }
+
+        .strength-medium {
+            color: var(--warning-color);
+        }
+
+        .strength-strong {
+            color: var(--success-color);
+        }
+
+        .verification-success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group-text {
+            background: var(--primary-color);
+            color: white;
+            border: 2px solid var(--primary-color);
+            border-radius: 10px 0 0 10px;
+        }
+
+        .input-group .form-control {
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 0;
+        }
+
         @media (max-width: 576px) {
             .auth-body {
                 padding: 20px;
             }
-            
+
             .auth-header h1 {
                 font-size: 1.5rem;
-            }
-            
-            .nav-tabs-custom .nav-link {
-                padding: 10px 15px;
-                font-size: 0.9rem;
             }
         }
     </style>
@@ -190,83 +215,110 @@
         <div class="auth-container">
             <div class="auth-card">
                 <div class="auth-header">
-                    <h1><i class="fas fa-book-reader me-2"></i>ITI Library/WorkShop</h1>
-                    <div class="subtitle">Create Account to Continue</div>
+                    <h1><i class="fas fa-book-reader me-2"></i>ITI Library & Workshop</h1>
+                    <div class="subtitle">Create Your Account</div>
                 </div>
-                
-                <div class="auth-body">     
+
+                <div class="auth-body">
                     <!-- Alert Messages -->
                     <asp:Panel runat="server" ID="pnlAlert" CssClass="alert alert-custom" Visible="false">
                         <asp:Label runat="server" ID="lblAlertMessage" />
                     </asp:Panel>
 
-                    <a href="Login.aspx" class="btn btn-primary-custom fw-bold w-100 mb-3" style="font-size:1.1rem;">Login if already Signup</a>
+                    <a href="Login.aspx" class="btn btn-primary-custom fw-bold w-100 mb-4" style="font-size: 1.1rem;">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login if already registered
+                    </a>
 
-                    <!-- Tab Content -->
-                    <div class="tab-content" id="authTabsContent">
-                        
+                    <h4 class="text-center mb-4" style="color: var(--primary-color);">Create New Account</h4>
 
-                        <!-- Signup Tab -->
-                        <div class="tab-pane fade show active" id="signup" role="tabpanel">
-                            <h4 class="text-center mb-4">Create New Account</h4>
-                            
-                            <asp:TextBox runat="server" ID="txtFullName" CssClass="form-control" 
-                                placeholder="Full Name" />
-                            
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <asp:TextBox runat="server" ID="txtMobile" CssClass="form-control" 
-                                        placeholder="Mobile Number" MaxLength="10" />
-                                </div>
-                                <div class="col-md-6">
-                                    <asp:Button runat="server" ID="btnSendOTP" Text="Send OTP" 
-                                        CssClass="btn btn-warning" OnClick="btnSendOTP_Click" 
-                                        Enabled="false" />
-                                </div>
+                    <!-- Basic Information Section -->
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <asp:TextBox runat="server" ID="txtFullName" CssClass="form-control"
+                            placeholder="Full Name" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <asp:TextBox runat="server" ID="txtEmail" TextMode="Email" CssClass="form-control"
+                            placeholder="Email Address" autocomplete="off" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
+                                <asp:TextBox runat="server" ID="txtMobile" CssClass="form-control"
+                                    placeholder="Mobile Number" autocomplete="off"  MaxLength="10" />
                             </div>
-                            
-                            <asp:TextBox runat="server" ID="txtEmail" TextMode="Email" CssClass="form-control" 
-                                placeholder="Email Address" />
-                            
-                            <!-- OTP Verification Section -->
-                            <asp:Panel runat="server" ID="pnlOTP" CssClass="otp-section" Visible="false">
-                                <h5><i class="fas fa-mobile-alt me-2"></i>Mobile Verification</h5>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <asp:TextBox runat="server" ID="txtOTP" CssClass="form-control" 
-                                            placeholder="Enter OTP" MaxLength="6" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <asp:Button runat="server" ID="btnVerifyOTP" Text="Verify OTP" 
-                                            CssClass="btn btn-success-custom" OnClick="btnVerifyOTP_Click" />
-                                    </div>
-                                </div>
-                                <div class="otp-timer">
-                                    OTP Valid for: <span id="lblOTPTimer">05:00</span>
-                                </div>
-                                <div class="text-center">
-                                    <asp:LinkButton runat="server" ID="btnResendOTP" Text="Resend OTP" 
-                                        CssClass="text-decoration-none" OnClick="btnResendOTP_Click" />
-                                </div>
-                            </asp:Panel>
-                            
-                            <asp:TextBox runat="server" ID="txtPassword" TextMode="Password" 
-                                CssClass="form-control" placeholder="Password" onkeyup="checkPasswordStrength(this.value)" />
-                            
-                            <div class="progress">
-                                <div id="passwordStrengthBar" class="progress-bar" role="progressbar" 
-                                    style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <div id="passwordStrengthText" class="password-strength"></div>
-                            
-                            <asp:TextBox runat="server" ID="txtConfirmPassword" TextMode="Password" 
-                                CssClass="form-control" placeholder="Confirm Password" />
-                            
-                           
-                            
-                            <asp:Button runat="server" ID="btnSignup" Text="Create Account" 
-                                CssClass="btn btn-primary-custom" OnClick="btnSignup_Click"  />
                         </div>
+                        <div class="col-md-4">
+                            <asp:Button runat="server" ID="btnSendOTP" Text="Send OTP"
+                                CssClass="btn btn-warning-custom" OnClick="btnSendOTP_Click"
+                                Enabled="false" />
+                        </div>
+                    </div>
+
+
+
+                    <!-- OTP Verification Section -->
+                    <asp:Panel runat="server" ID="pnlOTP" CssClass="otp-section" Visible="false">
+                        <h5><i class="fas fa-mobile-alt me-2"></i>Mobile Verification</h5>
+                        <p class="text-muted">We've sent a verification code to your mobile number</p>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                    <asp:TextBox runat="server" ID="txtOTP" CssClass="form-control"
+                                        placeholder="Enter 6-digit OTP" MaxLength="6" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <asp:Button runat="server" ID="btnVerifyOTP" Text="Verify OTP"
+                                    CssClass="btn btn-success-custom" OnClick="btnVerifyOTP_Click" />
+                            </div>
+                        </div>
+                        <div class="otp-timer">
+                            <i class="fas fa-clock me-1"></i>OTP Valid for: <span id="lblOTPTimer">05:00</span>
+                        </div>
+                        <div class="text-center">
+                            <asp:LinkButton runat="server" ID="btnResendOTP" Text="Resend OTP"
+                                CssClass="text-decoration-none fw-bold" OnClick="btnResendOTP_Click" />
+                        </div>
+                    </asp:Panel>
+
+                    <!-- Verification Success Message -->
+                    <div id="verificationSuccess" class="verification-success">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-check-circle me-2" style="color: var(--success-color); font-size: 1.2rem;"></i>
+                            <span class="fw-bold">Mobile number verified successfully!</span>
+                        </div>
+                    </div>
+
+                    <!-- Password Section (Hidden until OTP verified) -->
+                    <div id="passwordSection" class="password-section">
+                        <h5><i class="fas fa-lock me-2"></i>Create Password</h5>
+                        <p class="text-muted">Create a secure password for your account</p>
+
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <asp:TextBox runat="server" ID="txtPassword" TextMode="Password"
+                                CssClass="form-control" placeholder="Password" onkeyup="checkPasswordStrength(this.value)" />
+                        </div>
+
+                        <div class="progress">
+                            <div id="passwordStrengthBar" class="progress-bar" role="progressbar"
+                                style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <div id="passwordStrengthText" class="password-strength"></div>
+
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <asp:TextBox runat="server" ID="txtConfirmPassword" TextMode="Password"
+                                CssClass="form-control" placeholder="Confirm Password" />
+                        </div>
+
+                        <asp:Button runat="server" ID="btnSignup" Text="Create Account"
+                            CssClass="btn btn-primary-custom mt-3" OnClick="btnSignup_Click" />
                     </div>
                 </div>
             </div>
@@ -323,6 +375,9 @@
             }
 
             text.innerHTML = tips;
+
+            // Enable/disable signup button based on password strength
+            validateSignupForm();
         }
 
         // Mobile number validation for OTP
@@ -333,7 +388,7 @@
 
             if (mobileRegex.test(mobile)) {
                 btnSendOTP.disabled = false;
-                btnSendOTP.className = "btn btn-warning";
+                btnSendOTP.className = "btn btn-warning-custom";
             } else {
                 btnSendOTP.disabled = true;
                 btnSendOTP.className = "btn btn-secondary";
@@ -359,6 +414,25 @@
             }, 1000);
         }
 
+        // Show password section after OTP verification
+        function showPasswordSection() {
+            document.getElementById('passwordSection').style.display = 'block';
+            document.getElementById('verificationSuccess').style.display = 'block';
+        }
+
+        // Form validation
+        function validateSignupForm() {
+            var btnSignup = document.getElementById('<%= btnSignup.ClientID %>');
+            var password = document.getElementById('<%= txtPassword.ClientID %>').value;
+            var confirmPassword = document.getElementById('<%= txtConfirmPassword.ClientID %>').value;
+
+
+        }
+
+        // Attach event listeners
+        document.getElementById('<%= txtPassword.ClientID %>').addEventListener('input', validateSignupForm);
+        document.getElementById('<%= txtConfirmPassword.ClientID %>').addEventListener('input', validateSignupForm);
+
         // Start timer when OTP panel becomes visible
         var observer = new MutationObserver(function (mutations) {
             mutations.forEach(function (mutation) {
@@ -377,25 +451,13 @@
             observer.observe(otpPanel, { attributes: true });
         }
 
-        // Form validation
-        function validateSignupForm() {
-            var btnSignup = document.getElementById('<%= btnSignup.ClientID %>');
-            var password = document.getElementById('<%= txtPassword.ClientID %>').value;
-            var confirmPassword = document.getElementById('<%= txtConfirmPassword.ClientID %>').value;
-            var otpVerified = '<%= Session["OTPVerified"] != null ? "true" : "false" %>';
-
-            if (termsChecked && password === confirmPassword && password.length >= 6 && otpVerified === 'true') {
-                btnSignup.disabled = false;
-                btnSignup.className = "btn btn-primary-custom";
-            } else {
-                btnSignup.disabled = true;
-                btnSignup.className = "btn btn-secondary";
+        // Check if OTP is already verified (for page refresh scenarios)
+        window.onload = function () {
+            // If OTP is verified, show password section
+            if (<%= Session["OTPVerified"] != null ? "true" : "false" %>) {
+                showPasswordSection();
             }
-        }
-
-        // Attach event listeners
-        document.getElementById('<%= txtPassword.ClientID %>').addEventListener('input', validateSignupForm);
-        document.getElementById('<%= txtConfirmPassword.ClientID %>').addEventListener('input', validateSignupForm);
+        };
     </script>
 </body>
 </html>

@@ -208,12 +208,12 @@ namespace HigherEducation.PublicLibrary
             using (var cmd = new MySqlCommand(@"SELECT COUNT(*) FROM usersubscriptions 
                 WHERE UserId = @p_UserId 
                 AND ITIId = @p_ITIId 
-                AND SubscriptionType = @p_SubscriptionType 
+               
                 AND StartDate >= DATE_SUB(@p_subStart, INTERVAL 30 DAY)", conn))
             {
                 cmd.Parameters.AddWithValue("@p_UserId", userId);
                 cmd.Parameters.AddWithValue("@p_ITIId", ddlITI.SelectedItem.Value);
-                cmd.Parameters.AddWithValue("@p_SubscriptionType", subscriptionType);
+                //cmd.Parameters.AddWithValue("@p_SubscriptionType", subscriptionType);
                 cmd.Parameters.AddWithValue("@p_subStart", startDate.ToString("yyyy-MM-dd"));
 
                 conn.Open();
