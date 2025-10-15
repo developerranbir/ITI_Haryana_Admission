@@ -190,11 +190,11 @@
         <div class="auth-container">
             <div class="auth-card">
                 <div class="auth-header">
-                    <h1><i class="fas fa-book-reader me-2"></i>ITI Library</h1>
+                    <h1><i class="fas fa-book-reader me-2"></i>ITI Library/WorkShop</h1>
                     <div class="subtitle">Create Account to Continue</div>
                 </div>
                 
-                <div class="auth-body">
+                <div class="auth-body">     
                     <!-- Alert Messages -->
                     <asp:Panel runat="server" ID="pnlAlert" CssClass="alert alert-custom" Visible="false">
                         <asp:Label runat="server" ID="lblAlertMessage" />

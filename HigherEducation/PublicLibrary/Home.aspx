@@ -1,13 +1,6 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Home.aspx.cs" Inherits="HigherEducation.PublicLibrary.Home" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Home.aspx.cs" Inherits="HigherEducation.PublicLibrary.Home" MasterPageFile="~/PublicLibrary/LibraryMaster.Master" %>
 
-<!DOCTYPE html>
-<html>
-<head runat="server">
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITI Library and WorkShop Booking for Public</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -17,162 +10,89 @@
             --dark-color: #34495e;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-        }
-
-        .main-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .library-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            overflow: hidden;
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        .library-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+        .hero-section {
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.9), rgba(52, 73, 94, 0.9)), url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
             color: white;
-            padding: 30px;
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+             color: white;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 40px;
             text-align: center;
             position: relative;
+            padding-bottom: 15px;
         }
 
-            .library-header h1 {
-                margin: 0;
-                font-size: 2.5rem;
-                font-weight: 700;
-            }
-
-            .library-header .subtitle {
-                font-size: 1.2rem;
-                opacity: 0.9;
-                margin-top: 10px;
-            }
-
-        .library-body {
-            padding: 40px;
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--secondary-color);
+            border-radius: 2px;
         }
-
-        .nav-tabs-custom {
-            border-bottom: 3px solid var(--light-color);
-            margin-bottom: 30px;
-        }
-
-            .nav-tabs-custom .nav-link {
-                border: none;
-                color: var(--dark-color);
-                font-weight: 600;
-                padding: 15px 30px;
-                border-radius: 10px 10px 0 0;
-                margin-right: 5px;
-            }
-
-                .nav-tabs-custom .nav-link.active {
-                    background: var(--secondary-color);
-                    color: white;
-                    border: none;
-                }
-
-        .form-section {
-            background: var(--light-color);
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            border-left: 5px solid var(--secondary-color);
-        }
-
-        .form-control {
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            padding: 12px 15px;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-            .form-control:focus {
-                border-color: var(--secondary-color);
-                box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
-            }
-
-        .btn-primary-custom {
-            background: linear-gradient(135deg, var(--secondary-color), #2980b9);
-            border: none;
-            border-radius: 10px;
-            padding: 12px 30px;
-            font-weight: 600;
-            color: white;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-
-            .btn-primary-custom:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
-            }
 
         .plan-card {
             background: white;
             border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
             border: 2px solid transparent;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
-            .plan-card:hover {
-                transform: translateY(-5px);
-                border-color: var(--secondary-color);
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            }
-
-            .plan-card.featured {
-                border-color: var(--accent-color);
-                position: relative;
-                overflow: hidden;
-            }
-
-                .plan-card.featured::before {
-                    content: 'POPULAR';
-                    position: absolute;
-                    top: 20px;
-                    right: -30px;
-                    background: var(--accent-color);
-                    color: white;
-                    padding: 5px 40px;
-                    transform: rotate(45deg);
-                    font-size: 0.8rem;
-                    font-weight: 600;
-                }
+        .plan-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--secondary-color);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
 
         .plan-header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            flex-shrink: 0;
         }
 
         .plan-icon {
-            font-size: 2.5rem;
+            font-size: 3.5rem;
             color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .plan-card h4 {
+            color: var(--primary-color);
+            font-weight: 700;
             margin-bottom: 15px;
         }
 
         .plan-price {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             color: var(--primary-color);
             margin: 10px 0;
@@ -180,204 +100,293 @@
 
         .plan-period {
             color: #7f8c8d;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            margin-bottom: 10px;
         }
 
         .plan-features {
             list-style: none;
             padding: 0;
             margin: 20px 0;
+            flex-grow: 1;
         }
 
-            .plan-features li {
-                padding: 8px 0;
-                border-bottom: 1px solid #ecf0f1;
-                color: #2c3e50;
-            }
-
-                .plan-features li:last-child {
-                    border-bottom: none;
-                }
-
-                .plan-features li i {
-                    color: #27ae60;
-                    margin-right: 10px;
-                }
-
-        .section-title {
-            color: var(--primary-color);
-            font-weight: 700;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid var(--secondary-color);
-            display: inline-block;
+        .plan-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid #ecf0f1;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
         }
 
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .plan-features li i {
+            color: #27ae60;
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--secondary-color), #2980b9);
+            border: none;
+            border-radius: 10px;
+            padding: 14px 30px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1.1rem;
+            margin-top: auto;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .features-section {
+            padding: 60px 0;
+            background: rgba(255, 255, 255, 0.7);
+            margin-top: 50px;
         }
 
         .feature-item {
             text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px 20px;
+            transition: all 0.3s ease;
         }
 
-            .feature-item i {
-                font-size: 2rem;
-                color: var(--secondary-color);
-                margin-bottom: 15px;
-            }
-
-        .alert-info-custom {
-            background: linear-gradient(135deg, #d6eaf8, #ebf5fb);
-            border: none;
-            border-radius: 10px;
-            border-left: 5px solid var(--secondary-color);
-            padding: 20px;
-            margin-bottom: 30px;
+        .feature-item:hover {
+            transform: translateY(-5px);
         }
 
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .feature-item h5 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .feature-item p {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Mobile Responsiveness */
         @media (max-width: 768px) {
-            .library-body {
-                padding: 20px;
+            .hero-title {
+                font-size: 2.2rem;
             }
 
-            .library-header h1 {
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .plan-card {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .plan-icon {
+                font-size: 2.5rem;
+            }
+
+            .plan-price {
                 font-size: 2rem;
             }
 
-            .nav-tabs-custom .nav-link {
-                padding: 10px 15px;
-                font-size: 0.9rem;
+            .features-section, .stats-section {
+                padding: 40px 0;
+            }
+
+            .feature-icon {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-section {
+                padding: 60px 0;
+            }
+
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .plan-card {
+                padding: 15px;
             }
         }
     </style>
-</head>
-<body>
-    <form id="form1" runat="server">
-        <div class="main-container">
-            <div class="library-card">
-                <div class="library-header">
-                    <h1><i class="fas fa-book-reader me-3"></i>ITI Library and WorkShop Booking for Public</h1>
-                    <%--<div class="subtitle">Access Knowledge Across Multiple ITI Libraries</div>--%>
-                </div>
+</asp:Content>
 
-
-
-
-
-                <!-- Subscription Plans -->
-                <div class="row mt-5">
-                    <%--<div class="col-12 text-center">
-                        <h2 class="section-title ">Library Subscription Plans</h2>
-                    </div>--%>
-
-                    <!-- Reading Plans -->
-                    <div class="col-md-6">
-                        <div class="plan-card">
-                            <div class="plan-header">
-                                <div class="plan-icon">
-                                    <i class="fas fa-book-open"></i>
-                                </div>
-                                <h4>Reading / Book Issue</h4>
-                                <div class="plan-price">100₹/500₹</div>
-                                <div class="plan-period">per month</div>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+ 
+    <!-- Subscription Plans -->
+    <section class="plans-section">
+        <div class="container">
+              
+            <div class="row justify-content-center">
+                <h2 class="section-title"><p class="hero-subtitle">Access a vast collection of resources and book workshop sessions for your educational needs</p></h2>
+            
+                <!-- Reading Plans -->
+                <div class="col-lg-5 col-md-6 mb-4">
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <div class="plan-icon">
+                                <i class="fas fa-book-open"></i>
                             </div>
-                            <ul class="plan-features">
-                                <li><i class="fas fa-check"></i>Unlimited Reading Access</li>
-                                <li><i class="fas fa-check"></i>Book Issuing Facility</li>
-                                <li><i class="fas fa-check"></i>Access to All Sections</li>
-                                <li><i class="fas fa-check"></i>Digital Resources</li>
-                                <li><i class="fas fa-check"></i>Priority Support</li>
-                            </ul>
+                            <h4>Reading / Book Issue</h4>
+                            <div class="plan-price">100₹/500₹</div>
+                            <div class="plan-period">per month</div>
+                        </div>
+                        <ul class="plan-features">
+                            <li><i class="fas fa-check"></i>Unlimited Reading Access</li>
+                            <li><i class="fas fa-check"></i>Book Issuing Facility</li>
+                            <li><i class="fas fa-check"></i>Access to All Sections</li>
+                            <li><i class="fas fa-check"></i>Digital Resources</li>
+                            <li><i class="fas fa-check"></i>Priority Support</li>
+                        </ul>
 
-                            <asp:Button runat="server" Text="View" CssClass="btn btn-primary-custom" PostBackUrl="Subscription.aspx" />
-                        </div>
-                    </div>
-                    <!-- Workshop Section -->
-                    <div class="col-md-6">
-                        <div class="plan-card">
-                            <div class="plan-header">
-                                <div class="plan-icon">
-                                    <i class="fas fa-chair"></i>
-                                </div>
-                                <h4>Workshop Access</h4>
-                                <div class="plan-price">₹300</div>
-                                <div class="plan-period">per hour</div>
-                            </div>
-                            <ul class="plan-features">
-                                <li><i class="fas fa-check"></i>Access to Workshop Tools</li>
-                                <li><i class="fas fa-check"></i>Professional Equipment</li>
-                                <li><i class="fas fa-check"></i>Expert Guidance</li>
-                                <li><i class="fas fa-check"></i>Safety Equipment</li>
-                                <li><i class="fas fa-check"></i>Flexible Timing</li>
-                            </ul>
-                            <asp:Button runat="server" Text="View" CssClass="btn btn-primary-custom" PostBackUrl="~/PublicLibrary/WorkshopSlotBooking.aspx" />
-                        </div>
+                         <a href="Subscription.aspx" class="btn btn-primary-custom">
+     <i class="fas fa-book me-2"></i>Browse Library
+ </a>
+                        <%--<asp:Button runat="server" Text="View Details" CssClass="btn btn-primary-custom" PostBackUrl="Subscription.aspx" />--%>
                     </div>
                 </div>
-
-
-
-
-                <!-- Features Grid -->
-                <div class="row mt-5">
-                    <div class="col-12 text-center">
-                        <h2 class="section-title">Why Choose Our Library?</h2>
-                    </div>
-                    <div class="feature-grid">
-                        <div class="feature-item">
-                            <i class="fas fa-university"></i>
-                            <h5>Multiple ITI Libraries</h5>
-                            <p>Access books from various ITI libraries across the region</p>
+                
+                <!-- Workshop Section -->
+                <div class="col-lg-5 col-md-6 mb-4">
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <div class="plan-icon">
+                                <i class="fas fa-chair"></i>
+                            </div>
+                            <h4>Workshop Access</h4>
+                            <div class="plan-price">₹300</div>
+                            <div class="plan-period">per hour</div>
                         </div>
-                        <div class="feature-item">
-                            <i class="fas fa-books"></i>
-                            <h5>Vast Collection</h5>
-                            <p>Thousands of books covering all ITI's subjects</p>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-clock"></i>
-                            <h5>Flexible Timing</h5>
-                            <p>Open all weekdays</p>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-user-graduate"></i>
-                            <h5>Student Focused</h5>
-                            <p>Designed specifically for students</p>
-                        </div>
+                        <ul class="plan-features">
+                            <li><i class="fas fa-check"></i>Access to Workshop Tools</li>
+                            <li><i class="fas fa-check"></i>Professional Equipment</li>
+                            <li><i class="fas fa-check"></i>Expert Guidance</li>
+                            <li><i class="fas fa-check"></i>Safety Equipment</li>
+                            <li><i class="fas fa-check"></i>Flexible Timing</li>
+                        </ul>
+                          <a href="WorkshopSlotBooking.aspx" class="btn btn-primary-custom" style="background: linear-gradient(135deg, var(--accent-color), #c0392b);">
+      <i class="fas fa-tools me-2"></i>Book Workshop
+  </a>
+                        <%--<asp:Button runat="server" Text="Book Now" CssClass="btn btn-primary-custom" PostBackUrl="~/PublicLibrary/WorkshopSlotBooking.aspx" />--%>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 
-    </form>
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Why Choose Us?</h2>
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <h5>Multiple ITI Libraries</h5>
+                        <p>Access books from various ITI libraries across the region with a single subscription</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-books"></i>
+                        </div>
+                        <h5>Vast Collection</h5>
+                        <p>Thousands of books covering all ITI subjects and specializations</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h5>Flexible Timing</h5>
+                        <p>Open all weekdays with extended hours to accommodate your schedule</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h5>Student Focused</h5>
+                        <p>Resources and facilities designed specifically for ITI students</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Initialize tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        });
-
-        // Auto-switch to signup if coming from specific referral
-        function showSignup() {
-            var signupTab = new bootstrap.Tab(document.getElementById('signup-tab'));
-            signupTab.show();
-        }
-
-        // Show login tab
-        function showLogin() {
-            var loginTab = new bootstrap.Tab(document.getElementById('login-tab'));
-            loginTab.show();
-        }
-    </script>
-</body>
-</html>
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">10,000+</div>
+                        <div class="stat-label">Books Available</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">190+</div>
+                        <div class="stat-label">ITI Libraries</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">50,000+</div>
+                        <div class="stat-label">Happy Students</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Workshop Tools</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</asp:Content>

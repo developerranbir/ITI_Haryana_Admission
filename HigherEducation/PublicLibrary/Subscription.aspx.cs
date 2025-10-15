@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using HigherEducation.DataAccess;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -46,28 +47,25 @@ namespace HigherEducation.PublicLibrary
                             reader["text"].ToString()
                         ));
                     }
-
-                    ddlDistrict.DataSource = districts;
-                    ddlDistrict.DataTextField = "Value";
-                    ddlDistrict.DataValueField = "Key";
-                    ddlDistrict.DataBind();
+                    
+                    ddldistrict.DataSource = districts;
+                    ddldistrict.DataTextField = "Value";
+                    ddldistrict.DataValueField = "Key";
+                    ddldistrict.DataBind();
                 }
             }
         }
 
-        protected DropDownList ddlDistrict
-        {
-            get { return (DropDownList)FindControl("ddlDistrict"); }
-        }
+      
 
         protected void ddldistrict_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int selectedDistrictCode = Convert.ToInt32(ddlDistrict.SelectedValue);
+            int selectedDistrictCode = Convert.ToInt32(ddldistrict.SelectedValue);
 
             string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString;
 
             using (var conn = new MySqlConnection(connectionString))
-            using (var cmd = new MySqlCommand("CALL BindITIs(@p_districtcode);", conn))
+            using (var cmd = new MySqlCommand("CALL BindGovtITIs (@p_districtcode);", conn))
             {
                 cmd.Parameters.AddWithValue("@p_districtcode", selectedDistrictCode);
 
@@ -83,14 +81,12 @@ namespace HigherEducation.PublicLibrary
                         ));
                     }
 
-                    DropDownList ddlITI = (DropDownList)FindControl("ddlITI");
-                    if (ddlITI != null)
-                    {
+                   
                         ddlITI.DataSource = itis;
                         ddlITI.DataTextField = "Value";
                         ddlITI.DataValueField = "Key";
                         ddlITI.DataBind();
-                    }
+                    
                 }
             }
         }
@@ -99,12 +95,9 @@ namespace HigherEducation.PublicLibrary
         {
             // Validate mandatory parameters
             if (Session["UserId"] == null ||
-                string.IsNullOrWhiteSpace(Session["Email"]?.ToString()) ||
-                string.IsNullOrWhiteSpace(Session["Mobile"]?.ToString()) ||
-                FindControl("ddlITI") == null ||
-                string.IsNullOrWhiteSpace(((DropDownList)FindControl("ddlITI")).SelectedValue) ||
-                ((DropDownList)FindControl("ddlITI")).SelectedValue == "0" ||
+                ddlITI.SelectedValue == "0" ||
                 string.IsNullOrWhiteSpace(txtStartDate.Text))
+
             {
                 lblMessage.Text = "All fields are mandatory. Please fill in all required information.";
                 return;
@@ -114,8 +107,7 @@ namespace HigherEducation.PublicLibrary
             string email = Session["Email"].ToString();
             string mobile = Session["Mobile"].ToString();
 
-            DropDownList ddlITI = (DropDownList)FindControl("ddlITI");
-            int itiId = Convert.ToInt32(ddlITI.SelectedValue);
+            
 
             string subscriptionType = "ReadingWithIssue"; // Premium plan type
             decimal amount = 500; // Example premium plan amount
@@ -132,7 +124,7 @@ namespace HigherEducation.PublicLibrary
                 AND StartDate >= DATE_SUB(@p_subStart, INTERVAL 30 DAY)", conn))
             {
                 cmd.Parameters.AddWithValue("@p_UserId", userId);
-                cmd.Parameters.AddWithValue("@p_ITIId", itiId);
+                cmd.Parameters.AddWithValue("@p_ITIId", ddlITI.SelectedItem.Value);
                 cmd.Parameters.AddWithValue("@p_SubscriptionType", subscriptionType);
                 cmd.Parameters.AddWithValue("@p_subStart", startDate.ToString("yyyy-MM-dd"));
 
@@ -152,7 +144,7 @@ namespace HigherEducation.PublicLibrary
                 AND SubscriptionType = @p_SubscriptionType 
                 AND StartDate >= DATE_SUB(@p_subStart, INTERVAL 30 DAY)", conn))
             {
-                cmd.Parameters.AddWithValue("@p_ITIId", itiId);
+                cmd.Parameters.AddWithValue("@p_ITIId", ddlITI.SelectedItem.Value);
                 cmd.Parameters.AddWithValue("@p_SubscriptionType", subscriptionType);
                 cmd.Parameters.AddWithValue("@p_subStart", startDate.ToString("yyyy-MM-dd"));
 
@@ -172,7 +164,7 @@ namespace HigherEducation.PublicLibrary
                 using (var cmd = new MySqlCommand("CALL sp_SubscribeUser(@p_UserId, @p_ITIId, @p_SubscriptionType, @p_Amount,@p_subStart); SELECT LAST_INSERT_ID() AS SubscriptionId;", conn))
                 {
                     cmd.Parameters.AddWithValue("@p_UserId", userId);
-                    cmd.Parameters.AddWithValue("@p_ITIId", itiId);
+                    cmd.Parameters.AddWithValue("@p_ITIId", ddlITI.SelectedItem.Value);
                     cmd.Parameters.AddWithValue("@p_SubscriptionType", subscriptionType);
                     cmd.Parameters.AddWithValue("@p_Amount", amount);
                     cmd.Parameters.AddWithValue("@p_subStart", DateTime.Parse(txtStartDate.Text).ToString("yyyy-MM-dd"));
@@ -193,9 +185,7 @@ namespace HigherEducation.PublicLibrary
             if (Session["UserId"] == null ||
                 string.IsNullOrWhiteSpace(Session["Email"]?.ToString()) ||
                 string.IsNullOrWhiteSpace(Session["Mobile"]?.ToString()) ||
-                FindControl("ddlITI") == null ||
-                string.IsNullOrWhiteSpace(((DropDownList)FindControl("ddlITI")).SelectedValue) ||
-                ((DropDownList)FindControl("ddlITI")).SelectedValue == "0" ||
+                ddlITI.SelectedValue == "0" ||
                 string.IsNullOrWhiteSpace(txtStartDate.Text))
             {
                 lblMessage.Text = "All fields are mandatory. Please fill in all required information.";
@@ -206,8 +196,6 @@ namespace HigherEducation.PublicLibrary
             string email = Session["Email"]?.ToString() ?? string.Empty;
             string mobile = Session["Mobile"]?.ToString() ?? string.Empty;
 
-            DropDownList ddlITI = (DropDownList)FindControl("ddlITI");
-            int itiId = ddlITI != null ? Convert.ToInt32(ddlITI.SelectedValue) : 0;
 
             string subscriptionType = "ReadingOnly";
             decimal amount = 100;
@@ -224,7 +212,7 @@ namespace HigherEducation.PublicLibrary
                 AND StartDate >= DATE_SUB(@p_subStart, INTERVAL 30 DAY)", conn))
             {
                 cmd.Parameters.AddWithValue("@p_UserId", userId);
-                cmd.Parameters.AddWithValue("@p_ITIId", itiId);
+                cmd.Parameters.AddWithValue("@p_ITIId", ddlITI.SelectedItem.Value);
                 cmd.Parameters.AddWithValue("@p_SubscriptionType", subscriptionType);
                 cmd.Parameters.AddWithValue("@p_subStart", startDate.ToString("yyyy-MM-dd"));
 
@@ -244,7 +232,7 @@ namespace HigherEducation.PublicLibrary
                 AND SubscriptionType = @p_SubscriptionType 
                 AND StartDate >= DATE_SUB(@p_subStart, INTERVAL 30 DAY)", conn))
             {
-                cmd.Parameters.AddWithValue("@p_ITIId", itiId);
+                cmd.Parameters.AddWithValue("@p_ITIId", ddlITI.SelectedItem.Value);
                 cmd.Parameters.AddWithValue("@p_SubscriptionType", subscriptionType);
                 cmd.Parameters.AddWithValue("@p_subStart", startDate.ToString("yyyy-MM-dd"));
 
@@ -265,7 +253,7 @@ namespace HigherEducation.PublicLibrary
                 using (var cmd = new MySqlCommand("CALL sp_SubscribeUser(@p_UserId, @p_ITIId, @p_SubscriptionType, @p_Amount,@p_subStart); SELECT LAST_INSERT_ID() AS SubscriptionId;", conn))
                 {
                     cmd.Parameters.AddWithValue("@p_UserId", userId);
-                    cmd.Parameters.AddWithValue("@p_ITIId", itiId);
+                    cmd.Parameters.AddWithValue("@p_ITIId", ddlITI.SelectedItem.Value);
                     cmd.Parameters.AddWithValue("@p_SubscriptionType", subscriptionType);
                     cmd.Parameters.AddWithValue("@p_Amount", amount);
                     cmd.Parameters.AddWithValue("@p_subStart", startDate.ToString("yyyy-MM-dd"));
@@ -301,12 +289,12 @@ namespace HigherEducation.PublicLibrary
                     var dt = new System.Data.DataTable();
                     dt.Load(reader);
 
-                    GridView gvSubscriptions = (GridView)FindControl("gvSubscriptions");
-                    if (gvSubscriptions != null)
-                    {
-                        gvSubscriptions.DataSource = dt;
-                        gvSubscriptions.DataBind();
-                    }
+
+
+                    gvSubscriptions.DataSource = dt;
+                    gvSubscriptions.DataBind();
+
+
                 }
             }
         }

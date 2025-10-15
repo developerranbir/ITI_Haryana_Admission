@@ -88,6 +88,7 @@ namespace HigherEducation.PublicLibrary
         {
             try
             {
+               
                 string storedOTP = Session["OTP"] as string;
                 DateTime otpCreatedTime = Session["OTPCreatedTime"] != null ? (DateTime)Session["OTPCreatedTime"] : DateTime.MinValue;
 
@@ -104,17 +105,21 @@ namespace HigherEducation.PublicLibrary
                     Session.Remove("OTP");
                     Session.Remove("OTPCreatedTime");
                     return true;
+
+                  
                 }
                 else
                 {
                     ShowAlert("Invalid OTP. Please try again.", "danger");
                     return false;
+                   
                 }
             }
             catch (Exception ex)
             {
                 ShowAlert($"OTP verification failed: {ex.Message}", "danger");
                 return false;
+             
             }
         }
 
