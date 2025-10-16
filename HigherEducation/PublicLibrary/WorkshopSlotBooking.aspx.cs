@@ -678,7 +678,7 @@ namespace HigherEducation.PublicLibrary
                 cmd.Parameters.AddWithValue("p_Mobile", Session["Mobile"]?.ToString() ?? "");
                 cmd.Parameters.AddWithValue("p_Email", Session["Email"]?.ToString() ?? "");
                 cmd.Parameters.AddWithValue("p_TotalAmount", bookingAmount);
-                cmd.Parameters.AddWithValue("p_Payment_gateway", "YourPaymentGateway"); // Replace with actual gateway name
+                cmd.Parameters.AddWithValue("p_Payment_gateway", "CCAvenue"); // Replace with actual gateway name
                 cmd.Parameters.AddWithValue("p_CreateUser", Session["UserId"].ToString());
                 cmd.Parameters.AddWithValue("p_IPAddress", GetClientIPAddress());
                 cmd.Parameters.AddWithValue("p_Remarks", "Workshop slot booking payment");
@@ -701,9 +701,7 @@ namespace HigherEducation.PublicLibrary
                 // Set payment parameters
                 objFeeModule.RegistrationId = Session["UserId"]?.ToString() ?? "";
                 objFeeModule.TotalFee = (int)amount;
-                objFeeModule.TotalFee = 1;
                 objFeeModule.amount = (int)amount;
-                objFeeModule.amount = 1;
                 objFeeModule.PaymentTransactionId = paymentReferenceId;
 
                 // Merchant configuration from Web.config

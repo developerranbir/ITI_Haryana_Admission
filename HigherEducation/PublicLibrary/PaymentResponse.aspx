@@ -41,7 +41,7 @@
                     </div>
                     
                     <div class="mt-4">
-                        <asp:Button ID="btnViewBooking" runat="server" Text="View My Booking" 
+                        <asp:Button ID="btnViewBooking" runat="server" Text="Print Card" 
                             CssClass="btn btn-success me-2" OnClick="btnViewBooking_Click" />
                         <asp:Button ID="btnPrintReceipt" runat="server" Text="Print Receipt" 
                             CssClass="btn btn-outline-primary me-2" OnClientClick="window.print();return false;" />

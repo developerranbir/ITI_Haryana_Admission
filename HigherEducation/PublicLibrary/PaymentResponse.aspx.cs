@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Transactions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -75,12 +76,20 @@ namespace HigherEducation.PublicLibrary
                     // Update workshop booking status based on payment result
                     if (orderStatus == "Success")
                     {
-                        UpdateBookingStatus(orderId, "Confirmed");
+
+                        MySqlConnection conn = new MySqlConnection(connectionString);
+
+                        conn.Open();
+
+                        // Start transaction
+                        MySqlTransaction transaction = conn.BeginTransaction();
+                        // Step 1: Get the booking ID associated with this payment
+                        int bookingId = GetBookingIdByPaymentReference(orderId, conn, transaction);
+                        Session["LastBookingID"] = bookingId;
                         ShowSuccessPage(orderId, trackingId, amount, paymentMode, transDate);
                     }
                     else if (orderStatus == "Failure")
                     {
-                        UpdateBookingStatus(orderId, "Failed");
                         ShowFailurePage(orderId, statusMessage);
                     }
                     else if (orderStatus == "Pending" || orderStatus == "Initiated")
@@ -105,7 +114,7 @@ namespace HigherEducation.PublicLibrary
         }
 
         private bool UpdatePaymentResponse(string orderId, string trackingId, string bankRefNo, string amount,
-            string orderStatus, string paymentMode, string cardName, string statusCode, string statusMessage, string transDate)
+     string orderStatus, string paymentMode, string cardName, string statusCode, string statusMessage, string transDate)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -117,6 +126,7 @@ namespace HigherEducation.PublicLibrary
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
+                        // Input parameters
                         cmd.Parameters.AddWithValue("p_PaymentReferenceID", orderId);
                         cmd.Parameters.AddWithValue("p_tracking_id", trackingId);
                         cmd.Parameters.AddWithValue("p_bank_ref_no", bankRefNo);
@@ -126,10 +136,17 @@ namespace HigherEducation.PublicLibrary
                         cmd.Parameters.AddWithValue("p_card_name", cardName);
                         cmd.Parameters.AddWithValue("p_status_code", statusCode);
                         cmd.Parameters.AddWithValue("p_status_messsage", statusMessage);
-                        cmd.Parameters.AddWithValue("p_trans_date", DateTime.TryParse(transDate, out DateTime transDt) ? transDt : DateTime.Now);
+                        cmd.Parameters.AddWithValue("p_trans_date", transDate);
 
-                        int rowsAffected = cmd.ExecuteNonQuery();
-                        return rowsAffected > 0;
+                        // Output parameter - match the stored procedure parameter name
+                        MySqlParameter rowsUpdatedParam = new MySqlParameter("@p_RowsUpdated", MySqlDbType.Int32);
+                        rowsUpdatedParam.Direction = ParameterDirection.Output;
+                        cmd.Parameters.Add(rowsUpdatedParam);
+
+                        cmd.ExecuteNonQuery();
+
+                        int rowsUpdated = Convert.ToInt32(rowsUpdatedParam.Value);
+                        return rowsUpdated == 1;
                     }
                 }
                 catch (Exception ex)
@@ -140,59 +157,16 @@ namespace HigherEducation.PublicLibrary
             }
         }
 
-        private void UpdateBookingStatus(string paymentReferenceId, string status)
-        {
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    conn.Open();
-
-                    using (MySqlTransaction transaction = conn.BeginTransaction())
-                    {
-                        try
-                        {
-                            // Get booking ID from payment reference
-                            int bookingId = GetBookingIdByPaymentReference(paymentReferenceId, conn, transaction);
-
-                            if (bookingId > 0)
-                            {
-                                // Update workshop booking status
-                                UpdateWorkshopBookingStatus(bookingId, status, conn, transaction);
-
-                                // If payment successful, also update payment status
-                                if (status == "Confirmed")
-                                {
-                                    UpdatePaymentStatus(paymentReferenceId, "Completed", conn, transaction);
-                                }
-
-                                transaction.Commit();
-                                Session["LastBookingID"] = bookingId;
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            transaction.Rollback();
-                            LogError("UpdateBookingStatus", ex);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogError("UpdateBookingStatus", ex);
-                }
-            }
-        }
 
         private int GetBookingIdByPaymentReference(string paymentReferenceId, MySqlConnection conn, MySqlTransaction transaction)
         {
             string query = @"
                 SELECT wb.BookingID 
                 FROM WorkshopBookings wb
-                INNER JOIN tblworkshoplibraryfee_clone pay ON wb.ITI_Id = pay.College_id 
+                INNER JOIN tblworkshoplibraryfee pay ON wb.ITI_Id = pay.College_id 
                     AND wb.SlotID = CAST(pay.SubscriptionId_SlotId AS UNSIGNED)
                     AND wb.UserId = pay.UserId
-                WHERE pay.PaymentReferenceID = @PaymentReferenceID
+                WHERE pay.PaymentReferenceID = @PaymentReferenceID and wb.BookingStatus='Confirmed'
                 LIMIT 1";
 
             using (MySqlCommand cmd = new MySqlCommand(query, conn, transaction))
@@ -200,30 +174,6 @@ namespace HigherEducation.PublicLibrary
                 cmd.Parameters.AddWithValue("@PaymentReferenceID", paymentReferenceId);
                 object result = cmd.ExecuteScalar();
                 return result != null ? Convert.ToInt32(result) : 0;
-            }
-        }
-
-        private void UpdateWorkshopBookingStatus(int bookingId, string status, MySqlConnection conn, MySqlTransaction transaction)
-        {
-            string query = "UPDATE WorkshopBookings SET BookingStatus = @Status WHERE BookingID = @BookingID";
-
-            using (MySqlCommand cmd = new MySqlCommand(query, conn, transaction))
-            {
-                cmd.Parameters.AddWithValue("@Status", status);
-                cmd.Parameters.AddWithValue("@BookingID", bookingId);
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        private void UpdatePaymentStatus(string paymentReferenceId, string status, MySqlConnection conn, MySqlTransaction transaction)
-        {
-            string query = "UPDATE tblworkshoplibraryfee_clone SET order_status = @Status WHERE PaymentReferenceID = @PaymentReferenceID";
-
-            using (MySqlCommand cmd = new MySqlCommand(query, conn, transaction))
-            {
-                cmd.Parameters.AddWithValue("@Status", status);
-                cmd.Parameters.AddWithValue("@PaymentReferenceID", paymentReferenceId);
-                cmd.ExecuteNonQuery();
             }
         }
 
