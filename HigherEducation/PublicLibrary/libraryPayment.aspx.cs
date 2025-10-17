@@ -1,4 +1,5 @@
 ﻿using CCA.Util;
+using HigherEducation.BusinessLayer;
 using HigherEducation.Models;
 using MySql.Data.MySqlClient;
 using System;
@@ -32,7 +33,7 @@ namespace HigherEducation.PublicLibrary
                 }
                 else
                 {
-                   
+
                 }
             }
 
@@ -41,27 +42,38 @@ namespace HigherEducation.PublicLibrary
 
         private int SavePaymentRecord(MySqlConnection conn, MySqlTransaction transaction, int bookingId, int slotId, string paymentReferenceId, decimal bookingAmount)
         {
-            using (MySqlCommand cmd = new MySqlCommand("sp_SavePaymentRecord", conn, transaction))
+            try
             {
-                cmd.CommandType = CommandType.StoredProcedure;
+                using (MySqlCommand cmd = new MySqlCommand("sp_SavePaymentRecord", conn, transaction))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("p_FullName", Session["FullName"].ToString());
-                cmd.Parameters.AddWithValue("p_UserId", Session["UserId"].ToString());
-                cmd.Parameters.AddWithValue("p_PaymentReferenceID", paymentReferenceId);
-                cmd.Parameters.AddWithValue("p_College_id", Session["College_id"].ToString());
-                cmd.Parameters.AddWithValue("p_SubscriptionId_SlotId", slotId.ToString());
-                cmd.Parameters.AddWithValue("p_PaymentType", "Library");
-                cmd.Parameters.AddWithValue("p_Mobile", Session["Mobile"]?.ToString() ?? "");
-                cmd.Parameters.AddWithValue("p_Email", Session["Email"]?.ToString() ?? "");
-                cmd.Parameters.AddWithValue("p_TotalAmount", bookingAmount);
-                cmd.Parameters.AddWithValue("p_Payment_gateway", "CCAvenue"); // Replace with actual gateway name
-                cmd.Parameters.AddWithValue("p_CreateUser", Session["UserId"].ToString());
-                cmd.Parameters.AddWithValue("p_IPAddress", GetClientIPAddress());
-                cmd.Parameters.AddWithValue("p_Remarks", "Library slot booking payment");
+                    cmd.Parameters.AddWithValue("p_FullName", Session["FullName"].ToString());
+                    cmd.Parameters.AddWithValue("p_UserId", Session["UserId"].ToString());
+                    cmd.Parameters.AddWithValue("p_PaymentReferenceID", paymentReferenceId);
+                    cmd.Parameters.AddWithValue("p_College_id", Session["College_id"].ToString());
+                    cmd.Parameters.AddWithValue("p_SubscriptionId_SlotId", slotId.ToString());
+                    cmd.Parameters.AddWithValue("p_PaymentType", "Library");
+                    cmd.Parameters.AddWithValue("p_Mobile", Session["Mobile"]?.ToString() ?? "");
+                    cmd.Parameters.AddWithValue("p_Email", Session["Email"]?.ToString() ?? "");
+                    cmd.Parameters.AddWithValue("p_TotalAmount", bookingAmount);
+                    cmd.Parameters.AddWithValue("p_Payment_gateway", "CCAvenue"); // Replace with actual gateway name
+                    cmd.Parameters.AddWithValue("p_CreateUser", Session["UserId"].ToString());
+                    cmd.Parameters.AddWithValue("p_IPAddress", GetClientIPAddress());
+                    cmd.Parameters.AddWithValue("p_Remarks", "Library slot booking payment");
 
-                // Execute and get the payment ID
-                object result = cmd.ExecuteScalar();
-                return result != null ? Convert.ToInt32(result) : 0;
+                    // Execute and get the payment ID
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/libraryPayment";
+                clsLogger.ExceptionMsg = "SavePaymentRecord";
+                clsLogger.SaveException();
+                return 0;
             }
         }
 
@@ -219,47 +231,53 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                //LogError("RedirectToPaymentGateway", ex);
-                //ShowMessage("Error initializing payment gateway.", "danger");
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/libraryPayment";
+                clsLogger.ExceptionMsg = "RedirectToPaymentGateway";
+                clsLogger.SaveException();
             }
         }
 
         private DataTable getSubscriptionDetails(string subscriptionId)
         {
             DataTable dt = new DataTable();
-            if (Session["UserId"] == null)
+            try
             {
-
-                return dt;
-            }
-            int userId = Convert.ToInt32(Session["UserId"]);
-            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString;
-            using (var conn = new MySqlConnection(connectionString))
-            using (var cmd = new MySqlCommand("CALL getSubscriptionDetails(@p_SubscriptionId,@p_UserId);", conn))
-            {
-                cmd.Parameters.AddWithValue("@p_UserId", userId);
-                cmd.Parameters.AddWithValue("@p_SubscriptionId", subscriptionId);
-                conn.Open();
-                MySqlDataAdapter adp = new MySqlDataAdapter(cmd);
-                adp.Fill(dt);
-                if(dt.Rows.Count>0)
-                
+                if (Session["UserId"] == null)
                 {
 
-                  
-
-
-                    DataRow row = dt.Rows[0];
-                    Session["FullName"] = row["FullName"].ToString();
-                    Session["College_id"] = row["College_id"].ToString();
-                    Session["Mobile"] = row["Mobile"].ToString();
-                    Session["Email"] = row["Email"].ToString();
-                    Session["TotalAmount"] = row["TotalAmount"].ToString();
-                    
-
-
-
+                    return dt;
                 }
+                int userId = Convert.ToInt32(Session["UserId"]);
+                string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString;
+                using (var conn = new MySqlConnection(connectionString))
+                using (var cmd = new MySqlCommand("CALL getSubscriptionDetails(@p_SubscriptionId,@p_UserId);", conn))
+                {
+                    cmd.Parameters.AddWithValue("@p_UserId", userId);
+                    cmd.Parameters.AddWithValue("@p_SubscriptionId", subscriptionId);
+                    conn.Open();
+                    MySqlDataAdapter adp = new MySqlDataAdapter(cmd);
+                    adp.Fill(dt);
+                    if (dt.Rows.Count > 0)
+
+                    {
+                        DataRow row = dt.Rows[0];
+                        Session["FullName"] = row["FullName"].ToString();
+                        Session["College_id"] = row["College_id"].ToString();
+                        Session["Mobile"] = row["Mobile"].ToString();
+                        Session["Email"] = row["Email"].ToString();
+                        Session["TotalAmount"] = row["TotalAmount"].ToString();
+
+                    }
+                    return dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/libraryPayment";
+                clsLogger.ExceptionMsg = "getSubscriptionDetails";
+                clsLogger.SaveException();
                 return dt;
             }
         }

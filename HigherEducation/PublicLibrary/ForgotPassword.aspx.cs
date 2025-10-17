@@ -1,4 +1,5 @@
 ﻿using HigherEducation.BAL;
+using HigherEducation.BusinessLayer;
 using MySql.Data.MySqlClient;
 using System;
 using System.Configuration;
@@ -65,13 +66,14 @@ namespace HigherEducation.PublicLibrary
                 string sms_details = "Your ITI application OTP Number is " + otp;
                 AgriSMS.sendSingleSMS(mobile, sms_details, "1007030482147904866");
 
-                // Log OTP for testing
-                System.Diagnostics.Debug.WriteLine($"OTP for {mobile}: {otp}");
-
                 return true;
             }
             catch (Exception ex)
             {
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/ForgotPassword";
+                clsLogger.ExceptionMsg = "SendOTP";
+                clsLogger.SaveException();
                 ShowAlert($"Failed to send OTP: {ex.Message}", "danger");
                 return false;
             }
@@ -107,6 +109,10 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/ForgotPassword";
+                clsLogger.ExceptionMsg = "VerifyOTP";
+                clsLogger.SaveException();
                 ShowAlert($"OTP verification failed: {ex.Message}", "danger");
                 return false;
             }
@@ -157,7 +163,10 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error checking mobile: {ex.Message}");
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/ForgotPassword";
+                clsLogger.ExceptionMsg = "GetUserIdByMobile";
+                clsLogger.SaveException();
                 return null;
             }
         }
@@ -182,7 +191,10 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error updating password: {ex.Message}");
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/ForgotPassword";
+                clsLogger.ExceptionMsg = "UpdatePassword";
+                clsLogger.SaveException();
                 return false;
             }
         }
@@ -355,35 +367,57 @@ namespace HigherEducation.PublicLibrary
         public DataTable ExecuteStoredProcedure(string procedureName, params MySqlParameter[] parameters)
         {
             DataTable dt = new DataTable();
-            using (MySqlConnection conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString))
+            try
             {
-                using (MySqlCommand cmd = new MySqlCommand(procedureName, conn))
+                using (MySqlConnection conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddRange(parameters);
-
-                    conn.Open();
-                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                    using (MySqlCommand cmd = new MySqlCommand(procedureName, conn))
                     {
-                        da.Fill(dt);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddRange(parameters);
+
+                        conn.Open();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
                     }
                 }
+                return dt;
             }
-            return dt;
+            catch (Exception ex)
+            {
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/ForgotPassword";
+                clsLogger.ExceptionMsg = "ExecuteStoredProcedure";
+                clsLogger.SaveException();
+                return dt;
+            }
         }
 
         public int ExecuteNonQuerySP(string procedureName, params MySqlParameter[] parameters)
         {
-            using (MySqlConnection conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString))
+            try
             {
-                using (MySqlCommand cmd = new MySqlCommand(procedureName, conn))
+                using (MySqlConnection conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddRange(parameters);
+                    using (MySqlCommand cmd = new MySqlCommand(procedureName, conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddRange(parameters);
 
-                    conn.Open();
-                    return cmd.ExecuteNonQuery();
+                        conn.Open();
+                        return cmd.ExecuteNonQuery();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/ForgotPassword";
+                clsLogger.ExceptionMsg = "ExecuteNonQuerySP";
+                clsLogger.SaveException();
+                return 0;
             }
         }
     }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using HigherEducation.BusinessLayer;
 
 namespace HigherEducation.PublicLibrary
 {
@@ -102,9 +103,12 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                ShowError("Error loading pass details: " + ex.Message);
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/libraryPrintPass";
+                clsLogger.ExceptionMsg = "LoadPassDetails";
+                clsLogger.SaveException();
             }
-        }
+}
 
         private void ShowError(string errorMessage)
         {

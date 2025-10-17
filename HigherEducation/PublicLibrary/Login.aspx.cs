@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using HigherEducation.BusinessLayer;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -122,7 +123,11 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                ShowAlert($"Login failed: {ex.Message}", "danger");
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/Login";
+                clsLogger.ExceptionMsg = "btnLogin_Click";
+                clsLogger.SaveException();
+                ShowAlert($"Login failed", "danger");
             }
         }
 
@@ -131,35 +136,56 @@ namespace HigherEducation.PublicLibrary
         public DataTable ExecuteStoredProcedure(string procedureName, params MySqlParameter[] parameters)
         {
             DataTable dt = new DataTable();
-            using (MySqlConnection conn = msqlConn)
+            try
             {
-                using (MySqlCommand cmd = new MySqlCommand(procedureName, conn))
+                using (MySqlConnection conn = msqlConn)
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddRange(parameters);
-
-                    conn.Open();
-                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                    using (MySqlCommand cmd = new MySqlCommand(procedureName, conn))
                     {
-                        da.Fill(dt);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddRange(parameters);
+
+                        conn.Open();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/Login";
+                clsLogger.ExceptionMsg = "ExecuteStoredProcedure";
+                clsLogger.SaveException();
             }
             return dt;
         }
 
         public int ExecuteNonQuerySP(string procedureName, params MySqlParameter[] parameters)
         {
-            using (MySqlConnection conn = msqlConn)
+            try
             {
-                using (MySqlCommand cmd = new MySqlCommand(procedureName, conn))
+                using (MySqlConnection conn = msqlConn)
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddRange(parameters);
+                    using (MySqlCommand cmd = new MySqlCommand(procedureName, conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddRange(parameters);
 
-                    conn.Open();
-                    return cmd.ExecuteNonQuery();
+                        conn.Open();
+                        return cmd.ExecuteNonQuery();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/Login";
+                clsLogger.ExceptionMsg = "ExecuteNonQuerySP";
+                clsLogger.SaveException();
+                return -1;
             }
         }
 

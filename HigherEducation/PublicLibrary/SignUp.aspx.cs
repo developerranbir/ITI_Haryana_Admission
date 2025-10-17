@@ -1,4 +1,5 @@
 ﻿using HigherEducation.BAL;
+using HigherEducation.BusinessLayer;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -78,7 +79,11 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                ShowAlert($"Failed to send OTP: {ex.Message}", "danger");
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/SignUp";
+                clsLogger.ExceptionMsg = "SendOTP";
+                clsLogger.SaveException();
+                ShowAlert("Failed to send OTP:", "danger");
                 return false;
             }
         }
@@ -88,7 +93,7 @@ namespace HigherEducation.PublicLibrary
         {
             try
             {
-               
+
                 string storedOTP = Session["OTP"] as string;
                 DateTime otpCreatedTime = Session["OTPCreatedTime"] != null ? (DateTime)Session["OTPCreatedTime"] : DateTime.MinValue;
 
@@ -106,20 +111,24 @@ namespace HigherEducation.PublicLibrary
                     Session.Remove("OTPCreatedTime");
                     return true;
 
-                  
+
                 }
                 else
                 {
                     ShowAlert("Invalid OTP. Please try again.", "danger");
                     return false;
-                   
+
                 }
             }
             catch (Exception ex)
             {
-                ShowAlert($"OTP verification failed: {ex.Message}", "danger");
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/SignUp";
+                clsLogger.ExceptionMsg = "VerifyOTP";
+                clsLogger.SaveException();
+                ShowAlert("OTP verification failed:", "danger");
                 return false;
-             
+
             }
         }
 
@@ -231,7 +240,10 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error checking mobile: {ex.Message}");
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/SignUp";
+                clsLogger.ExceptionMsg = "IsMobileExists";
+                clsLogger.SaveException();
                 return false;
             }
         }
@@ -255,7 +267,10 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error checking email: {ex.Message}");
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/SignUp";
+                clsLogger.ExceptionMsg = "IsEmailExists";
+                clsLogger.SaveException();
                 return false;
             }
         }
@@ -335,7 +350,7 @@ namespace HigherEducation.PublicLibrary
             }
         }
 
-       
+
         // Clear Signup Form
         private void ClearSignupForm()
         {
@@ -352,43 +367,64 @@ namespace HigherEducation.PublicLibrary
             Session.Remove("OTPVerified");
             Session.Remove("OTPMobile");
         }
-    
 
-    
+
+
         public DataTable ExecuteStoredProcedure(string procedureName, params MySqlParameter[] parameters)
         {
             DataTable dt = new DataTable();
-            using (MySqlConnection conn = msqlConn)
+            try
             {
-                using (MySqlCommand cmd = new MySqlCommand(procedureName, conn))
+                using (MySqlConnection conn = msqlConn)
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddRange(parameters);
-
-                    conn.Open();
-                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                    using (MySqlCommand cmd = new MySqlCommand(procedureName, conn))
                     {
-                        da.Fill(dt);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddRange(parameters);
+
+                        conn.Open();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/SignUp";
+                clsLogger.ExceptionMsg = "ExecuteStoredProcedure";
+                clsLogger.SaveException();
             }
             return dt;
         }
 
         public int ExecuteNonQuerySP(string procedureName, params MySqlParameter[] parameters)
         {
-            using (MySqlConnection conn = msqlConn)
+            try
             {
-                using (MySqlCommand cmd = new MySqlCommand(procedureName, conn))
+                using (MySqlConnection conn = msqlConn)
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddRange(parameters);
+                    using (MySqlCommand cmd = new MySqlCommand(procedureName, conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddRange(parameters);
 
-                    conn.Open();
-                    return cmd.ExecuteNonQuery();
+                        conn.Open();
+                        return cmd.ExecuteNonQuery();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/SignUp";
+                clsLogger.ExceptionMsg = "ExecuteStoredProcedure";
+                clsLogger.SaveException();
+                return 0;
             }
         }
     }
-    
+
 }
