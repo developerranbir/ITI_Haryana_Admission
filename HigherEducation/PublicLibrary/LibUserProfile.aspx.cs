@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using HigherEducation.BusinessLayer;
 
 
 namespace HigherEducation.PublicLibrary
@@ -73,9 +74,12 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                ShowAlert($"Error loading profile: {ex.Message}", "danger");
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/LibUserProfile";
+                clsLogger.ExceptionMsg = "LoadUserProfile";
+                clsLogger.SaveException();
             }
-        }
+}
 
         // Load User Statistics
         private void LoadUserStatistics()
@@ -146,8 +150,10 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error loading statistics: {ex.Message}");
-                // Don't show error to user for statistics, just use default values
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/LibUserProfile";
+                clsLogger.ExceptionMsg = "LoadUserStatistics";
+                clsLogger.SaveException();
             }
         }
 
@@ -190,7 +196,12 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                ShowAlert($"Error verifying current password: {ex.Message}", "danger");
+
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/LibUserProfile";
+                clsLogger.ExceptionMsg = "VerifyCurrentPassword";
+                clsLogger.SaveException();
+                ShowAlert($"Error verifying current password", "danger");
                 return false;
             }
         }
@@ -217,7 +228,12 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                ShowAlert($"Error updating password: {ex.Message}", "danger");
+
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/LibUserProfile";
+                clsLogger.ExceptionMsg = "UpdatePassword";
+                clsLogger.SaveException();
+                ShowAlert($"Error updating password", "danger");
                 return false;
             }
         }
@@ -295,7 +311,11 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                ShowAlert($"Password change failed: {ex.Message}", "danger");
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/LibUserProfile";
+                clsLogger.ExceptionMsg = "btnChangePassword_Click";
+                clsLogger.SaveException();
+                ShowAlert($"Password change failed", "danger");
             }
         }
 
