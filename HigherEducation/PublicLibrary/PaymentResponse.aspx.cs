@@ -66,10 +66,12 @@ namespace HigherEducation.PublicLibrary
                 string statusMessage = responseParams["status_message"];
                 string amount = responseParams["amount"];
                 string transDate = responseParams["trans_date"];
+                string merchant_param1 = responseParams["merchant_param1"];
+                string merchant_param5 = responseParams["merchant_param5"];
 
                 // Update payment record in database
                 bool updateSuccess = UpdatePaymentResponse(orderId, trackingId, bankRefNo, amount,
-                    orderStatus, paymentMode, cardName, statusCode, statusMessage, transDate);
+                    orderStatus, paymentMode, cardName, statusCode, statusMessage, transDate, merchant_param1, merchant_param5);
 
                 if (updateSuccess)
                 {
@@ -84,9 +86,21 @@ namespace HigherEducation.PublicLibrary
                         // Start transaction
                         MySqlTransaction transaction = conn.BeginTransaction();
                         // Step 1: Get the booking ID associated with this payment
-                        int bookingId = GetBookingIdByPaymentReference(orderId, conn, transaction);
-                        Session["LastBookingID"] = bookingId;
-                        ShowSuccessPage(orderId, trackingId, amount, paymentMode, transDate);
+                        
+                       
+
+                        if (merchant_param5 == "Library")
+                        {
+                            Response.Redirect("libraryPrintPass.aspx?id=" + merchant_param1);
+                        }
+                        else
+                        {
+                            int bookingId = GetBookingIdByPaymentReference(orderId, conn, transaction);
+                            Session["LastBookingID"] = bookingId;
+                            ShowSuccessPage(orderId, trackingId, amount, paymentMode, transDate);
+                        }
+                      
+
                     }
                     else if (orderStatus == "Failure")
                     {
@@ -114,7 +128,8 @@ namespace HigherEducation.PublicLibrary
         }
 
         private bool UpdatePaymentResponse(string orderId, string trackingId, string bankRefNo, string amount,
-     string orderStatus, string paymentMode, string cardName, string statusCode, string statusMessage, string transDate)
+     string orderStatus, string paymentMode, string cardName, string statusCode, string statusMessage, string transDate
+            ,string merchant_param1, string merchant_param5)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -137,6 +152,8 @@ namespace HigherEducation.PublicLibrary
                         cmd.Parameters.AddWithValue("p_status_code", statusCode);
                         cmd.Parameters.AddWithValue("p_status_messsage", statusMessage);
                         cmd.Parameters.AddWithValue("p_trans_date", transDate);
+                        cmd.Parameters.AddWithValue("merchant_param1", merchant_param1);
+                        cmd.Parameters.AddWithValue("merchant_param5", merchant_param5);
 
                         // Output parameter - match the stored procedure parameter name
                         MySqlParameter rowsUpdatedParam = new MySqlParameter("@p_RowsUpdated", MySqlDbType.Int32);
@@ -179,15 +196,23 @@ namespace HigherEducation.PublicLibrary
 
         private void ShowSuccessPage(string orderId, string trackingId, string amount, string paymentMode, string transDate)
         {
-            pnlSuccess.Visible = true;
-            pnlFailure.Visible = false;
-            pnlPending.Visible = false;
 
-            litBookingIdSuccess.Text = Session["LastBookingID"]?.ToString() ?? "N/A";
-            litTransactionId.Text = trackingId;
-            litAmountPaid.Text = decimal.TryParse(amount, out decimal amt) ? amt.ToString("0.00") : "0.00";
-            litPaymentMode.Text = paymentMode;
-            litPaymentDate.Text = DateTime.TryParse(transDate, out DateTime dt) ? dt.ToString("dd-MM-yyyy HH:mm") : DateTime.Now.ToString("dd-MM-yyyy HH:mm");
+           
+           
+            {
+                pnlSuccess.Visible = true;
+                pnlFailure.Visible = false;
+                pnlPending.Visible = false;
+
+                litBookingIdSuccess.Text = Session["LastBookingID"]?.ToString() ?? "N/A";
+                litTransactionId.Text = trackingId;
+                litAmountPaid.Text = decimal.TryParse(amount, out decimal amt) ? amt.ToString("0.00") : "0.00";
+                litPaymentMode.Text = paymentMode;
+                litPaymentDate.Text = DateTime.TryParse(transDate, out DateTime dt) ? dt.ToString("dd-MM-yyyy HH:mm") : DateTime.Now.ToString("dd-MM-yyyy HH:mm");
+
+
+            }
+
         }
 
         private void ShowFailurePage(string orderId, string failureReason)

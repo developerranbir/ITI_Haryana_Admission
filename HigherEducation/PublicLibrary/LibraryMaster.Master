@@ -42,17 +42,17 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .library-header h1 {
-            margin: 0;
-            font-size: 2.2rem;
-            font-weight: 700;
-        }
+            .library-header h1 {
+                margin: 0;
+                font-size: 2.2rem;
+                font-weight: 700;
+            }
 
-        .library-header .subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-top: 8px;
-        }
+            .library-header .subtitle {
+                font-size: 1.1rem;
+                opacity: 0.9;
+                margin-top: 8px;
+            }
 
         .navbar-custom {
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
@@ -60,32 +60,32 @@
             box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
         }
 
-        .navbar-custom .navbar-nav .nav-link {
-            color: #fff !important;
-            font-weight: 600;
-            font-size: 1.05rem;
-            margin-right: 10px;
-            transition: background 0.2s, color 0.2s;
-            border-radius: 8px;
-            padding: 8px 18px;
-        }
+            .navbar-custom .navbar-nav .nav-link {
+                color: #fff !important;
+                font-weight: 600;
+                font-size: 1.05rem;
+                margin-right: 10px;
+                transition: background 0.2s, color 0.2s;
+                border-radius: 8px;
+                padding: 8px 18px;
+            }
 
-        .navbar-custom .navbar-nav .nav-link:hover,
-        .navbar-custom .navbar-nav .nav-link.active {
-            background: var(--accent-color);
-            color: #fff !important;
-        }
+                .navbar-custom .navbar-nav .nav-link:hover,
+                .navbar-custom .navbar-nav .nav-link.active {
+                    background: var(--accent-color);
+                    color: #fff !important;
+                }
 
-        .navbar-custom .navbar-brand {
-            color: #fff !important;
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin-right: 30px;
-        }
+            .navbar-custom .navbar-brand {
+                color: #fff !important;
+                font-weight: 700;
+                font-size: 1.2rem;
+                margin-right: 30px;
+            }
 
-        .navbar-custom .fa {
-            margin-right: 6px;
-        }
+            .navbar-custom .fa {
+                margin-right: 6px;
+            }
 
         .navbar-toggler {
             border: none;
@@ -116,42 +116,42 @@
             margin-top: auto;
         }
 
-        .footer h5 {
-            font-weight: 600;
-            margin-bottom: 20px;
-            position: relative;
-            padding-bottom: 10px;
-        }
+            .footer h5 {
+                font-weight: 600;
+                margin-bottom: 20px;
+                position: relative;
+                padding-bottom: 10px;
+            }
 
-        .footer h5:after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 40px;
-            height: 2px;
-            background: var(--secondary-color);
-        }
+                .footer h5:after {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    width: 40px;
+                    height: 2px;
+                    background: var(--secondary-color);
+                }
 
         .footer-links {
             list-style: none;
             padding: 0;
         }
 
-        .footer-links li {
-            margin-bottom: 10px;
-        }
+            .footer-links li {
+                margin-bottom: 10px;
+            }
 
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
+            .footer-links a {
+                color: rgba(255, 255, 255, 0.8);
+                text-decoration: none;
+                transition: all 0.3s ease;
+            }
 
-        .footer-links a:hover {
-            color: white;
-            padding-left: 5px;
-        }
+                .footer-links a:hover {
+                    color: white;
+                    padding-left: 5px;
+                }
 
         .social-links a {
             display: inline-block;
@@ -166,10 +166,10 @@
             transition: all 0.3s ease;
         }
 
-        .social-links a:hover {
-            background: var(--secondary-color);
-            transform: translateY(-3px);
-        }
+            .social-links a:hover {
+                background: var(--secondary-color);
+                transform: translateY(-3px);
+            }
 
         .copyright {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -186,9 +186,9 @@
                 padding: 20px 0;
             }
 
-            .library-header h1 {
-                font-size: 1.8rem;
-            }
+                .library-header h1 {
+                    font-size: 1.8rem;
+                }
 
             .navbar-custom .navbar-nav .nav-link {
                 margin-right: 0;
@@ -204,10 +204,10 @@
                 text-align: center;
             }
 
-            .footer h5:after {
-                left: 50%;
-                transform: translateX(-50%);
-            }
+                .footer h5:after {
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
         }
 
         @media (max-width: 576px) {
@@ -234,8 +234,10 @@
             <!-- Header -->
             <header class="library-header">
                 <div class="container">
-                    
-                    <h1><img src="images\Logo_ITI.png" /> ITI Library and WorkShop Booking for Public</h1>
+
+                    <h1>
+                        <img src="images\Logo_ITI.png" />
+                        ITI Library and WorkShop Booking for Public</h1>
                     <%--<div class="subtitle">Access Knowledge Across Multiple ITI Libraries</div>--%>
                 </div>
             </header>
@@ -243,32 +245,31 @@
             <!-- Navigation -->
             <nav class="navbar navbar-expand-lg navbar-custom">
                 <div class="container">
-                    <a class="navbar-brand" href="Home.aspx"><i class="fas fa-book-reader"></i> ITI Library</a>
+                    <a class="navbar-brand" href="Home.aspx"><i class="fas fa-book-reader"></i>ITI Library</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-bars"></i>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="Home.aspx"><i class="fas fa-home"></i> Home</a>
+                                <a class="nav-link" href="Home.aspx"><i class="fas fa-home"></i>Home</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="Subscription.aspx"><i class="fas fa-book"></i>Library</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="AboutUs.aspx"><i class="fas fa-info-circle"></i> About Us</a>
+                                <a class="nav-link" href="WorkshopSlotBooking.aspx"><i class="fas fa-tools"></i>Workshop</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="LibUserProfile.aspx"><i class="fas fa-user"></i>Profile</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="Subscription.aspx"><i class="fas fa-book"></i> Library</a>
+                                <a class="nav-link" href="AboutUs.aspx"><i class="fas fa-info-circle"></i>About Us</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="WorkshopSlotBooking.aspx"><i class="fas fa-tools"></i> Workshop</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="MySubscription.aspx"><i class="fas fa-clipboard-list"></i> My Subscription</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="LibUserProfile.aspx"><i class="fas fa-user"></i> Profile</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="Logout.aspx"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                                <a class="nav-link" href="Logout.aspx"><i class="fas fa-sign-out-alt"></i>Logout</a>
                             </li>
                         </ul>
                     </div>
@@ -345,13 +346,13 @@
                                     <i class="fas fa-phone me-2"></i>
                                     0172 258 6074
                                 </li>
-                               
-                               <%-- <li>
+
+                                <%-- <li>
                                     <i class="fas fa-clock me-2"></i>
                                     Mon-Fri: 9AM-5PM
                                 </li>--%>
                             </ul>
-                         
+
                         </div>
                     </div>
                     <div class="copyright">

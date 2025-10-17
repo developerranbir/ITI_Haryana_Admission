@@ -33,6 +33,15 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.WebControls.Label lblAlertMessage;
 
         /// <summary>
+        /// hlViewBooking control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink hlViewBooking;
+
+        /// <summary>
         /// lblDistrict control.
         /// </summary>
         /// <remarks>

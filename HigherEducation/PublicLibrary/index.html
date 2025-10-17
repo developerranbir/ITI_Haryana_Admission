@@ -1,0 +1,813 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITI Library & Workshop Access Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a4b8c;
+            --secondary-color: #f8a01a;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --accent-color: #2c6fb7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            transition: color 0.3s;
+            margin: 0 10px;
+        }
+
+            .nav-link:hover {
+                color: var(--secondary-color) !important;
+            }
+
+        .hero-section {
+            background: linear-gradient(rgba(26, 75, 140, 0.85), rgba(26, 75, 140, 0.9)), url('https://images.unsplash.com/photo-1521587760476-6c12a4b040da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 120px 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: var(--dark-color);
+            font-weight: 600;
+            padding: 12px 30px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+            .btn-primary:hover {
+                background-color: #e69500;
+                border-color: #e69500;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            }
+
+        .section-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+            font-size: 2.2rem;
+        }
+
+            .section-title:after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100px;
+                height: 4px;
+                background-color: var(--secondary-color);
+            }
+
+        .info-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 35px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+            border-top: 4px solid var(--accent-color);
+        }
+
+            .info-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            }
+
+            .info-card h3, .info-card h4 {
+                color: var(--primary-color);
+                margin-bottom: 20px;
+            }
+
+            .info-card i {
+                color: var(--secondary-color);
+                margin-right: 10px;
+            }
+
+        .member-img {
+            width: 90px;
+            height: 90px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+            .member-img i {
+                color: white;
+                font-size: 2.2rem;
+            }
+
+        .features-section {
+            background-color: var(--light-color);
+            padding: 100px 0;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 25px;
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+        }
+
+        .rules-section {
+            padding: 100px 0;
+            background-color: white;
+        }
+
+        .rule-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+            .rule-item:hover {
+                background-color: rgba(26, 75, 140, 0.05);
+            }
+
+        .rule-number {
+            background-color: var(--primary-color);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 18px;
+            flex-shrink: 0;
+            font-weight: 600;
+        }
+
+        .contact-info {
+            padding: 100px 0;
+            background-color: var(--light-color);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 35px;
+            padding: 25px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+
+            .contact-item:hover {
+                transform: translateY(-5px);
+            }
+
+        .contact-icon {
+            width: 70px;
+            height: 70px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 25px;
+            flex-shrink: 0;
+        }
+
+            .contact-icon i {
+                font-size: 1.8rem;
+            }
+
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 70px 0 25px;
+        }
+
+            .footer h5 {
+                color: var(--secondary-color);
+                margin-bottom: 25px;
+                font-weight: 600;
+            }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 12px;
+            transition: color 0.3s;
+        }
+
+            .footer-links a:hover {
+                color: var(--secondary-color);
+                padding-left: 5px;
+            }
+
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 25px;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .login-btn {
+            background-color: var(--secondary-color);
+            color: var(--dark-color);
+            border: none;
+            font-weight: 600;
+            padding: 10px 25px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+            .login-btn:hover {
+                background-color: #e69500;
+            }
+
+        .rule-category {
+            margin-bottom: 40px;
+        }
+
+            .rule-category h3 {
+                color: var(--primary-color);
+                margin-bottom: 25px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid var(--secondary-color);
+            }
+
+        .card-highlight {
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .stats-section {
+            background: linear-gradient(rgba(26, 75, 140, 0.9), rgba(26, 75, 140, 0.95)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        .stat-text {
+            font-size: 1.2rem;
+        }
+
+        .pricing-card {
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+            .pricing-card:hover {
+                transform: translateY(-10px);
+            }
+
+        .pricing-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .pricing-body {
+            padding: 30px;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        .pricing-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+
+            .pricing-features li {
+                padding: 8px 0;
+                border-bottom: 1px solid #eee;
+            }
+
+                .pricing-features li:last-child {
+                    border-bottom: none;
+                }
+
+                .pricing-features li i {
+                    color: var(--secondary-color);
+                    margin-right: 10px;
+                }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-book-open me-2"></i>
+                ITI Resource Portal
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#rules">Regulations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pricing">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <a class="nav-link login-btn" href="SignUp.aspx">Login / Register</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">ITI Library & Workshop Access Portal</h1>
+            <p class="hero-subtitle">Access premium educational resources and practical training facilities at your nearest Government ITI with our streamlined access system</p>
+            <a href="SignUp.aspx" class="btn btn-primary btn-lg me-3">Get Your Access Pass</a>
+            <a href="#services" class="btn btn-outline-light btn-lg">Explore Services</a>
+        </div>
+    </section>
+
+
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">Access Plans & Pricing</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-4 mb-4">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h3>Library Access</h3>
+                            <p>Sitting Only</p>
+                        </div>
+                        <div class="pricing-body text-center">
+                            <div class="pricing-price">₹100<span class="fs-6">/month</span></div>
+                            <ul class="pricing-features text-start">
+                                <li><i class="fas fa-check"></i> Access to reading area</li>
+                                <li><i class="fas fa-check"></i> Reference material usage</li>
+                                <li><i class="fas fa-times"></i> Book issuance not included</li>
+                                <li><i class="fas fa-check"></i> Wi-Fi connectivity</li>
+                            </ul>
+                            <a href="SignUp.aspx" class="btn btn-primary w-100">Select Plan</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h3>Library Access</h3>
+                            <p>Full Access</p>
+                        </div>
+                        <div class="pricing-body text-center">
+                            <div class="pricing-price">₹500<span class="fs-6">/month</span></div>
+                            <ul class="pricing-features text-start">
+                                <li><i class="fas fa-check"></i> All sitting privileges</li>
+                                <li><i class="fas fa-check"></i> Book issuance (up to 3 books)</li>
+                                <li><i class="fas fa-check"></i> Digital resource access</li>
+                                <li><i class="fas fa-check"></i> Printing facilities (100 pages)</li>
+                            </ul>
+                            <a href="SignUp.aspx" class="btn btn-primary w-100">Select Plan</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h3>Workshop Access</h3>
+                            <p>Practical Training</p>
+                        </div>
+                        <div class="pricing-body text-center">
+                            <div class="pricing-price">₹300<span class="fs-6">/hour</span></div>
+                            <ul class="pricing-features text-start">
+                                <li><i class="fas fa-check"></i> Equipment usage</li>
+                                <li><i class="fas fa-check"></i> Expert supervision</li>
+                                <li><i class="fas fa-check"></i> Safety equipment provided</li>
+                                <li><i class="fas fa-check"></i> Material costs extra</li>
+                            </ul>
+                            <a href="SignUp.aspx" class="btn btn-primary w-100">Select Plan</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rules & Regulations -->
+    <section id="rules" class="rules-section">
+        <div class="container">
+            <h2 class="section-title">Rules & Regulations</h2>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="rule-category">
+                        <h3><i class="fas fa-user-check me-2"></i>Access & Eligibility</h3>
+
+                        <div class="rule-item card-highlight">
+                            <div class="rule-number">1</div>
+                            <div class="rule-text">Access is available at any Government ITI facility convenient to the user upon registration and payment verification.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">2</div>
+                            <div class="rule-text">A digitally generated access pass must be obtained prior to visiting any ITI library or workshop facility.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">3</div>
+                            <div class="rule-text">Passes are generated exclusively after successful prepaid payment or confirmed advance booking of available slots.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">4</div>
+                            <div class="rule-text">All users must carry valid government-issued photo identification along with their access pass during facility visits.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">5</div>
+                            <div class="rule-text">Facility capacity is limited to 20 users simultaneously to ensure optimal learning environment and safety compliance.</div>
+                        </div>
+                    </div>
+
+                    <div class="rule-category">
+                        <h3><i class="fas fa-money-bill-wave me-2"></i>Financial Policies</h3>
+
+                        <div class="rule-item">
+                            <div class="rule-number">6</div>
+                            <div class="rule-text">Library sitting access is available at ₹100 per month, providing reading area privileges without book issuance rights.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">7</div>
+                            <div class="rule-text">Comprehensive library access including book issuance privileges is available at ₹500 per monthly cycle.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">8</div>
+                            <div class="rule-text">Workshop training sessions are billed at ₹300 per instructional hour, with material costs billed separately.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">9</div>
+                            <div class="rule-text">Maximum daily workshop participation is limited to 4 instructional hours to prevent fatigue and ensure safety.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="rule-category">
+                        <h3><i class="fas fa-clipboard-list me-2"></i>Conduct & Compliance</h3>
+
+                        <div class="rule-item">
+                            <div class="rule-number">10</div>
+                            <div class="rule-text">All users must maintain professional decorum and adhere to established disciplinary standards within facility premises.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">11</div>
+                            <div class="rule-text">Access privileges will be immediately revoked for any disciplinary violations or misconduct without refund.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">12</div>
+                            <div class="rule-text">Mobile devices must be switched to silent mode; calls should be taken only in designated areas outside learning spaces.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">13</div>
+                            <div class="rule-text">Consumption of food, beverages, and tobacco products is strictly prohibited within library and workshop areas.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">14</div>
+                            <div class="rule-text">Users are financially responsible for any damage to equipment, books, or facilities resulting from improper handling.</div>
+                        </div>
+                    </div>
+
+                    <div class="rule-category">
+                        <h3><i class="fas fa-shield-alt me-2"></i>Safety & Operations</h3>
+
+                        <div class="rule-item">
+                            <div class="rule-number">15</div>
+                            <div class="rule-text">All workshop participants must complete safety orientation before equipment access and wear appropriate protective gear.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">16</div>
+                            <div class="rule-text">Reservations for library seating and workshop equipment are allocated on a first-come, first-served basis.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">17</div>
+                            <div class="rule-text">Borrowed materials must be returned by the due date; overdue items will incur penalties of ₹10 per day.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">18</div>
+                            <div class="rule-text">The administration reserves the right to modify operational policies, schedules, and fees with prior notice.</div>
+                        </div>
+
+                        <div class="rule-item">
+                            <div class="rule-number">19</div>
+                            <div class="rule-text">Personal belongings should be stored in designated lockers; the facility assumes no liability for lost or stolen items.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Vision -->
+    <section class="mission-vision py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">Our Value Proposition</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="info-card text-center">
+                        <div class="member-img">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h4>Comprehensive Resources</h4>
+                        <p>Access to specialized technical literature, reference materials, and digital resources spanning all ITI trades and contemporary industrial subjects.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="info-card text-center">
+                        <div class="member-img">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h4>Industry-Standard Facilities</h4>
+                        <p>Practical training in workshops equipped with professional-grade tools and machinery under the supervision of qualified technical instructors.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="info-card text-center">
+                        <div class="member-img">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4>Professional Guidance</h4>
+                        <p>Dedicated support from experienced faculty and technical staff to maximize learning outcomes and skill development.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Information -->
+    <section id="contact" class="contact-info">
+        <div class="container">
+            <h2 class="section-title">Contact Information</h2>
+            <div class="row justify-content-center">
+                <div class="row">
+                    <div class="contact-item col-4">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-details ">
+                            <h4>Operational Hours</h4>
+                            <p>9:00 AM to 5:00 PM (All Working Days)</p>
+                            
+                        </div>
+                    </div>
+
+                    <div class="contact-item col-4">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details ">
+                            <h4>Contact Numbers</h4>
+                            <p>Primary: 0172-2996321</p>
+                            <p>Alternate: 0172-2997265, 0172-2586071</p>
+                           
+                        </div>
+                    </div>
+
+                    <div class="contact-item col-4">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details ">
+                            <h4>Email Support</h4>
+                            <p>General Inquiries: helpdesk.itiadmission@gmail.com</p>
+              
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">190+</div>
+                        <div class="stat-text"> Govt. ITI Centers</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">10K+</div>
+                        <div class="stat-text">Books & Resources</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">50K+</div>
+                        <div class="stat-text">Active Users</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">9am-5pm</div>
+                        <div class="stat-text">Online Support</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Services Section -->
+    <section id="services" class="features-section">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h4>ITI Library Access</h4>
+                        <p>Comprehensive access to thousands of technical books, journals, research papers across all ITI trades and specializations.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h4>Workshop Training</h4>
+                        <p>Hands-on training with modern industrial equipment and tools under the guidance of experienced instructors and industry experts.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h4>Skill Certification</h4>
+                        <p>Industry-recognized certification programs to validate technical competencies and enhance employability prospects.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>ITI Resource Portal</h5>
+                    <p>A centralized digital platform providing streamlined access to technical education resources and practical training facilities across the ITI network.</p>
+                    <div class="social-links mt-4">
+                        <a href="#" class="me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>Quick Links</h5>
+                    <div class="footer-links">
+                        <a href="#">Home</a>
+                        <a href="#about">About Us</a>
+                        <a href="#services">Services</a>
+                        <a href="#rules">Regulations</a>
+                        <a href="#pricing">Pricing</a>
+                        <a href="#contact">Contact</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Services</h5>
+                    <div class="footer-links">
+                        <a href="#">Library Access</a>
+                        <a href="SignUp.aspx">Workshop Training</a>
+                        <a href="SignUp.aspx">Digital Resources</a>
+                        <a href="SignUp.aspx">Skill Certification</a>
+                        <a href="SignUp.aspx">Online Booking</a>
+                        <a href="SignUp.aspx">Resource Portal</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 mb-4">
+                    <h5>Contact Info</h5>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt me-2"></i> ITI Campus, Sector 28, Chandigarh - 160019</p>
+                        <p><i class="fas fa-phone me-2"></i> 0172-2996321, 2997265</p>
+                        <p><i class="fas fa-envelope me-2"></i> helpdesk.itiadmission@gmail.com</p>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

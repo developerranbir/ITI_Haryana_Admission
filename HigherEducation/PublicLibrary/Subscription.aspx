@@ -329,7 +329,14 @@
 
         <!-- Subscription Form -->
         <div class="form-section">
-            <h2 class="section-title">Subscription Details</h2>
+           <div class="row">
+               <div class="col-8"> <h2 class="section-title">Book Library Pass</h2> </div>
+               <div class="col-4"> <asp:HyperLink ID="hlViewBooking" runat="server" 
+Text="View My Bookings" 
+CssClass="btn btn-primary-custom" 
+NavigateUrl="MySubscription.aspx" /></div>
+           </div>
+           
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
