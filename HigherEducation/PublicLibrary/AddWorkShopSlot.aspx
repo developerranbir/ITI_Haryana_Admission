@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AddWorkShopSlot.aspx.cs" Inherits="HigherEducation.PublicLibrary.AddWorkShopSlot" %>
+
 <!DOCTYPE html>
 <html>
 <head runat="server">
@@ -64,13 +65,89 @@
             color: #dc3545;
             font-weight: bold;
         }
+
+        .weekend-date {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .weekday-date {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .date-picker-container {
+            max-width: 300px;
+        }
+
+        /* Style for disabled weekend dates */
+        input[type="date"]:invalid {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .confirmation-details {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0d6efd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        /* Styles for disabled state */
+        .btn-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Tooltip styles */
+        [tooltip] {
+            position: relative;
+        }
+
+            [tooltip]:hover::after {
+                content: attr(tooltip);
+                position: absolute;
+                bottom: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #333;
+                color: white;
+                padding: 5px 10px;
+                border-radius: 4px;
+                font-size: 12px;
+                white-space: nowrap;
+                z-index: 1000;
+            }
+
+        /* Status styles */
+        .status-available {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .status-booked {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            color: #6c757d;
+            font-weight: bold;
+        }
+
+        .status-upcoming {
+            color: #0d6efd;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body class="bg-light">
     <form id="form1" runat="server" class="container mt-4">
 
         <!-- Success/Error Messages -->
-        <asp:Panel ID="pnlMessage" runat="server" CssClass="alert alert-dismissible fade show" role="alert" style="display: none;">
+        <asp:Panel ID="pnlMessage" runat="server" CssClass="alert alert-dismissible fade show" role="alert" Style="display: none;">
             <asp:Label ID="lblMessage" runat="server" Text=""></asp:Label>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </asp:Panel>
@@ -87,9 +164,13 @@
                         <strong>ITI Name:</strong> <span class="current-date">
                             <asp:Literal ID="litITIId" runat="server"></asp:Literal></span>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <strong>Current Date:</strong> <span class="current-date">
                             <asp:Literal ID="litCurrentDate" runat="server"></asp:Literal></span>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Current Time:</strong> <span class="current-time">
+                            <asp:Literal ID="litCurrentTime" runat="server"></asp:Literal></span>
                     </div>
                 </div>
             </div>
@@ -98,27 +179,39 @@
             <div class="time-slot-info">
                 <div class="row">
                     <div class="col-md-3">
-                        <strong>Current Time:</strong> <span class="current-time">
-                            <asp:Literal ID="litCurrentTime" runat="server"></asp:Literal></span>
                     </div>
                     <div class="col-md-3">
                         <strong>Available Hours:</strong> 9:00 AM - 5:00 PM
                     </div>
                     <div class="col-md-3">
-                        <strong>Last Start Time:</strong> 4:00 PM
-                    </div>
-                    <div class="col-md-3">
                         <strong>Duration:</strong> 1-4 hours
                     </div>
                 </div>
-                <div class="mt-2 text-muted small">
-                    <i class="bi bi-info-circle"></i>Slots must be between 9 AM to 5 PM with 1-4 hours duration. Last start time is 4:00 PM. Time slots are available in 15-minute intervals.
+                <div class="row">
+                    <div class="col-md-12 text-muted small text-center">
+                        <i class="bi bi-info-circle"></i>Slots must be between 9 AM to 5 PM with 1-4 hours duration. Only weekdays (Monday-Friday) are allowed. Time slots are available in 15-minute intervals.
+                    </div>
                 </div>
             </div>
 
             <!-- Slot Details Form -->
             <div class="row">
-                <div class="col-md-6">
+                <!-- Date Selection -->
+                <div class="col-md-4">
+                    <div class="mb-3 date-picker-container">
+                        <label for="txtSlotDate" class="form-label required">Select Date</label>
+                        <asp:TextBox ID="txtSlotDate" runat="server" CssClass="form-control"
+                            TextMode="Date" AutoPostBack="true" OnTextChanged="txtSlotDate_TextChanged"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvSlotDate" runat="server"
+                            ControlToValidate="txtSlotDate" ErrorMessage="Date is required"
+                            CssClass="text-danger small" Display="Dynamic"></asp:RequiredFieldValidator>
+                        <asp:CustomValidator ID="cvSlotDate" runat="server"
+                            ControlToValidate="txtSlotDate" Display="Dynamic"
+                            CssClass="text-danger" ErrorMessage="Please select a weekday (Monday to Friday)"
+                            OnServerValidate="cvSlotDate_ServerValidate" />
+                    </div>
+                </div>
+                <div class="col-md-4">
                     <div class="mb-3">
                         <label for="ddlStartTime" class="form-label required">Start Time</label>
                         <asp:DropDownList ID="ddlStartTime" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlStartTime_SelectedIndexChanged">
@@ -127,11 +220,9 @@
                         <asp:RequiredFieldValidator ID="rfvStartTime" runat="server"
                             ControlToValidate="ddlStartTime" ErrorMessage="Start time is required"
                             CssClass="text-danger small" Display="Dynamic" InitialValue=""></asp:RequiredFieldValidator>
-                        <div class="form-text">Only future time slots are available for selection</div>
                     </div>
                 </div>
-
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="mb-3">
                         <label for="ddlEndTime" class="form-label required">End Time</label>
                         <asp:DropDownList ID="ddlEndTime" runat="server" CssClass="form-select">
@@ -161,29 +252,40 @@
                         <small class="form-text text-muted">Maximum 20 seats allowed</small>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+
+                        <label for="txtRemarks" class="form-label">Remarks (Optional)</label>
+                        <asp:TextBox ID="txtRemarks" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="2"
+                            placeholder="Add any additional notes about this workshop slot..."></asp:TextBox>
+                    </div>
+                </div>
             </div>
 
-            <div class="mb-4">
-                <label for="txtRemarks" class="form-label">Remarks (Optional)</label>
-                <asp:TextBox ID="txtRemarks" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3"
-                    placeholder="Add any additional notes about this workshop slot..."></asp:TextBox>
-            </div>
 
             <div class="d-grid gap-2">
-                <asp:Button ID="btnSave" runat="server" Text="Save Workshop Slot" CssClass="btn btn-primary btn-lg" OnClick="btnSave_Click" />
+                <asp:Button ID="btnSave" runat="server" Text="Save Workshop Slot" CssClass="btn btn-primary btn-lg" OnClick="btnSave_Click" OnClientClick="return confirmSave();" />
                 <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-outline-secondary" OnClick="btnCancel_Click" CausesValidation="false" />
             </div>
         </div>
 
         <!-- Existing Slots Grid -->
         <div class="card shadow p-4">
-            <h5 class="mb-3">Today's Workshop Slots</h5>
+            <h5 class="mb-3">
+                <asp:Literal ID="litGridTitle" runat="server"></asp:Literal>
+            </h5>
             <asp:GridView ID="gvSlots" runat="server" CssClass="table table-bordered table-striped table-hover"
                 AutoGenerateColumns="False" DataKeyNames="ID"
                 OnRowDeleting="gvSlots_RowDeleting" OnRowDataBound="gvSlots_RowDataBound"
-                EmptyDataText="No workshop slots added yet today." ShowHeaderWhenEmpty="true">
+                EmptyDataText="No workshop slots added for selected date." ShowHeaderWhenEmpty="true">
 
                 <Columns>
+                    <asp:TemplateField HeaderText="Date">
+                        <ItemTemplate>
+                            <asp:Label ID="lblSlotDate" runat="server" Text='<%# Eval("SlotDate", "{0:dd-MMM-yyyy}") %>'></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
                     <asp:TemplateField HeaderText="Start Time">
                         <ItemTemplate>
                             <asp:Label ID="lblStartTime" runat="server" Text='<%# Eval("StartTime") %>'></asp:Label>
@@ -229,14 +331,14 @@
                                 Text="Delete"
                                 CausesValidation="false"
                                 CssClass="btn btn-danger btn-sm"
-                                OnClientClick="return confirm('Are you sure you want to delete this workshop slot?');" />
+                                OnClientClick="return confirmDelete(this);" />
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>
 
                 <EmptyDataTemplate>
                     <div class="text-center py-4">
-                        <p class="text-muted">No workshop slots have been created for today.</p>
+                        <p class="text-muted">No workshop slots have been created for the selected date.</p>
                     </div>
                 </EmptyDataTemplate>
             </asp:GridView>
@@ -245,7 +347,109 @@
     </form>
 
     <script>
-        // Client-side validation for available seats
+        // Set minimum date to today and restrict future dates if needed
+        document.addEventListener('DOMContentLoaded', function () {
+            var dateInput = document.getElementById('<%= txtSlotDate.ClientID %>');
+            if (dateInput) {
+                // Set min attribute to today
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+
+                today = yyyy + '-' + mm + '-' + dd;
+                dateInput.setAttribute('min', today);
+
+                // Set max attribute to 30 days from today (optional)
+                var maxDate = new Date();
+                maxDate.setDate(maxDate.getDate() + 10);
+                var maxDD = String(maxDate.getDate()).padStart(2, '0');
+                var maxMM = String(maxDate.getMonth() + 1).padStart(2, '0');
+                var maxYYYY = maxDate.getFullYear();
+
+                dateInput.setAttribute('max', maxYYYY + '-' + maxMM + '-' + maxDD);
+
+                // Add event listener to prevent weekend selection
+                dateInput.addEventListener('input', function () {
+                    disableWeekendSelection(this);
+                });
+
+                // Initial check
+                disableWeekendSelection(dateInput);
+            }
+
+            // Function to disable weekend selection
+            function disableWeekendSelection(dateInput) {
+                var selectedDate = new Date(dateInput.value);
+                var dayOfWeek = selectedDate.getDay(); // 0 = Sunday, 6 = Saturday
+
+                if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    // If weekend is selected, clear the value and show message
+                    dateInput.value = '';
+                    alert('Please select a weekday (Monday to Friday). Weekends are not available for slot booking.');
+                }
+            }
+
+            // Client-side validation for available seats
+            function validateSeats(input) {
+                var value = parseInt(input.value);
+                if (isNaN(value) || value < 1 || value > 20) {
+                    input.setCustomValidity('Please enter a number between 1 and 20');
+                } else {
+                    input.setCustomValidity('');
+                }
+            }
+
+            var seatsInput = document.getElementById('<%= txtAvailableSeats.ClientID %>');
+            if (seatsInput) {
+                seatsInput.addEventListener('input', function () {
+                    validateSeats(this);
+                });
+            }
+
+            // Prevent keyboard input for date field (optional)
+            var dateField = document.getElementById('<%= txtSlotDate.ClientID %>');
+            if (dateField) {
+                dateField.addEventListener('keydown', function (e) {
+                    e.preventDefault();
+                });
+            }
+        });
+
+        // Handle postbacks and maintain functionality
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        prm.add_endRequest(function () {
+            // Re-initialize after async postback
+            var dateInput = document.getElementById('<%= txtSlotDate.ClientID %>');
+            if (dateInput) {
+                dateInput.addEventListener('input', function () {
+                    disableWeekendSelection(this);
+                });
+            }
+
+            var seatsInput = document.getElementById('<%= txtAvailableSeats.ClientID %>');
+            if (seatsInput) {
+                seatsInput.addEventListener('input', function () {
+                    validateSeats(this);
+                });
+            }
+        });
+
+        // Function to disable weekend selection (needed for postback)
+        function disableWeekendSelection(dateInput) {
+            if (!dateInput.value) return;
+
+            var selectedDate = new Date(dateInput.value);
+            var dayOfWeek = selectedDate.getDay(); // 0 = Sunday, 6 = Saturday
+
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                // If weekend is selected, clear the value and show message
+                dateInput.value = '';
+                alert('Please select a weekday (Monday to Friday). Weekends are not available for slot booking.');
+            }
+        }
+
+        // Function to validate seats (needed for postback)
         function validateSeats(input) {
             var value = parseInt(input.value);
             if (isNaN(value) || value < 1 || value > 20) {
@@ -255,27 +459,78 @@
             }
         }
 
-        // Initialize seat validation
-        document.addEventListener('DOMContentLoaded', function () {
-            var seatsInput = document.getElementById('<%= txtAvailableSeats.ClientID %>');
-            if (seatsInput) {
-                seatsInput.addEventListener('input', function () {
-                    validateSeats(this);
-                });
+        // Confirmation function before saving
+        function confirmSave() {
+            // First, check if the form is valid
+            if (typeof Page_ClientValidate === 'function') {
+                Page_ClientValidate();
+                if (!Page_IsValid) {
+                    return false; // Don't show confirmation if form is invalid
+                }
             }
-        });
 
-        // Handle postbacks and maintain functionality
-        var prm = Sys.WebForms.PageRequestManager.getInstance();
-        prm.add_endRequest(function () {
-            // Re-initialize after async postback
-            var seatsInput = document.getElementById('<%= txtAvailableSeats.ClientID %>');
-            if (seatsInput) {
-                seatsInput.addEventListener('input', function () {
-                    validateSeats(this);
-                });
+            // Get form values for confirmation message
+            var date = document.getElementById('<%= txtSlotDate.ClientID %>').value;
+            var startTime = document.getElementById('<%= ddlStartTime.ClientID %>');
+            var endTime = document.getElementById('<%= ddlEndTime.ClientID %>');
+            var seats = document.getElementById('<%= txtAvailableSeats.ClientID %>').value;
+            var remarks = document.getElementById('<%= txtRemarks.ClientID %>').value;
+
+            // Format date for display
+            var dateObj = new Date(date);
+            var formattedDate = dateObj.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // Get selected time texts
+            var startTimeText = startTime.options[startTime.selectedIndex].text;
+            var endTimeText = endTime.options[endTime.selectedIndex].text;
+
+            // Extract just the time part (remove the duration in parentheses)
+            startTimeText = startTimeText.split(' (')[0];
+            endTimeText = endTimeText.split(' (')[0];
+
+            // Build confirmation message
+            var confirmationMessage =
+                "Please confirm the workshop slot details:\n\n" +
+                "📅 Date: " + formattedDate + "\n" +
+                "⏰ Time: " + startTimeText + " to " + endTimeText + "\n" +
+                "💺 Available Seats: " + seats + "\n";
+
+            // Add remarks if provided
+            if (remarks && remarks.trim() !== '') {
+                confirmationMessage += "📝 Remarks: " + remarks.substring(0, 100) + (remarks.length > 100 ? "..." : "") + "\n";
             }
-        });
+
+            confirmationMessage += "\nAre you sure you want to create this workshop slot?";
+
+            // Show confirmation dialog
+            return confirm(confirmationMessage);
+        }
+
+        // Enhanced delete confirmation with reason checking
+        function confirmDelete(deleteButton) {
+            // Check if button is disabled (shouldn't happen due to visibility, but just in case)
+            if (deleteButton.disabled || deleteButton.style.display === 'none') {
+                alert('This slot cannot be deleted. It may have already started or has booked seats.');
+                return false;
+            }
+
+            var row = deleteButton.closest('tr');
+            var statusCell = row.querySelector('[id*="lblStatus"]');
+            var statusText = statusCell ? statusCell.innerText : '';
+
+            var confirmationMessage = "Are you sure you want to delete this workshop slot?";
+
+            if (statusText.includes('booked')) {
+                confirmationMessage += "\n\n⚠️ Note: This slot has booked seats. Deleting it will cancel all existing bookings.";
+            }
+
+            return confirm(confirmationMessage);
+        }
     </script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Payment Response</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
         .payment-status {
             max-width: 600px;
@@ -56,7 +56,7 @@
                     <div class="mb-4">
                         <i class="fas fa-times-circle fa-4x text-danger mb-3"></i>
                         <h2 class="card-title text-danger">Payment Failed</h2>
-                        <p class="card-text">Your payment could not be processed. Please try again.</p>
+                        <p class="card-text">Your payment could not be processed.</p>
                     </div>
                     
                     <div class="alert alert-warning text-start">
@@ -64,11 +64,8 @@
                     </div>
                     
                     <div class="mt-4">
-                        <asp:Button ID="btnRetryPayment" runat="server" Text="Retry Payment" 
-                            CssClass="btn btn-danger me-2" OnClick="btnRetryPayment_Click" />
-                        <asp:Button ID="btnContactSupport" runat="server" Text="Contact Support" 
-                            CssClass="btn btn-outline-secondary me-2" OnClick="btnContactSupport_Click" />
-                        <asp:Button ID="btnBackToBookings" runat="server" Text="My Bookings" 
+                        
+                        <asp:Button ID="btnBackToBookings" runat="server" Text="View My Bookings" 
                             CssClass="btn btn-primary" OnClick="btnBackToBookings_Click" />
                     </div>
                 </div>

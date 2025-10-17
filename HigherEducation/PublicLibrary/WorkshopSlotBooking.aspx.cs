@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Web.Configuration;
 using CCA.Util;
 using System.Reflection;
+using HigherEducation.BusinessLayer;
 
 namespace HigherEducation.PublicLibrary
 {
@@ -33,17 +34,18 @@ namespace HigherEducation.PublicLibrary
             {
                 Response.Redirect("Login.aspx");
             }
-            
+
             CandidateName = Session["FullName"].ToString();
             litCan.Text = CandidateName;
-            //Session["UserId"] = user["UserId"];
-            //Session["Mobile"] = user["Mobile"];
-            //Session["Email"] = user["Email"];
+
             if (!IsPostBack)
             {
                 DateTime currentDateTime = DateTime.Now;
                 litCurrentDate.Text = currentDateTime.ToString("dddd, MMMM dd, yyyy");
                 litCurrentTime.Text = currentDateTime.ToString("hh:mm tt");
+
+                // Set default date to today
+                txtSlotDate.Text = DateTime.Today.ToString("yyyy-MM-dd");
 
                 BindDistricts();
                 ClearMessage();
@@ -86,7 +88,10 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-                    LogError("BindDistricts", ex);
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/WorkshopSlotBooking";
+                    clsLogger.ExceptionMsg = "BindDistricts";
+                    clsLogger.SaveException();
                     ShowMessage("Error loading districts. Please try again.", "danger");
                 }
             }
@@ -136,30 +141,38 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-                    LogError("BindGovtITIs", ex);
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/WorkshopSlotBooking";
+                    clsLogger.ExceptionMsg = "BindITIsByDistrict";
+                    clsLogger.SaveException();
                     ShowMessage("Error loading ITIs. Please try again.", "danger");
                 }
             }
         }
 
-        protected void ddlITI_SelectedIndexChanged(object sender, EventArgs e)
+
+        private void BindAvailableSlots()
         {
-            if (!string.IsNullOrEmpty(ddlITI.SelectedValue))
+            if (string.IsNullOrEmpty(txtSlotDate.Text))
             {
-                BindAvailableSlots();
-                pnlSlots.Visible = true;
-                ClearSlotSelection();
+                ShowMessage("Please select a date first.", "warning");
+                pnlSlots.Visible = false;
+                pnlAmount.Visible = false; // Ensure amount panel is hidden
+                pnlBookingForm.Visible = false; // Ensure booking form is hidden
+                return;
             }
-            else
+
+            DateTime selectedDate = DateTime.Parse(txtSlotDate.Text);
+
+            // Don't show slots for weekends
+            if (IsWeekend(selectedDate))
             {
                 pnlSlots.Visible = false;
                 pnlAmount.Visible = false;
                 pnlBookingForm.Visible = false;
+                return;
             }
-        }
 
-        private void BindAvailableSlots()
-        {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 try
@@ -169,7 +182,7 @@ namespace HigherEducation.PublicLibrary
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("p_ITI_Id", ddlITI.SelectedValue);
-                        cmd.Parameters.AddWithValue("p_SlotDate", DateTime.Today);
+                        cmd.Parameters.AddWithValue("p_SlotDate", selectedDate);
 
                         DataTable dt = new DataTable();
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
@@ -177,8 +190,9 @@ namespace HigherEducation.PublicLibrary
                             da.Fill(dt);
                         }
 
-                        // Filter slots where start time is greater than current time
-                        DataTable filteredSlots = FilterSlotsByCurrentTime(dt);
+                        // Filter slots based on current time if selected date is today
+                        DataTable filteredSlots = selectedDate == DateTime.Today ?
+                            FilterSlotsByCurrentTime(dt) : dt;
 
                         if (filteredSlots.Rows.Count > 0)
                         {
@@ -186,21 +200,27 @@ namespace HigherEducation.PublicLibrary
                             rptSlots.DataBind();
                             lblNoSlots.Visible = false;
 
-                            // Restore selected slot if exists, otherwise auto-select first
+                            // Update header text based on selected date
+                            UpdateSlotHeader(selectedDate);
+
+                            // Hide amount panel initially
+                            pnlAmount.Visible = false;
+                            pnlBookingForm.Visible = false;
+
+                            // Restore selected slot if exists, otherwise don't auto-select
                             if (ViewState["SelectedSlotId"] != null)
                             {
                                 RestoreSelectedSlot();
                             }
-                            else
-                            {
-                                SelectFirstAvailableSlot();
-                            }
+                            // Remove auto-selection of first slot
                         }
                         else
                         {
                             rptSlots.DataSource = null;
                             rptSlots.DataBind();
-                            lblNoSlots.Text = "No available slots for today. All slots have either passed or are fully booked.";
+                            lblNoSlots.Text = selectedDate == DateTime.Today ?
+                                "No available slots for today. All slots have either passed or are fully booked." :
+                                $"No available slots for {selectedDate:dddd, MMMM dd}. Please try another date.";
                             lblNoSlots.Visible = true;
                             pnlAmount.Visible = false;
                             pnlBookingForm.Visible = false;
@@ -212,11 +232,17 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-                    LogError("BindAvailableSlots", ex);
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/WorkshopSlotBooking";
+                    clsLogger.ExceptionMsg = "BindAvailableSlots";
+                    clsLogger.SaveException();
                     ShowMessage("Error loading available slots. Please try again.", "danger");
+                    pnlAmount.Visible = false;
+                    pnlBookingForm.Visible = false;
                 }
             }
         }
+
         private DataTable FilterSlotsByCurrentTime(DataTable slots)
         {
             DataTable filteredTable = slots.Clone();
@@ -239,31 +265,7 @@ namespace HigherEducation.PublicLibrary
             return filteredTable;
         }
 
-        private void SelectFirstAvailableSlot()
-        {
-            bool slotSelected = false;
 
-            foreach (RepeaterItem item in rptSlots.Items)
-            {
-                RadioButton rbSlot = (RadioButton)item.FindControl("rbSlot");
-                HtmlGenericControl slotCard = (HtmlGenericControl)item.FindControl("slotCard");
-
-                if (rbSlot != null && rbSlot.Enabled && slotCard != null && !slotCard.Attributes["class"].Contains("full-slot"))
-                {
-                    rbSlot.Checked = true;
-                    rbSlot_CheckedChanged(rbSlot, new EventArgs());
-                    slotSelected = true;
-                    break;
-                }
-            }
-
-            // If no slot was selected (all are disabled), show appropriate message
-            if (!slotSelected && rptSlots.Items.Count > 0)
-            {
-                lblNoSlots.Text = "All available slots for today have already started. Please check back for future slots.";
-                lblNoSlots.Visible = true;
-            }
-        }
 
         protected void rptSlots_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
@@ -273,53 +275,123 @@ namespace HigherEducation.PublicLibrary
 
                 // Set Slot ID
                 Literal litSlotId = (Literal)e.Item.FindControl("litSlotId");
-                litSlotId.Text = rowView["ID"].ToString();
+                if (litSlotId != null)
+                {
+                    litSlotId.Text = rowView["ID"].ToString();
+                }
 
                 // Format Time
                 Literal litTime = (Literal)e.Item.FindControl("litTime");
-                if (TimeSpan.TryParse(rowView["StartTime"].ToString(), out TimeSpan startTime) &&
-                    TimeSpan.TryParse(rowView["EndTime"].ToString(), out TimeSpan endTime))
+                if (litTime != null)
                 {
-                    DateTime startDateTime = DateTime.Today.Add(startTime);
-                    DateTime endDateTime = DateTime.Today.Add(endTime);
-
-                    litTime.Text = $"{startDateTime:hh:mm tt} - {endDateTime:hh:mm tt}";
-
-                    // Check if slot has already started
-                    Label lblSlotStatus = (Label)e.Item.FindControl("lblSlotStatus");
-                    if (lblSlotStatus != null)
+                    if (TimeSpan.TryParse(rowView["StartTime"].ToString(), out TimeSpan startTime) &&
+                        TimeSpan.TryParse(rowView["EndTime"].ToString(), out TimeSpan endTime))
                     {
-                        if (startDateTime <= DateTime.Now)
+                        DateTime startDateTime = DateTime.Today.Add(startTime);
+                        DateTime endDateTime = DateTime.Today.Add(endTime);
+
+                        litTime.Text = $"{startDateTime:hh:mm tt} - {endDateTime:hh:mm tt}";
+                    }
+                    else
+                    {
+                        litTime.Text = "Time not available";
+                    }
+                }
+
+                // Slot Status (Started/Upcoming/Scheduled)
+                Label lblSlotStatus = (Label)e.Item.FindControl("lblSlotStatus");
+                if (lblSlotStatus != null)
+                {
+                    DateTime selectedDate = string.IsNullOrEmpty(txtSlotDate.Text) ?
+                        DateTime.Today : DateTime.Parse(txtSlotDate.Text);
+
+                    if (TimeSpan.TryParse(rowView["StartTime"].ToString(), out TimeSpan startTime))
+                    {
+                        DateTime slotDateTime = selectedDate.Add(startTime);
+
+                        if (selectedDate == DateTime.Today)
                         {
-                            lblSlotStatus.Text = " (Started)";
-                            lblSlotStatus.CssClass = "text-danger small";
+                            if (slotDateTime <= DateTime.Now)
+                            {
+                                lblSlotStatus.Text = " (Started)";
+                                lblSlotStatus.CssClass = "text-danger small";
+                            }
+                            else
+                            {
+                                lblSlotStatus.Text = " (Upcoming)";
+                                lblSlotStatus.CssClass = "text-success small";
+                            }
+                        }
+                        else if (selectedDate < DateTime.Today)
+                        {
+                            lblSlotStatus.Text = " (Past)";
+                            lblSlotStatus.CssClass = "text-muted small";
                         }
                         else
                         {
-                            lblSlotStatus.Text = " (Upcoming)";
-                            lblSlotStatus.CssClass = "text-success small";
+                            lblSlotStatus.Text = " (Scheduled)";
+                            lblSlotStatus.CssClass = "text-info small";
                         }
                     }
                 }
 
                 // Format Duration
                 Literal litDuration = (Literal)e.Item.FindControl("litDuration");
-                if (double.TryParse(rowView["Duration"].ToString(), out double duration))
+                if (litDuration != null)
                 {
-                    litDuration.Text = $"{duration:0} hour{(duration > 1 ? "s" : "")}";
+                    if (double.TryParse(rowView["Duration"].ToString(), out double duration))
+                    {
+                        litDuration.Text = $"{duration:0} hour{(duration > 1 ? "s" : "")}";
+                    }
+                    else
+                    {
+                        litDuration.Text = "Duration not available";
+                    }
                 }
 
-                // Available Seats
-                Literal litAvailableSeats = (Literal)e.Item.FindControl("litAvailableSeats");
-                int availableSeats = Convert.ToInt32(rowView["AvailableSeats"]);
-                litAvailableSeats.Text = availableSeats.ToString();
+                // Available Seats - Use Label instead of Literal for styling
+                Label lblAvailableSeats = (Label)e.Item.FindControl("lblAvailableSeats");
+                if (lblAvailableSeats != null)
+                {
+                    int availableSeats = 0;
+                    if (int.TryParse(rowView["AvailableSeats"].ToString(), out availableSeats))
+                    {
+                        lblAvailableSeats.Text = availableSeats.ToString();
+
+                        // Change color based on availability
+                        if (availableSeats == 0)
+                        {
+                            lblAvailableSeats.CssClass = "text-danger font-weight-bold";
+                        }
+                        else if (availableSeats <= 2) // Low availability
+                        {
+                            lblAvailableSeats.CssClass = "text-warning font-weight-bold";
+                        }
+                        else
+                        {
+                            lblAvailableSeats.CssClass = "text-success font-weight-bold";
+                        }
+                    }
+                    else
+                    {
+                        lblAvailableSeats.Text = "0";
+                        lblAvailableSeats.CssClass = "text-danger font-weight-bold";
+                    }
+                }
 
                 // Calculate and display amount (for single seat)
                 Literal litAmount = (Literal)e.Item.FindControl("litAmount");
-                if (double.TryParse(rowView["Duration"].ToString(), out double hours))
+                if (litAmount != null)
                 {
-                    decimal amount = (decimal)hours * hourlyRate;
-                    litAmount.Text = amount.ToString("0");
+                    if (double.TryParse(rowView["Duration"].ToString(), out double hours))
+                    {
+                        decimal amount = (decimal)hours * hourlyRate;
+                        litAmount.Text = amount.ToString("0");
+                    }
+                    else
+                    {
+                        litAmount.Text = "0";
+                    }
                 }
 
                 // Store additional slot information for booking
@@ -327,48 +399,154 @@ namespace HigherEducation.PublicLibrary
                 HiddenField hfWorkshopTime = (HiddenField)e.Item.FindControl("hfWorkshopTime");
                 HiddenField hfWorkshopDuration = (HiddenField)e.Item.FindControl("hfWorkshopDuration");
 
-                if (hfWorkshopDate != null) hfWorkshopDate.Value = DateTime.Today.ToString("yyyy-MM-dd");
+                if (hfWorkshopDate != null)
+                {
+                    DateTime selectedDate = string.IsNullOrEmpty(txtSlotDate.Text) ?
+                        DateTime.Today : DateTime.Parse(txtSlotDate.Text);
+                    hfWorkshopDate.Value = selectedDate.ToString("yyyy-MM-dd");
+                }
+
                 if (hfWorkshopTime != null && TimeSpan.TryParse(rowView["StartTime"].ToString(), out TimeSpan slotTime))
                 {
                     hfWorkshopTime.Value = slotTime.ToString();
                 }
-                if (hfWorkshopDuration != null) hfWorkshopDuration.Value = rowView["Duration"].ToString();
 
-                // Disable radio button if no seats available or slot has started
+                if (hfWorkshopDuration != null)
+                {
+                    hfWorkshopDuration.Value = rowView["Duration"].ToString();
+                }
+
+                // Disable radio button if no seats available or slot has started (only for today/past dates)
                 RadioButton rbSlot = (RadioButton)e.Item.FindControl("rbSlot");
                 HtmlGenericControl slotCard = (HtmlGenericControl)e.Item.FindControl("slotCard");
 
-                if (TimeSpan.TryParse(rowView["StartTime"].ToString(), out TimeSpan slotStartTime))
+                if (rbSlot != null && slotCard != null)
                 {
-                    DateTime slotDateTime = DateTime.Today.Add(slotStartTime);
-                    bool isSlotStarted = slotDateTime <= DateTime.Now;
-                    bool hasAvailableSeats = availableSeats >= SEATS_PER_BOOKING;
+                    DateTime selectedDate = string.IsNullOrEmpty(txtSlotDate.Text) ?
+                        DateTime.Today : DateTime.Parse(txtSlotDate.Text);
 
-                    if (!hasAvailableSeats || isSlotStarted)
+                    bool isSlotStarted = false;
+                    bool hasAvailableSeats = false;
+                    int availableSeats = 0;
+
+                    // Check available seats
+                    if (int.TryParse(rowView["AvailableSeats"].ToString(), out availableSeats))
+                    {
+                        hasAvailableSeats = availableSeats >= SEATS_PER_BOOKING;
+                    }
+
+                    // Check if slot has started
+                    if (TimeSpan.TryParse(rowView["StartTime"].ToString(), out TimeSpan slotStartTime))
+                    {
+                        DateTime slotDateTime = selectedDate.Add(slotStartTime);
+
+                        if (selectedDate < DateTime.Today)
+                        {
+                            // Past date - all slots are unavailable
+                            isSlotStarted = true;
+                        }
+                        else if (selectedDate == DateTime.Today)
+                        {
+                            // Today - check if slot time has passed
+                            isSlotStarted = slotDateTime <= DateTime.Now;
+                        }
+                        else
+                        {
+                            // Future date - slots are available
+                            isSlotStarted = false;
+                        }
+                    }
+
+                    // Determine if slot should be enabled
+                    bool shouldEnableSlot = hasAvailableSeats && !isSlotStarted;
+
+                    if (!shouldEnableSlot)
                     {
                         rbSlot.Enabled = false;
-                        if (slotCard != null)
+                        slotCard.Attributes["class"] = (slotCard.Attributes["class"] ?? "") + " disabled";
+
+                        // Add appropriate tooltip
+                        if (!hasAvailableSeats)
                         {
-                            slotCard.Attributes["class"] = "slot-card full-slot";
-                            if (isSlotStarted)
+                            slotCard.Attributes["title"] = "No seats available";
+                            slotCard.Style["cursor"] = "not-allowed";
+                        }
+                        else if (isSlotStarted)
+                        {
+                            if (selectedDate < DateTime.Today)
                             {
-                                // Add tooltip or additional info for started slots
+                                slotCard.Attributes["title"] = "This slot is from a past date";
+                            }
+                            else
+                            {
                                 slotCard.Attributes["title"] = "This slot has already started";
                             }
+                            slotCard.Style["cursor"] = "not-allowed";
                         }
                     }
                     else
                     {
                         rbSlot.Enabled = true;
-                        if (slotCard != null)
+                        string currentClass = slotCard.Attributes["class"] ?? "";
+                        slotCard.Attributes["class"] = currentClass.Replace("disabled", "").Trim();
+                        slotCard.Attributes["title"] = "Click to select this slot";
+                        slotCard.Style["cursor"] = "pointer";
+                    }
+
+                    // Add data attributes for JavaScript
+                    slotCard.Attributes["data-slot-id"] = rowView["ID"].ToString();
+                    slotCard.Attributes["data-available-seats"] = availableSeats.ToString();
+                    slotCard.Attributes["data-start-time"] = rowView["StartTime"].ToString();
+                    slotCard.Attributes["data-duration"] = rowView["Duration"].ToString();
+                }
+
+                // Add visual indicators for slot status
+                if (slotCard != null)
+                {
+                    DateTime selectedDate = string.IsNullOrEmpty(txtSlotDate.Text) ?
+                        DateTime.Today : DateTime.Parse(txtSlotDate.Text);
+
+                    // Remove existing status classes
+                    string currentClass = slotCard.Attributes["class"] ?? "";
+                    currentClass = currentClass.Replace("slot-past", "")
+                                              .Replace("slot-today", "")
+                                              .Replace("slot-future", "")
+                                              .Replace("slot-full", "")
+                                              .Replace("slot-available", "")
+                                              .Trim();
+
+                    // Add appropriate status class
+                    if (selectedDate < DateTime.Today)
+                    {
+                        currentClass += " slot-past";
+                    }
+                    else if (selectedDate == DateTime.Today)
+                    {
+                        currentClass += " slot-today";
+                    }
+                    else
+                    {
+                        currentClass += " slot-future";
+                    }
+
+                    // Add availability class
+                    int availableSeats = 0;
+                    if (int.TryParse(rowView["AvailableSeats"].ToString(), out availableSeats))
+                    {
+                        if (availableSeats == 0)
                         {
-                            slotCard.Attributes["class"] = "slot-card";
+                            currentClass += " slot-full";
+                        }
+                        else
+                        {
+                            currentClass += " slot-available";
                         }
                     }
+
+                    slotCard.Attributes["class"] = currentClass.Trim();
                 }
             }
         }
-
         protected void rbSlot_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton rb = (RadioButton)sender;
@@ -380,6 +558,14 @@ namespace HigherEducation.PublicLibrary
                 if (otherRb != null && otherRb != rb)
                 {
                     otherRb.Checked = false;
+
+                    // Remove selected class from other slots
+                    HtmlGenericControl otherSlotCard = (HtmlGenericControl)item.FindControl("slotCard");
+                    if (otherSlotCard != null)
+                    {
+                        string currentClass = otherSlotCard.Attributes["class"] ?? "";
+                        otherSlotCard.Attributes["class"] = currentClass.Replace("selected", "").Trim();
+                    }
                 }
             }
 
@@ -392,11 +578,22 @@ namespace HigherEducation.PublicLibrary
                 Literal litSlotId = (Literal)item.FindControl("litSlotId");
                 Literal litDuration = (Literal)item.FindControl("litDuration");
                 Literal litTime = (Literal)item.FindControl("litTime");
+                HtmlGenericControl slotCard = (HtmlGenericControl)item.FindControl("slotCard");
 
                 if (int.TryParse(litSlotId.Text, out selectedSlotId))
                 {
                     // Store the selected slot in ViewState for postback
                     ViewState["SelectedSlotId"] = selectedSlotId;
+
+                    // Add selected class to the slot card
+                    if (slotCard != null)
+                    {
+                        string currentClass = slotCard.Attributes["class"] ?? "";
+                        if (!currentClass.Contains("selected"))
+                        {
+                            slotCard.Attributes["class"] = currentClass + " selected";
+                        }
+                    }
 
                     // Calculate amount for single seat
                     if (double.TryParse(litDuration.Text.Replace(" hours", "").Replace(" hour", ""), out double hours))
@@ -405,6 +602,7 @@ namespace HigherEducation.PublicLibrary
                         litTotalAmount.Text = totalAmount.ToString("0");
                         litSelectedDuration.Text = litDuration.Text;
 
+                        // Show amount and booking form panels
                         pnlAmount.Visible = true;
                         pnlBookingForm.Visible = true;
                     }
@@ -412,11 +610,13 @@ namespace HigherEducation.PublicLibrary
             }
             else
             {
+                // Hide panels if no slot is selected
                 pnlAmount.Visible = false;
                 pnlBookingForm.Visible = false;
                 ViewState["SelectedSlotId"] = null;
             }
         }
+
         protected void btnBookSlot_Click(object sender, EventArgs e)
         {
             if (Page.IsValid && selectedSlotId > 0)
@@ -440,12 +640,12 @@ namespace HigherEducation.PublicLibrary
                     }
 
                     TimeSpan workshopTime = TimeSpan.Parse(slotDetails["StartTime"].ToString());
-                    DateTime workshopDate = DateTime.Today;
+                    DateTime workshopDate = DateTime.Parse(slotDetails["SlotDate"].ToString());
 
-                    // Check for duplicate booking
-                    if (CheckDuplicateBooking(Session["Mobile"].ToString(), selectedSlotId, workshopDate, workshopTime))
+                    // Check for duplicate booking (simplified - only mobile number and slot ID)
+                    if (CheckDuplicateBooking(Session["Mobile"].ToString(), selectedSlotId))
                     {
-                        ShowMessage("You have already booked a workshop slot at this time. Each user can book only one slot per time period.", "warning");
+                        ShowMessage("You have already booked this workshop slot. Each user can book only one seat per slot. Kindly Click on View My Bookings to Check Status of your Booking", "warning");
                         return;
                     }
 
@@ -457,7 +657,10 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-                    LogError("btnBookSlot_Click", ex);
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/WorkshopSlotBooking";
+                    clsLogger.ExceptionMsg = "btnBookSlot_Click";
+                    clsLogger.SaveException();
                     ShowMessage($"Error booking slot: {ex.Message}", "danger");
                 }
             }
@@ -490,14 +693,17 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-                    LogError("CheckSeatAvailability", ex);
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/WorkshopSlotBooking";
+                    clsLogger.ExceptionMsg = "CheckSeatAvailability";
+                    clsLogger.SaveException();
                     return false;
                 }
             }
             return false;
         }
 
-        private bool CheckDuplicateBooking(string mobileNumber, int slotId, DateTime workshopDate, TimeSpan workshopTime)
+        private bool CheckDuplicateBooking(string mobileNumber, int slotId)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -509,21 +715,25 @@ namespace HigherEducation.PublicLibrary
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("p_MobileNumber", mobileNumber);
                         cmd.Parameters.AddWithValue("p_SlotID", slotId);
-                        cmd.Parameters.AddWithValue("p_WorkshopDate", workshopDate.Date);
-                        cmd.Parameters.AddWithValue("p_WorkshopTime", workshopTime);
 
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                return Convert.ToInt32(reader["IsDuplicate"]) == 1;
+                                // For first version: return Convert.ToInt32(reader["IsDuplicate"]) == 1;
+                                // For simpler version: return Convert.ToInt32(reader["IsDuplicate"]) > 0;
+                                return Convert.ToInt32(reader["IsDuplicate"]) > 0;
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    LogError("CheckDuplicateBooking", ex);
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/WorkshopSlotBooking";
+                    clsLogger.ExceptionMsg = "CheckDuplicateBooking";
+                    clsLogger.SaveException();
+                    // In case of error, assume no duplicate to not block legitimate bookings
                     return false;
                 }
             }
@@ -602,7 +812,10 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (MySqlException ex)
                 {
-                    LogError("SaveBooking", ex);
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/WorkshopSlotBooking";
+                    clsLogger.ExceptionMsg = "SaveBooking";
+                    clsLogger.SaveException();
                     if (ex.Message.Contains("No seats available"))
                     {
                         ShowMessage("Sorry, this slot is no longer available. Please select a different slot.", "danger");
@@ -624,7 +837,10 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-                    LogError("SaveBooking", ex);
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/WorkshopSlotBooking";
+                    clsLogger.ExceptionMsg = "SaveBooking";
+                    clsLogger.SaveException();
                     ShowMessage($"Error saving booking: {ex.Message}", "danger");
                     return false;
                 }
@@ -633,62 +849,83 @@ namespace HigherEducation.PublicLibrary
 
         private int SaveWorkshopBooking(MySqlConnection conn, MySqlTransaction transaction, int slotId, DataRow slotDetails, decimal bookingAmount)
         {
-            using (MySqlCommand cmd = new MySqlCommand("sp_SaveBooking", conn, transaction))
+            try
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                // Set parameters for workshop booking
-                cmd.Parameters.AddWithValue("p_SlotID", slotId);
-                cmd.Parameters.AddWithValue("p_FullName", CandidateName);
-                cmd.Parameters.AddWithValue("p_Email", Session["Email"]?.ToString() ?? "");
-                cmd.Parameters.AddWithValue("p_MobileNumber", Session["Mobile"]?.ToString() ?? "");
-                cmd.Parameters.AddWithValue("p_DistrictId", Convert.ToInt32(ddlDistrict.SelectedValue));
-                cmd.Parameters.AddWithValue("p_District", ddlDistrict.SelectedItem.Text);
-                cmd.Parameters.AddWithValue("p_ITI_Id", Convert.ToInt32(ddlITI.SelectedValue));
-                cmd.Parameters.AddWithValue("p_ITI_Name", ddlITI.SelectedItem.Text);
-                cmd.Parameters.AddWithValue("p_WorkshopDate", DateTime.Today);
-                cmd.Parameters.AddWithValue("p_WorkshopTime", TimeSpan.Parse(slotDetails["StartTime"].ToString()));
-                cmd.Parameters.AddWithValue("p_WorkshopDuration", Convert.ToInt32(slotDetails["Duration"]));
-                cmd.Parameters.AddWithValue("p_BookingAmount", bookingAmount);
-                cmd.Parameters.AddWithValue("p_UserId", Session["UserId"].ToString());
-
-                using (MySqlDataReader reader = cmd.ExecuteReader())
+                using (MySqlCommand cmd = new MySqlCommand("sp_SaveBooking", conn, transaction))
                 {
-                    if (reader.Read())
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Set parameters for workshop booking
+                    cmd.Parameters.AddWithValue("p_SlotID", slotId);
+                    cmd.Parameters.AddWithValue("p_FullName", CandidateName);
+                    cmd.Parameters.AddWithValue("p_Email", Session["Email"]?.ToString() ?? "");
+                    cmd.Parameters.AddWithValue("p_MobileNumber", Session["Mobile"]?.ToString() ?? "");
+                    cmd.Parameters.AddWithValue("p_DistrictId", Convert.ToInt32(ddlDistrict.SelectedValue));
+                    cmd.Parameters.AddWithValue("p_District", ddlDistrict.SelectedItem.Text);
+                    cmd.Parameters.AddWithValue("p_ITI_Id", Convert.ToInt32(ddlITI.SelectedValue));
+                    cmd.Parameters.AddWithValue("p_ITI_Name", ddlITI.SelectedItem.Text);
+                    cmd.Parameters.AddWithValue("p_WorkshopDate", DateTime.Parse(slotDetails["SlotDate"].ToString()));
+                    cmd.Parameters.AddWithValue("p_WorkshopTime", TimeSpan.Parse(slotDetails["StartTime"].ToString()));
+                    cmd.Parameters.AddWithValue("p_WorkshopDuration", Convert.ToInt32(slotDetails["Duration"]));
+                    cmd.Parameters.AddWithValue("p_BookingAmount", bookingAmount);
+                    cmd.Parameters.AddWithValue("p_UserId", Session["UserId"].ToString());
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
-                        return Convert.ToInt32(reader["BookingID"]);
+                        if (reader.Read())
+                        {
+                            return Convert.ToInt32(reader["BookingID"]);
+                        }
                     }
+                    return 0;
                 }
-                return 0;
             }
+            catch (Exception ex)
+            {
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/WorkshopSlotBooking";
+                clsLogger.ExceptionMsg = "SaveWorkshopBooking";
+                clsLogger.SaveException();
+            }
+            return 0;
         }
 
         private int SavePaymentRecord(MySqlConnection conn, MySqlTransaction transaction, int bookingId, int slotId, string paymentReferenceId, decimal bookingAmount)
         {
-            using (MySqlCommand cmd = new MySqlCommand("sp_SavePaymentRecord", conn, transaction))
+            try
             {
-                cmd.CommandType = CommandType.StoredProcedure;
+                using (MySqlCommand cmd = new MySqlCommand("sp_SavePaymentRecord", conn, transaction))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("p_FullName", CandidateName);
-                cmd.Parameters.AddWithValue("p_UserId", Session["UserId"].ToString());
-                cmd.Parameters.AddWithValue("p_PaymentReferenceID", paymentReferenceId);
-                cmd.Parameters.AddWithValue("p_College_id", Convert.ToInt32(ddlITI.SelectedValue));
-                cmd.Parameters.AddWithValue("p_SubscriptionId_SlotId", slotId.ToString());
-                cmd.Parameters.AddWithValue("p_PaymentType", "WORKSHOP");
-                cmd.Parameters.AddWithValue("p_Mobile", Session["Mobile"]?.ToString() ?? "");
-                cmd.Parameters.AddWithValue("p_Email", Session["Email"]?.ToString() ?? "");
-                cmd.Parameters.AddWithValue("p_TotalAmount", bookingAmount);
-                cmd.Parameters.AddWithValue("p_Payment_gateway", "CCAvenue"); // Replace with actual gateway name
-                cmd.Parameters.AddWithValue("p_CreateUser", Session["UserId"].ToString());
-                cmd.Parameters.AddWithValue("p_IPAddress", GetClientIPAddress());
-                cmd.Parameters.AddWithValue("p_Remarks", "Workshop slot booking payment");
+                    cmd.Parameters.AddWithValue("p_FullName", CandidateName);
+                    cmd.Parameters.AddWithValue("p_UserId", Session["UserId"].ToString());
+                    cmd.Parameters.AddWithValue("p_PaymentReferenceID", paymentReferenceId);
+                    cmd.Parameters.AddWithValue("p_College_id", Convert.ToInt32(ddlITI.SelectedValue));
+                    cmd.Parameters.AddWithValue("p_SubscriptionId_SlotId", slotId.ToString());
+                    cmd.Parameters.AddWithValue("p_PaymentType", "WORKSHOP");
+                    cmd.Parameters.AddWithValue("p_Mobile", Session["Mobile"]?.ToString() ?? "");
+                    cmd.Parameters.AddWithValue("p_Email", Session["Email"]?.ToString() ?? "");
+                    cmd.Parameters.AddWithValue("p_TotalAmount", bookingAmount);
+                    cmd.Parameters.AddWithValue("p_Payment_gateway", "CCAvenue"); // Replace with actual gateway name
+                    cmd.Parameters.AddWithValue("p_CreateUser", Session["UserId"].ToString());
+                    cmd.Parameters.AddWithValue("p_IPAddress", GetClientIPAddress());
+                    cmd.Parameters.AddWithValue("p_Remarks", "Workshop slot booking payment");
 
-                // Execute and get the payment ID
-                object result = cmd.ExecuteScalar();
-                return result != null ? Convert.ToInt32(result) : 0;
+                    // Execute and get the payment ID
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : 0;
+                }
             }
+            catch (Exception ex)
+            {
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/WorkshopSlotBooking";
+                clsLogger.ExceptionMsg = "SavePaymentRecord";
+                clsLogger.SaveException();
+            }
+            return 0;
         }
-
 
 
         private void RedirectToPaymentGateway(int bookingId, string paymentReferenceId, decimal amount)
@@ -720,28 +957,31 @@ namespace HigherEducation.PublicLibrary
                 objFeeModule.merchant_param5 = "WORKSHOP";  // Payment type
 
 
-                
-                    // Generate encrypted request for payment gateway
-                    string ccaRequest = GenerateCCARequest(objFeeModule);
-                    string workingKey = ConfigurationManager.AppSettings["workingKey_ITI"];
-                    string strAccessCode = ConfigurationManager.AppSettings["strAccessCode_ITI"];
 
-                    // Encrypt the request (you need the ccaCrypto class)
-                    string strEncRequest = ccaCrypto.Encrypt(ccaRequest, workingKey);
+                // Generate encrypted request for payment gateway
+                string ccaRequest = GenerateCCARequest(objFeeModule);
+                string workingKey = ConfigurationManager.AppSettings["workingKey_ITI"];
+                string strAccessCode = ConfigurationManager.AppSettings["strAccessCode_ITI"];
 
-                    // Store in session or pass to payment page
-                    Session["strEncRequest"] = strEncRequest;
-                    Session["strAccessCode"] = strAccessCode;
-                    Session["strMerchantId"] = objFeeModule.merchant_id;
+                // Encrypt the request (you need the ccaCrypto class)
+                string strEncRequest = ccaCrypto.Encrypt(ccaRequest, workingKey);
 
-                    // Redirect to payment page
-                    Response.Redirect("PaymentGateway.aspx", false);
-                    Context.ApplicationInstance.CompleteRequest();
-                
+                // Store in session or pass to payment page
+                Session["strEncRequest"] = strEncRequest;
+                Session["strAccessCode"] = strAccessCode;
+                Session["strMerchantId"] = objFeeModule.merchant_id;
+
+                // Redirect to payment page
+                Response.Redirect("PaymentGateway.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
+
             }
             catch (Exception ex)
             {
-                LogError("RedirectToPaymentGateway", ex);
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/WorkshopSlotBooking";
+                clsLogger.ExceptionMsg = "RedirectToPaymentGateway";
+                clsLogger.SaveException();
                 ShowMessage("Error initializing payment gateway.", "danger");
             }
         }
@@ -776,11 +1016,6 @@ namespace HigherEducation.PublicLibrary
             return ccaRequest;
         }
 
-        private string ToQueryString(System.Collections.Specialized.NameValueCollection nvc)
-        {
-            return string.Join("&", nvc.AllKeys.Select(key => $"{Uri.EscapeDataString(key)}={Uri.EscapeDataString(nvc[key])}"));
-        }
-
         private string GetClientIPAddress()
         {
             string ipAddress = Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
@@ -812,7 +1047,10 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-                    LogError("GetSlotDetails", ex);
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/WorkshopSlotBooking";
+                    clsLogger.ExceptionMsg = "GetSlotDetails";
+                    clsLogger.SaveException();
                     return null;
                 }
             }
@@ -821,6 +1059,7 @@ namespace HigherEducation.PublicLibrary
         protected void btnCancel_Click(object sender, EventArgs e)
         {
             ClearForm();
+            ShowMessage("Slot selection cancelled.", "info");
         }
 
         private void ClearForm()
@@ -835,6 +1074,10 @@ namespace HigherEducation.PublicLibrary
         {
             selectedSlotId = 0;
             ViewState["SelectedSlotId"] = null;
+
+            // Hide amount and booking panels
+            pnlAmount.Visible = false;
+            pnlBookingForm.Visible = false;
 
             foreach (RepeaterItem item in rptSlots.Items)
             {
@@ -853,6 +1096,7 @@ namespace HigherEducation.PublicLibrary
                 }
             }
         }
+
 
         private void ShowMessage(string message, string type)
         {
@@ -880,12 +1124,6 @@ namespace HigherEducation.PublicLibrary
             pnlMessage.Style["display"] = "none";
         }
 
-        private void LogError(string methodName, Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"Error in {methodName}: {ex.Message}");
-            System.Diagnostics.Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
-        }
-
         private void RestoreSelectedSlot()
         {
             if (ViewState["SelectedSlotId"] != null)
@@ -897,14 +1135,33 @@ namespace HigherEducation.PublicLibrary
                 {
                     RadioButton rbSlot = (RadioButton)item.FindControl("rbSlot");
                     Literal litSlotId = (Literal)item.FindControl("litSlotId");
+                    HtmlGenericControl slotCard = (HtmlGenericControl)item.FindControl("slotCard");
 
-                    if (rbSlot != null && litSlotId != null && int.TryParse(litSlotId.Text, out int slotId))
+                    if (rbSlot != null && litSlotId != null && slotCard != null && int.TryParse(litSlotId.Text, out int slotId))
                     {
-                        if (slotId == selectedSlotId)
+                        if (slotId == selectedSlotId && rbSlot.Enabled)
                         {
                             rbSlot.Checked = true;
+
+                            // Add selected class
+                            string currentClass = slotCard.Attributes["class"] ?? "";
+                            if (!currentClass.Contains("selected"))
+                            {
+                                slotCard.Attributes["class"] = currentClass + " selected";
+                            }
+
+                            // Show amount panel
                             pnlAmount.Visible = true;
                             pnlBookingForm.Visible = true;
+
+                            // Update amount display
+                            Literal litDuration = (Literal)item.FindControl("litDuration");
+                            if (litDuration != null && double.TryParse(litDuration.Text.Replace(" hours", "").Replace(" hour", ""), out double hours))
+                            {
+                                decimal totalAmount = (decimal)hours * hourlyRate;
+                                litTotalAmount.Text = totalAmount.ToString("0");
+                                litSelectedDuration.Text = litDuration.Text;
+                            }
                             break;
                         }
                     }
@@ -912,11 +1169,90 @@ namespace HigherEducation.PublicLibrary
             }
         }
 
-
         protected void btnViewBooking_Click(object sender, EventArgs e)
         {
             Response.Redirect($"ViewMyWorkshopBookings.aspx");
         }
+
+        protected void txtSlotDate_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtSlotDate.Text))
+            {
+                DateTime selectedDate = DateTime.Parse(txtSlotDate.Text);
+
+                // Check if weekend
+                if (IsWeekend(selectedDate))
+                {
+                    pnlWeekendWarning.Visible = true;
+                    pnlSlots.Visible = false;
+                    pnlAmount.Visible = false;
+                    pnlBookingForm.Visible = false;
+                }
+                else
+                {
+                    pnlWeekendWarning.Visible = false;
+                    if (!string.IsNullOrEmpty(ddlITI.SelectedValue))
+                    {
+                        BindAvailableSlots();
+                        pnlSlots.Visible = true;
+                    }
+                }
+            }
+            else
+            {
+                pnlSlots.Visible = false;
+                pnlAmount.Visible = false;
+                pnlBookingForm.Visible = false;
+                pnlWeekendWarning.Visible = false;
+            }
+        }
+
+        protected void cvSlotDate_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (!string.IsNullOrEmpty(txtSlotDate.Text))
+            {
+                DateTime selectedDate = DateTime.Parse(txtSlotDate.Text);
+                args.IsValid = !IsWeekend(selectedDate);
+            }
+            else
+            {
+                args.IsValid = false;
+            }
+        }
+
+        private bool IsWeekend(DateTime date)
+        {
+            return date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
+        }
+
+        private void UpdateSlotHeader(DateTime selectedDate)
+        {
+            string dateText = selectedDate == DateTime.Today ? "Today" : selectedDate.ToString("dddd, MMMM dd");
+            head.InnerText = $"Available Workshop Slots - {dateText}";
+            showText.InnerText = $"Select one slot to book for {selectedDate:MMMM dd, yyyy}. Price: ₹300 per hour. Green indicates available seats.";
+        }
+
+        // Update the ddlITI_SelectedIndexChanged method
+        protected void ddlITI_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ddlITI.SelectedValue) && !string.IsNullOrEmpty(txtSlotDate.Text))
+            {
+                DateTime selectedDate = DateTime.Parse(txtSlotDate.Text);
+                if (!IsWeekend(selectedDate))
+                {
+                    BindAvailableSlots();
+                    pnlSlots.Visible = true;
+                    ClearSlotSelection();
+                }
+            }
+            else
+            {
+                pnlSlots.Visible = false;
+                pnlAmount.Visible = false;
+                pnlBookingForm.Visible = false;
+            }
+        }
+
     }
 
 }

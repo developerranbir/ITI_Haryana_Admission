@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using HigherEducation.BusinessLayer;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,7 +11,6 @@ using System.Web.UI.WebControls;
 
 namespace HigherEducation.PublicLibrary
 {
-  
     public partial class AddWorkShopSlot : System.Web.UI.Page
     {
         private string connectionString = ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString;
@@ -44,10 +44,58 @@ namespace HigherEducation.PublicLibrary
                 DateTime currentDateTime = DateTime.Now;
                 litCurrentDate.Text = currentDateTime.ToString("dddd, MMMM dd, yyyy");
                 litCurrentTime.Text = currentDateTime.ToString("hh:mm tt");
+
+                // Set default date to today
+                txtSlotDate.Text = DateTime.Today.ToString("yyyy-MM-dd");
+                UpdateSelectedDateDisplay();
                 BindTimeSlots();
                 BindExistingSlots();
 
                 ClearMessage();
+            }
+        }
+
+        protected void txtSlotDate_TextChanged(object sender, EventArgs e)
+        {
+            if (IsValidDateSelected())
+            {
+                UpdateSelectedDateDisplay();
+                BindTimeSlots();
+                BindExistingSlots();
+                ClearMessage();
+            }
+            else
+            {
+                ClearForm();
+                gvSlots.DataSource = new DataTable();
+                gvSlots.DataBind();
+            }
+        }
+
+        private bool IsValidDateSelected()
+        {
+            if (string.IsNullOrEmpty(txtSlotDate.Text))
+                return false;
+
+            if (!DateTime.TryParse(txtSlotDate.Text, out DateTime selectedDate))
+                return false;
+
+            // Check if date is a weekday (Monday to Friday)
+            return IsWeekday(selectedDate);
+        }
+
+        private bool IsWeekday(DateTime date)
+        {
+            return date.DayOfWeek >= DayOfWeek.Monday && date.DayOfWeek <= DayOfWeek.Friday;
+        }
+
+        private void UpdateSelectedDateDisplay()
+        {
+            if (DateTime.TryParse(txtSlotDate.Text, out DateTime selectedDate))
+            {
+                
+                // Update grid title
+                litGridTitle.Text = $"Workshop Slots for {selectedDate.ToString("dddd, MMMM dd, yyyy")}";
             }
         }
 
@@ -61,22 +109,36 @@ namespace HigherEducation.PublicLibrary
                 ddlStartTime.Items.Add(new ListItem("-- Select Start Time --", ""));
                 ddlEndTime.Items.Add(new ListItem("-- Select End Time --", ""));
 
-                DateTime currentTime = DateTime.Now;
-                DateTime startTime = DateTime.Today.AddHours(9); // 9 AM
-                DateTime lastStartTime = DateTime.Today.AddHours(16.1); // 4 PM
-
-                // If current time is after 4 PM, disable slot creation
-                if (currentTime.TimeOfDay > lastStartTime.TimeOfDay)
+                // Check if valid date is selected
+                if (!IsValidDateSelected())
                 {
-                    ShowMessage("Workshop slot creation for today is only available until 4:00 PM.", "warning");
                     btnSave.Enabled = false;
                     return;
                 }
 
-                // Adjust start time based on current time
-                if (currentTime.TimeOfDay > startTime.TimeOfDay)
+                DateTime selectedDate = DateTime.Parse(txtSlotDate.Text);
+                DateTime currentTime = DateTime.Now;
+
+                // If selected date is today, use current time logic
+                // If selected date is in future, show all time slots
+                DateTime startTime = selectedDate.AddHours(9); // 9 AM
+                DateTime lastStartTime = selectedDate.AddHours(16.1); // 4 PM
+
+                if (selectedDate.Date == DateTime.Today)
                 {
-                    startTime = GetNextAvailableTimeSlot(currentTime);
+                    // If current time is after 4 PM for today, disable slot creation
+                    if (currentTime.TimeOfDay > lastStartTime.TimeOfDay)
+                    {
+                        ShowMessage("Workshop slot creation for today is only available until 4:00 PM.", "warning");
+                        btnSave.Enabled = false;
+                        return;
+                    }
+
+                    // Adjust start time based on current time for today
+                    if (currentTime.TimeOfDay > startTime.TimeOfDay)
+                    {
+                        startTime = GetNextAvailableTimeSlot(currentTime);
+                    }
                 }
 
                 // Generate time slots from calculated start time to 4 PM
@@ -89,17 +151,20 @@ namespace HigherEducation.PublicLibrary
                     startTime = startTime.AddMinutes(15);
                 }
 
-                // Enable/disable save button based on available slots
-                btnSave.Enabled = (ddlStartTime.Items.Count > 1);
+                // Enable/disable save button based on available slots and date validity
+                btnSave.Enabled = (ddlStartTime.Items.Count > 1) && IsValidDateSelected();
 
-                if (!btnSave.Enabled)
+                if (!btnSave.Enabled && IsValidDateSelected())
                 {
-                    ShowMessage("No available time slots remaining for today. Last start time is 4:00 PM.", "warning");
+                    ShowMessage("No available time slots remaining for selected date. Last start time is 4:00 PM.", "warning");
                 }
             }
             catch (Exception ex)
             {
-                LogError("BindTimeSlots", ex);
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
+                clsLogger.ExceptionMsg = "BindTimeSlots";
+                clsLogger.SaveException();
                 ShowMessage("Error loading time slots. Please try again.", "danger");
             }
         }
@@ -122,10 +187,11 @@ namespace HigherEducation.PublicLibrary
         {
             try
             {
-                if (!string.IsNullOrEmpty(ddlStartTime.SelectedValue))
+                if (!string.IsNullOrEmpty(ddlStartTime.SelectedValue) && IsValidDateSelected())
                 {
-                    DateTime selectedStart = DateTime.Today.Add(TimeSpan.Parse(ddlStartTime.SelectedValue));
-                    DateTime dayEnd = DateTime.Today.AddHours(17); // 5 PM
+                    DateTime selectedDate = DateTime.Parse(txtSlotDate.Text);
+                    DateTime selectedStart = selectedDate.Add(TimeSpan.Parse(ddlStartTime.SelectedValue));
+                    DateTime dayEnd = selectedDate.AddHours(17); // 5 PM
 
                     ddlEndTime.Items.Clear();
                     ddlEndTime.Items.Add(new ListItem("-- Select End Time --", ""));
@@ -153,7 +219,11 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                LogError("ddlStartTime_SelectedIndexChanged", ex);
+
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
+                clsLogger.ExceptionMsg = "ddlStartTime_SelectedIndexChanged";
+                clsLogger.SaveException();
                 ShowMessage("Error loading end times. Please try again.", "danger");
             }
         }
@@ -192,6 +262,13 @@ namespace HigherEducation.PublicLibrary
             {
                 try
                 {
+                    // Validate date selection
+                    if (!IsValidDateSelected())
+                    {
+                        ShowMessage("Please select a valid weekday (Monday to Friday).", "danger");
+                        return;
+                    }
+
                     // Validate time selection
                     if (string.IsNullOrEmpty(ddlStartTime.SelectedValue) || string.IsNullOrEmpty(ddlEndTime.SelectedValue))
                     {
@@ -206,25 +283,26 @@ namespace HigherEducation.PublicLibrary
                         return;
                     }
 
+                    DateTime selectedDate = DateTime.Parse(txtSlotDate.Text);
                     TimeSpan startTime = TimeSpan.Parse(ddlStartTime.SelectedValue);
                     TimeSpan endTime = TimeSpan.Parse(ddlEndTime.SelectedValue);
                     DateTime currentTime = DateTime.Now;
 
-                    // Validate if selected time is in the future
-                    if (DateTime.Today.Add(startTime) <= currentTime)
+                    // Validate if selected time is in the future (only for today)
+                    if (selectedDate.Date == DateTime.Today.Date && selectedDate.Add(startTime) <= currentTime)
                     {
                         ShowMessage("Please select a start time that is in the future.", "danger");
                         return;
                     }
 
                     // Validate business rules
-                    if (!ValidateTimeSlot(startTime, endTime))
+                    if (!ValidateTimeSlot(selectedDate, startTime, endTime))
                     {
                         return;
                     }
 
                     // Save to database using stored procedure
-                    if (SaveWorkshopSlotToDatabase(startTime, endTime, txtRemarks.Text.Trim(), availableSeats))
+                    if (SaveWorkshopSlotToDatabase(selectedDate, startTime, endTime, txtRemarks.Text.Trim(), availableSeats))
                     {
                         ShowMessage("Workshop slot added successfully!", "success");
                         ClearForm();
@@ -237,13 +315,16 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-                    LogError("btnSave_Click", ex);
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
+                    clsLogger.ExceptionMsg = "btnSave_Click";
+                    clsLogger.SaveException();
                     ShowMessage($"Error saving slot: {ex.Message}", "danger");
                 }
             }
         }
 
-        private bool SaveWorkshopSlotToDatabase(TimeSpan startTime, TimeSpan endTime, string remarks, int availableSeats)
+        private bool SaveWorkshopSlotToDatabase(DateTime slotDate, TimeSpan startTime, TimeSpan endTime, string remarks, int availableSeats)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -258,7 +339,7 @@ namespace HigherEducation.PublicLibrary
                         double totalHours = duration.TotalHours;
 
                         cmd.Parameters.AddWithValue("p_ITI_Id", ITI_Id);
-                        cmd.Parameters.AddWithValue("p_SlotDate", DateTime.Today);
+                        cmd.Parameters.AddWithValue("p_SlotDate", slotDate);
                         cmd.Parameters.AddWithValue("p_StartTime", startTime.ToString(@"hh\:mm\:ss"));
                         cmd.Parameters.AddWithValue("p_EndTime", endTime.ToString(@"hh\:mm\:ss"));
                         cmd.Parameters.AddWithValue("p_Duration", totalHours);
@@ -272,13 +353,16 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (MySqlException ex)
                 {
-                    LogError("SaveWorkshopSlotToDatabase", ex);
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
+                    clsLogger.ExceptionMsg = "SaveWorkshopSlotToDatabase";
+                    clsLogger.SaveException();
                     throw new Exception($"Database error: {ex.Message}");
                 }
             }
         }
 
-        private bool ValidateTimeSlot(TimeSpan startTime, TimeSpan endTime)
+        private bool ValidateTimeSlot(DateTime slotDate, TimeSpan startTime, TimeSpan endTime)
         {
             // Check if start time is before end time
             if (startTime >= endTime)
@@ -308,7 +392,7 @@ namespace HigherEducation.PublicLibrary
             }
 
             // Check for overlapping slots using stored procedure
-            if (CheckOverlappingSlots(startTime, endTime))
+            if (CheckOverlappingSlots(slotDate, startTime, endTime))
             {
                 ShowMessage("This time slot overlaps with an existing workshop slot.", "danger");
                 return false;
@@ -317,7 +401,7 @@ namespace HigherEducation.PublicLibrary
             return true;
         }
 
-        private bool CheckOverlappingSlots(TimeSpan newStart, TimeSpan newEnd)
+        private bool CheckOverlappingSlots(DateTime slotDate, TimeSpan newStart, TimeSpan newEnd)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -329,7 +413,7 @@ namespace HigherEducation.PublicLibrary
                         cmd.CommandType = CommandType.StoredProcedure;
 
                         cmd.Parameters.AddWithValue("p_ITI_Id", ITI_Id);
-                        cmd.Parameters.AddWithValue("p_SlotDate", DateTime.Today);
+                        cmd.Parameters.AddWithValue("p_SlotDate", slotDate);
                         cmd.Parameters.AddWithValue("p_NewStart", newStart.ToString(@"hh\:mm\:ss"));
                         cmd.Parameters.AddWithValue("p_NewEnd", newEnd.ToString(@"hh\:mm\:ss"));
 
@@ -339,7 +423,10 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-                    LogError("CheckOverlappingSlots", ex);
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
+                    clsLogger.ExceptionMsg = "CheckOverlappingSlots";
+                    clsLogger.SaveException();
                     ShowMessage($"Error checking overlapping slots: {ex.Message}", "danger");
                     return true; // Return true to prevent potential conflicts
                 }
@@ -352,13 +439,20 @@ namespace HigherEducation.PublicLibrary
             {
                 try
                 {
+                    if (!IsValidDateSelected())
+                    {
+                        gvSlots.DataSource = new DataTable();
+                        gvSlots.DataBind();
+                        return;
+                    }
+
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand("sp_GetWorkshopSlots", conn))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
                         cmd.Parameters.AddWithValue("p_ITI_Id", ITI_Id);
-                        cmd.Parameters.AddWithValue("p_SlotDate", DateTime.Today);
+                        cmd.Parameters.AddWithValue("p_SlotDate", DateTime.Parse(txtSlotDate.Text));
 
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
@@ -372,7 +466,11 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-                    LogError("BindExistingSlots", ex);
+
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
+                    clsLogger.ExceptionMsg = "BindExistingSlots";
+                    clsLogger.SaveException();
                     ShowMessage($"Error loading existing slots: {ex.Message}", "danger");
                     gvSlots.DataSource = new DataTable();
                     gvSlots.DataBind();
@@ -413,7 +511,11 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                LogError("gvSlots_RowDeleting", ex);
+
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
+                clsLogger.ExceptionMsg = "gvSlots_RowDeleting";
+                clsLogger.SaveException();
                 ShowMessage($"Error deleting slot: {ex.Message}", "danger");
             }
         }
@@ -438,7 +540,10 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-                    LogError("DeleteWorkshopSlot", ex);
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
+                    clsLogger.ExceptionMsg = "DeleteWorkshopSlot";
+                    clsLogger.SaveException();
                     throw new Exception($"Database error: {ex.Message}");
                 }
             }
@@ -486,31 +591,102 @@ namespace HigherEducation.PublicLibrary
                 LinkButton lnkDelete = e.Row.FindControl("lnkDelete") as LinkButton;
                 Label lblStatus = e.Row.FindControl("lblStatus") as Label;
 
-                if (rowView["AvailableSeats"] != DBNull.Value && rowView["TotalSeats"] != DBNull.Value)
+                if (rowView["AvailableSeats"] != DBNull.Value && rowView["TotalSeats"] != DBNull.Value &&
+                    rowView["SlotDate"] != DBNull.Value && rowView["StartTime"] != DBNull.Value)
                 {
                     int availableSeats = Convert.ToInt32(rowView["AvailableSeats"]);
                     int totalSeats = Convert.ToInt32(rowView["TotalSeats"]);
                     int bookedSeats = totalSeats - availableSeats;
 
-                    // Show delete button only if all seats are available
-                    if (lnkDelete != null)
+                    // Get slot date and time
+                    DateTime slotDate = Convert.ToDateTime(rowView["SlotDate"]);
+                    TimeSpan startTime;
+
+                    if (rowView["StartTime"] is TimeSpan)
                     {
-                        lnkDelete.Visible = (availableSeats == totalSeats);
+                        startTime = (TimeSpan)rowView["StartTime"];
+                    }
+                    else
+                    {
+                        string timeString = rowView["StartTime"].ToString();
+                        TimeSpan.TryParse(timeString, out startTime);
                     }
 
-                    // Update status label
-                    if (lblStatus != null)
+                    DateTime slotDateTime = slotDate.Add(startTime);
+                    DateTime currentDateTime = DateTime.Now;
+
+                    // Calculate if the slot has already started or is in the past
+                    bool isSlotStarted = slotDateTime <= currentDateTime;
+                    bool isAllSeatsAvailable = (availableSeats == totalSeats);
+
+                    // Show delete button only if:
+                    // 1. All seats are available AND
+                    // 2. The slot hasn't started yet (is in the future)
+                    if (lnkDelete != null)
                     {
-                        if (availableSeats == totalSeats)
+                        lnkDelete.Visible = (isAllSeatsAvailable && !isSlotStarted);
+
+                        // Add tooltip for disabled delete button
+                        if (!lnkDelete.Visible)
                         {
-                            lblStatus.Text = "Available";
-                            lblStatus.CssClass = "status-available";
+                            if (isSlotStarted)
+                            {
+                                lnkDelete.ToolTip = "Cannot delete slot that has already started or is in the past";
+                            }
+                            else if (!isAllSeatsAvailable)
+                            {
+                                lnkDelete.ToolTip = "Cannot delete slot with booked seats";
+                            }
                         }
                         else
                         {
-                            lblStatus.Text = $"{bookedSeats} booked";
-                            lblStatus.CssClass = "status-booked";
+                            lnkDelete.ToolTip = "Delete this workshop slot";
                         }
+                    }
+
+                    // Update status label with more detailed information
+                    if (lblStatus != null)
+                    {
+                        if (isSlotStarted)
+                        {
+                            if (availableSeats == totalSeats)
+                            {
+                                lblStatus.Text = "Completed (No bookings)";
+                                lblStatus.CssClass = "status-booked";
+                            }
+                            else if (availableSeats == 0)
+                            {
+                                lblStatus.Text = "Completed (Fully booked)";
+                                lblStatus.CssClass = "status-booked";
+                            }
+                            else
+                            {
+                                lblStatus.Text = $"Completed ({bookedSeats} booked)";
+                                lblStatus.CssClass = "status-booked";
+                            }
+                        }
+                        else
+                        {
+                            if (availableSeats == totalSeats)
+                            {
+                                lblStatus.Text = "Available";
+                                lblStatus.CssClass = "status-available";
+                            }
+                            else if (availableSeats == 0)
+                            {
+                                lblStatus.Text = "Fully booked";
+                                lblStatus.CssClass = "status-booked";
+                            }
+                            else
+                            {
+                                lblStatus.Text = $"{bookedSeats} booked";
+                                lblStatus.CssClass = "status-booked";
+                            }
+                        }
+
+                        // Add tooltip with time information
+                        string timeStatus = isSlotStarted ? "Slot has already started" : "Slot is upcoming";
+                        lblStatus.ToolTip = $"{timeStatus}. {availableSeats} of {totalSeats} seats available";
                     }
                 }
                 else
@@ -519,6 +695,15 @@ namespace HigherEducation.PublicLibrary
                     if (lnkDelete != null)
                     {
                         lnkDelete.Visible = false;
+                        lnkDelete.ToolTip = "Cannot delete - incomplete slot information";
+                    }
+
+                    // Set default status if data is missing
+                    if (lblStatus != null)
+                    {
+                        lblStatus.Text = "Unknown";
+                        lblStatus.CssClass = "text-muted";
+                        lblStatus.ToolTip = "Slot information is incomplete";
                     }
                 }
             }
@@ -556,6 +741,24 @@ namespace HigherEducation.PublicLibrary
             args.IsValid = (seats >= 1 && seats <= 20);
         }
 
+        protected void cvSlotDate_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (string.IsNullOrEmpty(txtSlotDate.Text.Trim()))
+            {
+                args.IsValid = false;
+                return;
+            }
+
+            if (!DateTime.TryParse(txtSlotDate.Text, out DateTime selectedDate))
+            {
+                args.IsValid = false;
+                return;
+            }
+
+            // Validate that date is a weekday (Monday to Friday)
+            args.IsValid = IsWeekday(selectedDate);
+        }
+
         private void ShowMessage(string message, string type)
         {
             // Only set the message if we actually have a message to show
@@ -588,12 +791,5 @@ namespace HigherEducation.PublicLibrary
             pnlMessage.Style["display"] = "none";
         }
 
-        private void LogError(string methodName, Exception ex)
-        {
-            // Log error to debug output
-            System.Diagnostics.Debug.WriteLine($"Error in {methodName}: {ex.Message}");
-            System.Diagnostics.Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
-        }
     }
-
 }

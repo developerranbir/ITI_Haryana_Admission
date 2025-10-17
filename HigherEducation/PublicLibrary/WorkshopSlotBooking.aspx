@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PublicLibrary/LibraryMaster.Master" AutoEventWireup="true" CodeBehind="WorkshopSlotBooking.aspx.cs" Inherits="HigherEducation.PublicLibrary.WorkshopSlotBooking" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
         :root {
@@ -19,18 +20,18 @@
             /*margin-bottom: 40px;*/
         }
 
-        .workshop-hero h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
+            .workshop-hero h1 {
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 15px;
+            }
 
-        .workshop-hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto;
-            opacity: 0.9;
-        }
+            .workshop-hero p {
+                font-size: 1.2rem;
+                max-width: 600px;
+                margin: 0 auto;
+                opacity: 0.9;
+            }
 
         .main-content-card {
             background: white;
@@ -82,10 +83,10 @@
             transition: all 0.3s ease;
         }
 
-        .form-control:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
-        }
+            .form-control:focus {
+                border-color: var(--secondary-color);
+                box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+            }
 
         .required::after {
             content: " *";
@@ -102,24 +103,24 @@
             background: white;
         }
 
-        .slot-card:hover {
-            border-color: var(--secondary-color);
-            background-color: #f8f9fa;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
+            .slot-card:hover {
+                border-color: var(--secondary-color);
+                background-color: #f8f9fa;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
 
-        .slot-card.selected {
-            border-color: var(--secondary-color);
-            background: linear-gradient(135deg, #e7f1ff, #d4e6ff);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
-        }
+            .slot-card.selected {
+                border-color: var(--secondary-color);
+                background: linear-gradient(135deg, #e7f1ff, #d4e6ff);
+                box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+            }
 
-        .slot-card.disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            background-color: #f8f9fa;
-        }
+            .slot-card.disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                background-color: #f8f9fa;
+            }
 
         .slot-radio {
             margin-right: 10px;
@@ -181,10 +182,10 @@
             font-size: 1.1rem;
         }
 
-        .btn-primary-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4);
-        }
+            .btn-primary-custom:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4);
+            }
 
         .btn-outline-custom {
             border: 2px solid var(--secondary-color);
@@ -196,11 +197,11 @@
             transition: all 0.3s ease;
         }
 
-        .btn-outline-custom:hover {
-            background: var(--secondary-color);
-            color: white;
-            transform: translateY(-2px);
-        }
+            .btn-outline-custom:hover {
+                background: var(--secondary-color);
+                color: white;
+                transform: translateY(-2px);
+            }
 
         .alert-custom {
             border-radius: 10px;
@@ -225,6 +226,30 @@
             border-radius: 20px;
             font-weight: 600;
             font-size: 0.9rem;
+        }
+
+        .date-selection {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .date-info {
+            background: #e8f4fd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid #3498db;
+        }
+
+        .weekend-warning {
+            background: #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid #f39c12;
         }
 
         /* Mobile Responsiveness */
@@ -265,13 +290,40 @@
                 padding: 40px 0;
             }
 
-            .workshop-hero h1 {
-                font-size: 1.8rem;
-            }
+                .workshop-hero h1 {
+                    font-size: 1.8rem;
+                }
 
             .slot-card {
                 padding: 15px;
             }
+        }
+
+        .slot-past {
+            opacity: 0.6;
+            background-color: #f8f9fa !important;
+        }
+
+        .slot-today {
+            border-left: 4px solid #3498db !important;
+        }
+
+        .slot-future {
+            border-left: 4px solid #27ae60 !important;
+        }
+
+        .slot-full {
+            background-color: #ffe6e6 !important;
+        }
+
+        .slot-available {
+            background-color: #e6ffe6 !important;
+        }
+
+        .disabled {
+            opacity: 0.5;
+            cursor: not-allowed !important;
+            background-color: #f8f9fa !important;
         }
     </style>
 </asp:Content>
@@ -280,7 +332,7 @@
     </asp:ScriptManager>
 
     <!-- Hero Section -->
-   <%-- <section class="workshop-hero">
+    <%-- <section class="workshop-hero">
         <div class="container">
             <h1>Workshop Slot Booking</h1>
             <p>Book your workshop session and access professional tools and equipment</p>
@@ -300,9 +352,9 @@
             <!-- Header Section -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="section-title mb-0">Book Your Workshop Slot</h2>
-                <asp:HyperLink ID="hlViewBooking" runat="server" 
-                    Text="View My Bookings" 
-                    CssClass="btn btn-primary-custom" 
+                <asp:HyperLink ID="hlViewBooking" runat="server"
+                    Text="View My Bookings"
+                    CssClass="btn btn-primary-custom"
                     NavigateUrl="~/PublicLibrary/ViewMyWorkshopBookings.aspx" />
             </div>
 
@@ -310,7 +362,7 @@
             <div class="user-info-panel">
                 <div class="row">
                     <div class="col-md-4 mb-2">
-                        <strong><i class="fas fa-user me-2"></i>Full Name:</strong> 
+                        <strong><i class="fas fa-user me-2"></i>Full Name:</strong>
                         <span class="ms-2">
                             <asp:Literal ID="litCan" runat="server"></asp:Literal>
                         </span>
@@ -343,6 +395,38 @@
                         All workshop sessions include access to professional tools and expert guidance.
                     </p>
                 </div>
+            </div>
+
+            <!-- Date Selection -->
+            <div class="date-selection">
+                <h5 class="mb-3"><i class="fas fa-calendar-alt me-2"></i>Select Workshop Date</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="txtSlotDate" class="form-label required">Workshop Date</label>
+                            <asp:TextBox ID="txtSlotDate" runat="server" CssClass="form-control"
+                                TextMode="Date" AutoPostBack="true" OnTextChanged="txtSlotDate_TextChanged"></asp:TextBox>
+                            <asp:RequiredFieldValidator ID="rfvSlotDate" runat="server"
+                                ControlToValidate="txtSlotDate" ErrorMessage="Please select a date"
+                                CssClass="text-danger small" Display="Dynamic"></asp:RequiredFieldValidator>
+                            <asp:CustomValidator ID="cvSlotDate" runat="server"
+                                ControlToValidate="txtSlotDate" Display="Dynamic"
+                                CssClass="text-danger" ErrorMessage="Please select a weekday (Monday to Friday)"
+                                OnServerValidate="cvSlotDate_ServerValidate" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weekend Warning -->
+                <asp:Panel ID="pnlWeekendWarning" runat="server" Visible="false" CssClass="weekend-warning">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle me-3 text-warning" style="font-size: 1.5rem;"></i>
+                        <div>
+                            <strong>Weekend Selected</strong>
+                            <p class="mb-0">Workshops are not available on weekends. Please select a weekday (Monday to Friday).</p>
+                        </div>
+                    </div>
+                </asp:Panel>
             </div>
 
             <!-- District and ITI Selection -->
@@ -407,13 +491,10 @@
                                     </div>
                                     <div class="col-md-3">
                                         <strong>Available Seats:</strong>
-                                        <span class="available-seats ms-2">
-                                            <asp:Literal ID="litAvailableSeats" runat="server"></asp:Literal>
-                                        </span>
+                                        <asp:Label ID="lblAvailableSeats" runat="server" CssClass="ms-2"></asp:Label>
                                     </div>
                                     <div class="col-md-2">
-                                        <span class="price-badge">
-                                            ₹<asp:Literal ID="litAmount" runat="server"></asp:Literal>
+                                        <span class="price-badge">₹<asp:Literal ID="litAmount" runat="server"></asp:Literal>
                                         </span>
                                     </div>
                                     <div class="col-md-1">
@@ -424,7 +505,7 @@
                         </ItemTemplate>
                     </asp:Repeater>
 
-                    <asp:Label ID="lblNoSlots" runat="server" Text="No available slots for selected ITI today."
+                    <asp:Label ID="lblNoSlots" runat="server" Text="No available slots for selected ITI on the selected date."
                         CssClass="text-muted text-center d-block mt-4" Visible="false"></asp:Label>
                 </div>
 
@@ -434,7 +515,8 @@
                         <h4><i class="fas fa-receipt me-2"></i>Total Amount to Pay</h4>
                         <div class="amount-value">₹<asp:Literal ID="litTotalAmount" runat="server"></asp:Literal></div>
                         <p class="mb-0">
-                            for <strong><asp:Literal ID="litSelectedDuration" runat="server"></asp:Literal></strong> workshop session (1 seat)
+                            for <strong>
+                                <asp:Literal ID="litSelectedDuration" runat="server"></asp:Literal></strong> workshop session (1 seat)
                         </p>
                     </div>
                 </asp:Panel>
@@ -490,9 +572,32 @@
                 __doPostBack(radioButton.name, '');
             }
         }
-
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function () {
+            // Set date input min and max attributes
+            var dateInput = document.getElementById('<%= txtSlotDate.ClientID %>');
+            if (dateInput) {
+                // Set min to today
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0');
+                var yyyy = today.getFullYear();
+                dateInput.setAttribute('min', yyyy + '-' + mm + '-' + dd);
+
+                // Set max to 30 days from today
+                var maxDate = new Date();
+                maxDate.setDate(maxDate.getDate() + 30);
+                var maxDD = String(maxDate.getDate()).padStart(2, '0');
+                var maxMM = String(maxDate.getMonth() + 1).padStart(2, '0');
+                var maxYYYY = maxDate.getFullYear();
+                dateInput.setAttribute('max', maxYYYY + '-' + maxMM + '-' + maxDD);
+
+                // Add weekend prevention
+                dateInput.addEventListener('input', function () {
+                    disableWeekendSelection(this);
+                });
+            }
+
             // Check if any radio is already selected and highlight its card
             var selectedRadio = document.querySelector('input[type="radio"][name$="WorkshopSlot"]:checked');
             if (selectedRadio) {
@@ -512,10 +617,32 @@
             });
         });
 
+        // Function to disable weekend selection
+        function disableWeekendSelection(dateInput) {
+            if (!dateInput.value) return;
+
+            var selectedDate = new Date(dateInput.value);
+            var dayOfWeek = selectedDate.getDay(); // 0 = Sunday, 6 = Saturday
+
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                // If weekend is selected, clear the value and show message
+                dateInput.value = '';
+                alert('Please select a weekday (Monday to Friday). Weekends are not available for workshop booking.');
+            }
+        }
+
         // Handle postbacks
         var prm = Sys.WebForms.PageRequestManager.getInstance();
         prm.add_endRequest(function () {
-            // Re-initialize after async postback
+            // Re-initialize date input after async postback
+            var dateInput = document.getElementById('<%= txtSlotDate.ClientID %>');
+            if (dateInput) {
+                dateInput.addEventListener('input', function () {
+                    disableWeekendSelection(this);
+                });
+            }
+
+            // Re-initialize slot selection
             var selectedRadio = document.querySelector('input[type="radio"][name$="WorkshopSlot"]:checked');
             if (selectedRadio) {
                 var selectedSlot = selectedRadio.closest('.slot-card');

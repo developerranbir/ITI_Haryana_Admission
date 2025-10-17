@@ -1,4 +1,5 @@
 ﻿using CCA.Util;
+using HigherEducation.BusinessLayer;
 using HigherEducation.Models;
 using MySql.Data.MySqlClient;
 using System;
@@ -122,7 +123,10 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-                LogError("ProcessPaymentResponse", ex);
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/PaymentResponse";
+                clsLogger.ExceptionMsg = "ProcessPaymentResponse";
+                clsLogger.SaveException();
                 ShowError("An error occurred while processing your payment. Please contact support.");
             }
         }
@@ -168,7 +172,10 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-                    LogError("UpdatePaymentResponse", ex);
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/PaymentResponse";
+                    clsLogger.ExceptionMsg = "UpdatePaymentResponse";
+                    clsLogger.SaveException();
                     return false;
                 }
             }
@@ -296,22 +303,6 @@ namespace HigherEducation.PublicLibrary
             Response.Redirect("ViewMyWorkshopBookings.aspx");
         }
 
-        // Utility Methods
-        private void LogError(string methodName, Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"ERROR in {methodName}: {ex.Message}");
-            System.Diagnostics.Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
-
-            try
-            {
-                string logPath = Server.MapPath("~/App_Data/Logs/PaymentErrors.txt");
-                string logMessage = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] ERROR in {methodName}: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}{Environment.NewLine}{new string('-', 80)}{Environment.NewLine}";
-                System.IO.File.AppendAllText(logPath, logMessage);
-            }
-            catch
-            {
-                // Ignore file errors
-            }
-        }
+        
     }
 }

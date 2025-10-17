@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using HigherEducation.BusinessLayer;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -85,8 +86,10 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-                    // Log error and redirect
-                    System.Diagnostics.Debug.WriteLine($"Error loading booking details: {ex.Message}");
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/WorkShopBookingConfirmation";
+                    clsLogger.ExceptionMsg = "LoadBookingDetails";
+                    clsLogger.SaveException();
                     Response.Redirect("WorkshopSlotBooking.aspx");
                 }
             }

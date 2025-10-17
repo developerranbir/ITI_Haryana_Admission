@@ -123,24 +123,6 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.WebControls.Literal litFailureReason;
 
         /// <summary>
-        /// btnRetryPayment control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnRetryPayment;
-
-        /// <summary>
-        /// btnContactSupport control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnContactSupport;
-
-        /// <summary>
         /// btnBackToBookings control.
         /// </summary>
         /// <remarks>

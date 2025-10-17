@@ -78,6 +78,42 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.WebControls.Literal litCurrentTime;
 
         /// <summary>
+        /// txtSlotDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSlotDate;
+
+        /// <summary>
+        /// rfvSlotDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvSlotDate;
+
+        /// <summary>
+        /// cvSlotDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvSlotDate;
+
+        /// <summary>
+        /// pnlWeekendWarning control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlWeekendWarning;
+
+        /// <summary>
         /// ddlDistrict control.
         /// </summary>
         /// <remarks>

@@ -69,6 +69,33 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.WebControls.Literal litCurrentTime;
 
         /// <summary>
+        /// txtSlotDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSlotDate;
+
+        /// <summary>
+        /// rfvSlotDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvSlotDate;
+
+        /// <summary>
+        /// cvSlotDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvSlotDate;
+
+        /// <summary>
         /// ddlStartTime control.
         /// </summary>
         /// <remarks>
@@ -166,6 +193,15 @@ namespace HigherEducation.PublicLibrary
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancel;
+
+        /// <summary>
+        /// litGridTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litGridTitle;
 
         /// <summary>
         /// gvSlots control.
