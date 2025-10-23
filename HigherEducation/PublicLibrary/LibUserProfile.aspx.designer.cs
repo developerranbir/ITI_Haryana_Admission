@@ -150,15 +150,6 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.WebControls.Literal litWorkshopBookings;
 
         /// <summary>
-        /// litActiveSubscriptions control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litActiveSubscriptions;
-
-        /// <summary>
         /// litTotalSpent control.
         /// </summary>
         /// <remarks>

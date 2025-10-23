@@ -478,24 +478,7 @@ namespace HigherEducation.PublicLibrary
             return ipAddress ?? "Unknown";
         }
 
-        private void UpdateSubscriptionPaymentStatus(string subscriptionId)
-        {
-
-
-            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString;
-
-            using (var conn = new MySqlConnection(connectionString))
-            using (var cmd = new MySqlCommand("CALL sp_UpdateSubscriptionPaymentStatus(@p_SubscriptionId);", conn))
-            {
-                cmd.Parameters.AddWithValue("@p_SubscriptionId", subscriptionId);
-                conn.Open();
-
-                cmd.ExecuteNonQuery();
-            }
-            ShowAlert("Payment Updated", "success");
-        }
-
-
+ 
         private string GenerateCCARequest(FeeModule objFeeModule)
         {
             string ccaRequest = "";

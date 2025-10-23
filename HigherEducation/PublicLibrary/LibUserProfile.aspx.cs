@@ -91,9 +91,8 @@ namespace HigherEducation.PublicLibrary
                 // Total Library Subscriptions
                 using (MySqlConnection conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString))
                 {
-                    string query = @"SELECT COUNT(*) as TotalSubscriptions 
-                                   FROM LibrarySubscriptions 
-                                   WHERE UserId = @UserId";
+                    string query = @" select count(*) from tblworkshoplibraryfee
+                where (order_status='Success'  or order_status='Shipped' ) and PaymentType='Library' and UserId = @UserId";
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@UserId", userId);
@@ -105,9 +104,8 @@ namespace HigherEducation.PublicLibrary
                 // Workshop Bookings Count
                 using (MySqlConnection conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString))
                 {
-                    string query = @"SELECT COUNT(*) as WorkshopBookings 
-                                   FROM WorkshopBookings 
-                                   WHERE UserId = @UserId";
+                    string query = @" select count(*) from tblworkshoplibraryfee
+                where (order_status='Success'  or order_status='Shipped' ) and PaymentType='Workshop' and UserId = @UserId";
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@UserId", userId);
@@ -117,28 +115,24 @@ namespace HigherEducation.PublicLibrary
                 }
 
                 // Active Subscriptions
-                using (MySqlConnection conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString))
-                {
-                    string query = @"SELECT COUNT(*) as ActiveSubscriptions 
-                                   FROM LibrarySubscriptions 
-                                   WHERE UserId = @UserId AND EndDate >= CURDATE()";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@UserId", userId);
-                        conn.Open();
-                        litActiveSubscriptions.Text = cmd.ExecuteScalar().ToString();
-                    }
-                }
+                //using (MySqlConnection conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString))
+                //{
+                //    string query = @"SELECT COUNT(*) as ActiveSubscriptions 
+                //                   FROM LibrarySubscriptions 
+                //                   WHERE UserId = @UserId AND EndDate >= CURDATE()";
+                //    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                //    {
+                //        cmd.Parameters.AddWithValue("@UserId", userId);
+                //        conn.Open();
+                //        litActiveSubscriptions.Text = cmd.ExecuteScalar().ToString();
+                //    }
+                //}
 
                 // Total Amount Spent
                 using (MySqlConnection conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString))
                 {
-                    string query = @"SELECT COALESCE(SUM(Amount), 0) as TotalSpent 
-                                   FROM (
-                                       SELECT Amount FROM LibrarySubscriptions WHERE UserId = @UserId AND PaymentStatus = 'Completed'
-                                       UNION ALL
-                                       SELECT Amount FROM WorkshopBookings WHERE UserId = @UserId AND PaymentStatus = 'Completed'
-                                   ) as CombinedPayments";
+                    string query = @" select sum(TotalAmount) from tblworkshoplibraryfee
+                where (order_status='Success'  or order_status='Shipped' )  and UserId = @UserId;";
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@UserId", userId);

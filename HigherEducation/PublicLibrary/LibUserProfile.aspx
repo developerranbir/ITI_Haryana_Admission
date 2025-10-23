@@ -264,15 +264,15 @@
             <div class="col-lg-8">
                 <div class="profile-card">
                     <div class="profile-header">
-                        <div class="profile-avatar">
+                      <%--  <div class="profile-avatar">
                             <i class="fas fa-user"></i>
-                        </div>
+                        </div>--%>
                         <h2 class="section-title"><asp:Literal ID="litUserName" runat="server" /></h2>
                         <p class="text-muted">Member since <asp:Literal ID="litMemberSince" runat="server" /></p>
                     </div>
 
                     <div class="profile-info">
-                        <h5 class="mb-4"><i class="fas fa-info-circle me-2"></i>Personal Information</h5>
+                        <h5 class="mb-4"><i class="fas fa-info-circle me-"></i>Personal Information</h5>
                         
                         <div class="info-item">
                             <span class="info-label">Full Name:</span>
@@ -350,10 +350,10 @@
                             <div class="stat-label">Workshop Bookings</div>
                         </div>
                         
-                        <div class="stat-card">
+                      <%--  <div class="stat-card">
                             <div class="stat-number"><asp:Literal ID="litActiveSubscriptions" runat="server" Text="0" /></div>
                             <div class="stat-label">Active Subscriptions</div>
-                        </div>
+                        </div>--%>
                         
                         <div class="stat-card">
                             <div class="stat-number"><asp:Literal ID="litTotalSpent" runat="server" Text="₹0" /></div>

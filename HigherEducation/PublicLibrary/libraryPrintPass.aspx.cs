@@ -37,33 +37,13 @@ namespace HigherEducation.PublicLibrary
 
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    string query = @"SELECT
-                                    us.SubscriptionId,
-                                    us.UserId,
-                                    us.ITIId,
-                                  CASE 
-        WHEN SubscriptionType = 'ReadingWithIssue' THEN 'Access to Reading Area and Book Issuance Privileges'
-        WHEN SubscriptionType = 'ReadingOnly' THEN 'Access to Reading Area Only'
-        ELSE 'Unspecified Subscription Type'
-    END AS SubscriptionType,
-        
-                                    us.Amount,
-                                    us.StartDate,
-                                    us.EndDate, 
-                                    us.PaymentDate,
-                                    us.PaymentStatus,
-                                    itu.collegename,
-                                    lu.FullName as UserName,
-                                     lu.FullName as PassholderName -- Placeholder, update if you have a separate passholder name
-                                FROM usersubscriptions us
-                                INNER JOIN dhe_legacy_college itu ON us.ITIId = itu.collegeid
-                                INNER JOIN libraryusers lu ON us.UserId = lu.UserId
-                                WHERE us.SubscriptionId = @SubscriptionId 
-                                AND us.PaymentStatus = 'Completed'";
+                    string query = "sp_LoadPassDetails";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@SubscriptionId", subscriptionId);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@p_SubscriptionId", subscriptionId);
+                        cmd.Parameters.AddWithValue("@p_UserId", Session["UserId"]);
                         conn.Open();
 
                         using (MySqlDataReader reader = cmd.ExecuteReader())

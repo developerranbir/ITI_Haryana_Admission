@@ -4,10 +4,9 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
         <div class="subscription-table">
-        <div class="table-header">
-            <h3><i class="fas fa-history me-2"></i>Your Subscription History</h3>
-        </div>
-        <div class="p-3">
+       
+        <div class=" container bg-white p-3  text-center">
+             <h3><i class="fas fa-history me-2"></i>Your Library Subscription History</h3>
             <asp:GridView ID="gvSubscriptions" runat="server" AutoGenerateColumns="False" 
                 CssClass="table table-hover" HeaderStyle-CssClass="table-primary" 
                 GridLines="None" EmptyDataText="No subscriptions found">
