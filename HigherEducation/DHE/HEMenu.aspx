@@ -786,6 +786,43 @@
                             </div>
                         </div>
 
+
+                        
+                        <div id="dvLibWork" runat="server" class="col-lg-3 col-md-3 col-sm-6 m-b-30">
+                            <div class="pricingTable">
+                                <div class="pricingTable-header">
+                                    <div class="price-value">
+                                        <span>
+                                            <img src="../assets/images/report.png" /></span>
+                                    </div>
+                                    <h3 class="title">ITI Libray/Workshop Reports</h3>
+
+                                </div>
+
+                                <div id="dvLibrary" runat="server">
+                                    <ul class="content-list">
+                                        <li><a href="#" id="aLibrary" runat="server"></a></li>
+                                    </ul>
+                                </div>
+
+                                <div id="dvAddWorkshop" runat="server">
+                                    <ul class="content-list">
+
+                                        <li><a href="#" id="aAddWorkshop" runat="server"></a></li>
+                                    </ul>
+                                </div>
+                                <div id="dvWorkshop" runat="server">
+                                    <ul class="content-list">
+
+                                        <li><a href="#" id="aWorkshop" runat="server"></a></li>
+                                    </ul>
+                                </div>
+
+                                
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

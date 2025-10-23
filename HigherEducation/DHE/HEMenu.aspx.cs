@@ -152,6 +152,12 @@ namespace HigherEducation.HigherEducations
                     dvRptFeeReceiptQtr22_24.Visible = false;
                     dvCandidateDetailsITIWise_2022.Visible = false;
 
+                    // For ITI Library Workshop
+                    dvLibWork.Visible = false;
+                    dvLibrary.Visible = false;
+                    dvWorkshop.Visible = false;
+                    dvAddWorkshop.Visible = false;
+
                     clsLoginUser obj = new clsLoginUser();
                     obj.UserID = Convert.ToString(Session["UserID"]);
                     obj.ApplicationCode = "1";
@@ -196,6 +202,10 @@ namespace HigherEducation.HigherEducations
                                 if (DisplayBlockID == "dvStateReports")
                                 {
                                     dvStateReports.Visible = true;
+                                }
+                                if (DisplayBlockID == "dvLibWork")
+                                {
+                                    dvLibWork.Visible = true;
                                 }
                             }
                         }
@@ -824,6 +834,28 @@ namespace HigherEducation.HigherEducations
                                     dvInactiveTradeStudents.Visible = true;
                                     aInactiveTradeStudents.InnerText = ModuleName;
                                     aInactiveTradeStudents.HRef = ModuleURL;
+                                }
+
+                                /* for ITI Library and Workshop */
+                                if (DisplayBlockID == "dvLibrary")
+                                {
+                                    dvLibrary.Visible = true;
+                                    aLibrary.InnerText = ModuleName;
+                                    aLibrary.HRef = ModuleURL;
+                                }
+
+                                if (DisplayBlockID == "dvAddWorkshop")
+                                {
+                                    dvAddWorkshop.Visible = true;
+                                    aAddWorkshop.InnerText = ModuleName;
+                                    aAddWorkshop.HRef = ModuleURL;
+                                }
+
+                                if (DisplayBlockID == "dvWorkshop")
+                                {
+                                    dvWorkshop.Visible = true;
+                                    aWorkshop.InnerText = ModuleName;
+                                    aWorkshop.HRef = ModuleURL;
                                 }
                             }
 
