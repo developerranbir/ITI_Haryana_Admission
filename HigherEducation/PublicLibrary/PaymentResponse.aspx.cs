@@ -258,7 +258,7 @@ namespace HigherEducation.PublicLibrary
 
         protected void btnNewBooking_Click(object sender, EventArgs e)
         {
-            Response.Redirect("WorkshopSlotBooking.aspx");
+            Response.Redirect("ViewMyWorkshopBookings.aspx");
         }
 
         protected void btnRetryPayment_Click(object sender, EventArgs e)

@@ -11,8 +11,17 @@ namespace HigherEducation.PublicLibrary
 {
 
 
-    public partial class WorkshopSlotBooking
+    public partial class ITIWorkshopReports
     {
+
+        /// <summary>
+        /// form1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
         /// ScriptManager1 control.
@@ -22,6 +31,24 @@ namespace HigherEducation.PublicLibrary
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.ScriptManager ScriptManager1;
+
+        /// <summary>
+        /// litUserName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litUserName;
+
+        /// <summary>
+        /// lnkLogout control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkLogout;
 
         /// <summary>
         /// hdnSweetAlertMessage control.
@@ -51,49 +78,13 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.WebControls.HiddenField hdnSweetAlertTitle;
 
         /// <summary>
-        /// upMessage control.
+        /// litITIName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upMessage;
-
-        /// <summary>
-        /// pnlMessage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlMessage;
-
-        /// <summary>
-        /// lblMessage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
-
-        /// <summary>
-        /// hlViewBooking control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hlViewBooking;
-
-        /// <summary>
-        /// litCan control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litCan;
+        protected global::System.Web.UI.WebControls.Literal litITIName;
 
         /// <summary>
         /// litCurrentDate control.
@@ -114,210 +105,246 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.WebControls.Literal litCurrentTime;
 
         /// <summary>
-        /// upDateSelection control.
+        /// upFilter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upDateSelection;
+        protected global::System.Web.UI.UpdatePanel upFilter;
 
         /// <summary>
-        /// txtSlotDate control.
+        /// ddlReportType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSlotDate;
+        protected global::System.Web.UI.WebControls.DropDownList ddlReportType;
 
         /// <summary>
-        /// rfvSlotDate control.
+        /// ddlBookingStatus control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvSlotDate;
+        protected global::System.Web.UI.WebControls.DropDownList ddlBookingStatus;
 
         /// <summary>
-        /// cvSlotDate control.
+        /// ddlWorkshopSlot control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvSlotDate;
+        protected global::System.Web.UI.WebControls.DropDownList ddlWorkshopSlot;
 
         /// <summary>
-        /// pnlWeekendWarning control.
+        /// pnlDailyDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlWeekendWarning;
+        protected global::System.Web.UI.WebControls.Panel pnlDailyDate;
 
         /// <summary>
-        /// upDistrictITI control.
+        /// txtReportDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upDistrictITI;
+        protected global::System.Web.UI.WebControls.TextBox txtReportDate;
 
         /// <summary>
-        /// ddlDistrict control.
+        /// pnlDateRange control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlDistrict;
+        protected global::System.Web.UI.WebControls.Panel pnlDateRange;
 
         /// <summary>
-        /// rfvDistrict control.
+        /// txtFromDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvDistrict;
+        protected global::System.Web.UI.WebControls.TextBox txtFromDate;
 
         /// <summary>
-        /// ddlITI control.
+        /// txtToDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlITI;
+        protected global::System.Web.UI.WebControls.TextBox txtToDate;
 
         /// <summary>
-        /// rfvITI control.
+        /// pnlMonthly control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvITI;
+        protected global::System.Web.UI.WebControls.Panel pnlMonthly;
 
         /// <summary>
-        /// upSlots control.
+        /// txtMonth control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upSlots;
+        protected global::System.Web.UI.WebControls.TextBox txtMonth;
 
         /// <summary>
-        /// pnlSlots control.
+        /// btnGenerateReport control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlSlots;
+        protected global::System.Web.UI.WebControls.Button btnGenerateReport;
 
         /// <summary>
-        /// head control.
+        /// btnReset control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl head;
+        protected global::System.Web.UI.WebControls.Button btnReset;
 
         /// <summary>
-        /// showText control.
+        /// upSummary control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl showText;
+        protected global::System.Web.UI.UpdatePanel upSummary;
 
         /// <summary>
-        /// rptSlots control.
+        /// pnlSummary control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptSlots;
+        protected global::System.Web.UI.WebControls.Panel pnlSummary;
 
         /// <summary>
-        /// lblNoSlots control.
+        /// litSummaryTotal control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNoSlots;
+        protected global::System.Web.UI.WebControls.Literal litSummaryTotal;
 
         /// <summary>
-        /// pnlAmount control.
+        /// litSummaryAmount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlAmount;
+        protected global::System.Web.UI.WebControls.Literal litSummaryAmount;
 
         /// <summary>
-        /// litTotalAmount control.
+        /// litSummaryDateRange control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litTotalAmount;
+        protected global::System.Web.UI.WebControls.Literal litSummaryDateRange;
 
         /// <summary>
-        /// litSelectedDuration control.
+        /// upExport control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litSelectedDuration;
+        protected global::System.Web.UI.UpdatePanel upExport;
 
         /// <summary>
-        /// pnlBookingForm control.
+        /// pnlExport control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlBookingForm;
+        protected global::System.Web.UI.WebControls.Panel pnlExport;
 
         /// <summary>
-        /// btnBookSlot control.
+        /// btnExportExcel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnBookSlot;
+        protected global::System.Web.UI.WebControls.Button btnExportExcel;
 
         /// <summary>
-        /// btnCancel control.
+        /// btnPrint control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancel;
+        protected global::System.Web.UI.WebControls.Button btnPrint;
 
         /// <summary>
-        /// UpdateProgress1 control.
+        /// upReports control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdateProgress UpdateProgress1;
+        protected global::System.Web.UI.UpdatePanel upReports;
+
+        /// <summary>
+        /// pnlNoData control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlNoData;
+
+        /// <summary>
+        /// pnlGrid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlGrid;
+
+        /// <summary>
+        /// gvBookings control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvBookings;
+
+        /// <summary>
+        /// litFooterDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litFooterDate;
     }
 }

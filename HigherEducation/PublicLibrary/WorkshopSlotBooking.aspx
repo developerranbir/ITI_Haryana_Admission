@@ -1,6 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PublicLibrary/LibraryMaster.Master" AutoEventWireup="true" CodeBehind="WorkshopSlotBooking.aspx.cs" Inherits="HigherEducation.PublicLibrary.WorkshopSlotBooking" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -17,7 +20,6 @@
             color: white;
             padding: 10px 0;
             text-align: center;
-            /*margin-bottom: 40px;*/
         }
 
             .workshop-hero h1 {
@@ -252,6 +254,51 @@
             border-left: 4px solid #f39c12;
         }
 
+        /* Loading Indicator */
+        .update-progress {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            border: 2px solid var(--secondary-color);
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .loading-spinner {
+            color: var(--secondary-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .spinner-border {
+            width: 2rem;
+            height: 2rem;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        /* Date validation error styling */
+        .date-error {
+            border-color: #dc3545 !important;
+            background-color: #fff8f8;
+        }
+
+        .alert-danger {
+            border-radius: 8px;
+            border-left: 4px solid #dc3545;
+        }
+
+        /* Hide default alert */
+        #pnlMessage {
+            display: none !important;
+        }
+
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .workshop-hero h1 {
@@ -331,22 +378,26 @@
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true">
     </asp:ScriptManager>
 
-    <!-- Hero Section -->
-    <%-- <section class="workshop-hero">
-        <div class="container">
-            <h1>Workshop Slot Booking</h1>
-            <p>Book your workshop session and access professional tools and equipment</p>
-        </div>
-    </section>--%>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Hidden field to store SweetAlert messages -->
+    <asp:HiddenField ID="hdnSweetAlertMessage" runat="server" />
+    <asp:HiddenField ID="hdnSweetAlertType" runat="server" />
+    <asp:HiddenField ID="hdnSweetAlertTitle" runat="server" />
 
     <div class="container">
-        <!-- Success/Error Messages -->
-        <asp:Panel ID="pnlMessage" runat="server" CssClass="alert alert-custom" role="alert" Style="display: none;">
-            <div class="d-flex justify-content-between align-items-center">
-                <asp:Label ID="lblMessage" runat="server" Text=""></asp:Label>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        </asp:Panel>
+        <!-- Success/Error Messages (Hidden - used for server-side only) -->
+        <asp:UpdatePanel ID="upMessage" runat="server" UpdateMode="Conditional">
+            <ContentTemplate>
+                <asp:Panel ID="pnlMessage" runat="server" CssClass="alert alert-custom" role="alert" Style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <asp:Label ID="lblMessage" runat="server" Text=""></asp:Label>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </asp:Panel>
+            </ContentTemplate>
+        </asp:UpdatePanel>
 
         <div class="main-content-card">
             <!-- Header Section -->
@@ -398,153 +449,256 @@
             </div>
 
             <!-- Date Selection -->
-            <div class="date-selection">
-                <h5 class="mb-3"><i class="fas fa-calendar-alt me-2"></i>Select Workshop Date</h5>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="txtSlotDate" class="form-label required">Workshop Date</label>
-                            <asp:TextBox ID="txtSlotDate" runat="server" CssClass="form-control"
-                                TextMode="Date" AutoPostBack="true" OnTextChanged="txtSlotDate_TextChanged"></asp:TextBox>
-                            <asp:RequiredFieldValidator ID="rfvSlotDate" runat="server"
-                                ControlToValidate="txtSlotDate" ErrorMessage="Please select a date"
-                                CssClass="text-danger small" Display="Dynamic"></asp:RequiredFieldValidator>
-                            <asp:CustomValidator ID="cvSlotDate" runat="server"
-                                ControlToValidate="txtSlotDate" Display="Dynamic"
-                                CssClass="text-danger" ErrorMessage="Please select a weekday (Monday to Friday)"
-                                OnServerValidate="cvSlotDate_ServerValidate" />
+            <asp:UpdatePanel ID="upDateSelection" runat="server" UpdateMode="Conditional">
+                <ContentTemplate>
+                    <div class="date-selection">
+                        <h5 class="mb-3"><i class="fas fa-calendar-alt me-2"></i>Select Workshop Date</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="txtSlotDate" class="form-label required">Workshop Date</label>
+                                    <asp:TextBox ID="txtSlotDate" runat="server" CssClass="form-control"
+                                        TextMode="Date" AutoPostBack="true" OnTextChanged="txtSlotDate_TextChanged"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="rfvSlotDate" runat="server"
+                                        ControlToValidate="txtSlotDate" ErrorMessage="Please select a date"
+                                        CssClass="text-danger small" Display="Dynamic"></asp:RequiredFieldValidator>
+                                    <asp:CustomValidator ID="cvSlotDate" runat="server"
+                                        ControlToValidate="txtSlotDate" Display="Dynamic"
+                                        CssClass="text-danger" ErrorMessage="Please select a weekday (Monday to Friday)"
+                                        OnServerValidate="cvSlotDate_ServerValidate" />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Weekend Warning -->
-                <asp:Panel ID="pnlWeekendWarning" runat="server" Visible="false" CssClass="weekend-warning">
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-exclamation-triangle me-3 text-warning" style="font-size: 1.5rem;"></i>
-                        <div>
-                            <strong>Weekend Selected</strong>
-                            <p class="mb-0">Workshops are not available on weekends. Please select a weekday (Monday to Friday).</p>
-                        </div>
+                        <!-- Weekend Warning -->
+                        <asp:Panel ID="pnlWeekendWarning" runat="server" Visible="false" CssClass="weekend-warning">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-exclamation-triangle me-3 text-warning" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <strong>Weekend Selected</strong>
+                                    <p class="mb-0">Workshops are not available on weekends. Please select a weekday (Monday to Friday).</p>
+                                </div>
+                            </div>
+                        </asp:Panel>
                     </div>
-                </asp:Panel>
-            </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
 
             <!-- District and ITI Selection -->
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="ddlDistrict" class="form-label required">Select District</label>
-                        <asp:DropDownList ID="ddlDistrict" runat="server" CssClass="form-control" AutoPostBack="true"
-                            OnSelectedIndexChanged="ddlDistrict_SelectedIndexChanged">
-                            <asp:ListItem Value="">-- Select District --</asp:ListItem>
-                        </asp:DropDownList>
-                        <asp:RequiredFieldValidator ID="rfvDistrict" runat="server"
-                            ControlToValidate="ddlDistrict" ErrorMessage="Please select a district"
-                            CssClass="text-danger small" Display="Dynamic" InitialValue=""></asp:RequiredFieldValidator>
+            <asp:UpdatePanel ID="upDistrictITI" runat="server" UpdateMode="Conditional">
+                <ContentTemplate>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="ddlDistrict" class="form-label required">Select District</label>
+                                <asp:DropDownList ID="ddlDistrict" runat="server" CssClass="form-control" AutoPostBack="true"
+                                    OnSelectedIndexChanged="ddlDistrict_SelectedIndexChanged">
+                                    <asp:ListItem Value="">-- Select District --</asp:ListItem>
+                                </asp:DropDownList>
+                                <asp:RequiredFieldValidator ID="rfvDistrict" runat="server"
+                                    ControlToValidate="ddlDistrict" ErrorMessage="Please select a district"
+                                    CssClass="text-danger small" Display="Dynamic" InitialValue=""></asp:RequiredFieldValidator>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="ddlITI" class="form-label required">Select ITI</label>
+                                <asp:DropDownList ID="ddlITI" runat="server" CssClass="form-control" AutoPostBack="true"
+                                    OnSelectedIndexChanged="ddlITI_SelectedIndexChanged">
+                                    <asp:ListItem Value="">-- Select ITI --</asp:ListItem>
+                                </asp:DropDownList>
+                                <asp:RequiredFieldValidator ID="rfvITI" runat="server"
+                                    ControlToValidate="ddlITI" ErrorMessage="Please select an ITI"
+                                    CssClass="text-danger small" Display="Dynamic" InitialValue=""></asp:RequiredFieldValidator>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="ddlITI" class="form-label required">Select ITI</label>
-                        <asp:DropDownList ID="ddlITI" runat="server" CssClass="form-control" AutoPostBack="true"
-                            OnSelectedIndexChanged="ddlITI_SelectedIndexChanged">
-                            <asp:ListItem Value="">-- Select ITI --</asp:ListItem>
-                        </asp:DropDownList>
-                        <asp:RequiredFieldValidator ID="rfvITI" runat="server"
-                            ControlToValidate="ddlITI" ErrorMessage="Please select an ITI"
-                            CssClass="text-danger small" Display="Dynamic" InitialValue=""></asp:RequiredFieldValidator>
-                    </div>
-                </div>
-            </div>
+                </ContentTemplate>
+                <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="txtSlotDate" EventName="TextChanged" />
+                </Triggers>
+            </asp:UpdatePanel>
 
-            <!-- Available Slots -->
-            <asp:Panel ID="pnlSlots" runat="server" Visible="false">
-                <div class="mb-4">
-                    <h4 class="section-title" id="head" runat="server">Available Workshop Slots</h4>
-                    <p id="showText" runat="server" class="text-muted mb-4">
-                        Select one slot to book. Price: ₹300 per hour. Green indicates available seats.
-                    </p>
+            <!-- Available Slots Section -->
+            <asp:UpdatePanel ID="upSlots" runat="server" UpdateMode="Conditional">
+                <ContentTemplate>
+                    <asp:Panel ID="pnlSlots" runat="server" Visible="false">
+                        <div class="mb-4">
+                            <h4 class="section-title" id="head" runat="server">Available Workshop Slots</h4>
+                            <p id="showText" runat="server" class="text-muted mb-4">
+                                Select one slot to book. Price: ₹300 per hour. Green indicates available seats.
+                            </p>
 
-                    <asp:Repeater ID="rptSlots" runat="server" OnItemDataBound="rptSlots_ItemDataBound">
-                        <ItemTemplate>
-                            <div class="slot-card" id="slotCard" runat="server" onclick="selectSlot(this)">
-                                <div class="row align-items-center">
-                                    <div class="col-md-1 text-center">
-                                        <asp:RadioButton ID="rbSlot" runat="server"
-                                            CssClass="slot-radio"
-                                            GroupName="WorkshopSlot"
-                                            OnCheckedChanged="rbSlot_CheckedChanged"
-                                            AutoPostBack="true" />
+                            <asp:Repeater ID="rptSlots" runat="server" OnItemDataBound="rptSlots_ItemDataBound">
+                                <ItemTemplate>
+                                    <div class="slot-card" id="slotCard" runat="server" onclick="selectSlot(this)">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-1 text-center">
+                                                <asp:RadioButton ID="rbSlot" runat="server"
+                                                    CssClass="slot-radio"
+                                                    GroupName="WorkshopSlot"
+                                                    OnCheckedChanged="rbSlot_CheckedChanged"
+                                                    AutoPostBack="true" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="time-badge">
+                                                    <i class="fas fa-clock me-1"></i>
+                                                    <asp:Literal ID="litTime" runat="server"></asp:Literal>
+                                                </span>
+                                                <asp:Label ID="lblSlotStatus" runat="server" CssClass="small d-block mt-1"></asp:Label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <span class="duration-badge">
+                                                    <i class="fas fa-hourglass-half me-1"></i>
+                                                    <asp:Literal ID="litDuration" runat="server"></asp:Literal>
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <strong>Available Seats:</strong>
+                                                <asp:Label ID="lblAvailableSeats" runat="server" CssClass="ms-2"></asp:Label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <span class="price-badge">₹<asp:Literal ID="litAmount" runat="server"></asp:Literal>
+                                                </span>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <asp:Literal ID="litSlotId" runat="server" Visible="false"></asp:Literal>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <span class="time-badge">
-                                            <i class="fas fa-clock me-1"></i>
-                                            <asp:Literal ID="litTime" runat="server"></asp:Literal>
-                                        </span>
-                                        <asp:Label ID="lblSlotStatus" runat="server" CssClass="small d-block mt-1"></asp:Label>
+                                </ItemTemplate>
+                            </asp:Repeater>
+
+                            <asp:Label ID="lblNoSlots" runat="server" Text="No available slots for selected ITI on the selected date."
+                                CssClass="text-muted text-center d-block mt-4" Visible="false"></asp:Label>
+                        </div>
+
+                        <!-- Amount Display -->
+                        <asp:Panel ID="pnlAmount" runat="server" Visible="false">
+                            <div class="amount-display">
+                                <h4><i class="fas fa-receipt me-2"></i>Total Amount to Pay</h4>
+                                <div class="amount-value">₹<asp:Literal ID="litTotalAmount" runat="server"></asp:Literal></div>
+                                <p class="mb-0">
+                                    for <strong>
+                                        <asp:Literal ID="litSelectedDuration" runat="server"></asp:Literal></strong> workshop session (1 seat)
+                                </p>
+                            </div>
+                        </asp:Panel>
+
+                        <!-- Booking Form -->
+                        <asp:Panel ID="pnlBookingForm" runat="server" Visible="false">
+                            <div class="booking-form-panel">
+                                <h5 class="mb-4 text-center">Confirm Your Booking</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <asp:Button ID="btnBookSlot" runat="server" Text="Confirm & Proceed to Payment"
+                                            CssClass="btn btn-primary-custom w-100 py-3" OnClick="btnBookSlot_Click" />
                                     </div>
-                                    <div class="col-md-2">
-                                        <span class="duration-badge">
-                                            <i class="fas fa-hourglass-half me-1"></i>
-                                            <asp:Literal ID="litDuration" runat="server"></asp:Literal>
-                                        </span>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <strong>Available Seats:</strong>
-                                        <asp:Label ID="lblAvailableSeats" runat="server" CssClass="ms-2"></asp:Label>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <span class="price-badge">₹<asp:Literal ID="litAmount" runat="server"></asp:Literal>
-                                        </span>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <asp:Literal ID="litSlotId" runat="server" Visible="false"></asp:Literal>
+                                    <div class="col-md-6 mb-3">
+                                        <asp:Button ID="btnCancel" runat="server" Text="Cancel Selection"
+                                            CssClass="btn btn-outline-custom w-100 py-3" OnClick="btnCancel_Click" CausesValidation="false" />
                                     </div>
                                 </div>
                             </div>
-                        </ItemTemplate>
-                    </asp:Repeater>
-
-                    <asp:Label ID="lblNoSlots" runat="server" Text="No available slots for selected ITI on the selected date."
-                        CssClass="text-muted text-center d-block mt-4" Visible="false"></asp:Label>
-                </div>
-
-                <!-- Amount Display -->
-                <asp:Panel ID="pnlAmount" runat="server" Visible="false">
-                    <div class="amount-display">
-                        <h4><i class="fas fa-receipt me-2"></i>Total Amount to Pay</h4>
-                        <div class="amount-value">₹<asp:Literal ID="litTotalAmount" runat="server"></asp:Literal></div>
-                        <p class="mb-0">
-                            for <strong>
-                                <asp:Literal ID="litSelectedDuration" runat="server"></asp:Literal></strong> workshop session (1 seat)
-                        </p>
-                    </div>
-                </asp:Panel>
-
-                <!-- Booking Form -->
-                <asp:Panel ID="pnlBookingForm" runat="server" Visible="false">
-                    <div class="booking-form-panel">
-                        <h5 class="mb-4 text-center">Confirm Your Booking</h5>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <asp:Button ID="btnBookSlot" runat="server" Text="Confirm & Proceed to Payment"
-                                    CssClass="btn btn-primary-custom w-100 py-3" OnClick="btnBookSlot_Click" />
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <asp:Button ID="btnCancel" runat="server" Text="Cancel Selection"
-                                    CssClass="btn btn-outline-custom w-100 py-3" OnClick="btnCancel_Click" CausesValidation="false" />
-                            </div>
-                        </div>
-                    </div>
-                </asp:Panel>
-            </asp:Panel>
+                        </asp:Panel>
+                    </asp:Panel>
+                </ContentTemplate>
+                <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="ddlDistrict" EventName="SelectedIndexChanged" />
+                    <asp:AsyncPostBackTrigger ControlID="ddlITI" EventName="SelectedIndexChanged" />
+                    <asp:AsyncPostBackTrigger ControlID="txtSlotDate" EventName="TextChanged" />
+                    <asp:AsyncPostBackTrigger ControlID="rptSlots" EventName="ItemDataBound" />
+                </Triggers>
+            </asp:UpdatePanel>
         </div>
     </div>
 
+    <!-- Loading Indicator -->
+    <asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="upSlots">
+        <ProgressTemplate>
+            <div class="update-progress">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="loading-spinner">Loading available slots...</div>
+            </div>
+        </ProgressTemplate>
+    </asp:UpdateProgress>
+
     <script type="text/javascript">
+        // SweetAlert configuration
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 5000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        // Function to show SweetAlert messages
+        function showSweetAlert(title, message, type) {
+            if (type === 'success') {
+                Toast.fire({
+                    icon: 'success',
+                    title: title,
+                    text: message
+                });
+            } else if (type === 'error') {
+                Swal.fire({
+                    icon: 'error',
+                    title: title,
+                    text: message,
+                    confirmButtonColor: '#3085d6',
+                });
+            } else if (type === 'warning') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: title,
+                    text: message,
+                    confirmButtonColor: '#3085d6',
+                });
+            } else if (type === 'info') {
+                Swal.fire({
+                    icon: 'info',
+                    title: title,
+                    text: message,
+                    confirmButtonColor: '#3085d6',
+                });
+            } else {
+                Toast.fire({
+                    icon: 'info',
+                    title: title,
+                    text: message
+                });
+            }
+        }
+
+        // Function to show confirmation dialog
+        function showConfirmation(title, message, confirmCallback) {
+            Swal.fire({
+                title: title,
+                text: message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, proceed!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    confirmCallback();
+                }
+            });
+        }
+
         function selectSlot(element) {
             // Check if slot is disabled
             if (element.classList.contains('disabled')) {
+                showSweetAlert('Slot Not Available', 'This slot is not available for selection. Please choose another slot.', 'warning');
                 return;
             }
 
@@ -572,17 +726,32 @@
                 __doPostBack(radioButton.name, '');
             }
         }
+
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function () {
+            // Check for server-side SweetAlert messages
+            var message = document.getElementById('<%= hdnSweetAlertMessage.ClientID %>').value;
+            var type = document.getElementById('<%= hdnSweetAlertType.ClientID %>').value;
+            var title = document.getElementById('<%= hdnSweetAlertTitle.ClientID %>').value;
+
+            if (message && type && title) {
+                showSweetAlert(title, message, type);
+                // Clear the hidden fields
+                document.getElementById('<%= hdnSweetAlertMessage.ClientID %>').value = '';
+                document.getElementById('<%= hdnSweetAlertType.ClientID %>').value = '';
+                document.getElementById('<%= hdnSweetAlertTitle.ClientID %>').value = '';
+            }
+
             // Set date input min and max attributes
             var dateInput = document.getElementById('<%= txtSlotDate.ClientID %>');
             if (dateInput) {
-                // Set min to today
+                // Set min to today - prevent past date selection
                 var today = new Date();
                 var dd = String(today.getDate()).padStart(2, '0');
                 var mm = String(today.getMonth() + 1).padStart(2, '0');
                 var yyyy = today.getFullYear();
-                dateInput.setAttribute('min', yyyy + '-' + mm + '-' + dd);
+                var todayFormatted = yyyy + '-' + mm + '-' + dd;
+                dateInput.setAttribute('min', todayFormatted);
 
                 // Set max to 30 days from today
                 var maxDate = new Date();
@@ -592,9 +761,19 @@
                 var maxYYYY = maxDate.getFullYear();
                 dateInput.setAttribute('max', maxYYYY + '-' + maxMM + '-' + maxDD);
 
-                // Add weekend prevention
+                // Prevent manual entry of past dates
                 dateInput.addEventListener('input', function () {
-                    disableWeekendSelection(this);
+                    validateDateSelection(this);
+                });
+
+                // Also validate on change (for browser date picker)
+                dateInput.addEventListener('change', function () {
+                    validateDateSelection(this);
+                });
+
+                // Validate on blur as well
+                dateInput.addEventListener('blur', function () {
+                    validateDateSelection(this);
                 });
             }
 
@@ -617,28 +796,82 @@
             });
         });
 
-        // Function to disable weekend selection
-        function disableWeekendSelection(dateInput) {
+        // Function to validate date selection (prevent past dates and weekends)
+        function validateDateSelection(dateInput) {
             if (!dateInput.value) return;
 
             var selectedDate = new Date(dateInput.value);
+            var today = new Date();
+
+            // Reset time part for accurate comparison
+            today.setHours(0, 0, 0, 0);
+            selectedDate.setHours(0, 0, 0, 0);
+
             var dayOfWeek = selectedDate.getDay(); // 0 = Sunday, 6 = Saturday
 
-            if (dayOfWeek === 0 || dayOfWeek === 6) {
-                // If weekend is selected, clear the value and show message
+            // Check if date is in the past
+            if (selectedDate < today) {
                 dateInput.value = '';
-                alert('Please select a weekday (Monday to Friday). Weekends are not available for workshop booking.');
+                showSweetAlert('Invalid Date', 'Please select today or a future date. Past dates are not allowed.', 'error');
+                return;
+            }
+
+            // Check if date is a weekend
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                dateInput.value = '';
+                showSweetAlert('Weekend Selected', 'Please select a weekday (Monday to Friday). Weekends are not available for workshop booking.', 'warning');
+                return;
+            }
+
+            // If valid, clear any existing errors
+            clearDateError();
+        }
+
+        // Function to clear date error message
+        function clearDateError() {
+            var dateInput = document.getElementById('<%= txtSlotDate.ClientID %>');
+            var existingError = dateInput.parentNode.querySelector('.alert-danger');
+            if (existingError) {
+                existingError.remove();
             }
         }
 
         // Handle postbacks
         var prm = Sys.WebForms.PageRequestManager.getInstance();
         prm.add_endRequest(function () {
+            // Check for server-side SweetAlert messages after postback
+            var message = document.getElementById('<%= hdnSweetAlertMessage.ClientID %>').value;
+            var type = document.getElementById('<%= hdnSweetAlertType.ClientID %>').value;
+            var title = document.getElementById('<%= hdnSweetAlertTitle.ClientID %>').value;
+
+            if (message && type && title) {
+                showSweetAlert(title, message, type);
+                // Clear the hidden fields
+                document.getElementById('<%= hdnSweetAlertMessage.ClientID %>').value = '';
+                document.getElementById('<%= hdnSweetAlertType.ClientID %>').value = '';
+                document.getElementById('<%= hdnSweetAlertTitle.ClientID %>').value = '';
+            }
+
             // Re-initialize date input after async postback
             var dateInput = document.getElementById('<%= txtSlotDate.ClientID %>');
             if (dateInput) {
+                // Set min to today again (in case it was reset)
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0');
+                var yyyy = today.getFullYear();
+                var todayFormatted = yyyy + '-' + mm + '-' + dd;
+                dateInput.setAttribute('min', todayFormatted);
+
+                // Re-attach event listeners
                 dateInput.addEventListener('input', function () {
-                    disableWeekendSelection(this);
+                    validateDateSelection(this);
+                });
+                dateInput.addEventListener('change', function () {
+                    validateDateSelection(this);
+                });
+                dateInput.addEventListener('blur', function () {
+                    validateDateSelection(this);
                 });
             }
 

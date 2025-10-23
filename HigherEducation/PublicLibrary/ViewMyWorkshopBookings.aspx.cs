@@ -492,12 +492,6 @@ namespace HigherEducation.PublicLibrary
             }
         }
 
-        private void LogError(string methodName, Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"Error in {methodName}: {ex.Message}");
-            System.Diagnostics.Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
-        }
-
         private string GenerateCCARequest(FeeModule objFeeModule)
         {
             string ccaRequest = "";

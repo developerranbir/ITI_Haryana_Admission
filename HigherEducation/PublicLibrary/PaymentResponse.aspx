@@ -45,7 +45,7 @@
                             CssClass="btn btn-success me-2" OnClick="btnViewBooking_Click" />
                         <asp:Button ID="btnPrintReceipt" runat="server" Text="Print Receipt" 
                             CssClass="btn btn-outline-primary me-2" OnClientClick="window.print();return false;" />
-                        <asp:Button ID="btnNewBooking" runat="server" Text="Book Another Slot" 
+                        <asp:Button ID="btnNewBooking" runat="server" Text="View My Bookings" 
                             CssClass="btn btn-primary" OnClick="btnNewBooking_Click" />
                     </div>
                 </div>
