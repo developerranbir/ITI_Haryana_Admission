@@ -49,8 +49,8 @@ namespace HigherEducation.Controllers
             byte[] hashdata = sha.ComputeHash(Encoding.UTF8.GetBytes(myStr.ToString()));
             Session["BrowserId"] = Convert.ToBase64String(hashdata);
         }
-        // GET: APIData
 
+        // GET: APIData
         public ActionResult viewCandidateRecords()
         {
             string Usertype = "0";
@@ -68,11 +68,7 @@ namespace HigherEducation.Controllers
             {
                 Response.Redirect("~/dhe/frmlogin.aspx");
                 return Json(new { });
-
             }
-            
-            //return View();
-            
         }
 
         [HttpGet]
@@ -103,23 +99,18 @@ namespace HigherEducation.Controllers
                 logger = LogManager.GetLogger("databaseLogger");
                 logger.Error(ex, "Error occured in HigherEducation.APIDataController.[HttpPost] d_getCollegeType()");
             }
-            // return Json(Newtonsoft.Json.JsonConvert.SerializeObject(dt), JsonRequestBehavior.AllowGet);
             var jsonResult = Json(Newtonsoft.Json.JsonConvert.SerializeObject(dt), JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
-
         }
 
         [HttpGet]
         public JsonResult getCollegeListAsPerCollegeType(String collegeType)
         {
-            //string regId = "";
             DataTable dt = new DataTable();
             try
             {
-
-                dt = apiObj.getCollegeListAsPerCollegeType(collegeType);//collegeid and courseId
-
+                dt = apiObj.getCollegeListAsPerCollegeType(collegeType);
             }
             catch (Exception ex)
             {
@@ -135,8 +126,7 @@ namespace HigherEducation.Controllers
             DataTable dt = new DataTable();
             try
             {
-                dt = apiObj.GetCourseListByCollege(collegeId);//collegeid and courseId
-
+                dt = apiObj.GetCourseListByCollege(collegeId);
             }
             catch (Exception ex)
             {
@@ -146,14 +136,14 @@ namespace HigherEducation.Controllers
             return Json(Newtonsoft.Json.JsonConvert.SerializeObject(dt), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult d_getStudentDetails(String collegeType,String collegeId, String courseId)
+        public JsonResult d_getStudentDetails(String collegeType, String collegeId, String courseId)
         {
             DataSet dt = new DataSet();
             try
             {
                 if (Session["collegeId"] != null)
                 {
-                    dt = apiObj.d_getStudentDetailsList(collegeType,collegeId, courseId);
+                    dt = apiObj.d_getStudentDetailsList(collegeType, collegeId, courseId);
                 }
                 else
                 {
@@ -163,23 +153,18 @@ namespace HigherEducation.Controllers
                     Session.Clear();
                     Session.Abandon();
                     Response.Cookies.Clear();
-                    //ClearSessionAndCookies();
                     TempData["SessionExpired"] = 1;
                     return Json("1", JsonRequestBehavior.AllowGet);
                 }
-
-
             }
             catch (Exception ex)
             {
                 logger = LogManager.GetLogger("databaseLogger");
                 logger.Error(ex, "Error occured in HigherEducation.APIDataController.[HttpPost] d_getStudentDetails()");
             }
-            // return Json(Newtonsoft.Json.JsonConvert.SerializeObject(dt), JsonRequestBehavior.AllowGet);
             var jsonResult = Json(Newtonsoft.Json.JsonConvert.SerializeObject(dt), JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
-
         }
 
         public ActionResult viewCandidateDetails(string RegID)
@@ -195,7 +180,6 @@ namespace HigherEducation.Controllers
                 }
                 ViewBag.regID = RegID;
                 return View();
-                
             }
             else
             {
@@ -221,38 +205,33 @@ namespace HigherEducation.Controllers
                     Session.Clear();
                     Session.Abandon();
                     Response.Cookies.Clear();
-                    //ClearSessionAndCookies();
                     TempData["SessionExpired"] = 1;
                     return Json("1", JsonRequestBehavior.AllowGet);
                 }
-
-
             }
             catch (Exception ex)
             {
                 logger = LogManager.GetLogger("databaseLogger");
                 logger.Error(ex, "Error occured in HigherEducation.APIDataController.[HttpPost] d_getCandidateDetails()");
             }
-            // return Json(Newtonsoft.Json.JsonConvert.SerializeObject(dt), JsonRequestBehavior.AllowGet);
             var jsonResult = Json(Newtonsoft.Json.JsonConvert.SerializeObject(dt), JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
-
         }
 
         [HttpPost]
         public String d_updateDataOfStudent(String DATA)
         {
             DataTable dt = new DataTable();
-            string mobile="", email="", shift="", unit="",regID="",catName="",pwdCat="",tName="",fName="",mName="";
+            string mobile = "", email = "", shift = "", unit = "", regID = "", catName = "", pwdCat = "", tName = "", fName = "", mName = "";
             var result = "0";
             var uData = JsonConvert.DeserializeObject<Dictionary<string, string>>(DATA);
             foreach (var kv in uData)
             {
-                if(kv.Key == "mobile")
+                if (kv.Key == "mobile")
                     mobile = kv.Value;
                 if (kv.Key == "email")
-                    email = kv.Value; 
+                    email = kv.Value;
                 if (kv.Key == "shift")
                     shift = kv.Value;
                 if (kv.Key == "unit")
@@ -275,10 +254,10 @@ namespace HigherEducation.Controllers
             {
                 if ((Session["UserID"] != null) && (Session["UserID"].ToString() != ""))
                 {
-                    dt = apiObj.UpdateDataforAPI(mobile,email,shift,unit,regID,catName,pwdCat,tName,fName,mName);
+                    dt = apiObj.UpdateDataforAPI(mobile, email, shift, unit, regID, catName, pwdCat, tName, fName, mName);
                     if (dt.Rows.Count > 0)
                     {
-                        result="1";
+                        result = "1";
                     }
                 }
                 else
@@ -345,7 +324,7 @@ namespace HigherEducation.Controllers
                     objITI.SaveAPIResponse(Convert.ToString(row["SrNo"]), Convert.ToString(row["MISITICode"]), Convert.ToString(row["TraineeName"]), Convert.ToString(row["StateRegNumber"]), Result, sucessRec);
                 }
             }
-            if(max>0)
+            if (max > 0)
             {
                 return Json("1", JsonRequestBehavior.AllowGet);
             }
@@ -353,7 +332,6 @@ namespace HigherEducation.Controllers
             {
                 return Json("0", JsonRequestBehavior.AllowGet);
             }
-            
         }
 
         public ActionResult viewResponse()
@@ -376,7 +354,7 @@ namespace HigherEducation.Controllers
             {
                 if (Session["collegeId"] != null)
                 {
-                    dt = apiObj.getErrorResponse(collegeType,collegeId, courseId);
+                    dt = apiObj.getErrorResponse(collegeType, collegeId, courseId);
                 }
                 else
                 {
@@ -386,25 +364,21 @@ namespace HigherEducation.Controllers
                     Session.Clear();
                     Session.Abandon();
                     Response.Cookies.Clear();
-                    //ClearSessionAndCookies();
                     TempData["SessionExpired"] = 1;
                     return Json("1", JsonRequestBehavior.AllowGet);
                 }
-
-
             }
             catch (Exception ex)
             {
                 logger = LogManager.GetLogger("databaseLogger");
                 logger.Error(ex, "Error occured in HigherEducation.APIDataController.[HttpPost] d_getErrorResponse()");
             }
-            // return Json(Newtonsoft.Json.JsonConvert.SerializeObject(dt), JsonRequestBehavior.AllowGet);
             var jsonResult = Json(Newtonsoft.Json.JsonConvert.SerializeObject(dt), JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
         }
 
-        #region Data for new Portal SID
+        #region Data for new Portal SID - UPDATED AS PER USER MANUAL
         public ActionResult sendDataToSID()
         {
             if (Session["CollegeId"] != null && (Session["CollegeId"].ToString() != ""))
@@ -430,6 +404,7 @@ namespace HigherEducation.Controllers
             }
             return View();
         }
+
         public ActionResult viewSIDResponse()
         {
             if (Session["CollegeId"] != null && (Session["CollegeId"].ToString() != ""))
@@ -474,26 +449,22 @@ namespace HigherEducation.Controllers
                     Session.Clear();
                     Session.Abandon();
                     Response.Cookies.Clear();
-                    //ClearSessionAndCookies();
                     TempData["SessionExpired"] = 1;
                     return Json("1", JsonRequestBehavior.AllowGet);
                 }
-
-
             }
             catch (Exception ex)
             {
                 logger = LogManager.GetLogger("databaseLogger");
                 logger.Error(ex, "Error occured in HigherEducation.APIDataController.[HttpGet] getUserData()");
             }
-            // return Json(Newtonsoft.Json.JsonConvert.SerializeObject(dt), JsonRequestBehavior.AllowGet);
             var jsonResult = Json(Newtonsoft.Json.JsonConvert.SerializeObject(dt), JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
         }
 
         [HttpPost]
-        public String updateUserData(String Id, String Mobile, String Pass,String Type)
+        public String updateUserData(String Id, String Mobile, String Pass, String Type)
         {
             DataTable dt = new DataTable();
             String result = "0";
@@ -501,8 +472,8 @@ namespace HigherEducation.Controllers
             {
                 if (Session["collegeId"] != null)
                 {
-                    String base64String = ConvertBase64Encode("{\"mobileNumber\":\""+ Mobile+"\",\"pin\": \""+Pass+"\",\"userType\":\""+Type+"\"}");
-                    dt = apiObj.updateUserData(Id, Mobile, Pass,Type, base64String);
+                    // Updated to store plain credentials as per manual requirements
+                    dt = apiObj.updateUserData(Id, Mobile, Pass, Type, "");
                     if (dt.Rows.Count > 0)
                     {
                         result = "1";
@@ -516,7 +487,6 @@ namespace HigherEducation.Controllers
                     Session.Clear();
                     Session.Abandon();
                     Response.Cookies.Clear();
-                    //ClearSessionAndCookies();
                     TempData["SessionExpired"] = 1;
                     return result;
                 }
@@ -529,39 +499,46 @@ namespace HigherEducation.Controllers
             return result;
         }
 
-        public string ConvertBase64Encode(string text)
-        {
-            var textBytes = System.Text.Encoding.UTF8.GetBytes(text);
-            return System.Convert.ToBase64String(textBytes);
-        }
+        // Removed ConvertBase64Encode and getBase64UserData methods as they're no longer needed
 
-        public string getBase64UserData()
-        {
-            string result="";
-            DataTable dt = new DataTable();
-            dt = apiObj.getBase64Data();
-            foreach (DataRow row in dt.Rows)
-            {
-                result = row["Body"].ToString();
-            }
-            return result;
-        }
-        
         [HttpPost]
         public JsonResult sendDataToSIDPortal()
         {
             DataTable dt = new DataTable();
             AccessData accData = null;
-            TokenData t1 = new TokenData();
-            t1.Body = getBase64UserData();
+
+            // Get user credentials from database
+            DataTable userDt = apiObj.getStateUserData();
+            if (userDt.Rows.Count == 0)
+            {
+                return Json("3", JsonRequestBehavior.AllowGet); // No user credentials configured
+            }
+
+            string mobile = userDt.Rows[0]["Mobile"].ToString();
+            string password = userDt.Rows[0]["Password"].ToString();
+
+            // Create TokenData with manual-specified format
+            TokenData t1 = new TokenData
+            {
+                Mobile = mobile,
+                Password = password,
+                Role = "admission_state_admin" // Fixed role as per manual
+            };
+
             ITI objITI = new ITI();
             accData = objITI.generateAccessToken(t1);
+
+            if (string.IsNullOrEmpty(accData?.accessToken))
+            {
+                return Json("4", JsonRequestBehavior.AllowGet); // Authentication failed
+            }
+
             dt = objITI.GetITIDataForAPI();
             int max = dt.Rows.Count;
             if (max > 0)
             {
-                int r = objITI.CallAPIForSendDataSID(dt, accData.accessToken, accData.sessionId,max);
-                if(r==1)
+                int r = objITI.CallAPIForSendDataSID(dt, accData.accessToken, accData.sessionId, max);
+                if (r == 1)
                     return Json("1", JsonRequestBehavior.AllowGet);
                 else
                     return Json("2", JsonRequestBehavior.AllowGet);
@@ -570,7 +547,6 @@ namespace HigherEducation.Controllers
             {
                 return Json("0", JsonRequestBehavior.AllowGet);
             }
-
         }
 
         [HttpPost]
@@ -578,16 +554,39 @@ namespace HigherEducation.Controllers
         {
             DataTable dt = new DataTable();
             AccessData accData = null;
-            TokenData t1 = new TokenData();
+
+            // Get user credentials from database
+            DataTable userDt = apiObj.getStateUserData();
+            if (userDt.Rows.Count == 0)
+            {
+                return Json("3", JsonRequestBehavior.AllowGet); // No user credentials configured
+            }
+
+            string mobile = userDt.Rows[0]["Mobile"].ToString();
+            string password = userDt.Rows[0]["Password"].ToString();
+
+            // Create TokenData with manual-specified format
+            TokenData t1 = new TokenData
+            {
+                Mobile = mobile,
+                Password = password,
+                Role = "admission_state_admin" // Fixed role as per manual
+            };
+
             LogHistoryBody logHistory = new LogHistoryBody();
             ITI objITI = new ITI();
-            t1.Body = getBase64UserData();
             accData = objITI.generateAccessToken(t1);
+
+            if (string.IsNullOrEmpty(accData?.accessToken))
+            {
+                return Json("4", JsonRequestBehavior.AllowGet); // Authentication failed
+            }
+
             logHistory.LogId = objITI.getLogID();
             logHistory.PageSize = "100000";
             logHistory.PageNumber = "1";
-            
-            int r = objITI.getAPIResponseSID(logHistory,accData.accessToken, accData.sessionId);
+
+            int r = objITI.getAPIResponseSID(logHistory, accData.accessToken, accData.sessionId);
             if (r == 1)
                 return Json("1", JsonRequestBehavior.AllowGet);
             else if (r == 2)
@@ -596,7 +595,7 @@ namespace HigherEducation.Controllers
                 return Json("0", JsonRequestBehavior.AllowGet);
         }
 
-
         #endregion
     }
+
 }

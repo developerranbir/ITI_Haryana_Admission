@@ -475,16 +475,21 @@ namespace HigherEducation.DataAccess
         public AccessData Data { get; set; }
     }
 
+    public class TokenData
+    {
+        public string Mobile { get; set; }
+        public string Password { get; set; }
+
+        public string Role {  get; set; }
+        // Role is fixed to "admission_state_admin" as per manual
+    }
+
+    // Updated AccessData class
     public class AccessData
     {
         public string accessToken { get; set; }
         public string sessionId { get; set; }
         public string logId { get; set; }
-    }
-    class TokenData
-    {
-        public string Body { get; set; }
-        
     }
     class LogHistoryBody
     {
@@ -611,44 +616,175 @@ namespace HigherEducation.DataAccess
 
         #region Code for new SID Portal for NCVT Data
         // Generate Access Token
+        //public AccessData generateAccessToken(TokenData t1)
+        //{
+        //    ITI objITI = new ITI();
+        //    string accToken = "";
+        //    AccessData accData = new AccessData();
+        //    try { 
+        //        ServicePointManager.Expect100Continue = true;
+        //        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+        //               | SecurityProtocolType.Tls11
+        //               | SecurityProtocolType.Tls12
+        //               | SecurityProtocolType.Ssl3;
+        //        //HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://uat-api-fe-sid.betalaunch.in/api/discovery-account/token")); // Staging
+        //        HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://api-fe.skillindiadigital.gov.in/api/discovery-account/token")); // Prod
+        //        req.Method = "POST";
+        //        req.ContentType = "application/json";
+        //        req.ProtocolVersion = HttpVersion.Version11;
+        //        string jsondata = JsonConvert.SerializeObject(t1);
+        //        var data = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(t1));
+        //        req.ContentLength = data.Length;
+        //        using (var stream = req.GetRequestStream())
+        //        {
+        //            stream.Write(data, 0, data.Length);
+        //        }
+        //        var httpResponse = (HttpWebResponse)req.GetResponse();
+        //        using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+        //        {
+        //            accToken = streamReader.ReadToEnd();
+        //        }
+
+        //        // Deserialize the JSON response into an AuthResponse object
+        //        AuthResponse authResponse = JsonConvert.DeserializeObject<AuthResponse>(accToken);
+
+
+
+        //        // Access the accessToken property
+
+        //        accData.accessToken = authResponse.Data.accessToken;
+        //        accData.sessionId = authResponse.Data.sessionId;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        logger = LogManager.GetLogger("databaseLogger");
+        //        logger.Error(ex, "Error occured in HigherEducation.DataAccess.APIDataContext.generateAccessToken()");
+        //    }
+
+        //    return accData;
+        //}
+
+        //// send data on SID portal
+        //public int CallAPIForSendDataSID(DataTable objData, String accessToken,String sessionId,int count)
+        //{
+        //    string result = "";
+        //    int r = 0;
+        //    try
+        //    {
+        //        ServicePointManager.Expect100Continue = true;
+        //        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+        //               | SecurityProtocolType.Tls11
+        //               | SecurityProtocolType.Tls12
+        //               | SecurityProtocolType.Ssl3;
+        //        //HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://uat-api-fe-sid.betalaunch.in/api/iti/state/trainee/register"));  // Staging
+        //        HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://api-fe.skillindiadigital.gov.in/api/iti/state/trainee/register")); // Prod
+        //        req.Method = "POST";
+        //        req.ContentType = "application/json";
+        //        req.ProtocolVersion = HttpVersion.Version11;
+        //        req.Headers.Add("Authorization", "Bearer " + accessToken);
+        //        req.Headers.Add("sessionId", sessionId);
+        //        string jsondata = JsonConvert.SerializeObject(objData);
+        //        var data = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(objData));
+        //        req.ContentLength = data.Length;
+        //        using (var stream = req.GetRequestStream())
+        //        {
+        //            stream.Write(data, 0, data.Length);
+        //        }
+        //        var httpResponse = (HttpWebResponse)req.GetResponse();
+        //        using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+        //        {
+        //            result = streamReader.ReadToEnd();
+        //        }
+        //        // Deserialize the JSON response into an AuthResponse object
+        //        AuthResponse authResponse = JsonConvert.DeserializeObject<AuthResponse>(result);
+
+        //        AccessData accData = new AccessData();
+
+        //        accData.logId = authResponse.Data.logId;
+        //        if(accData.logId == null || accData.logId == "")
+        //        {
+        //            r = 0;
+        //        }
+        //        else
+        //        {
+        //            r = 1;
+        //            saveLogID(accessToken, sessionId, accData.logId,count);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        logger = LogManager.GetLogger("databaseLogger");
+        //        logger.Error(ex, "Error occured in HigherEducation.DataAccess.APIDataContext.CallAPIForSendDataSID()");
+        //    }
+        //    return r;
+        //}
+
+
+
+
+
+
+
+
+
+        #endregion
+
+        #region New API Link for NCVT SID
+
         public AccessData generateAccessToken(TokenData t1)
         {
             ITI objITI = new ITI();
             string accToken = "";
             AccessData accData = new AccessData();
-            try { 
+            try
+            {
                 ServicePointManager.Expect100Continue = true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
                        | SecurityProtocolType.Tls11
                        | SecurityProtocolType.Tls12
                        | SecurityProtocolType.Ssl3;
-                //HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://uat-api-fe-sid.betalaunch.in/api/discovery-account/token")); // Staging
-                HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://api-fe.skillindiadigital.gov.in/api/discovery-account/token")); // Prod
+
+                // Updated endpoint as per user manual
+                HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://auth-iti.skillindiadigital.gov.in/auth/api/admission/login"));
                 req.Method = "POST";
                 req.ContentType = "application/json";
                 req.ProtocolVersion = HttpVersion.Version11;
-                string jsondata = JsonConvert.SerializeObject(t1);
-                var data = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(t1));
+
+                // Updated request body structure as per manual
+                var loginRequest = new
+                {
+                    mobile = t1.Mobile, // Assuming t1 has Mobile property
+                    password = t1.Password, // Assuming t1 has Password property
+                    role = "admission_state_admin" // Fixed role as per manual
+                };
+
+                string jsondata = JsonConvert.SerializeObject(loginRequest);
+                var data = Encoding.ASCII.GetBytes(jsondata);
                 req.ContentLength = data.Length;
+
                 using (var stream = req.GetRequestStream())
                 {
                     stream.Write(data, 0, data.Length);
                 }
+
                 var httpResponse = (HttpWebResponse)req.GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     accToken = streamReader.ReadToEnd();
                 }
 
-                // Deserialize the JSON response into an AuthResponse object
-                AuthResponse authResponse = JsonConvert.DeserializeObject<AuthResponse>(accToken);
+                // Deserialize the JSON response
+                var authResponse = JsonConvert.DeserializeObject<dynamic>(accToken);
 
-                
-
-                // Access the accessToken property
-
-                accData.accessToken = authResponse.Data.accessToken;
-                accData.sessionId = authResponse.Data.sessionId;
+                if (authResponse.status == "success")
+                {
+                    accData.accessToken = authResponse.data;
+                    accData.sessionId = ""; // SessionId not mentioned in manual response
+                }
+                else
+                {
+                    throw new Exception($"Authentication failed: {authResponse.message}");
+                }
             }
             catch (Exception ex)
             {
@@ -659,8 +795,8 @@ namespace HigherEducation.DataAccess
             return accData;
         }
 
-        // send data on SID portal
-        public int CallAPIForSendDataSID(DataTable objData, String accessToken,String sessionId,int count)
+        // send data on SID portal - Updated for trainee data upload
+        public int CallAPIForSendDataSID(DataTable objData, String accessToken, String sessionId, int count)
         {
             string result = "";
             int r = 0;
@@ -671,39 +807,76 @@ namespace HigherEducation.DataAccess
                        | SecurityProtocolType.Tls11
                        | SecurityProtocolType.Tls12
                        | SecurityProtocolType.Ssl3;
-                //HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://uat-api-fe-sid.betalaunch.in/api/iti/state/trainee/register"));  // Staging
-                HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://api-fe.skillindiadigital.gov.in/api/iti/state/trainee/register")); // Prod
+
+                // Updated endpoint as per user manual
+                HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://iti-api.skillindiadigital.gov.in/v1/state/Uploadjson"));
                 req.Method = "POST";
                 req.ContentType = "application/json";
                 req.ProtocolVersion = HttpVersion.Version11;
+
+                // Updated headers as per manual
                 req.Headers.Add("Authorization", "Bearer " + accessToken);
-                req.Headers.Add("sessionId", sessionId);
-                string jsondata = JsonConvert.SerializeObject(objData);
-                var data = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(objData));
+                // sessionId header removed as not mentioned in manual
+
+                // Convert DataTable to the expected JSON array format
+                var traineeList = new List<object>();
+                foreach (DataRow row in objData.Rows)
+                {
+                    var trainee = new
+                    {
+                        StateRegNumber = row["StateRegNumber"]?.ToString(),
+                        TraineeName = row["TraineeName"]?.ToString(),
+                        UIDNumber = row["UIDNumber"]?.ToString(),
+                        DateOfBirth = row["DateOfBirth"]?.ToString(),
+                        Gender = row["Gender"]?.ToString(),
+                        Category = row["Category"]?.ToString(),
+                        FatherGuardianName = row["FatherGuardianName"]?.ToString(),
+                        MotherName = row["MotherName"]?.ToString(),
+                        MobileNumber = row["MobileNumber"]?.ToString(),
+                        EmailID = row["EmailID"]?.ToString(),
+                        Session = row["Session"]?.ToString(),
+                        AdmissionDate = row["AdmissionDate"]?.ToString(),
+                        HighestQualification = row["HighestQualification"]?.ToString(),
+                        Trade = row["Trade"]?.ToString(),
+                        Shift = row["Shift"]?.ToString(),
+                        Unit = row["Unit"]?.ToString(),
+                        IsTraineeDualMode = row["IsTraineeDualMode"]?.ToString(),
+                        MISITICode = row["MISITICode"]?.ToString(),
+                        PersonwithDisability = row["PersonwithDisability"]?.ToString(),
+                        PWDcategory = row["PWDcategory"]?.ToString(),
+                        EconomicWeakerSection = row["EconomicWeakerSection"]?.ToString(),
+                        TraineeType = row["TraineeType"]?.ToString()
+                    };
+                    traineeList.Add(trainee);
+                }
+
+                string jsondata = JsonConvert.SerializeObject(traineeList);
+                var data = Encoding.ASCII.GetBytes(jsondata);
                 req.ContentLength = data.Length;
+
                 using (var stream = req.GetRequestStream())
                 {
                     stream.Write(data, 0, data.Length);
                 }
+
                 var httpResponse = (HttpWebResponse)req.GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     result = streamReader.ReadToEnd();
                 }
-                // Deserialize the JSON response into an AuthResponse object
-                AuthResponse authResponse = JsonConvert.DeserializeObject<AuthResponse>(result);
 
-                AccessData accData = new AccessData();
+                // Handle response based on expected format from manual
+                var response = JsonConvert.DeserializeObject<dynamic>(result);
 
-                accData.logId = authResponse.Data.logId;
-                if(accData.logId == null || accData.logId == "")
-                {
-                    r = 0;
-                }
-                else
+                // Adjust this based on actual API response structure
+                if (response.status == "success" || httpResponse.StatusCode == HttpStatusCode.OK)
                 {
                     r = 1;
-                    saveLogID(accessToken, sessionId, accData.logId,count);
+                    // Save log ID if provided in response
+                    if (response.log_id != null)
+                    {
+                        saveLogID(accessToken, "", Convert.ToString(response.log_id), Convert.ToInt32(count));
+                    }
                 }
             }
             catch (Exception ex)
@@ -714,121 +887,8 @@ namespace HigherEducation.DataAccess
             return r;
         }
 
-        // History API
-        public int getAPIResponseSID(LogHistoryBody objData, String accessToken, String sessionId)
-        {
-            string result = "";
-            int r = 0;
-            try
-            {
-                ServicePointManager.Expect100Continue = true;
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
-                       | SecurityProtocolType.Tls11
-                       | SecurityProtocolType.Tls12
-                       | SecurityProtocolType.Ssl3;
-                //HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://uat-api-fe-sid.betalaunch.in/api/iti/state/trainee/json-history"));  // Staging
-                HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://api-fe.skillindiadigital.gov.in/api/iti/state/trainee/json-history")); // Prod
-                req.Method = "POST";
-                req.ContentType = "application/json";
-                req.ProtocolVersion = HttpVersion.Version11;
-                req.Headers.Add("Authorization", "Bearer " + accessToken);
-                req.Headers.Add("sessionId", sessionId);
-                string jsondata = JsonConvert.SerializeObject(objData);
-                var data = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(objData));
-                req.ContentLength = data.Length;
-                using (var stream = req.GetRequestStream())
-                {
-                    stream.Write(data, 0, data.Length);
-                }
-                var httpResponse = (HttpWebResponse)req.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    result = streamReader.ReadToEnd();
-                }
-                int waitForRes = 0;
-                if(result.Contains("Data upload process is in progress, please wait for some time"))
-                {
-                    waitForRes = 1;
-                }
-                // Parse the JSON string
-                JObject json = JObject.Parse(result);
-                if (json["StatusCode"].ToString() == "200")
-                {
-                    if (waitForRes == 1)
-                    {
-                        r = 2;
-                    }
-                    else
-                    {
-                        r = 1;
-                        // Accessing the 'Results' array from the JSON response
-                        JArray resResults = (JArray)json["Data"]["Data"]["Results"];
-
-                        // Loop through each result
-                        foreach (JToken oneResult in resResults)
-                        {
-                            int s = 0;
-                            if (oneResult["RecordStatus"].ToString() == "S")
-                            {
-                                s = 1;
-                            }
-                            string response = oneResult["MISITICode"].ToString() + "---" + oneResult["MobileNumber"].ToString() + "---" + oneResult["StateRegNumber"].ToString() + "---" + oneResult["TraineeName"].ToString() + "---" + oneResult["Trade"].ToString();
-                            saveSIDResponse(oneResult["MISITICode"].ToString(), oneResult["MobileNumber"].ToString(), oneResult["StateRegNumber"].ToString(), response, s, oneResult["ErrorDescription"].ToString());
-                        }
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                logger = LogManager.GetLogger("databaseLogger");
-                logger.Error(ex, "Error occured in HigherEducation.DataAccess.APIDataContext.getAPIResponseSID()");
-            }
-            return r;
-        }
-        
-        // save response in table
-        public DataTable saveSIDResponse(String MISITICode, String mobileNo, String RegistrationNo,String APIResponse,int status, String err)
-        {
-            DataTable dt = new DataTable();
-            try
-            {
-                MySqlCommand cmd = new MySqlCommand("save_sid_response", connection)
-                {
-                    CommandType = CommandType.StoredProcedure
-
-                };
-                cmd.CommandTimeout = 120;
-                cmd.Parameters.AddWithValue("p_MISITICode", MISITICode);
-                cmd.Parameters.AddWithValue("p_mobileNo", mobileNo);
-                cmd.Parameters.AddWithValue("p_RegistrationNo", RegistrationNo);
-                cmd.Parameters.AddWithValue("p_APIResponse", APIResponse);
-                cmd.Parameters.AddWithValue("p_status", status);
-                cmd.Parameters.AddWithValue("p_err", err);
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                if (connection.State == ConnectionState.Closed)
-                {
-                    connection.Open();
-                }
-                da.Fill(dt);
-            }
-            catch (Exception ex)
-            {
-                logger = LogManager.GetLogger("databaseLogger");
-                logger.Error(ex, "Error occured in HigherEducation.DataAccess.APIDataContext.saveSIDResponse()");
-            }
-            finally
-            {
-                if (connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
-            }
-            return dt;
-        }
-        
         // save log id for getting response later
-        public DataTable saveLogID(String accessToken,String sessionId,String logID, int count)
+        public DataTable saveLogID(String accessToken, String sessionId, String logID, int count)
         {
             DataTable dt = new DataTable();
             try
@@ -869,7 +929,7 @@ namespace HigherEducation.DataAccess
         public string getLogID()
         {
             DataTable dt = new DataTable();
-            string result="";
+            string result = "";
             try
             {
                 MySqlCommand cmd = new MySqlCommand("get_logID", connection)
@@ -905,6 +965,120 @@ namespace HigherEducation.DataAccess
             return result;
         }
 
+
+        // History API
+        public int getAPIResponseSID(LogHistoryBody objData, String accessToken, String sessionId)
+        {
+            string result = "";
+            int r = 0;
+            try
+            {
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+                       | SecurityProtocolType.Tls11
+                       | SecurityProtocolType.Tls12
+                       | SecurityProtocolType.Ssl3;
+                //HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://uat-api-fe-sid.betalaunch.in/api/iti/state/trainee/json-history"));  // Staging
+                HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://api-fe.skillindiadigital.gov.in/api/iti/state/trainee/json-history")); // Prod
+                req.Method = "POST";
+                req.ContentType = "application/json";
+                req.ProtocolVersion = HttpVersion.Version11;
+                req.Headers.Add("Authorization", "Bearer " + accessToken);
+                req.Headers.Add("sessionId", sessionId);
+                string jsondata = JsonConvert.SerializeObject(objData);
+                var data = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(objData));
+                req.ContentLength = data.Length;
+                using (var stream = req.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                var httpResponse = (HttpWebResponse)req.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    result = streamReader.ReadToEnd();
+                }
+                int waitForRes = 0;
+                if (result.Contains("Data upload process is in progress, please wait for some time"))
+                {
+                    waitForRes = 1;
+                }
+                // Parse the JSON string
+                JObject json = JObject.Parse(result);
+                if (json["StatusCode"].ToString() == "200")
+                {
+                    if (waitForRes == 1)
+                    {
+                        r = 2;
+                    }
+                    else
+                    {
+                        r = 1;
+                        // Accessing the 'Results' array from the JSON response
+                        JArray resResults = (JArray)json["Data"]["Data"]["Results"];
+
+                        // Loop through each result
+                        foreach (JToken oneResult in resResults)
+                        {
+                            int s = 0;
+                            if (oneResult["RecordStatus"].ToString() == "S")
+                            {
+                                s = 1;
+                            }
+                            string response = oneResult["MISITICode"].ToString() + "---" + oneResult["MobileNumber"].ToString() + "---" + oneResult["StateRegNumber"].ToString() + "---" + oneResult["TraineeName"].ToString() + "---" + oneResult["Trade"].ToString();
+                            saveSIDResponse(oneResult["MISITICode"].ToString(), oneResult["MobileNumber"].ToString(), oneResult["StateRegNumber"].ToString(), response, s, oneResult["ErrorDescription"].ToString());
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                logger = LogManager.GetLogger("databaseLogger");
+                logger.Error(ex, "Error occured in HigherEducation.DataAccess.APIDataContext.getAPIResponseSID()");
+            }
+            return r;
+        }
+
+        // save response in table
+        public DataTable saveSIDResponse(String MISITICode, String mobileNo, String RegistrationNo, String APIResponse, int status, String err)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand("save_sid_response", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+
+                };
+                cmd.CommandTimeout = 120;
+                cmd.Parameters.AddWithValue("p_MISITICode", MISITICode);
+                cmd.Parameters.AddWithValue("p_mobileNo", mobileNo);
+                cmd.Parameters.AddWithValue("p_RegistrationNo", RegistrationNo);
+                cmd.Parameters.AddWithValue("p_APIResponse", APIResponse);
+                cmd.Parameters.AddWithValue("p_status", status);
+                cmd.Parameters.AddWithValue("p_err", err);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+                da.Fill(dt);
+            }
+            catch (Exception ex)
+            {
+                logger = LogManager.GetLogger("databaseLogger");
+                logger.Error(ex, "Error occured in HigherEducation.DataAccess.APIDataContext.saveSIDResponse()");
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+            return dt;
+        }
+
         #endregion
     }
 
@@ -934,4 +1108,6 @@ namespace HigherEducation.DataAccess
         public string TraineeType { get; set; }
         public string TraineePhoto { get; set; }
     }
+
+    
 }
