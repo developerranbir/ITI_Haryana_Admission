@@ -481,7 +481,6 @@ namespace HigherEducation.DataAccess
         public string Password { get; set; }
 
         public string Role {  get; set; }
-        // Role is fixed to "admission_state_admin" as per manual
     }
 
     // Updated AccessData class
@@ -522,10 +521,6 @@ namespace HigherEducation.DataAccess
                 MySqlParameter[] p = new MySqlParameter[6];
                 p[0] = new MySqlParameter("@PSrNo", SrNo);
                 p[1] = new MySqlParameter("@PMISITICode", MISITICode);
-                // p[2] = new MySqlParameter("@PCollegeName", CollegeName);
-
-                // p[3] = new MySqlParameter("@PTrade", Trade);
-                //      p[2] = new MySqlParameter("@PReg_ID", Reg_ID);
                 p[2] = new MySqlParameter("@PTraineeName", TraineeName);
                 p[3] = new MySqlParameter("@PStateRegNumber", StateRegNumber);
                 p[4] = new MySqlParameter("@PAPIResponse", APIResponse);
@@ -722,11 +717,6 @@ namespace HigherEducation.DataAccess
 
 
 
-
-
-
-
-
         #endregion
 
         #region New API Link for NCVT SID
@@ -753,9 +743,9 @@ namespace HigherEducation.DataAccess
                 // Updated request body structure as per manual
                 var loginRequest = new
                 {
-                    mobile = t1.Mobile, // Assuming t1 has Mobile property
-                    password = t1.Password, // Assuming t1 has Password property
-                    role = "admission_state_admin" // Fixed role as per manual
+                    mobile = t1.Mobile, 
+                    password = t1.Password, 
+                    role = t1.Role 
                 };
 
                 string jsondata = JsonConvert.SerializeObject(loginRequest);
@@ -779,7 +769,6 @@ namespace HigherEducation.DataAccess
                 if (authResponse.status == "success")
                 {
                     accData.accessToken = authResponse.data;
-                    accData.sessionId = ""; // SessionId not mentioned in manual response
                 }
                 else
                 {
@@ -967,74 +956,118 @@ namespace HigherEducation.DataAccess
 
 
         // History API
-        public int getAPIResponseSID(LogHistoryBody objData, String accessToken, String sessionId)
+        public int getAPIResponseSID(string logId, string accessToken, string admissionSession)
         {
             string result = "";
             int r = 0;
             try
             {
                 ServicePointManager.Expect100Continue = true;
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
-                       | SecurityProtocolType.Tls11
-                       | SecurityProtocolType.Tls12
-                       | SecurityProtocolType.Ssl3;
-                //HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://uat-api-fe-sid.betalaunch.in/api/iti/state/trainee/json-history"));  // Staging
-                HttpWebRequest req = (HttpWebRequest)(HttpWebRequest.Create("https://api-fe.skillindiadigital.gov.in/api/iti/state/trainee/json-history")); // Prod
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                // Updated endpoint as per documentation
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://iti-api.skillindiadigital.gov.in/v1/state/api-upload-status");
                 req.Method = "POST";
                 req.ContentType = "application/json";
-                req.ProtocolVersion = HttpVersion.Version11;
                 req.Headers.Add("Authorization", "Bearer " + accessToken);
-                req.Headers.Add("sessionId", sessionId);
-                string jsondata = JsonConvert.SerializeObject(objData);
-                var data = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(objData));
+                req.Headers.Add("X-ADMISSION-SESSION", admissionSession);
+
+                // Updated request body as per documentation
+                var requestBody = new
+                {
+                    log_id = logId,
+                    pageNumber = 1,
+                    pageSize = 10000 // Increased to get all records
+                };
+
+                string jsondata = JsonConvert.SerializeObject(requestBody);
+                var data = Encoding.UTF8.GetBytes(jsondata);
                 req.ContentLength = data.Length;
+
                 using (var stream = req.GetRequestStream())
                 {
                     stream.Write(data, 0, data.Length);
                 }
+
                 var httpResponse = (HttpWebResponse)req.GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     result = streamReader.ReadToEnd();
                 }
-                int waitForRes = 0;
-                if (result.Contains("Data upload process is in progress, please wait for some time"))
-                {
-                    waitForRes = 1;
-                }
-                // Parse the JSON string
-                JObject json = JObject.Parse(result);
-                if (json["StatusCode"].ToString() == "200")
-                {
-                    if (waitForRes == 1)
-                    {
-                        r = 2;
-                    }
-                    else
-                    {
-                        r = 1;
-                        // Accessing the 'Results' array from the JSON response
-                        JArray resResults = (JArray)json["Data"]["Data"]["Results"];
 
-                        // Loop through each result
-                        foreach (JToken oneResult in resResults)
+                // Parse the JSON response
+                JObject json = JObject.Parse(result);
+
+                // Check if upload is still in progress
+                if (result.Contains("Upload still in progress") || (json["error"]?.ToString()?.Contains("progress") == true))
+                {
+                    return 2; // Still processing
+                }
+
+                // Check if we have successful data
+                if (json["Data"] != null && json["Data"]["results"] != null)
+                {
+                    JArray resResults = (JArray)json["Data"]["results"];
+
+                    // Process each result
+                    foreach (JToken oneResult in resResults)
+                    {
+                        int status = 0;
+                        if (oneResult["RecordStatus"]?.ToString() == "S")
                         {
-                            int s = 0;
-                            if (oneResult["RecordStatus"].ToString() == "S")
-                            {
-                                s = 1;
-                            }
-                            string response = oneResult["MISITICode"].ToString() + "---" + oneResult["MobileNumber"].ToString() + "---" + oneResult["StateRegNumber"].ToString() + "---" + oneResult["TraineeName"].ToString() + "---" + oneResult["Trade"].ToString();
-                            saveSIDResponse(oneResult["MISITICode"].ToString(), oneResult["MobileNumber"].ToString(), oneResult["StateRegNumber"].ToString(), response, s, oneResult["ErrorDescription"].ToString());
+                            status = 1;
+                        }
+
+                        string response = $"{oneResult["MISITICode"]}---{oneResult["MobileNumber"]}---{oneResult["StateRegNumber"]}---{oneResult["TraineeName"]}---{oneResult["Trade"]}";
+
+                        saveSIDResponse(
+                            oneResult["MISITICode"]?.ToString() ?? "",
+                            oneResult["MobileNumber"]?.ToString() ?? "",
+                            oneResult["StateRegNumber"]?.ToString() ?? "",
+                            response,
+                            status,
+                            oneResult["ErrorDescription"]?.ToString() ?? ""
+                        );
+                    }
+                    r = 1;
+                }
+                else if (json["error"] != null)
+                {
+                    // Handle other errors
+                    logger.Error($"API Error: {json["error"]}");
+                    r = 0;
+                }
+            }
+            catch (WebException webEx)
+            {
+                if (webEx.Response is HttpWebResponse httpResponse)
+                {
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        string errorResponse = streamReader.ReadToEnd();
+                        logger.Error($"Web Exception: {webEx.Status} - {errorResponse}");
+
+                        // Handle specific HTTP status codes
+                        switch (httpResponse.StatusCode)
+                        {
+                            case HttpStatusCode.BadRequest:
+                                logger.Error("Bad Request - Missing or invalid log_id");
+                                break;
+                            case HttpStatusCode.Unauthorized:
+                                logger.Error("Unauthorized - Invalid or expired token");
+                                break;
+                            case HttpStatusCode.NotFound:
+                                logger.Error("Not Found - No log present for provided log_id");
+                                break;
                         }
                     }
                 }
-
+                logger.Error(webEx, "Web exception in getAPIResponseSID");
             }
             catch (Exception ex)
             {
                 logger = LogManager.GetLogger("databaseLogger");
-                logger.Error(ex, "Error occured in HigherEducation.DataAccess.APIDataContext.getAPIResponseSID()");
+                logger.Error(ex, "Error occurred in HigherEducation.DataAccess.APIDataContext.getAPIResponseSID()");
             }
             return r;
         }

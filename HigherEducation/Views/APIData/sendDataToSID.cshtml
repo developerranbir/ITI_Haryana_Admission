@@ -470,74 +470,127 @@
 
 
     function getResponse() {
-        swal({
-            title: "Are you sure?",
-            text: "Get Response from SID Portal of last hit.",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#DD6B55',
-            confirmButtonText: 'Yes, I am sure!',
-            cancelButtonText: "No, cancel it!",
-            closeOnConfirm: true,
-            closeOnCancel: false
-        },
-        function (isConfirm) {
+    swal({
+        title: "Are you sure?",
+        text: "Get Response from SID Portal of last hit.",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: '#DD6B55',
+        confirmButtonText: 'Yes, I am sure!',
+        cancelButtonText: "No, cancel it!",
+        closeOnConfirm: true,
+        closeOnCancel: false
+    },
+    function (isConfirm) {
 
-            if (isConfirm) {
-                startPreloader();
-                //var urltoSend = '@Url.Action("getAPIResponseSID", "APIData")';
-                $.ajax({
-
-            type: "POST",
+        if (isConfirm) {
+            startPreloader();
+            $.ajax({
+                type: "POST",
                 url: "@Url.Action("getAPIResponseSID", "APIData")",
                 data: '{}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
-                            if (data == "1") {
-                                stopPreloader();
-                                swal('Alert!', 'Kindly check API response by clicking on View Response Log Button!!!');
-                            }
-                            if (data == "2") {
-                                stopPreloader();
-                                swal('Alert!', 'Data uploaded process is in-progress. Please try After some time!!!');
-                            }
-                            if (data == "0") {
-                                stopPreloader();
-                                swal('Alert!', 'Some error occured in the Response API');
-                            }
-                        },
-                        error: function (jqXHR, exception) {
-                            var msg = '';
-                            if (jqXHR.status === 0) {
-                                msg = 'Not connect.\n Verify Network.';
-                            } else if (jqXHR.status == 404) {
-                                msg = 'Requested page not found. [404]';
-                            } else if (jqXHR.status == 500) {
-                                msg = 'Internal Server Error [500].';
-                            } else if (exception === 'parsererror') {
-                                msg = 'Requested JSON parse failed.';
-                            } else if (exception === 'timeout') {
-                                msg = 'Time out error.';
-                            } else if (exception === 'abort') {
-                                msg = 'Ajax request aborted.';
-                            } else {
-                                msg = 'Uncaught Error.\n' + jqXHR.responseText;
-                            }
-                            swal('Error!', msg, "error");
-                            stopPreloader();
-                            //alert("Error: " + msg);
-                        }
+                    stopPreloader();
+
+                    switch (data) {
+                        case "1":
+                            swal({
+                                title: 'Success!',
+                                text: 'Responses retrieved successfully! Kindly check API response by clicking on View Response Log Button.',
+                                type: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                            break;
+
+                        case "2":
+                            swal({
+                                title: 'Processing!',
+                                text: 'Data upload process is in-progress. Please try again after some time.',
+                                type: 'info',
+                                confirmButtonText: 'OK'
+                            });
+                            break;
+
+                        case "3":
+                            swal({
+                                title: 'Configuration Required!',
+                                text: 'No user credentials configured. Please update credentials first.',
+                                type: 'warning',
+                                confirmButtonText: 'OK'
+                            });
+                            break;
+
+                        case "4":
+                            swal({
+                                title: 'Authentication Failed!',
+                                text: 'Authentication failed. Please check your credentials.',
+                                type: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                            break;
+
+                        case "5":
+                            swal({
+                                title: 'No Log Found!',
+                                text: 'No log ID found. Please upload data first before checking responses.',
+                                type: 'warning',
+                                confirmButtonText: 'OK'
+                            });
+                            break;
+
+                        case "6":
+                            swal({
+                                title: 'Configuration Missing!',
+                                text: 'Admission session not configured in database. Please contact administrator.',
+                                type: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                            break;
+
+                        case "0":
+                        default:
+                            swal({
+                                title: 'Error!',
+                                text: 'Some error occurred while fetching the response. Please try again.',
+                                type: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                            break;
+                    }
+                },
+                error: function (jqXHR, exception) {
+                    stopPreloader();
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    swal({
+                        title: 'Error!',
+                        text: msg,
+                        type: 'error',
+                        confirmButtonText: 'OK'
                     });
-                //$("#cover").fadeOut();
-            } else {
-                swal("Cancelled", "No Action Performed", "error");
-
-            }
-        });
-
-    }
-
+                }
+            });
+        } else {
+            swal("Cancelled", "No Action Performed", "error");
+        }
+    });
+}
 
 
 

@@ -516,13 +516,14 @@ namespace HigherEducation.Controllers
 
             string mobile = userDt.Rows[0]["Mobile"].ToString();
             string password = userDt.Rows[0]["Password"].ToString();
+            string userType = userDt.Rows[0]["userType"].ToString();
 
             // Create TokenData with manual-specified format
             TokenData t1 = new TokenData
             {
                 Mobile = mobile,
                 Password = password,
-                Role = "admission_state_admin" // Fixed role as per manual
+                Role = userType
             };
 
             ITI objITI = new ITI();
@@ -549,50 +550,68 @@ namespace HigherEducation.Controllers
             }
         }
 
+
         [HttpPost]
         public JsonResult getAPIResponseSID()
         {
-            DataTable dt = new DataTable();
-            AccessData accData = null;
-
-            // Get user credentials from database
-            DataTable userDt = apiObj.getStateUserData();
-            if (userDt.Rows.Count == 0)
+            try
             {
-                return Json("3", JsonRequestBehavior.AllowGet); // No user credentials configured
+                // Get user credentials from database including admission session
+                DataTable userDt = apiObj.getStateUserData();
+                if (userDt.Rows.Count == 0)
+                {
+                    return Json("3", JsonRequestBehavior.AllowGet); // No user credentials configured
+                }
+
+                string mobile = userDt.Rows[0]["Mobile"].ToString();
+                string password = userDt.Rows[0]["Password"].ToString();
+                string userType = userDt.Rows[0]["userType"].ToString();
+                string admissionSession = userDt.Rows[0]["admSession"]?.ToString(); // Get admission session from same SP
+
+                if (string.IsNullOrEmpty(admissionSession))
+                {
+                    return Json("6", JsonRequestBehavior.AllowGet); // Admission session not configured
+                }
+
+                // Create TokenData with manual-specified format
+                TokenData t1 = new TokenData
+                {
+                    Mobile = mobile,
+                    Password = password,
+                    Role = userType
+                };
+
+                ITI objITI = new ITI();
+                AccessData accData = objITI.generateAccessToken(t1);
+
+                if (string.IsNullOrEmpty(accData?.accessToken))
+                {
+                    return Json("4", JsonRequestBehavior.AllowGet); // Authentication failed
+                }
+
+                // Get the log ID to check
+                string logId = objITI.getLogID();
+
+                if (string.IsNullOrEmpty(logId))
+                {
+                    return Json("5", JsonRequestBehavior.AllowGet); // No log ID found
+                }
+
+                // Call the API status check method with admission session from database
+                int r = objITI.getAPIResponseSID(logId, accData.accessToken, admissionSession);
+
+                if (r == 1)
+                    return Json("1", JsonRequestBehavior.AllowGet); // Successfully processed responses
+                else if (r == 2)
+                    return Json("2", JsonRequestBehavior.AllowGet); // Still processing
+                else
+                    return Json("0", JsonRequestBehavior.AllowGet); // Error
             }
-
-            string mobile = userDt.Rows[0]["Mobile"].ToString();
-            string password = userDt.Rows[0]["Password"].ToString();
-
-            // Create TokenData with manual-specified format
-            TokenData t1 = new TokenData
+            catch (Exception ex)
             {
-                Mobile = mobile,
-                Password = password,
-                Role = "admission_state_admin" // Fixed role as per manual
-            };
-
-            LogHistoryBody logHistory = new LogHistoryBody();
-            ITI objITI = new ITI();
-            accData = objITI.generateAccessToken(t1);
-
-            if (string.IsNullOrEmpty(accData?.accessToken))
-            {
-                return Json("4", JsonRequestBehavior.AllowGet); // Authentication failed
-            }
-
-            logHistory.LogId = objITI.getLogID();
-            logHistory.PageSize = "100000";
-            logHistory.PageNumber = "1";
-
-            int r = objITI.getAPIResponseSID(logHistory, accData.accessToken, accData.sessionId);
-            if (r == 1)
-                return Json("1", JsonRequestBehavior.AllowGet);
-            else if (r == 2)
-                return Json("2", JsonRequestBehavior.AllowGet);
-            else
+                logger.Error(ex, "Error in getAPIResponseSID controller method");
                 return Json("0", JsonRequestBehavior.AllowGet);
+            }
         }
 
         #endregion
