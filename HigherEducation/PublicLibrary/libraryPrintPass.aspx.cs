@@ -1,12 +1,14 @@
-﻿using System;
+﻿using HigherEducation.BusinessLayer;
+using MessagingToolkit.QRCode.Codec;
+using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using MySql.Data.MySqlClient;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using HigherEducation.BusinessLayer;
 
 namespace HigherEducation.PublicLibrary
 {
@@ -29,6 +31,32 @@ namespace HigherEducation.PublicLibrary
             }
         }
 
+
+        public string GenerateQrCode(String lblPassholderName, String lblAmountPaid, String lblValidUpto, String lblCourse, String InstituteName)
+        {
+
+            try
+            {
+                String UserData = String.Format("Passholder Name:{0}\n, Amount Paid:{1}\n, Valid Up To:{2}\n, Access Type:{3}\n, InstituteName:{4}", lblPassholderName, lblAmountPaid, lblValidUpto, lblCourse, InstituteName);
+                QRCodeEncoder qe = new QRCodeEncoder();
+                qe.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;
+                qe.QRCodeErrorCorrect = QRCodeEncoder.ERROR_CORRECTION.L;
+                qe.QRCodeVersion = 0;
+                System.Drawing.Image im = qe.Encode(UserData.ToString());
+                MemoryStream ms = new MemoryStream();
+                im.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                byte[] bt = ms.ToArray();
+                String base64File = Convert.ToBase64String(bt);
+                return base64File;
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
         private void LoadPassDetails(string subscriptionId)
         {
             try
@@ -64,9 +92,11 @@ namespace HigherEducation.PublicLibrary
                                 DateTime issuedDate = Convert.ToDateTime(reader["StartDate"]);
                                 lblIssuedDate.Text = issuedDate.ToString("dd MMMM yyyy");
 
-                                // Set logo if available
-
-
+                                // Set QrCode available
+                                string QrCodeImgBase64;
+                              QrCodeImgBase64 = GenerateQrCode(reader["UserName"].ToString(), string.Format("₹{0:0.00}", reader["Amount"]), validUpto.ToString("dd MMMM yyyy"), reader["SubscriptionType"].ToString(), reader["collegename"].ToString());
+                                imgQrCode.ImageUrl = "data:image/png;base64," + QrCodeImgBase64;
+                                
                                 // Set page title
                                 Page.Title = "ITI Pass - " + reader["PassholderName"].ToString();
 

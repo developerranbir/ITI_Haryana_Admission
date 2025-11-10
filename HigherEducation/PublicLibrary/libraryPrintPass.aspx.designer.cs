@@ -33,6 +33,15 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.WebControls.Image imgLogo;
 
         /// <summary>
+        /// imgQrCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgQrCode;
+
+        /// <summary>
         /// InstituteName control.
         /// </summary>
         /// <remarks>
