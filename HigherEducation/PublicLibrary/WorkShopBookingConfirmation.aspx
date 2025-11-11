@@ -32,9 +32,11 @@
             <!-- Booking Confirmation Card -->
             <div class="card confirmation-card">
                 <div class="card-header bg-success text-white text-center">
-                    <h4 class="card-title mb-0">
+                    <h4 class="card-title mb-0" style="margin-left:120px;">
                         Workshop Card
                     </h4>
+                    <asp:Image ID="imgQrCode" runat="server" AlternateText="QR Code" Style="height: 120px; float: right;" />
+
                 </div>
                 <div class="card-body">
                     <div class="row">

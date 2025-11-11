@@ -1,9 +1,11 @@
 ﻿using HigherEducation.BusinessLayer;
+using MessagingToolkit.QRCode.Codec;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -70,6 +72,13 @@ namespace HigherEducation.PublicLibrary
                                 // Duration and amount
                                 litConfDuration.Text = $"{reader["WorkshopDuration"]} hour{(Convert.ToInt32(reader["WorkshopDuration"]) > 1 ? "s" : "")}";
                                 litConfAmount.Text = Convert.ToDecimal(reader["BookingAmount"]).ToString("0");
+
+                                // Set QrCode available
+                                string QrCodeImgBase64;
+                                QrCodeImgBase64 = GenerateQrCode(reader["FullName"].ToString(), reader["MobileNumber"].ToString(), reader["ITI_Name"].ToString(),
+                                  (reader["WorkshopDate"]).ToString(), startDateTime, endDateTime
+                                    );
+                                imgQrCode.ImageUrl = "data:image/png;base64," + QrCodeImgBase64;
                             }
                             else
                             {
@@ -100,5 +109,35 @@ namespace HigherEducation.PublicLibrary
             // Redirect to your home page
             Response.Redirect("Home.aspx");
         }
+
+        public string GenerateQrCode(String FullName, String MobileNumber, String ITI_Name, String WorkshopDate, DateTime startTime,
+            DateTime endDateTime)
+        {
+
+            try
+            {
+                String UserData = String.Format("FullName:{0}\n, MobileNumber:{1}\n, ITI Name:{2}\n, WorkshopDate:{3}\n, Start Time:{4}\n , End Time: {5}",
+                    FullName, MobileNumber, ITI_Name, WorkshopDate, startTime, endDateTime);
+
+                QRCodeEncoder qe = new QRCodeEncoder();
+                qe.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;
+                qe.QRCodeErrorCorrect = QRCodeEncoder.ERROR_CORRECTION.L;
+                qe.QRCodeVersion = 0;
+                System.Drawing.Image im = qe.Encode(UserData.ToString());
+                MemoryStream ms = new MemoryStream();
+                im.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                byte[] bt = ms.ToArray();
+                String base64File = Convert.ToBase64String(bt);
+                return base64File;
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
     }
 }

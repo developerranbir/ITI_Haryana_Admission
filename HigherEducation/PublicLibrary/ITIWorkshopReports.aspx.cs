@@ -24,26 +24,26 @@ namespace HigherEducation.PublicLibrary
         protected void Page_Load(object sender, EventArgs e)
         {
             // Session handling - uncomment when ready
-            /*
+           
             if (Session["Collegeid"] != null && Session["UserName"] != null)
             {
                 ITI_Id = Session["Collegeid"].ToString();
                 ITI_Name = Session["UserName"].ToString();
-                //litITIId.Text = ITI_Name;
+                litITIId.Text = ITI_Name;
             }
             else
             {
                 Response.Redirect("Login.aspx");
                 return;
             }
-            /*/
+            */
 
             // Temporary hardcoded values for testing
             ITI_Id = "2";
             ITI_Name = "GITI Ambala City";
             litITIName.Text = ITI_Name;
             litUserName.Text = ITI_Name;
-            //*/
+
             if (!IsPostBack)
             {
                 InitializePage();

@@ -19,8 +19,8 @@ namespace HigherEducation.PublicLibrary
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Session handling - uncomment when ready
-            /*
+             //Session handling - uncomment when ready
+            
             if (Session["Collegeid"] != null && Session["UserName"] != null)
             {
                 ITI_Id = Session["Collegeid"].ToString();
@@ -32,12 +32,12 @@ namespace HigherEducation.PublicLibrary
                 Response.Redirect("Login.aspx");
                 return;
             }
-            */
+            
 
             // Temporary hardcoded values for testing
-            ITI_Id = "2";
-            ITI_Name = "GITI Ambala City";
-            litITIId.Text = ITI_Name;
+            //ITI_Id = "2";
+            //ITI_Name = "GITI Ambala City";
+            //litITIId.Text = ITI_Name;
 
             if (!IsPostBack)
             {
