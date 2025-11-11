@@ -5,14 +5,14 @@
 <head runat="server">
     <title>ITI Workshop Reports</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <!-- SweetAlert2 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
     <!-- DataTables CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" />
 
     <style>
         :root {
@@ -113,6 +113,39 @@
             padding: 15px;
             margin-bottom: 20px;
         }
+
+        .summary-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+            .summary-section .bg-success {
+                background-color: #28a745 !important;
+            }
+
+            .summary-section .bg-warning {
+                background-color: #ffc107 !important;
+            }
+
+            .summary-section .bg-primary {
+                background-color: #007bff !important;
+            }
+
+            .summary-section .bg-info {
+                background-color: #17a2b8 !important;
+            }
+
+            .summary-section .rounded-circle {
+                width: 50px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
     </style>
 </head>
 <body>
@@ -144,7 +177,7 @@
                             <asp:Literal ID="litUserName" runat="server"></asp:Literal>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="ITIDashboard.aspx"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                            <li><a class="dropdown-item" href="../DHE/HEMenu.aspx"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -208,28 +241,6 @@
                                         </asp:DropDownList>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label class="form-label">Booking Status</label>
-                                        <asp:DropDownList ID="ddlBookingStatus" runat="server" CssClass="form-control">
-                                            <asp:ListItem Value="">All Status</asp:ListItem>
-                                            <asp:ListItem Value="CONFIRMED">Confirmed</asp:ListItem>
-                                            <asp:ListItem Value="PENDING">Pending</asp:ListItem>
-                                        </asp:DropDownList>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label class="form-label">Workshop Slot</label>
-                                        <asp:DropDownList ID="ddlWorkshopSlot" runat="server" CssClass="form-control">
-                                            <asp:ListItem Value="">All Slots</asp:ListItem>
-                                        </asp:DropDownList>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Date Selection based on Report Type -->
-                            <div class="row">
                                 <asp:Panel ID="pnlDailyDate" runat="server" CssClass="col-md-4">
                                     <div class="mb-3">
                                         <label class="form-label">Select Date</label>
@@ -264,6 +275,27 @@
                                             TextMode="Month"></asp:TextBox>
                                     </div>
                                 </asp:Panel>
+
+                                <asp:Panel ID="pnlWorkshopSlot" runat="server" CssClass="col-md-4" Visible="false">
+                                    <div class="mb-3">
+                                        <label class="form-label">Workshop Slot</label>
+                                        <asp:DropDownList ID="ddlWorkshopSlot" runat="server" CssClass="form-control">
+                                            <asp:ListItem Value="">All Slots</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
+                                </asp:Panel>
+
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Booking Status</label>
+                                        <asp:DropDownList ID="ddlBookingStatus" runat="server" CssClass="form-control">
+                                            <asp:ListItem Value="">All Status</asp:ListItem>
+                                            <asp:ListItem Value="CONFIRMED">Confirmed</asp:ListItem>
+                                            <asp:ListItem Value="PENDING">Pending</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="row">
@@ -284,17 +316,76 @@
                 <ContentTemplate>
                     <asp:Panel ID="pnlSummary" runat="server" Visible="false" CssClass="summary-section">
                         <div class="row">
-                            <div class="col-md-4">
-                                <strong>Total Bookings:</strong>
-                                <asp:Literal ID="litSummaryTotal" runat="server"></asp:Literal>
+                            <!-- Confirmed Bookings -->
+                            <div class="col-md-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-success rounded-circle p-2 me-3">
+                                        <i class="fas fa-check-circle text-white"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-success">
+                                            <asp:Literal ID="litConfirmedCount" runat="server" Text="0"></asp:Literal>
+                                        </div>
+                                        <small class="text-muted">Confirmed Bookings</small>
+                                        <div class="fw-bold text-success">
+                                            ₹<asp:Literal ID="litConfirmedAmount" runat="server" Text="0"></asp:Literal>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <strong>Total Amount:</strong>
-                                ₹<asp:Literal ID="litSummaryAmount" runat="server"></asp:Literal>
+
+                            <!-- Pending Bookings -->
+                            <div class="col-md-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-warning rounded-circle p-2 me-3">
+                                        <i class="fas fa-clock text-white"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-warning">
+                                            <asp:Literal ID="litPendingCount" runat="server" Text="0"></asp:Literal>
+                                        </div>
+                                        <small class="text-muted">Pending Bookings</small>
+                                        <div class="fw-bold text-warning">
+                                            ₹<asp:Literal ID="litPendingAmount" runat="server" Text="0"></asp:Literal>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <strong>Date Range:</strong>
-                                <asp:Literal ID="litSummaryDateRange" runat="server"></asp:Literal>
+
+                            <!-- Total Summary -->
+                            <div class="col-md-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary rounded-circle p-2 me-3">
+                                        <i class="fas fa-chart-bar text-white"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-primary">
+                                            <asp:Literal ID="litTotalCount" runat="server" Text="0"></asp:Literal>
+                                        </div>
+                                        <small class="text-muted">Total Bookings</small>
+                                        <div class="fw-bold text-primary">
+                                            ₹<asp:Literal ID="litTotalAmount" runat="server" Text="0"></asp:Literal>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Date Range -->
+                            <div class="col-md-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-info rounded-circle p-2 me-3">
+                                        <i class="fas fa-calendar-alt text-white"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">
+                                            <asp:Literal ID="litSummaryDateRange" runat="server"></asp:Literal>
+                                        </div>
+                                        <small class="text-muted">Report Period</small>
+                                        <div class="text-muted small">
+                                            <asp:Literal ID="litReportType" runat="server"></asp:Literal>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </asp:Panel>
@@ -302,18 +393,14 @@
             </asp:UpdatePanel>
 
             <!-- Export Buttons -->
-            <asp:UpdatePanel ID="upExport" runat="server" UpdateMode="Conditional">
-                <ContentTemplate>
-                    <asp:Panel ID="pnlExport" runat="server" Visible="false" CssClass="export-buttons">
-                        <div class="d-flex gap-2">
-                            <asp:Button ID="btnExportExcel" runat="server" Text="Export to Excel"
-                                CssClass="btn btn-success" OnClick="btnExportExcel_Click" />
-                            <asp:Button ID="btnPrint" runat="server" Text="Print Report"
-                                CssClass="btn btn-info" OnClick="btnPrint_Click" />
-                        </div>
-                    </asp:Panel>
-                </ContentTemplate>
-            </asp:UpdatePanel>
+            <asp:Panel ID="pnlExport" runat="server" Visible="false" CssClass="export-buttons">
+                <div class="d-flex gap-2">
+                    <asp:Button ID="btnExportExcel" runat="server" Text="Export to Excel"
+                        CssClass="btn btn-success" OnClick="btnExportExcel_Click" />
+                    <asp:Button ID="btnPrint" runat="server" Text="Print Report"
+                        CssClass="btn btn-info" OnClick="btnPrint_Click" />
+                </div>
+            </asp:Panel>
 
             <!-- Reports Grid -->
             <asp:UpdatePanel ID="upReports" runat="server" UpdateMode="Conditional">
@@ -330,7 +417,7 @@
                         <asp:Panel ID="pnlGrid" runat="server" Visible="false">
                             <div class="table-responsive">
                                 <asp:GridView ID="gvBookings" runat="server" AutoGenerateColumns="false"
-                                    CssClass="table table-striped table-bordered table-hover"
+                                    CssClass="table table-striped table-bordered table-hover nowrap"
                                     OnRowDataBound="gvBookings_RowDataBound"
                                     DataKeyNames="BookingID"
                                     ShowHeaderWhenEmpty="true">
@@ -338,7 +425,7 @@
                                         <asp:BoundField DataField="BookingID" HeaderText="Booking ID" ItemStyle-CssClass="text-center" />
                                         <asp:BoundField DataField="FullName" HeaderText="Student Name" ItemStyle-CssClass="text-nowrap" />
                                         <asp:BoundField DataField="MobileNumber" HeaderText="Mobile" ItemStyle-CssClass="text-nowrap" />
-                                        <asp:BoundField DataField="Email" HeaderText="Email" ItemStyle-CssClass="text-truncate" />
+                                        <asp:BoundField DataField="Email" HeaderText="Email" ItemStyle-CssClass="text-truncate" ItemStyle-Width="200px" />
                                         <asp:BoundField DataField="WorkshopDate" HeaderText="Workshop Date"
                                             DataFormatString="{0:dd-MMM-yyyy}" HtmlEncode="false" ItemStyle-CssClass="text-center" />
                                         <asp:BoundField DataField="StartTime" HeaderText="Start Time" ItemStyle-CssClass="text-center" />
@@ -347,7 +434,7 @@
                                             DataFormatString="{0:N1}" ItemStyle-CssClass="text-center" />
                                         <asp:BoundField DataField="BookingAmount" HeaderText="Amount"
                                             DataFormatString="₹{0:N0}" HtmlEncode="false" ItemStyle-CssClass="text-right" />
-                                        <asp:TemplateField HeaderText="Status" ItemStyle-CssClass="text-center">
+                                        <asp:TemplateField HeaderText="Booking Status" ItemStyle-CssClass="text-center">
                                             <ItemTemplate>
                                                 <asp:Label ID="lblStatus" runat="server"
                                                     Text='<%# Eval("BookingStatus") %>'
@@ -364,7 +451,7 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:BoundField DataField="CreatedDate" HeaderText="Booked On"
-                                            DataFormatString="{0:dd-MMM-yyyy}" HtmlEncode="false" ItemStyle-CssClass="text-center" />
+                                            DataFormatString="{0:dd-MMM-yyyy HH:mm}" HtmlEncode="false" ItemStyle-CssClass="text-center" />
                                     </Columns>
                                     <EmptyDataTemplate>
                                         <div class="text-center py-4">
@@ -469,7 +556,7 @@
                 document.getElementById('loadingOverlay').style.display = 'none';
             }
 
-            
+
 
             // Check for server-side SweetAlert messages
             function checkForAlerts() {
@@ -537,29 +624,187 @@
             // Call this after the page loads and grid might be visible
             setTimeout(initDataTableIfVisible, 1000);
 
-            // Print function
+
+            // Enhanced Print function
             function printReport() {
-                window.print();
+                // Store original styles
+                var originalStyles = {};
+                var elementsToHide = document.querySelectorAll('.navbar-custom, .export-buttons, .footer, .filter-section, .section-title');
+
+                // Hide elements that shouldn't be printed
+                elementsToHide.forEach(function (element) {
+                    originalStyles[element] = element.style.display;
+                    element.style.display = 'none';
+                });
+
+                // Add print-specific styles
+                var printStyles = `
+        <style>
+            @media print {
+                body { 
+                    font-size: 12pt; 
+                    background: white !important; 
+                    color: black !important;
+                    margin: 0;
+                    padding: 20px;
+                }
+                .container {
+                    max-width: 100% !important;
+                    width: 100% !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+                .report-card { 
+                    box-shadow: none !important; 
+                    border: 1px solid #ddd !important;
+                    margin: 10px 0 !important;
+                    padding: 15px !important;
+                }
+                .table { 
+                    font-size: 10pt; 
+                    width: 100% !important;
+                    border-collapse: collapse !important;
+                }
+                .table th,
+                .table td {
+                    padding: 6px !important;
+                    border: 1px solid #ddd !important;
+                }
+                .summary-section {
+                    background: #f8f9fa !important;
+                    border: 1px solid #ddd !important;
+                    margin: 10px 0 !important;
+                }
+                .badge, .booking-status { 
+                    border: 1px solid #000 !important;
+                    color: #000 !important;
+                    background: transparent !important;
+                    padding: 2px 6px !important;
+                }
+                .btn, .no-print { display: none !important; }
+                
+                /* Ensure table breaks properly across pages */
+                table { 
+                    page-break-inside: auto !important; 
+                }
+                tr { 
+                    page-break-inside: avoid !important; 
+                    page-break-after: auto !important; 
+                }
+                thead { 
+                    display: table-header-group !important; 
+                }
+                tfoot { 
+                    display: table-footer-group !important; 
+                }
+                
+                /* Hide user info in print */
+                .user-info {
+                    display: none !important;
+                }
             }
+            
+            @page {
+                margin: 1cm;
+                size: landscape;
+            }
+        </style>
+    `;
+
+                // Get the reports content
+                var reportsContent = document.getElementById('upReports');
+                if (!reportsContent) {
+                    alert('No report data available to print.');
+                    return;
+                }
+
+                // Create print window
+                var printWindow = window.open('', '_blank');
+                var currentDate = new Date().toLocaleString();
+
+                printWindow.document.write(`
+        <html>
+            <head>
+                <title>ITI Workshop Report - ${new Date().toISOString().slice(0, 19).replace(/:/g, '')}</title>
+                ${printStyles}
+            </head>
+            <body>
+                <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px;">
+                    <h2 style="margin: 0; color: #000;">ITI WORKSHOP BOOKINGS REPORT</h2>
+                    <p style="margin: 5px 0; font-size: 12pt;">
+                        <strong>ITI:</strong> ${document.getElementById('<%= litITIName.ClientID %>')?.innerText || 'N/A'} |
+                        <strong>Report Type:</strong> ${document.querySelector('[id*="ddlReportType"] option:checked')?.text || 'N/A'} |
+                        <strong>Date Range:</strong> ${document.getElementById('<%= litSummaryDateRange.ClientID %>')?.innerText || 'N/A'}
+                    </p>
+                    <p style="margin: 5px 0; font-size: 11pt;">
+                        Generated on: ${currentDate}
+                    </p>
+                </div>
+                ${reportsContent.innerHTML}
+            </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+
+    // Wait for content to load before printing
+    setTimeout(function () {
+        printWindow.focus();
+        printWindow.print();
+
+        // Close window after print
+        setTimeout(function () {
+            printWindow.close();
+        }, 500);
+
+        // Restore original styles
+        elementsToHide.forEach(function (element) {
+            if (originalStyles[element] !== undefined) {
+                element.style.display = originalStyles[element];
+            }
+        });
+    }, 500);
+}
+
         </script>
         <script type="text/javascript">
             function initializeDataTable() {
-                var table = $('#<%= gvBookings.ClientID %>');
+                try {
+                    var table = $('#<%= gvBookings.ClientID %>');
 
-                // Check if table exists and has data
-                if (table.length > 0 && table.find('tbody tr').length > 0) {
-                    // Destroy existing DataTable instance if exists
-                    if ($.fn.DataTable.isDataTable(table)) {
-                        table.DataTable().destroy();
+                    if (table.length === 0) {
+                        console.log('Table not found');
+                        return;
                     }
 
-                    // Initialize DataTables
-                    table.DataTable({
+                    // Check if table has headers and data
+                    var headerCount = table.find('thead th').length;
+                    var firstRowCount = table.find('tbody tr:first td').length;
+
+                    console.log('Header columns: ' + headerCount + ', First row columns: ' + firstRowCount);
+
+                    if (headerCount === 0 || firstRowCount === 0) {
+                        console.log('No headers or data found');
+                        return;
+                    }
+
+                    if (headerCount !== firstRowCount) {
+                        console.warn('Column count mismatch: Headers=' + headerCount + ', Data=' + firstRowCount);
+                    }
+
+                    // Destroy existing instance
+                    if ($.fn.DataTable.isDataTable(table)) {
+                        table.DataTable().destroy();
+                        table.removeClass('dataTable');
+                    }
+
+                    // Initialize with error handling
+                    var dataTable = table.DataTable({
                         "responsive": true,
                         "lengthChange": true,
                         "autoWidth": false,
                         "pageLength": 25,
-                        "order": [[0, 'desc']], // Sort by BookingID descending
+                        "order": [[0, 'desc']],
                         "language": {
                             "emptyTable": "No bookings found",
                             "info": "Showing _START_ to _END_ of _TOTAL_ entries",
@@ -568,8 +813,19 @@
                             "lengthMenu": "Show _MENU_ entries",
                             "search": "Search:",
                             "zeroRecords": "No matching records found"
+                        },
+                        "drawCallback": function (settings) {
+                            console.log('DataTable draw complete');
+                        },
+                        "error": function (settings, techNote, message) {
+                            console.error('DataTables error: ', message);
                         }
                     });
+
+                    console.log('DataTable initialized successfully');
+
+                } catch (error) {
+                    console.error('Error initializing DataTable:', error);
                 }
             }
 
@@ -583,6 +839,7 @@
             prm.add_endRequest(function () {
                 initializeDataTable();
             });
+
         </script>
     </form>
 </body>

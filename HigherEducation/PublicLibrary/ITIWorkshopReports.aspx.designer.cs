@@ -123,24 +123,6 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.WebControls.DropDownList ddlReportType;
 
         /// <summary>
-        /// ddlBookingStatus control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlBookingStatus;
-
-        /// <summary>
-        /// ddlWorkshopSlot control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlWorkshopSlot;
-
-        /// <summary>
         /// pnlDailyDate control.
         /// </summary>
         /// <remarks>
@@ -204,6 +186,33 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.WebControls.TextBox txtMonth;
 
         /// <summary>
+        /// pnlWorkshopSlot control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlWorkshopSlot;
+
+        /// <summary>
+        /// ddlWorkshopSlot control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlWorkshopSlot;
+
+        /// <summary>
+        /// ddlBookingStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlBookingStatus;
+
+        /// <summary>
         /// btnGenerateReport control.
         /// </summary>
         /// <remarks>
@@ -240,22 +249,58 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.WebControls.Panel pnlSummary;
 
         /// <summary>
-        /// litSummaryTotal control.
+        /// litConfirmedCount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litSummaryTotal;
+        protected global::System.Web.UI.WebControls.Literal litConfirmedCount;
 
         /// <summary>
-        /// litSummaryAmount control.
+        /// litConfirmedAmount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litSummaryAmount;
+        protected global::System.Web.UI.WebControls.Literal litConfirmedAmount;
+
+        /// <summary>
+        /// litPendingCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litPendingCount;
+
+        /// <summary>
+        /// litPendingAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litPendingAmount;
+
+        /// <summary>
+        /// litTotalCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litTotalCount;
+
+        /// <summary>
+        /// litTotalAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litTotalAmount;
 
         /// <summary>
         /// litSummaryDateRange control.
@@ -267,13 +312,13 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.WebControls.Literal litSummaryDateRange;
 
         /// <summary>
-        /// upExport control.
+        /// litReportType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upExport;
+        protected global::System.Web.UI.WebControls.Literal litReportType;
 
         /// <summary>
         /// pnlExport control.

@@ -11,6 +11,7 @@ using System.IO;
 using System.Text;
 using HigherEducation.BusinessLayer;
 using HigherEducation.Models;
+using System.Threading;
 
 namespace HigherEducation.PublicLibrary
 {
@@ -28,21 +29,21 @@ namespace HigherEducation.PublicLibrary
             {
                 ITI_Id = Session["Collegeid"].ToString();
                 ITI_Name = Session["UserName"].ToString();
-                litITIId.Text = ITI_Name;
+                //litITIId.Text = ITI_Name;
             }
             else
             {
                 Response.Redirect("Login.aspx");
                 return;
             }
-            */
+            /*/
 
             // Temporary hardcoded values for testing
             ITI_Id = "2";
             ITI_Name = "GITI Ambala City";
             litITIName.Text = ITI_Name;
             litUserName.Text = ITI_Name;
-
+            //*/
             if (!IsPostBack)
             {
                 InitializePage();
@@ -130,16 +131,19 @@ namespace HigherEducation.PublicLibrary
                     pnlDailyDate.Visible = true;
                     pnlDateRange.Visible = false;
                     pnlMonthly.Visible = false;
+                    pnlWorkshopSlot.Visible = true;
                     break;
                 case "RANGE":
                     pnlDailyDate.Visible = false;
                     pnlDateRange.Visible = true;
                     pnlMonthly.Visible = false;
+                    pnlWorkshopSlot.Visible = false;
                     break;
                 case "MONTHLY":
                     pnlDailyDate.Visible = false;
                     pnlDateRange.Visible = false;
                     pnlMonthly.Visible = true;
+                    pnlWorkshopSlot.Visible = false;
                     break;
             }
             upFilter.Update();
@@ -164,24 +168,23 @@ namespace HigherEducation.PublicLibrary
                 {
                     BindReportGrid(reportData);
                     UpdateSummary(reportData);
-                    pnlExport.Visible = true;
+                    pnlExport.Visible = true; // Show export buttons
                     pnlNoData.Visible = false;
                     pnlGrid.Visible = true;
-
+                    pnlNoData.Visible = false;
                     ShowSweetAlert("Report Generated", $"Found {reportData.Rows.Count} bookings matching your criteria.", "success");
                 }
                 else
                 {
                     pnlGrid.Visible = false;
                     pnlNoData.Visible = true;
-                    pnlExport.Visible = false;
+                    pnlExport.Visible = false; // Hide export buttons when no data
                     pnlSummary.Visible = false;
                     ShowSweetAlert("No Data", "No bookings found for the selected criteria.", "info");
                 }
 
                 upReports.Update();
                 upSummary.Update();
-                upExport.Update();
             }
             catch (Exception ex)
             {
@@ -192,6 +195,7 @@ namespace HigherEducation.PublicLibrary
                 ShowSweetAlert("Error", "Error generating report. Please try again.", "error");
             }
         }
+
 
         private bool ValidateDates()
         {
@@ -314,7 +318,7 @@ namespace HigherEducation.PublicLibrary
         {
             try
             {
-                
+
 
                 gvBookings.DataSource = data;
                 gvBookings.DataBind();
@@ -331,38 +335,64 @@ namespace HigherEducation.PublicLibrary
 
         private void UpdateSummary(DataTable data)
         {
-            int totalBookings = data.Rows.Count;
+            int confirmedCount = 0;
+            int pendingCount = 0;
+            int totalCount = data.Rows.Count;
+            decimal confirmedAmount = 0;
+            decimal pendingAmount = 0;
             decimal totalAmount = 0;
 
             foreach (DataRow row in data.Rows)
             {
-                if (row["BookingAmount"] != DBNull.Value)
+                string status = row["BookingStatus"]?.ToString() ?? "";
+                decimal amount = row["BookingAmount"] != DBNull.Value ? Convert.ToDecimal(row["BookingAmount"]) : 0;
+
+                if (status.Equals("CONFIRMED", StringComparison.OrdinalIgnoreCase))
                 {
-                    totalAmount += Convert.ToDecimal(row["BookingAmount"]);
+                    confirmedCount++;
+                    confirmedAmount += amount;
                 }
+                else if (status.Equals("PENDING", StringComparison.OrdinalIgnoreCase))
+                {
+                    pendingCount++;
+                    pendingAmount += amount;
+                }
+
+                totalAmount += amount;
             }
 
-            litSummaryTotal.Text = totalBookings.ToString("N0");
-            litSummaryAmount.Text = totalAmount.ToString("N0");
+            // Update the literals
+            litConfirmedCount.Text = confirmedCount.ToString("N0");
+            litConfirmedAmount.Text = confirmedAmount.ToString("N0");
+            litPendingCount.Text = pendingCount.ToString("N0");
+            litPendingAmount.Text = pendingAmount.ToString("N0");
+            litTotalCount.Text = totalCount.ToString("N0");
+            litTotalAmount.Text = totalAmount.ToString("N0");
 
             // Set date range text
             switch (ddlReportType.SelectedValue)
             {
                 case "DAILY":
                     litSummaryDateRange.Text = DateTime.Parse(txtReportDate.Text).ToString("dd-MMM-yyyy");
+                    litReportType.Text = "Daily Report";
                     break;
                 case "RANGE":
                     litSummaryDateRange.Text = $"{DateTime.Parse(txtFromDate.Text):dd-MMM-yyyy} to {DateTime.Parse(txtToDate.Text):dd-MMM-yyyy}";
+                    litReportType.Text = "Date Range Report";
                     break;
                 case "MONTHLY":
                     DateTime month = DateTime.Parse(txtMonth.Text + "-01");
                     litSummaryDateRange.Text = month.ToString("MMMM yyyy");
+                    litReportType.Text = "Monthly Report";
+                    break;
+                default:
+                    litSummaryDateRange.Text = "N/A";
+                    litReportType.Text = "Custom Report";
                     break;
             }
 
             pnlSummary.Visible = true;
         }
-
         protected void gvBookings_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -418,29 +448,29 @@ namespace HigherEducation.PublicLibrary
         // Update your GetStatusClass method to handle nulls
         protected string GetStatusClass(string status)
         {
-            if (string.IsNullOrEmpty(status)) return "badge badge-secondary";
+            if (string.IsNullOrEmpty(status)) return "badge bg-secondary";
 
             switch (status.ToLower())
             {
-                case "confirmed": return "badge badge-success";
-                case "pending": return "badge badge-warning";
-                case "cancelled": return "badge badge-danger";
-                case "completed": return "badge badge-info";
-                default: return "badge badge-secondary";
+                case "confirmed": return "badge bg-success";
+                case "pending": return "badge bg-warning";
+                case "cancelled": return "badge bg-danger";
+                case "completed": return "badge bg-info";
+                default: return "badge bg-secondary";
             }
         }
 
         protected string GetPaymentStatusClass(string paymentStatus)
         {
-            if (string.IsNullOrEmpty(paymentStatus)) return "badge badge-secondary";
+            if (string.IsNullOrEmpty(paymentStatus)) return "badge bg-secondary";
 
             switch (paymentStatus.ToLower())
             {
-                case "paid": return "badge badge-success";
-                case "pending": return "badge badge-warning";
-                case "failed": return "badge badge-danger";
-                case "refunded": return "badge badge-info";
-                default: return "badge badge-secondary";
+                case "paid": return "badge bg-success";
+                case "pending": return "badge bg-warning";
+                case "failed": return "badge bg-danger";
+                case "refunded": return "badge bg-info";
+                default: return "badge bg-secondary";
             }
         }
 
@@ -456,7 +486,6 @@ namespace HigherEducation.PublicLibrary
             upFilter.Update();
             upReports.Update();
             upSummary.Update();
-            upExport.Update();
 
             ShowSweetAlert("Filters Reset", "All filters have been reset to default values.", "success");
         }
@@ -474,7 +503,7 @@ namespace HigherEducation.PublicLibrary
             try
             {
                 DataTable exportData = GetReportData();
-                if (exportData.Rows.Count > 0)
+                if (exportData != null && exportData.Rows.Count > 0)
                 {
                     ExportToExcel(exportData);
                 }
@@ -482,6 +511,10 @@ namespace HigherEducation.PublicLibrary
                 {
                     ShowSweetAlert("No Data", "No data available to export.", "warning");
                 }
+            }
+            catch (ThreadAbortException)
+            {
+                // Ignore - this is normal for Response.End()
             }
             catch (Exception ex)
             {
@@ -495,7 +528,20 @@ namespace HigherEducation.PublicLibrary
 
         protected void btnPrint_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "Print", "printReport();", true);
+            try
+            {
+                // Register print script
+                ScriptManager.RegisterStartupScript(this, GetType(), "Print", "printReport();", true);
+
+            }
+            catch (Exception ex)
+            {
+                clsLogger.ExceptionError = ex.Message;
+                clsLogger.ExceptionPage = "PublicLibrary/ITIWorkshopReports";
+                clsLogger.ExceptionMsg = "btnPrint_Click";
+                clsLogger.SaveException();
+                ShowSweetAlert("Print Error", "Error preparing print. Please try again.", "error");
+            }
         }
 
         private void ExportToExcel(DataTable data)
@@ -504,7 +550,8 @@ namespace HigherEducation.PublicLibrary
             {
                 Response.Clear();
                 Response.Buffer = true;
-                Response.AddHeader("content-disposition", "attachment;filename=ITI_Workshop_Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls");
+                Response.AddHeader("content-disposition",
+                    $"attachment;filename=ITI_Workshop_Report_{DateTime.Now:yyyyMMdd_HHmmss}.xls");
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.ms-excel";
 
@@ -512,109 +559,137 @@ namespace HigherEducation.PublicLibrary
                 {
                     HtmlTextWriter hw = new HtmlTextWriter(sw);
 
-                    // Create Excel file header
+                    // Create Excel file structure
                     hw.WriteLine("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
-                    hw.WriteLine("<table border=\"1\">");
+                    hw.WriteLine("<table border=\"1\" style=\"border-collapse:collapse; width:100%;\">");
 
-                    // Add report header
-                    hw.WriteLine("<tr><td colspan=\"10\" style=\"background-color: #2c3e50; color: white; font-size: 16px; font-weight: bold; text-align: center; padding: 10px;\">ITI WORKSHOP BOOKINGS REPORT</td></tr>");
-
-                    // Add summary info
-                    hw.WriteLine("<tr><td colspan=\"10\" style=\"background-color: #f8f9fa; padding: 8px;\">");
-                    hw.WriteLine("<strong>ITI:</strong> " + ITI_Name + " | ");
-                    hw.WriteLine("<strong>Report Type:</strong> " + ddlReportType.SelectedItem.Text + " | ");
-                    hw.WriteLine("<strong>Date Range:</strong> " + litSummaryDateRange.Text + " | ");
-                    hw.WriteLine("<strong>Total Bookings:</strong> " + litSummaryTotal.Text + " | ");
-                    hw.WriteLine("<strong>Total Amount:</strong> ₹" + litSummaryAmount.Text);
-                    hw.WriteLine("</td></tr>");
-                    hw.WriteLine("<tr><td colspan=\"10\"></td></tr>");
-
-                    // Add column headers
-                    hw.WriteLine("<tr style=\"background-color: #3498db; color: white; font-weight: bold;\">");
-                    hw.WriteLine("<th>Booking ID</th>");
-                    hw.WriteLine("<th>Student Name</th>");
-                    hw.WriteLine("<th>Mobile</th>");
-                    hw.WriteLine("<th>Workshop Date</th>");
-                    hw.WriteLine("<th>Time</th>");
-                    hw.WriteLine("<th>Duration (hrs)</th>");
-                    hw.WriteLine("<th>Amount</th>");
-                    hw.WriteLine("<th>Status</th>");
-                    hw.WriteLine("<th>Payment</th>");
-                    hw.WriteLine("<th>Booked On</th>");
+                    // Report Header
+                    hw.WriteLine("<tr>");
+                    hw.WriteLine("<td colspan=\"12\" style=\"background-color: #2c3e50; color: white; font-size: 16px; font-weight: bold; text-align: center; padding: 15px;\">");
+                    hw.WriteLine("ITI WORKSHOP BOOKINGS REPORT");
+                    hw.WriteLine("</td>");
                     hw.WriteLine("</tr>");
 
-                    // Add data rows
+                    // Summary Information
+                    hw.WriteLine("<tr>");
+                    hw.WriteLine("<td colspan=\"12\" style=\"background-color: #f8f9fa; padding: 10px; font-size: 12px;\">");
+                    hw.WriteLine($"<strong>ITI:</strong> {ITI_Name} | ");
+                    hw.WriteLine($"<strong>Report Type:</strong> {ddlReportType.SelectedItem.Text} | ");
+                    hw.WriteLine($"<strong>Date Range:</strong> {litSummaryDateRange.Text} | ");
+                    hw.WriteLine($"<strong>Confirmed Bookings:</strong> {litConfirmedCount.Text} (₹{litConfirmedAmount.Text}) | ");
+                    hw.WriteLine($"<strong>Pending Bookings:</strong> {litPendingCount.Text} (₹{litPendingAmount.Text}) | ");
+                    hw.WriteLine($"<strong>Total Bookings:</strong> {litTotalCount.Text} (₹{litTotalAmount.Text})");
+                    hw.WriteLine("</td>");
+                    hw.WriteLine("</tr>");
+
+                    hw.WriteLine("<tr><td colspan=\"12\"></td></tr>");
+
+                    // Column Headers
+                    hw.WriteLine("<tr style=\"background-color: #3498db; color: white; font-weight: bold;\">");
+                    hw.WriteLine("<th style=\"padding: 8px;\">Booking ID</th>");
+                    hw.WriteLine("<th style=\"padding: 8px;\">Student Name</th>");
+                    hw.WriteLine("<th style=\"padding: 8px;\">Mobile</th>");
+                    hw.WriteLine("<th style=\"padding: 8px;\">Email</th>");
+                    hw.WriteLine("<th style=\"padding: 8px;\">Workshop Date</th>");
+                    hw.WriteLine("<th style=\"padding: 8px;\">Start Time</th>");
+                    hw.WriteLine("<th style=\"padding: 8px;\">End Time</th>");
+                    hw.WriteLine("<th style=\"padding: 8px;\">Duration (hrs)</th>");
+                    hw.WriteLine("<th style=\"padding: 8px;\">Amount</th>");
+                    hw.WriteLine("<th style=\"padding: 8px;\">Status</th>");
+                    hw.WriteLine("<th style=\"padding: 8px;\">Payment</th>");
+                    hw.WriteLine("<th style=\"padding: 8px;\">Booked On</th>");
+                    hw.WriteLine("</tr>");
+
+                    // Data Rows
                     foreach (DataRow row in data.Rows)
                     {
                         hw.WriteLine("<tr>");
-                        hw.WriteLine("<td>" + row["BookingID"] + "</td>");
-                        hw.WriteLine("<td>" + row["FullName"] + "</td>");
-                        hw.WriteLine("<td>" + row["MobileNumber"] + "</td>");
 
-                        // Format date
+                        // Booking ID
+                        hw.WriteLine($"<td style=\"padding: 6px;\">{row["BookingID"]}</td>");
+
+                        // Student Name
+                        hw.WriteLine($"<td style=\"padding: 6px;\">{row["FullName"]}</td>");
+
+                        // Mobile
+                        hw.WriteLine($"<td style=\"padding: 6px;\">{row["MobileNumber"]}</td>");
+
+                        // Email
+                        hw.WriteLine($"<td style=\"padding: 6px;\">{row["Email"]}</td>");
+
+                        // Workshop Date
                         if (row["WorkshopDate"] != DBNull.Value)
                         {
                             DateTime workshopDate = Convert.ToDateTime(row["WorkshopDate"]);
-                            hw.WriteLine("<td>" + workshopDate.ToString("dd-MMM-yyyy") + "</td>");
+                            hw.WriteLine($"<td style=\"padding: 6px;\">{workshopDate:dd-MMM-yyyy}</td>");
                         }
                         else
                         {
-                            hw.WriteLine("<td></td>");
+                            hw.WriteLine("<td style=\"padding: 6px;\"></td>");
                         }
 
-                        // Format time
-                        if (row["WorkshopTime"] != DBNull.Value)
+                        // Start Time
+                        hw.WriteLine($"<td style=\"padding: 6px;\">{row["StartTime"]}</td>");
+
+                        // End Time
+                        hw.WriteLine($"<td style=\"padding: 6px;\">{row["EndTime"]}</td>");
+
+                        // Duration
+                        if (row["Duration"] != DBNull.Value)
                         {
-                            try
-                            {
-                                TimeSpan workshopTime = (TimeSpan)row["WorkshopTime"];
-                                string timeString = workshopTime.ToString(@"hh\:mm") + " " + (workshopTime.Hours >= 12 ? "PM" : "AM");
-                                hw.WriteLine("<td>" + timeString + "</td>");
-                            }
-                            catch
-                            {
-                                hw.WriteLine("<td>" + row["WorkshopTime"] + "</td>");
-                            }
+                            decimal duration = Convert.ToDecimal(row["Duration"]);
+                            hw.WriteLine($"<td style=\"padding: 6px; text-align: right;\">{duration:N1}</td>");
                         }
                         else
                         {
-                            hw.WriteLine("<td></td>");
+                            hw.WriteLine("<td style=\"padding: 6px;\"></td>");
                         }
 
-                        hw.WriteLine("<td>" + row["Duration"] + "</td>");
-
-                        // Format amount
+                        // Amount
                         if (row["BookingAmount"] != DBNull.Value)
                         {
                             decimal amount = Convert.ToDecimal(row["BookingAmount"]);
-                            hw.WriteLine("<td>₹" + amount.ToString("N0") + "</td>");
+                            hw.WriteLine($"<td style=\"padding: 6px; text-align: right;\">₹{amount:N0}</td>");
                         }
                         else
                         {
-                            hw.WriteLine("<td>₹0</td>");
+                            hw.WriteLine("<td style=\"padding: 6px;\">₹0</td>");
                         }
 
-                        hw.WriteLine("<td>" + row["BookingStatus"] + "</td>");
-                        hw.WriteLine("<td>" + row["PaymentStatus"] + "</td>");
+                        // Status
+                        string status = row["BookingStatus"]?.ToString() ?? "Pending";
+                        string statusColor = status.ToLower() == "confirmed" ? "#28a745" :
+                                           status.ToLower() == "pending" ? "#ffc107" : "#6c757d";
+                        hw.WriteLine($"<td style=\"padding: 6px; color: {statusColor}; font-weight: bold;\">{status}</td>");
 
-                        // Format created date
+                        // Payment Status
+                        string paymentStatus = row["PaymentStatus"]?.ToString() ?? "Pending";
+                        string paymentColor = paymentStatus.ToLower() == "paid" ? "#28a745" :
+                                            paymentStatus.ToLower() == "pending" ? "#ffc107" : "#dc3545";
+                        hw.WriteLine($"<td style=\"padding: 6px; color: {paymentColor}; font-weight: bold;\">{paymentStatus}</td>");
+
+                        // Created Date
                         if (row["CreatedDate"] != DBNull.Value)
                         {
                             DateTime createdDate = Convert.ToDateTime(row["CreatedDate"]);
-                            hw.WriteLine("<td>" + createdDate.ToString("dd-MMM-yyyy HH:mm") + "</td>");
+                            hw.WriteLine($"<td style=\"padding: 6px;\">{createdDate:dd-MMM-yyyy HH:mm}</td>");
                         }
                         else
                         {
-                            hw.WriteLine("<td></td>");
+                            hw.WriteLine("<td style=\"padding: 6px;\"></td>");
                         }
 
                         hw.WriteLine("</tr>");
                     }
 
-                    // Add footer with export info
-                    hw.WriteLine("<tr><td colspan=\"10\" style=\"background-color: #f8f9fa; padding: 8px; font-size: 11px;\">");
-                    hw.WriteLine("Exported on: " + DateTime.Now.ToString("dd-MMM-yyyy HH:mm") + " | ITI Workshop Management System");
-                    hw.WriteLine("</td></tr>");
+                    // Footer
+                    hw.WriteLine("<tr>");
+                    hw.WriteLine("<td colspan=\"12\" style=\"background-color: #f8f9fa; padding: 8px; font-size: 11px; border-top: 2px solid #dee2e6;\">");
+                    hw.WriteLine($"<strong>Exported on:</strong> {DateTime.Now:dd-MMM-yyyy HH:mm} | ");
+                    hw.WriteLine($"<strong>Total Records:</strong> {data.Rows.Count} | ");
+                    hw.WriteLine("ITI Workshop Management System");
+                    hw.WriteLine("</td>");
+                    hw.WriteLine("</tr>");
 
                     hw.WriteLine("</table>");
 
@@ -628,11 +703,7 @@ namespace HigherEducation.PublicLibrary
                 // Handle exception if user cancels download
                 if (!ex.Message.Contains("Thread was being aborted"))
                 {
-                    clsLogger.ExceptionError = ex.Message;
-                    clsLogger.ExceptionPage = "PublicLibrary/ITIWorkshopReports";
-                    clsLogger.ExceptionMsg = "ExportToExcel";
-                    clsLogger.SaveException();
-                    ShowSweetAlert("Export Error", "Error generating Excel file. Please try again.", "error");
+                    throw;
                 }
             }
         }
