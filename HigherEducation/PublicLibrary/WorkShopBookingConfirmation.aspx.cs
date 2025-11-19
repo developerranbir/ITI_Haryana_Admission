@@ -57,6 +57,7 @@ namespace HigherEducation.PublicLibrary
                                 litConfEmail.Text = reader["Email"].ToString();
                                 litConfITI.Text = reader["ITI_Name"].ToString();
                                 litConfDistrict.Text = reader["District"].ToString();
+                                litWorkshopType.Text = reader["workshopType"].ToString();
 
                                 // Format date
                                 DateTime workshopDate = Convert.ToDateTime(reader["WorkshopDate"]);
@@ -65,8 +66,8 @@ namespace HigherEducation.PublicLibrary
                                 // Format time
                                 TimeSpan startTime = TimeSpan.Parse(reader["StartTime"].ToString());
                                 TimeSpan endTime = TimeSpan.Parse(reader["EndTime"].ToString());
-                                DateTime startDateTime = DateTime.Today.Add(startTime);
-                                DateTime endDateTime = DateTime.Today.Add(endTime);
+                                DateTime startDateTime = workshopDate.Add(startTime);
+                                DateTime endDateTime = workshopDate.Add(endTime);
                                 litConfTime.Text = $"{startDateTime:hh:mm tt} - {endDateTime:hh:mm tt}";
 
                                 // Duration and amount

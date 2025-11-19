@@ -19,37 +19,29 @@ namespace HigherEducation.PublicLibrary
 
         protected void Page_Load(object sender, EventArgs e)
         {
-             //Session handling - uncomment when ready
-            
+            // Session handling
             if (Session["Collegeid"] != null && Session["UserName"] != null)
             {
                 ITI_Id = Session["Collegeid"].ToString();
                 ITI_Name = Session["UserName"].ToString();
-                litITIId.Text = ITI_Name;
+                litUserName.Text = ITI_Name;
             }
             else
             {
-                Response.Redirect("Login.aspx");
+                Response.Redirect("~/DHE/frmlogin.aspx");
                 return;
             }
-            
-
-            // Temporary hardcoded values for testing
-            //ITI_Id = "2";
-            //ITI_Name = "GITI Ambala City";
-            //litITIId.Text = ITI_Name;
 
             if (!IsPostBack)
             {
                 DateTime currentDateTime = DateTime.Now;
-                litCurrentDate.Text = currentDateTime.ToString("dddd, MMMM dd, yyyy");
-                litCurrentTime.Text = currentDateTime.ToString("hh:mm tt");
 
                 // Set default date to today
                 txtSlotDate.Text = DateTime.Today.ToString("yyyy-MM-dd");
                 UpdateSelectedDateDisplay();
                 BindTimeSlots();
                 BindExistingSlots();
+                BindWorkShopType();
 
                 ClearMessage();
             }
@@ -93,7 +85,6 @@ namespace HigherEducation.PublicLibrary
         {
             if (DateTime.TryParse(txtSlotDate.Text, out DateTime selectedDate))
             {
-                
                 // Update grid title
                 litGridTitle.Text = $"Workshop Slots for {selectedDate.ToString("dddd, MMMM dd, yyyy")}";
             }
@@ -120,7 +111,6 @@ namespace HigherEducation.PublicLibrary
                 DateTime currentTime = DateTime.Now;
 
                 // If selected date is today, use current time logic
-                // If selected date is in future, show all time slots
                 DateTime startTime = selectedDate.AddHours(9); // 9 AM
                 DateTime lastStartTime = selectedDate.AddHours(16.1); // 4 PM
 
@@ -219,7 +209,6 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-
                 clsLogger.ExceptionError = ex.Message;
                 clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
                 clsLogger.ExceptionMsg = "ddlStartTime_SelectedIndexChanged";
@@ -255,7 +244,6 @@ namespace HigherEducation.PublicLibrary
                 }
             }
         }
-
         protected void btnSave_Click(object sender, EventArgs e)
         {
             if (Page.IsValid)
@@ -283,6 +271,20 @@ namespace HigherEducation.PublicLibrary
                         return;
                     }
 
+                    // Validate Workshop Type
+                    if (string.IsNullOrEmpty(ddlWorkshopType.SelectedValue))
+                    {
+                        ShowMessage("Please select Workshop Type.", "danger");
+                        return;
+                    }
+
+                    // Validate equipment selection
+                    if (!cvWorkshopEquipment.IsValid)
+                    {
+                        ShowMessage("Please add at least one equipment item.", "danger");
+                        return;
+                    }
+
                     DateTime selectedDate = DateTime.Parse(txtSlotDate.Text);
                     TimeSpan startTime = TimeSpan.Parse(ddlStartTime.SelectedValue);
                     TimeSpan endTime = TimeSpan.Parse(ddlEndTime.SelectedValue);
@@ -301,16 +303,26 @@ namespace HigherEducation.PublicLibrary
                         return;
                     }
 
-                    // Save to database using stored procedure
-                    if (SaveWorkshopSlotToDatabase(selectedDate, startTime, endTime, txtRemarks.Text.Trim(), availableSeats))
+                    // Get equipment data from hidden field
+                    string equipmentData = hdnEquipmentData.Value;
+                    List<string> equipmentList = new List<string>();
+
+                    if (!string.IsNullOrEmpty(equipmentData))
                     {
-                        ShowMessage("Workshop slot added successfully!", "success");
+                        equipmentList = equipmentData.Split('|').Where(x => !string.IsNullOrEmpty(x)).ToList();
+                    }
+                    string workshopType = ddlWorkshopType.SelectedValue.ToString();
+                    // Save to database with equipment
+                    if (SaveWorkshopSlotWithEquipment(workshopType, selectedDate, startTime, endTime, txtRemarks.Text.Trim(), availableSeats, equipmentList))
+                    {
+                        // Use SweetAlert for success message instead of regular alert
+                        ShowSweetAlert("Success", $"Workshop slot with {equipmentList.Count} equipment item(s) added successfully!", "success");
                         ClearForm();
                         BindExistingSlots();
                     }
                     else
                     {
-                        ShowMessage("Failed to save workshop slot. Please try again.", "danger");
+                        ShowSweetAlert("Error", "Failed to save workshop slot. Please try again.", "error");
                     }
                 }
                 catch (Exception ex)
@@ -323,45 +335,6 @@ namespace HigherEducation.PublicLibrary
                 }
             }
         }
-
-        private bool SaveWorkshopSlotToDatabase(DateTime slotDate, TimeSpan startTime, TimeSpan endTime, string remarks, int availableSeats)
-        {
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    conn.Open();
-                    using (MySqlCommand cmd = new MySqlCommand("sp_InsertWorkshopSlot", conn))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-
-                        TimeSpan duration = endTime - startTime;
-                        double totalHours = duration.TotalHours;
-
-                        cmd.Parameters.AddWithValue("p_ITI_Id", ITI_Id);
-                        cmd.Parameters.AddWithValue("p_SlotDate", slotDate);
-                        cmd.Parameters.AddWithValue("p_StartTime", startTime.ToString(@"hh\:mm\:ss"));
-                        cmd.Parameters.AddWithValue("p_EndTime", endTime.ToString(@"hh\:mm\:ss"));
-                        cmd.Parameters.AddWithValue("p_Duration", totalHours);
-                        cmd.Parameters.AddWithValue("p_TotalSeats", availableSeats);
-                        cmd.Parameters.AddWithValue("p_AvailableSeats", availableSeats);
-                        cmd.Parameters.AddWithValue("p_Remarks", remarks ?? string.Empty);
-
-                        int rowsAffected = Convert.ToInt32(cmd.ExecuteScalar());
-                        return rowsAffected > 0;
-                    }
-                }
-                catch (MySqlException ex)
-                {
-                    clsLogger.ExceptionError = ex.Message;
-                    clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
-                    clsLogger.ExceptionMsg = "SaveWorkshopSlotToDatabase";
-                    clsLogger.SaveException();
-                    throw new Exception($"Database error: {ex.Message}");
-                }
-            }
-        }
-
         private bool ValidateTimeSlot(DateTime slotDate, TimeSpan startTime, TimeSpan endTime)
         {
             // Check if start time is before end time
@@ -391,8 +364,9 @@ namespace HigherEducation.PublicLibrary
                 return false;
             }
 
+            string workshopType = ddlWorkshopType.SelectedValue.ToString();
             // Check for overlapping slots using stored procedure
-            if (CheckOverlappingSlots(slotDate, startTime, endTime))
+            if (CheckOverlappingSlots(slotDate, workshopType, startTime, endTime))
             {
                 ShowMessage("This time slot overlaps with an existing workshop slot.", "danger");
                 return false;
@@ -401,7 +375,7 @@ namespace HigherEducation.PublicLibrary
             return true;
         }
 
-        private bool CheckOverlappingSlots(DateTime slotDate, TimeSpan newStart, TimeSpan newEnd)
+        private bool CheckOverlappingSlots(DateTime slotDate, string workshopType, TimeSpan newStart, TimeSpan newEnd)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -414,6 +388,7 @@ namespace HigherEducation.PublicLibrary
 
                         cmd.Parameters.AddWithValue("p_ITI_Id", ITI_Id);
                         cmd.Parameters.AddWithValue("p_SlotDate", slotDate);
+                        cmd.Parameters.AddWithValue("p_workshopType", workshopType);
                         cmd.Parameters.AddWithValue("p_NewStart", newStart.ToString(@"hh\:mm\:ss"));
                         cmd.Parameters.AddWithValue("p_NewEnd", newEnd.ToString(@"hh\:mm\:ss"));
 
@@ -466,7 +441,6 @@ namespace HigherEducation.PublicLibrary
                 }
                 catch (Exception ex)
                 {
-
                     clsLogger.ExceptionError = ex.Message;
                     clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
                     clsLogger.ExceptionMsg = "BindExistingSlots";
@@ -511,7 +485,6 @@ namespace HigherEducation.PublicLibrary
             }
             catch (Exception ex)
             {
-
                 clsLogger.ExceptionError = ex.Message;
                 clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
                 clsLogger.ExceptionMsg = "gvSlots_RowDeleting";
@@ -586,6 +559,9 @@ namespace HigherEducation.PublicLibrary
                         lblDuration.Text = $"{duration:0} hour{(duration > 1 ? "s" : "")}";
                     }
                 }
+
+                Label lblEquipment = e.Row.FindControl("lblEquipment") as Label;
+                lblEquipment.Text = rowView["EquipmentList"].ToString();
 
                 // Handle Delete Button Visibility and Status
                 LinkButton lnkDelete = e.Row.FindControl("lnkDelete") as LinkButton;
@@ -718,10 +694,13 @@ namespace HigherEducation.PublicLibrary
         {
             ddlStartTime.SelectedIndex = 0;
             ddlEndTime.SelectedIndex = 0;
+            ddlWorkshopType.SelectedIndex = 0;
             txtAvailableSeats.Text = "";
             txtRemarks.Text = "";
+            txtWorkshopEqp.Text = "";
+            hdnEquipmentData.Value = "";
             lblDuration.Text = "";
-            ClearMessage(); // Also clear any messages
+            ClearMessage();
         }
 
         protected void cvAvailableSeats_ServerValidate(object source, ServerValidateEventArgs args)
@@ -759,6 +738,20 @@ namespace HigherEducation.PublicLibrary
             args.IsValid = IsWeekday(selectedDate);
         }
 
+        // Custom validator for equipment selection
+        protected void cvWorkshopEquipment_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            string equipmentData = hdnEquipmentData.Value;
+            if (string.IsNullOrEmpty(equipmentData))
+            {
+                args.IsValid = false;
+                return;
+            }
+
+            var equipmentList = equipmentData.Split('|').Where(x => !string.IsNullOrEmpty(x)).ToList();
+            args.IsValid = equipmentList.Count > 0;
+        }
+
         private void ShowMessage(string message, string type)
         {
             // Only set the message if we actually have a message to show
@@ -791,5 +784,144 @@ namespace HigherEducation.PublicLibrary
             pnlMessage.Style["display"] = "none";
         }
 
+        protected void lnkLogout_Click(object sender, EventArgs e)
+        {
+            Session.Clear();
+            Session.Abandon();
+            Response.Redirect("~/DHE/frmlogin.aspx");
+        }
+
+        private void BindWorkShopType()
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand("BindWorkShopType", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            ddlWorkshopType.Items.Clear();
+                            ddlWorkshopType.Items.Add(new ListItem("-- Select Workshop Type --", ""));
+
+                            while (reader.Read())
+                            {
+                                ddlWorkshopType.Items.Add(new ListItem(
+                                reader["text"].ToString(),
+                                reader["value"].ToString()
+                                ));
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
+                    clsLogger.ExceptionMsg = "BindWorkShopType";
+                    clsLogger.SaveException();
+                    ShowSweetAlert("Error", "Error loading workshop types. Please try again.", "error");
+                }
+            }
+        }
+
+        // SweetAlert helper method
+        private void ShowSweetAlert(string title, string message, string type)
+        {
+            hdnSweetAlertTitle.Value = title;
+            hdnSweetAlertMessage.Value = message;
+            hdnSweetAlertType.Value = type;
+
+            // Register script to show alert on client side
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowAlert",
+                "setTimeout(function() { checkForAlerts(); }, 500);", true);
+        }
+
+        // Updated save method to include equipment
+        private bool SaveWorkshopSlotWithEquipment(string workshopType,DateTime slotDate, TimeSpan startTime, TimeSpan endTime, string remarks, int availableSeats, List<string> equipmentList)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand("sp_InsertWorkshopSlot", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        TimeSpan duration = endTime - startTime;
+                        double totalHours = duration.TotalHours;
+
+                        // Convert equipment list to pipe-separated string
+                        string equipmentData = string.Join("|", equipmentList);
+
+                        cmd.Parameters.AddWithValue("p_ITI_Id", ITI_Id);
+                        cmd.Parameters.AddWithValue("p_workshopType", workshopType);
+                        cmd.Parameters.AddWithValue("p_SlotDate", slotDate);
+                        cmd.Parameters.AddWithValue("p_StartTime", startTime.ToString(@"hh\:mm\:ss"));
+                        cmd.Parameters.AddWithValue("p_EndTime", endTime.ToString(@"hh\:mm\:ss"));
+                        cmd.Parameters.AddWithValue("p_Duration", totalHours);
+                        cmd.Parameters.AddWithValue("p_TotalSeats", availableSeats);
+                        cmd.Parameters.AddWithValue("p_AvailableSeats", availableSeats);
+                        cmd.Parameters.AddWithValue("p_Remarks", remarks ?? string.Empty);
+                        cmd.Parameters.AddWithValue("p_EquipmentData", equipmentData);
+
+                        int rowsAffected = Convert.ToInt32(cmd.ExecuteScalar());
+                        return rowsAffected > 0;
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
+                    clsLogger.ExceptionMsg = "SaveWorkshopSlotWithEquipment";
+                    clsLogger.SaveException();
+                    throw new Exception($"Database error: {ex.Message}");
+                }
+            }
+        }
+        // Method to get equipment info for a slot
+        private string GetSlotEquipmentInfo(int slotId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand("sp_GetWorkshopSlotEquipment", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("p_SlotID", slotId);
+
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            var equipmentList = new List<string>();
+
+                            while (reader.Read())
+                            {
+                                string equipmentName = reader["EquipmentName"]?.ToString();
+                                if (!string.IsNullOrEmpty(equipmentName))
+                                {
+                                    equipmentList.Add(equipmentName);
+                                }
+                            }
+
+                            return equipmentList.Count > 0 ? string.Join(", ", equipmentList) : "No equipment";
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/AddWorkShopSlot";
+                    clsLogger.ExceptionMsg = "GetSlotEquipmentInfo";
+                    clsLogger.SaveException();
+                    return "Error loading equipment";
+                }
+            }
+        }
     }
 }

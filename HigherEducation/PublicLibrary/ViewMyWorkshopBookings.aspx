@@ -237,6 +237,9 @@
                             <asp:BoundField DataField="ITI_Name" HeaderText="ITI Name"
                                 SortExpression="ITI_Name" />
 
+                            <asp:BoundField DataField="workshopType" HeaderText="Workshop Type"
+                                SortExpression="workshopType" />
+
                             <asp:TemplateField HeaderText="Workshop Date" SortExpression="WorkshopDate">
                                 <ItemTemplate>
                                     <asp:Label ID="lblWorkshopDate" runat="server"

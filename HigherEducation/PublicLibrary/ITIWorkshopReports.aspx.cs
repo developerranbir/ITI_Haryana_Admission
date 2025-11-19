@@ -29,35 +29,30 @@ namespace HigherEducation.PublicLibrary
             {
                 ITI_Id = Session["Collegeid"].ToString();
                 ITI_Name = Session["UserName"].ToString();
-                litITIId.Text = ITI_Name;
+                litUserName.Text = ITI_Name;
             }
             else
             {
-                Response.Redirect("Login.aspx");
+                Response.Redirect("~/DHE/frmlogin.aspx");
                 return;
             }
-            */
-
-            // Temporary hardcoded values for testing
-            ITI_Id = "2";
-            ITI_Name = "GITI Ambala City";
-            litITIName.Text = ITI_Name;
-            litUserName.Text = ITI_Name;
 
             if (!IsPostBack)
             {
                 InitializePage();
                 BindWorkshopSlots();
-                DisplayUserInfo();
+                
             }
         }
 
         private void InitializePage()
         {
+            DateTime maxDate = DateTime.Today;
+            txtFromDate.Attributes.Add("max", maxDate.ToString("yyyy-MM-dd"));
+            txtToDate.Attributes.Add("max", maxDate.ToString("yyyy-MM-dd"));
             // Set default dates
+            txtReportDate.Attributes.Add("max", maxDate.ToString("yyyy-MM-dd"));
             txtReportDate.Text = DateTime.Today.ToString("yyyy-MM-dd");
-            txtFromDate.Text = DateTime.Today.ToString("yyyy-MM-dd");
-            txtToDate.Text = DateTime.Today.ToString("yyyy-MM-dd");
             txtMonth.Text = DateTime.Today.ToString("yyyy-MM");
 
             // Show daily report panel by default
@@ -70,14 +65,6 @@ namespace HigherEducation.PublicLibrary
             pnlExport.Visible = false;
             pnlGrid.Visible = false;
             pnlNoData.Visible = false;
-        }
-
-        private void DisplayUserInfo()
-        {
-            // Set current date and time
-            litCurrentDate.Text = DateTime.Now.ToString("dddd, MMMM dd, yyyy");
-            litCurrentTime.Text = DateTime.Now.ToString("hh:mm tt");
-            litFooterDate.Text = DateTime.Now.ToString("dd-MMM-yyyy HH:mm");
         }
 
         private void BindWorkshopSlots()
@@ -149,12 +136,7 @@ namespace HigherEducation.PublicLibrary
             upFilter.Update();
         }
 
-        protected void txtReportDate_TextChanged(object sender, EventArgs e)
-        {
-            // Refresh slots when date changes
-            BindWorkshopSlots();
-            upFilter.Update();
-        }
+        
 
         protected void btnGenerateReport_Click(object sender, EventArgs e)
         {
@@ -490,12 +472,8 @@ namespace HigherEducation.PublicLibrary
             ShowSweetAlert("Filters Reset", "All filters have been reset to default values.", "success");
         }
 
-        protected void lnkLogout_Click(object sender, EventArgs e)
-        {
-            Session.Clear();
-            Session.Abandon();
-            Response.Redirect("Login.aspx");
-        }
+
+       
 
         // Export Methods
         protected void btnExportExcel_Click(object sender, EventArgs e)

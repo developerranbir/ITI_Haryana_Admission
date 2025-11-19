@@ -230,6 +230,30 @@
             font-size: 0.9rem;
         }
 
+        .workshop-type-badge {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+
+        .equipment-badge {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            margin-right: 3px;
+            margin-bottom: 3px;
+            display: inline-block;
+        }
+
         .date-selection {
             background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             border-radius: 10px;
@@ -299,6 +323,23 @@
             display: none !important;
         }
 
+        .workshop-details {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            border-left: 3px solid #3498db;
+        }
+
+        .equipment-container {
+            margin-top: 8px;
+        }
+
+        .workshop-info {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .workshop-hero h1 {
@@ -329,6 +370,11 @@
 
             .amount-value {
                 font-size: 2rem;
+            }
+
+            .workshop-type-badge, .equipment-badge {
+                font-size: 0.7rem;
+                padding: 3px 8px;
             }
         }
 
@@ -409,30 +455,7 @@
                     NavigateUrl="~/PublicLibrary/ViewMyWorkshopBookings.aspx" />
             </div>
 
-            <!-- User Information -->
-            <div class="user-info-panel">
-                <div class="row">
-                    <div class="col-md-4 mb-2">
-                        <strong><i class="fas fa-user me-2"></i>Full Name:</strong>
-                        <span class="ms-2">
-                            <asp:Literal ID="litCan" runat="server"></asp:Literal>
-                        </span>
-                    </div>
-                    <div class="col-md-4 mb-2">
-                        <strong><i class="fas fa-calendar me-2"></i>Current Date:</strong>
-                        <span class="ms-2">
-                            <asp:Literal ID="litCurrentDate" runat="server"></asp:Literal>
-                        </span>
-                    </div>
-                    <div class="col-md-4 mb-2">
-                        <strong><i class="fas fa-clock me-2"></i>Current Time:</strong>
-                        <span class="ms-2">
-                            <asp:Literal ID="litCurrentTime" runat="server"></asp:Literal>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
+            
             <!-- Booking Information -->
             <div class="info-highlight">
                 <div class="info-icon">
@@ -540,7 +563,7 @@
                                                     OnCheckedChanged="rbSlot_CheckedChanged"
                                                     AutoPostBack="true" />
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <span class="time-badge">
                                                     <i class="fas fa-clock me-1"></i>
                                                     <asp:Literal ID="litTime" runat="server"></asp:Literal>
@@ -553,7 +576,7 @@
                                                     <asp:Literal ID="litDuration" runat="server"></asp:Literal>
                                                 </span>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <strong>Available Seats:</strong>
                                                 <asp:Label ID="lblAvailableSeats" runat="server" CssClass="ms-2"></asp:Label>
                                             </div>
@@ -561,8 +584,26 @@
                                                 <span class="price-badge">₹<asp:Literal ID="litAmount" runat="server"></asp:Literal>
                                                 </span>
                                             </div>
-                                            <div class="col-md-1">
+                                            <div class="col-md-3 text-end">
                                                 <asp:Literal ID="litSlotId" runat="server" Visible="false"></asp:Literal>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Workshop Type and Equipment Details -->
+                                        <div class="workshop-details mt-3">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <strong>Workshop Type:</strong>
+                                                    <span class="workshop-type-badge">
+                                                        <asp:Literal ID="litWorkshopType" runat="server"></asp:Literal>
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <strong>Equipment:</strong>
+                                                    <div class="equipment-container">
+                                                        <asp:Literal ID="litEquipment" runat="server"></asp:Literal>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

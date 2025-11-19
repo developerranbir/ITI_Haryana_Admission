@@ -22,7 +22,7 @@ namespace HigherEducation.PublicLibrary
     {
         private string connectionString = ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString;
         private int selectedSlotId = 0;
-        private decimal hourlyRate = 300; // ₹300 per hour
+        private decimal hourlyRate = 0; 
         private const int SEATS_PER_BOOKING = 1; // Single seat per booking
         private string CandidateName = "";
         CCACrypto ccaCrypto = new CCACrypto();
@@ -35,13 +35,10 @@ namespace HigherEducation.PublicLibrary
             }
 
             CandidateName = Session["FullName"].ToString();
-            litCan.Text = CandidateName;
-
+            hourlyRate = setPriceforWorkshop();
             if (!IsPostBack)
             {
                 DateTime currentDateTime = DateTime.Now;
-                litCurrentDate.Text = currentDateTime.ToString("dddd, MMMM dd, yyyy");
-                litCurrentTime.Text = currentDateTime.ToString("hh:mm tt");
 
                 // Set default date to today and ensure it's not a weekend
                 DateTime today = DateTime.Today;
@@ -56,17 +53,50 @@ namespace HigherEducation.PublicLibrary
                 {
                     txtSlotDate.Text = today.ToString("yyyy-MM-dd");
                 }
-
+                
                 BindDistricts();
             }
             else
             {
+                //hourlyRate = setPriceforWorkshop();
                 // Restore selected slot on postback
                 if (ViewState["SelectedSlotId"] != null)
                 {
                     selectedSlotId = (int)ViewState["SelectedSlotId"];
                 }
             }
+        }
+
+        private decimal setPriceforWorkshop() {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand("getWorkshopFee", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                hourlyRate = Convert.ToDecimal(reader["workshopFee"]);
+                            }
+                        }
+                    }
+                    conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/WorkshopSlotBooking";
+                    clsLogger.ExceptionMsg = "getWorkshopFee";
+                    clsLogger.SaveException();
+                    ShowSweetAlert("Error", "Error loading districts. Please try again.", "error");
+                }
+            }
+            return hourlyRate; 
         }
 
         private void BindDistricts()
@@ -94,6 +124,7 @@ namespace HigherEducation.PublicLibrary
                             }
                         }
                     }
+                    conn.Close();
                 }
                 catch (Exception ex)
                 {
@@ -276,7 +307,6 @@ namespace HigherEducation.PublicLibrary
             // Update the slots panel
             upSlots.Update();
         }
-
         // ... (All other methods remain the same until the ShowMessage method)
 
         // Replace the old ShowMessage method with SweetAlert version
@@ -802,6 +832,7 @@ namespace HigherEducation.PublicLibrary
                     cmd.Parameters.AddWithValue("p_District", ddlDistrict.SelectedItem.Text);
                     cmd.Parameters.AddWithValue("p_ITI_Id", Convert.ToInt32(ddlITI.SelectedValue));
                     cmd.Parameters.AddWithValue("p_ITI_Name", ddlITI.SelectedItem.Text);
+                    cmd.Parameters.AddWithValue("p_WorkshopType", Convert.ToInt32(slotDetails["WorkshopTypeId"]));
                     cmd.Parameters.AddWithValue("p_WorkshopDate", DateTime.Parse(slotDetails["SlotDate"].ToString()));
                     cmd.Parameters.AddWithValue("p_WorkshopTime", TimeSpan.Parse(slotDetails["StartTime"].ToString()));
                     cmd.Parameters.AddWithValue("p_WorkshopDuration", Convert.ToInt32(slotDetails["Duration"]));
@@ -1031,6 +1062,8 @@ namespace HigherEducation.PublicLibrary
                 Literal litSlotId = (Literal)item.FindControl("litSlotId");
                 Literal litDuration = (Literal)item.FindControl("litDuration");
                 Literal litTime = (Literal)item.FindControl("litTime");
+                Literal litWorkshopType = (Literal)item.FindControl("litWorkshopType");
+                Literal litEquipment = (Literal)item.FindControl("litEquipment");
                 HtmlGenericControl slotCard = (HtmlGenericControl)item.FindControl("slotCard");
 
                 if (int.TryParse(litSlotId.Text, out selectedSlotId))
@@ -1055,6 +1088,7 @@ namespace HigherEducation.PublicLibrary
                         litTotalAmount.Text = totalAmount.ToString("0");
                         litSelectedDuration.Text = litDuration.Text;
 
+                        
                         // Show amount and booking form panels
                         pnlAmount.Visible = true;
                         pnlBookingForm.Visible = true;
@@ -1072,7 +1106,6 @@ namespace HigherEducation.PublicLibrary
             // Update the slots panel
             upSlots.Update();
         }
-
 
         protected void rptSlots_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
@@ -1156,7 +1189,7 @@ namespace HigherEducation.PublicLibrary
                     }
                 }
 
-                // Available Seats - Use Label instead of Literal for styling
+                // Available Seats
                 Label lblAvailableSeats = (Label)e.Item.FindControl("lblAvailableSeats");
                 if (lblAvailableSeats != null)
                 {
@@ -1201,29 +1234,24 @@ namespace HigherEducation.PublicLibrary
                     }
                 }
 
-                // Store additional slot information for booking
-                HiddenField hfWorkshopDate = (HiddenField)e.Item.FindControl("hfWorkshopDate");
-                HiddenField hfWorkshopTime = (HiddenField)e.Item.FindControl("hfWorkshopTime");
-                HiddenField hfWorkshopDuration = (HiddenField)e.Item.FindControl("hfWorkshopDuration");
-
-                if (hfWorkshopDate != null)
+                // Workshop Type
+                Literal litWorkshopType = (Literal)e.Item.FindControl("litWorkshopType");
+                if (litWorkshopType != null)
                 {
-                    DateTime selectedDate = string.IsNullOrEmpty(txtSlotDate.Text) ?
-                        DateTime.Today : DateTime.Parse(txtSlotDate.Text);
-                    hfWorkshopDate.Value = selectedDate.ToString("yyyy-MM-dd");
+                    string workshopType = rowView["WorkshopType"]?.ToString();
+                    litWorkshopType.Text = !string.IsNullOrEmpty(workshopType) ? workshopType : "General Workshop";
                 }
 
-                if (hfWorkshopTime != null && TimeSpan.TryParse(rowView["StartTime"].ToString(), out TimeSpan slotTime))
+                // Equipment
+                Literal litEquipment = (Literal)e.Item.FindControl("litEquipment");
+                if (litEquipment != null)
                 {
-                    hfWorkshopTime.Value = slotTime.ToString();
+                    string equipment = rowView["EquipmentList"]?.ToString();
+                    litEquipment.Text = !string.IsNullOrEmpty(equipment) ? equipment : "General Workshop";
                 }
+                
 
-                if (hfWorkshopDuration != null)
-                {
-                    hfWorkshopDuration.Value = rowView["Duration"].ToString();
-                }
-
-                // Disable radio button if no seats available or slot has started (only for today/past dates)
+                // Disable radio button if no seats available or slot has started
                 RadioButton rbSlot = (RadioButton)e.Item.FindControl("rbSlot");
                 HtmlGenericControl slotCard = (HtmlGenericControl)e.Item.FindControl("slotCard");
 

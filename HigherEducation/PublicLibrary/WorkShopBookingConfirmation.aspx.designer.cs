@@ -24,15 +24,6 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// imgQrCode control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Image imgQrCode;
-
-        /// <summary>
         /// litBookingId control.
         /// </summary>
         /// <remarks>
@@ -96,6 +87,15 @@ namespace HigherEducation.PublicLibrary
         protected global::System.Web.UI.WebControls.Literal litConfDate;
 
         /// <summary>
+        /// litWorkshopType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litWorkshopType;
+
+        /// <summary>
         /// litConfTime control.
         /// </summary>
         /// <remarks>
@@ -121,6 +121,15 @@ namespace HigherEducation.PublicLibrary
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litConfAmount;
+
+        /// <summary>
+        /// imgQrCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgQrCode;
 
         /// <summary>
         /// btnGoHome control.

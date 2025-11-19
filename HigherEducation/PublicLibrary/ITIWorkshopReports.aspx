@@ -178,14 +178,6 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="../DHE/HEMenu.aspx"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <asp:LinkButton ID="lnkLogout" runat="server" CssClass="dropdown-item" OnClick="lnkLogout_Click">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
-                                </asp:LinkButton>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -198,30 +190,7 @@
         <asp:HiddenField ID="hdnSweetAlertTitle" runat="server" />
 
         <div class="container mt-4">
-            <!-- User Info -->
-            <div class="user-info">
-                <div class="row">
-                    <div class="col-md-4">
-                        <strong><i class="fas fa-building me-2"></i>ITI:</strong>
-                        <span class="ms-2">
-                            <asp:Literal ID="litITIName" runat="server"></asp:Literal>
-                        </span>
-                    </div>
-                    <div class="col-md-4">
-                        <strong><i class="fas fa-calendar me-2"></i>Current Date:</strong>
-                        <span class="ms-2">
-                            <asp:Literal ID="litCurrentDate" runat="server"></asp:Literal>
-                        </span>
-                    </div>
-                    <div class="col-md-4">
-                        <strong><i class="fas fa-clock me-2"></i>Current Time:</strong>
-                        <span class="ms-2">
-                            <asp:Literal ID="litCurrentTime" runat="server"></asp:Literal>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
+            
             <!-- Filter Section -->
             <div class="report-card">
                 <h4 class="mb-4"><i class="fas fa-filter me-2"></i>Filter Bookings</h4>
@@ -245,7 +214,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Select Date</label>
                                         <asp:TextBox ID="txtReportDate" runat="server" CssClass="form-control"
-                                            TextMode="Date" AutoPostBack="true" OnTextChanged="txtReportDate_TextChanged"></asp:TextBox>
+                                            TextMode="Date" AutoPostBack="true"></asp:TextBox>
                                     </div>
                                 </asp:Panel>
 
@@ -423,9 +392,11 @@
                                     ShowHeaderWhenEmpty="true">
                                     <Columns>
                                         <asp:BoundField DataField="BookingID" HeaderText="Booking ID" ItemStyle-CssClass="text-center" />
-                                        <asp:BoundField DataField="FullName" HeaderText="Student Name" ItemStyle-CssClass="text-nowrap" />
+                                        <asp:BoundField DataField="FullName" HeaderText="Full Name" ItemStyle-CssClass="text-nowrap" />
                                         <asp:BoundField DataField="MobileNumber" HeaderText="Mobile" ItemStyle-CssClass="text-nowrap" />
                                         <asp:BoundField DataField="Email" HeaderText="Email" ItemStyle-CssClass="text-truncate" ItemStyle-Width="200px" />
+                                        
+                                        <asp:BoundField DataField="workshopType" HeaderText="Workshop Type" />
                                         <asp:BoundField DataField="WorkshopDate" HeaderText="Workshop Date"
                                             DataFormatString="{0:dd-MMM-yyyy}" HtmlEncode="false" ItemStyle-CssClass="text-center" />
                                         <asp:BoundField DataField="StartTime" HeaderText="Start Time" ItemStyle-CssClass="text-center" />
@@ -472,13 +443,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6">
-                        <p>&copy; 2024 ITI Workshop Management System. All rights reserved.</p>
-                    </div>
-                    <div class="col-md-6 text-end">
-                        <p>
-                            Generated on:
-                            <asp:Literal ID="litFooterDate" runat="server"></asp:Literal>
-                        </p>
+                        <p>&copy; 2025 ITI Workshop Management System. All rights reserved.</p>
                     </div>
                 </div>
             </div>
@@ -732,7 +697,7 @@
                 <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px;">
                     <h2 style="margin: 0; color: #000;">ITI WORKSHOP BOOKINGS REPORT</h2>
                     <p style="margin: 5px 0; font-size: 12pt;">
-                        <strong>ITI:</strong> ${document.getElementById('<%= litITIName.ClientID %>')?.innerText || 'N/A'} |
+                        
                         <strong>Report Type:</strong> ${document.querySelector('[id*="ddlReportType"] option:checked')?.text || 'N/A'} |
                         <strong>Date Range:</strong> ${document.getElementById('<%= litSummaryDateRange.ClientID %>')?.innerText || 'N/A'}
                     </p>
@@ -839,7 +804,28 @@
             prm.add_endRequest(function () {
                 initializeDataTable();
             });
+            // Prevent future date selection
+            document.addEventListener('DOMContentLoaded', function () {
+                var dateInputs = document.querySelectorAll('.past-date');
+                var maxDate = new Date();
+                maxDate.setDate(maxDate.getDate() - 1);
+                var maxDateStr = maxDate.toISOString().split('T')[0];
 
+                dateInputs.forEach(function (input) {
+                    input.setAttribute('max', maxDateStr);
+
+                    input.addEventListener('change', function () {
+                        var selectedDate = new Date(this.value);
+                        var today = new Date();
+                        today.setHours(0, 0, 0, 0);
+
+                        if (selectedDate >= today) {
+                            alert('Please select a past date only');
+                            this.value = '';
+                        }
+                    });
+                });
+            });
         </script>
     </form>
 </body>
