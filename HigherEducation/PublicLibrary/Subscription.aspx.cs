@@ -126,7 +126,6 @@ namespace HigherEducation.PublicLibrary
                 if (Session["UserId"] == null || ddldistrict.SelectedIndex == 0 ||
                     ddlITI.SelectedItem.Value == null ||
                     string.IsNullOrWhiteSpace(txtStartDate.Text))
-
                 {
                     lblMessage.Text = "All fields are mandatory. Please fill in all required information.";
                     return;
@@ -136,13 +135,45 @@ namespace HigherEducation.PublicLibrary
                 string email = Session["Email"].ToString();
                 string mobile = Session["Mobile"].ToString();
 
-
-
                 string subscriptionType = "ReadingWithIssue"; // Premium plan type
-                decimal amount = 500; // Example premium plan amount
-                DateTime startDate = DateTime.Parse(txtStartDate.Text);
 
+                // Retrieve amount from DB: SELECT LibraryFeeWithIssue FROM workshoplibraryfee WHERE isActive=1;
+                decimal amount = 0;
+                DateTime startDate = DateTime.Parse(txtStartDate.Text);
                 string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString;
+
+                try
+                {
+                    using (var conn = new MySqlConnection(connectionString))
+                    using (var cmd = new MySqlCommand("SELECT LibraryFeeWithIssue FROM workshoplibraryfee WHERE isActive=1 LIMIT 1;", conn))
+                    {
+                        conn.Open();
+                        object result = cmd.ExecuteScalar();
+                        if (result == null || result == DBNull.Value)
+                        {
+                            ShowAlert("Library fee configuration not found. Please contact administrator.", "danger");
+                            return;
+                        }
+
+                        decimal dbAmount;
+                        if (!decimal.TryParse(result.ToString(), out dbAmount))
+                        {
+                            ShowAlert("Invalid library fee configuration. Please contact administrator.", "danger");
+                            return;
+                        }
+
+                        amount = dbAmount;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/Subscription";
+                    clsLogger.ExceptionMsg = "Fetching LibraryFeeWithIssue";
+                    clsLogger.SaveException();
+                    ShowAlert("Unable to retrieve library fee. Please try again later.", "danger");
+                    return;
+                }
 
                 // Check for existing subscription in last 30 days
                 using (var conn = new MySqlConnection(connectionString))
@@ -273,10 +304,43 @@ namespace HigherEducation.PublicLibrary
 
 
                 string subscriptionType = "ReadingOnly";
-                decimal amount = 100;
+                decimal amount = 0;
                 DateTime startDate = DateTime.Parse(txtStartDate.Text);
 
                 string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString;
+
+                try
+                {
+                    using (var conn = new MySqlConnection(connectionString))
+                    using (var cmd = new MySqlCommand("SELECT LibraryFee FROM workshoplibraryfee WHERE isActive=1 LIMIT 1;", conn))
+                    {
+                        conn.Open();
+                        object result = cmd.ExecuteScalar();
+                        if (result == null || result == DBNull.Value)
+                        {
+                            ShowAlert("Library fee configuration not found. Please contact administrator.", "danger");
+                            return;
+                        }
+
+                        decimal dbAmount;
+                        if (!decimal.TryParse(result.ToString(), out dbAmount))
+                        {
+                            ShowAlert("Invalid library fee configuration. Please contact administrator.", "danger");
+                            return;
+                        }
+
+                        amount = dbAmount;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    clsLogger.ExceptionError = ex.Message;
+                    clsLogger.ExceptionPage = "PublicLibrary/Subscription";
+                    clsLogger.ExceptionMsg = "Fetching LibraryFeeWithIssue";
+                    clsLogger.SaveException();
+                    ShowAlert("Unable to retrieve library fee. Please try again later.", "danger");
+                    return;
+                }
 
                 // Check for existing subscription in last 30 days for this user
                 using (var conn = new MySqlConnection(connectionString))
